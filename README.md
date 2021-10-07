@@ -37,7 +37,7 @@ This is a library for using the Twitter API v2 in the Go language. (It is still 
     - [ ] `PUT /2/tweets/:id/hidden`
 - Users
   - Users lookup
-    - [ ] `GET /2/users`
+    - [x] `GET /2/users`
     - [ ] `GET /2/users/:id`
     - [ ] `GET /2/users/by`
     - [x] `GET /2/users/by/username`
