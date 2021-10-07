@@ -1,35 +1,104 @@
 package gotwi
 
 import (
+	"fmt"
+	"io/ioutil"
 	"net/http"
 	"os"
 	"time"
 
-	"github.com/michimani/gotwi/api/oauth2"
 	"github.com/michimani/gotwi/types"
+	"github.com/michimani/gotwi/types/response"
 )
 
-func NewClient() *types.TwitterClient {
-	return &types.TwitterClient{
+const (
+	APIKeyEnvName       = "GOTWI_API_KEY"
+	APIKeySecretEnvName = "GOTWI_API_KEY_SECRET"
+)
+
+type TwitterClient struct {
+	Client      *http.Client
+	AccessToken string
+}
+
+func NewClient() *TwitterClient {
+	return &TwitterClient{
 		Client: &http.Client{
 			Timeout: time.Duration(30) * time.Second,
 		},
 	}
 }
 
-func NewAuthorizedClient() (*types.TwitterClient, error) {
+func NewAuthorizedClient() (*TwitterClient, error) {
 	c := NewClient()
 	return Authorize(c)
 }
 
-func Authorize(c *types.TwitterClient) (*types.TwitterClient, error) {
-	apiKey := os.Getenv(types.APIKeyEnvName)
-	apiKeySecret := os.Getenv(types.APIKeySecretEnvName)
-	accessToken, err := oauth2.GenerateBearerToken(c, apiKey, apiKeySecret)
+func Authorize(c *TwitterClient) (*TwitterClient, error) {
+	apiKey := os.Getenv(APIKeyEnvName)
+	apiKeySecret := os.Getenv(APIKeySecretEnvName)
+	accessToken, err := GenerateBearerToken(c, apiKey, apiKeySecret)
 	if err != nil {
 		return nil, err
 	}
 
 	c.AccessToken = accessToken
 	return c, nil
+}
+
+func (c *TwitterClient) IsReady() bool {
+	if c == nil {
+		return false
+	}
+
+	if c.AccessToken == "" {
+		return false
+	}
+
+	return true
+}
+
+func (c *TwitterClient) Exec(req *http.Request) (*response.ClientResponse, error) {
+	res, err := c.Client.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	defer res.Body.Close()
+
+	bytes, err := ioutil.ReadAll(res.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	return &response.ClientResponse{
+		StatusCode: res.StatusCode,
+		Status:     res.Status,
+		Body:       bytes,
+	}, nil
+}
+
+func (c *TwitterClient) Prepare(endpointBase, method string, p types.Parameters) (*http.Request, error) {
+	if p == nil {
+		return nil, fmt.Errorf(types.ErrorParametersNil, endpointBase)
+	}
+
+	if !c.IsReady() {
+		return nil, fmt.Errorf(types.ErrorClientNotReady)
+	}
+
+	endpoint := p.ResolveEndpoint(endpointBase)
+	p.SetAccessToken(c.AccessToken)
+	return newRequest(endpoint, method, p)
+}
+
+func newRequest(endpoint, method string, p types.Parameters) (*http.Request, error) {
+	req, err := http.NewRequest(method, endpoint, p.Body())
+	if err != nil {
+		return nil, err
+	}
+
+	req.Header.Set("Content-Type", "application/json;charset=UTF-8")
+	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", p.AccessToken()))
+
+	return req, nil
 }
