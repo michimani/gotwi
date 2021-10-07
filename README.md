@@ -90,7 +90,7 @@ import (
 
 	"github.com/michimani/gotwi"
 	"github.com/michimani/gotwi/api/resource/users"
-	"github.com/michimani/gotwi/types/params"
+	"github.com/michimani/gotwi/params"
 )
 
 func main() {
@@ -100,18 +100,18 @@ func main() {
 		return
 	}
 
-	p := &params.ByUserNameParams{
-		UserName: "michimani210",
-		Expansions: &params.UsersExpansions{
-			params.ExpansionPinnedTweetID,
+	p := &params.ByUsernameParams{
+		Username: "michimani210",
+		Expansions: []string{
+			string(params.ExpansionPinnedTweetID),
 		},
-		UserFields: &params.UsersUserFields{
-			params.PublicMetrics,
-			params.UserCreatedAt,
+		UserFields: []string{
+			string(params.PublicMetrics),
+			string(params.UserCreatedAt),
 		},
 	}
 
-	u, err := users.UsersByUserName(c, p)
+	u, err := users.UsersByUsername(c, p)
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -119,7 +119,7 @@ func main() {
 
 	fmt.Println(u.Data.ID)
 	fmt.Println(u.Data.Name)
-	fmt.Println(u.Data.UserName)
+	fmt.Println(u.Data.Username)
 	fmt.Println(u.Data.CreatedAt)
 	fmt.Println(u.Data.PublicMetrics.FollowersCount)
 	fmt.Println(u.Data.PublicMetrics.FollowingCount)
@@ -141,6 +141,6 @@ michimani210
 2012-05-16 12:07:04 +0000 UTC
 724
 709
-35096
+35097
 pinned tweet
 ```

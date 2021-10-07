@@ -1,12 +1,14 @@
 package params
 
+import (
+	"io"
+	"net/url"
+	"strings"
+)
+
 type UsersExpansion string
 type UsersTweetField string
 type UsersUserField string
-
-type UsersExpansions []UsersExpansion
-type UsersTweetFields []UsersTweetField
-type UsersUserFields []UsersUserField
 
 const (
 	ExpansionPinnedTweetID UsersExpansion  = "pinned_tweet_id"
@@ -46,57 +48,61 @@ const (
 	Withheld               UsersUserField  = "withheld"
 )
 
-type ByUserNameParams struct {
+type ByUsernameParams struct {
+	accessToken string
+
 	// Path parameters
-	UserName string
+	Username string
 
 	// Query parameters
-	Expansions  *UsersExpansions
-	TweetFields *UsersTweetFields
-	UserFields  *UsersUserFields
+	Expansions  []string
+	TweetFields []string
+	UserFields  []string
 }
 
-func (ue *UsersExpansions) QueryValue() string {
-	v := ""
-	if ue == nil {
-		return v
-	}
-	for _, e := range *ue {
-		if v != "" {
-			v = v + ","
-		}
-		v = v + string(e)
-	}
-
-	return v
+func (p *ByUsernameParams) SetAccessToken(token string) {
+	p.accessToken = token
 }
 
-func (ue *UsersTweetFields) QueryValue() string {
-	v := ""
-	if ue == nil {
-		return v
-	}
-	for _, e := range *ue {
-		if v != "" {
-			v = v + ","
-		}
-		v = v + string(e)
-	}
-
-	return v
+func (p *ByUsernameParams) AccessToken() string {
+	return p.accessToken
 }
 
-func (ue *UsersUserFields) QueryValue() string {
-	v := ""
-	if ue == nil {
-		return v
-	}
-	for _, e := range *ue {
-		if v != "" {
-			v = v + ","
-		}
-		v = v + string(e)
+func (p *ByUsernameParams) ResolveEndpoint(endpointBase string) string {
+	encoded := url.QueryEscape(p.Username)
+	endpoint := strings.Replace(endpointBase, ":username", encoded, 1)
+
+	query := url.Values{}
+	if p.Expansions != nil {
+		query.Add("expansions", queryValue(p.Expansions))
 	}
 
-	return v
+	if p.TweetFields != nil {
+		query.Add("tweet.fields", queryValue(p.TweetFields))
+	}
+
+	if p.UserFields != nil {
+		query.Add("user.fields", queryValue(p.UserFields))
+	}
+
+	if p.Expansions != nil && len(p.Expansions) > 0 {
+	}
+
+	if query.Has("expansions") || query.Has("tweet.fields") || query.Has("user.fields") {
+		endpoint = endpoint + "?" + query.Encode()
+	}
+
+	return endpoint
+}
+
+func queryValue(params []string) string {
+	if len(params) == 0 {
+		return ""
+	}
+
+	return strings.Join(params, ",")
+}
+
+func (p *ByUsernameParams) Body() io.Reader {
+	return nil
 }

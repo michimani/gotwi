@@ -5,7 +5,7 @@ import "time"
 type User struct {
 	ID              string            `json:"id"`
 	Name            string            `json:"name"`
-	UserName        string            `json:"username"`
+	Username        string            `json:"username"`
 	CreatedAt       time.Time         `json:"created_at,omitempty"`
 	Description     string            `json:"description,omitempty"`
 	Entities        UserEntities      `json:"entities,omitempty"`
