@@ -91,6 +91,7 @@ import (
 	"github.com/michimani/gotwi"
 	"github.com/michimani/gotwi/api/resource/users"
 	"github.com/michimani/gotwi/params"
+	"github.com/michimani/gotwi/types/query_enum/userslookup"
 )
 
 func main() {
@@ -103,11 +104,11 @@ func main() {
 	p := &params.ByUsernameParams{
 		Username: "michimani210",
 		Expansions: []string{
-			string(params.ExpansionPinnedTweetID),
+			string(userslookup.ExpansionPinnedTweetID),
 		},
 		UserFields: []string{
-			string(params.PublicMetrics),
-			string(params.UserCreatedAt),
+			string(userslookup.PublicMetrics),
+			string(userslookup.UserCreatedAt),
 		},
 	}
 
