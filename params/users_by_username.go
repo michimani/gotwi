@@ -3,38 +3,36 @@ package params
 import (
 	"io"
 	"net/url"
+	"strings"
 
 	"github.com/michimani/gotwi/types"
 )
 
-type UsersParams struct {
+type ByUsernameParams struct {
 	accessToken string
 
+	// Path parameters
+	Username string
+
 	// Query parameters
-	IDs         []string
 	Expansions  []string
 	TweetFields []string
 	UserFields  []string
 }
 
-func (p *UsersParams) SetAccessToken(token string) {
+func (p *ByUsernameParams) SetAccessToken(token string) {
 	p.accessToken = token
 }
 
-func (p *UsersParams) AccessToken() string {
+func (p *ByUsernameParams) AccessToken() string {
 	return p.accessToken
 }
 
-func (p *UsersParams) ResolveEndpoint(endpointBase string) string {
-	endpoint := endpointBase
-
-	if p.IDs == nil || len(p.IDs) == 0 {
-		return ""
-	}
+func (p *ByUsernameParams) ResolveEndpoint(endpointBase string) string {
+	encoded := url.QueryEscape(p.Username)
+	endpoint := strings.Replace(endpointBase, ":username", encoded, 1)
 
 	query := url.Values{}
-	query.Add("ids", types.QueryValue(p.IDs))
-
 	if p.Expansions != nil {
 		query.Add("expansions", types.QueryValue(p.Expansions))
 	}
@@ -57,6 +55,6 @@ func (p *UsersParams) ResolveEndpoint(endpointBase string) string {
 	return endpoint
 }
 
-func (p *UsersParams) Body() io.Reader {
+func (p *ByUsernameParams) Body() io.Reader {
 	return nil
 }
