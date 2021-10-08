@@ -39,7 +39,7 @@ This is a library for using the Twitter API v2 in the Go language. (It is still 
   - Users lookup
     - [x] `GET /2/users`
     - [x] `GET /2/users/:id`
-    - [ ] `GET /2/users/by`
+    - [x] `GET /2/users/by`
     - [x] `GET /2/users/by/username`
   - Follows
     - [ ] `GET /2/users/:id/following`

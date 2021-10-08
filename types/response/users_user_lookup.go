@@ -16,6 +16,13 @@ type UsersID struct {
 	} `json:"includes"`
 }
 
+type UsersBy struct {
+	Data     []resource.User `json:"data"`
+	Includes struct {
+		Tweets []resource.Tweet `json:"tweets"`
+	} `json:"includes"`
+}
+
 type UsersByUsername struct {
 	Data     resource.User `json:"data"`
 	Includes struct {
