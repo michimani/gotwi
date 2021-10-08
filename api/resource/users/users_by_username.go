@@ -14,7 +14,7 @@ const (
 	UsersByUsernameEndpoint = "https://api.twitter.com/2/users/by/username/:username"
 )
 
-func UsersByUsername(c *gotwi.TwitterClient, p *params.ByUsernameParams) (*response.UsersByUsername, error) {
+func UsersByUsername(c *gotwi.TwitterClient, p *params.UsersByUsernameParams) (*response.UsersByUsername, error) {
 	req, err := c.Prepare(UsersByUsernameEndpoint, "GET", p)
 	if err != nil {
 		return nil, err

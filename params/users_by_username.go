@@ -8,7 +8,7 @@ import (
 	"github.com/michimani/gotwi/types"
 )
 
-type ByUsernameParams struct {
+type UsersByUsernameParams struct {
 	accessToken string
 
 	// Path parameters
@@ -20,15 +20,19 @@ type ByUsernameParams struct {
 	UserFields  []string
 }
 
-func (p *ByUsernameParams) SetAccessToken(token string) {
+func (p *UsersByUsernameParams) SetAccessToken(token string) {
 	p.accessToken = token
 }
 
-func (p *ByUsernameParams) AccessToken() string {
+func (p *UsersByUsernameParams) AccessToken() string {
 	return p.accessToken
 }
 
-func (p *ByUsernameParams) ResolveEndpoint(endpointBase string) string {
+func (p *UsersByUsernameParams) ResolveEndpoint(endpointBase string) string {
+	if p.Username == "" {
+		return ""
+	}
+
 	encoded := url.QueryEscape(p.Username)
 	endpoint := strings.Replace(endpointBase, ":username", encoded, 1)
 
@@ -55,6 +59,6 @@ func (p *ByUsernameParams) ResolveEndpoint(endpointBase string) string {
 	return endpoint
 }
 
-func (p *ByUsernameParams) Body() io.Reader {
+func (p *UsersByUsernameParams) Body() io.Reader {
 	return nil
 }

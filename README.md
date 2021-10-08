@@ -101,7 +101,7 @@ func main() {
 		return
 	}
 
-	p := &params.ByUsernameParams{
+	p := &params.UsersByUsernameParams{
 		Username: "michimani210",
 		Expansions: []string{
 			string(userslookup.ExpansionPinnedTweetID),
