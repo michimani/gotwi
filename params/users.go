@@ -47,10 +47,7 @@ func (p *UsersParams) ResolveEndpoint(endpointBase string) string {
 		query.Add("user.fields", types.QueryValue(p.UserFields))
 	}
 
-	if p.Expansions != nil && len(p.Expansions) > 0 {
-	}
-
-	if query.Has("expansions") || query.Has("tweet.fields") || query.Has("user.fields") {
+	if query.Has("ids") || query.Has("expansions") || query.Has("tweet.fields") || query.Has("user.fields") {
 		endpoint = endpoint + "?" + query.Encode()
 	}
 

@@ -29,6 +29,10 @@ func (p *UsersIDParams) AccessToken() string {
 }
 
 func (p *UsersIDParams) ResolveEndpoint(endpointBase string) string {
+	if p.ID == "" {
+		return ""
+	}
+
 	encoded := url.QueryEscape(p.ID)
 	endpoint := strings.Replace(endpointBase, ":id", encoded, 1)
 
