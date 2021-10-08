@@ -7,29 +7,29 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestQueryString(t *testing.T) {
+func Test_QueryString(t *testing.T) {
 	cases := []struct {
 		name   string
 		params []string
 		expect string
 	}{
 		{
-			name:   "normal 1",
+			name:   "normal",
 			params: []string{"param1", "param2", "param3"},
 			expect: "param1,param2,param3",
 		},
 		{
-			name:   "normal 2: only one param",
+			name:   "normal: only one param",
 			params: []string{"param1"},
 			expect: "param1",
 		},
 		{
-			name:   "normal 3: empty params",
+			name:   "normal: empty params",
 			params: []string{},
 			expect: "",
 		},
 		{
-			name:   "normal 4: nil params",
+			name:   "normal: nil params",
 			params: nil,
 			expect: "",
 		},
