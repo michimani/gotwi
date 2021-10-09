@@ -1,3 +1,5 @@
 package util
 
-type Response interface{}
+type Response interface {
+	HasPartialError() bool
+}

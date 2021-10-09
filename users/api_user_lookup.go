@@ -3,7 +3,6 @@ package users
 import (
 	"encoding/json"
 	"fmt"
-	"net/http"
 
 	"github.com/michimani/gotwi"
 	"github.com/michimani/gotwi/internal/util"
@@ -64,10 +63,7 @@ func execUserLookupAPI(c *gotwi.TwitterClient, endpoint, method string, p util.P
 		return err
 	}
 
-	if res.StatusCode != http.StatusOK {
-		return fmt.Errorf("An error occered. %s", res.Status)
-	}
-
+	fmt.Println(string(res.Body))
 	if err := json.Unmarshal(res.Body, &i); err != nil {
 		return err
 	}

@@ -7,6 +7,11 @@ type UserLookupUsersResponse struct {
 	Includes struct {
 		Tweets []resources.Tweet `json:"tweets"`
 	} `json:"includes"`
+	Errors []resources.PartialError `json:"errors"`
+}
+
+func (r *UserLookupUsersResponse) HasPartialError() bool {
+	return !(r.Errors == nil || len(r.Errors) == 0)
 }
 
 type UserLookupUsersIDResponse struct {
@@ -14,6 +19,11 @@ type UserLookupUsersIDResponse struct {
 	Includes struct {
 		Tweets []resources.Tweet `json:"tweets"`
 	} `json:"includes"`
+	Errors []resources.PartialError `json:"errors"`
+}
+
+func (r *UserLookupUsersIDResponse) HasPartialError() bool {
+	return !(r.Errors == nil || len(r.Errors) == 0)
 }
 
 type UserLookupUsersByResponse struct {
@@ -21,6 +31,11 @@ type UserLookupUsersByResponse struct {
 	Includes struct {
 		Tweets []resources.Tweet `json:"tweets"`
 	} `json:"includes"`
+	Errors []resources.PartialError `json:"errors"`
+}
+
+func (r *UserLookupUsersByResponse) HasPartialError() bool {
+	return !(r.Errors == nil || len(r.Errors) == 0)
 }
 
 type UserLookupUsersByUsernameResponse struct {
@@ -28,4 +43,9 @@ type UserLookupUsersByUsernameResponse struct {
 	Includes struct {
 		Tweets []resources.Tweet `json:"tweets"`
 	} `json:"includes"`
+	Errors []resources.PartialError `json:"errors"`
+}
+
+func (r *UserLookupUsersByUsernameResponse) HasPartialError() bool {
+	return !(r.Errors == nil || len(r.Errors) == 0)
 }
