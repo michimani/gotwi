@@ -89,9 +89,9 @@ import (
 	"fmt"
 
 	"github.com/michimani/gotwi"
-	"github.com/michimani/gotwi/api/resource/users"
-	"github.com/michimani/gotwi/params"
-	"github.com/michimani/gotwi/types/query_enum/userslookup"
+	"github.com/michimani/gotwi/fields"
+	"github.com/michimani/gotwi/users"
+	"github.com/michimani/gotwi/users/types"
 )
 
 func main() {
@@ -101,31 +101,32 @@ func main() {
 		return
 	}
 
-	p := &params.UsersByUsernameParams{
+	p := &types.UserLookupUsersByUsernameParams{
 		Username: "michimani210",
 		Expansions: []string{
-			string(userslookup.ExpansionPinnedTweetID),
+			string(fields.UserPinnedTweetID),
 		},
 		UserFields: []string{
-			string(userslookup.PublicMetrics),
-			string(userslookup.UserCreatedAt),
+			string(fields.UserCreatedAt),
+		},
+		TweetFields: []string{
+			string(fields.TweetCreatedAt),
 		},
 	}
 
-	u, err := users.UsersByUsername(c, p)
+	u, err := users.UserLookupUsersByUsername(c, p)
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
 
-	fmt.Println(u.Data.ID)
-	fmt.Println(u.Data.Name)
-	fmt.Println(u.Data.Username)
-	fmt.Println(u.Data.CreatedAt)
-	fmt.Println(u.Data.PublicMetrics.FollowersCount)
-	fmt.Println(u.Data.PublicMetrics.FollowingCount)
-	fmt.Println(u.Data.PublicMetrics.TweetCount)
-	fmt.Println(u.Includes.Tweets[0].Text)
+	fmt.Println("ID: ", u.Data.ID)
+	fmt.Println("Name: ", u.Data.Name)
+	fmt.Println("Username: ", u.Data.Username)
+	fmt.Println("CreatedAt: ", u.Data.CreatedAt)
+	for _, t := range u.Includes.Tweets {
+		fmt.Println("PinnedTweet: ", t.Text)
+	}
 }
 ```
 
@@ -136,12 +137,9 @@ go run main.go
 You will get the following output.
 
 ```
-581780917
-michimani Lv.859
-michimani210
-2012-05-16 12:07:04 +0000 UTC
-724
-709
-35097
-pinned tweet
+ID:  581780917
+Name:  michimani Lv.859
+Username:  michimani210
+CreatedAt:  2012-05-16 12:07:04 +0000 UTC
+PinnedTweet:  pinned tweet
 ```
