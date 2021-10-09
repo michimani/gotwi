@@ -1,6 +1,7 @@
 package gotwi
 
 import (
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -9,6 +10,7 @@ import (
 
 	"github.com/michimani/gotwi/internal/gotwierrors"
 	"github.com/michimani/gotwi/internal/util"
+	"github.com/michimani/gotwi/resources"
 )
 
 const (
@@ -24,6 +26,7 @@ type TwitterClient struct {
 type ClientResponse struct {
 	StatusCode int
 	Status     string
+	Error      *resources.Non200Error
 	Body       []byte
 }
 
@@ -74,6 +77,15 @@ func (c *TwitterClient) Exec(req *http.Request) (*ClientResponse, error) {
 	bytes, err := ioutil.ReadAll(res.Body)
 	if err != nil {
 		return nil, err
+	}
+
+	if res.StatusCode != http.StatusOK {
+		non200err := resources.Non200Error{}
+		if err := json.Unmarshal(bytes, &non200err); err != nil {
+			return nil, err
+		}
+
+		return nil, fmt.Errorf(gotwierrors.ErrorNon200Status, res.StatusCode, non200err.Title, non200err.Detail)
 	}
 
 	return &ClientResponse{
