@@ -35,24 +35,7 @@ func (p *UserLookupUsersParams) ResolveEndpoint(endpointBase string) string {
 
 	query := url.Values{}
 	query.Add("ids", util.QueryValue(p.IDs))
-
-	if p.Expansions != nil {
-		query.Add("expansions", util.QueryValue(p.Expansions))
-	}
-
-	if p.TweetFields != nil {
-		query.Add("tweet.fields", util.QueryValue(p.TweetFields))
-	}
-
-	if p.UserFields != nil {
-		query.Add("user.fields", util.QueryValue(p.UserFields))
-	}
-
-	if query.Has("ids") || query.Has("expansions") || query.Has("tweet.fields") || query.Has("user.fields") {
-		endpoint = endpoint + "?" + query.Encode()
-	}
-
-	return endpoint
+	return endpoint + resolveUserLookupQuery(query, p.Expansions, p.TweetFields, p.UserFields)
 }
 
 func (p *UserLookupUsersParams) Body() io.Reader {
@@ -88,26 +71,7 @@ func (p *UserLookupUsersIDParams) ResolveEndpoint(endpointBase string) string {
 	endpoint := strings.Replace(endpointBase, ":id", encoded, 1)
 
 	query := url.Values{}
-	if p.Expansions != nil {
-		query.Add("expansions", util.QueryValue(p.Expansions))
-	}
-
-	if p.TweetFields != nil {
-		query.Add("tweet.fields", util.QueryValue(p.TweetFields))
-	}
-
-	if p.UserFields != nil {
-		query.Add("user.fields", util.QueryValue(p.UserFields))
-	}
-
-	if p.Expansions != nil && len(p.Expansions) > 0 {
-	}
-
-	if query.Has("expansions") || query.Has("tweet.fields") || query.Has("user.fields") {
-		endpoint = endpoint + "?" + query.Encode()
-	}
-
-	return endpoint
+	return endpoint + resolveUserLookupQuery(query, p.Expansions, p.TweetFields, p.UserFields)
 }
 
 func (p *UserLookupUsersIDParams) Body() io.Reader {
@@ -141,27 +105,7 @@ func (p *UserLookupUsersByParams) ResolveEndpoint(endpointBase string) string {
 
 	query := url.Values{}
 	query.Add("usernames", util.QueryValue(p.Usernames))
-
-	if p.Expansions != nil {
-		query.Add("expansions", util.QueryValue(p.Expansions))
-	}
-
-	if p.TweetFields != nil {
-		query.Add("tweet.fields", util.QueryValue(p.TweetFields))
-	}
-
-	if p.UserFields != nil {
-		query.Add("user.fields", util.QueryValue(p.UserFields))
-	}
-
-	if p.Expansions != nil && len(p.Expansions) > 0 {
-	}
-
-	if query.Has("usernames") || query.Has("expansions") || query.Has("tweet.fields") || query.Has("user.fields") {
-		endpoint = endpoint + "?" + query.Encode()
-	}
-
-	return endpoint
+	return endpoint + resolveUserLookupQuery(query, p.Expansions, p.TweetFields, p.UserFields)
 }
 
 func (p *UserLookupUsersByParams) Body() io.Reader {
@@ -197,28 +141,30 @@ func (p *UserLookupUsersByUsernameParams) ResolveEndpoint(endpointBase string) s
 	endpoint := strings.Replace(endpointBase, ":username", encoded, 1)
 
 	query := url.Values{}
-	if p.Expansions != nil {
-		query.Add("expansions", util.QueryValue(p.Expansions))
-	}
-
-	if p.TweetFields != nil {
-		query.Add("tweet.fields", util.QueryValue(p.TweetFields))
-	}
-
-	if p.UserFields != nil {
-		query.Add("user.fields", util.QueryValue(p.UserFields))
-	}
-
-	if p.Expansions != nil && len(p.Expansions) > 0 {
-	}
-
-	if query.Has("expansions") || query.Has("tweet.fields") || query.Has("user.fields") {
-		endpoint = endpoint + "?" + query.Encode()
-	}
-
-	return endpoint
+	return endpoint + resolveUserLookupQuery(query, p.Expansions, p.TweetFields, p.UserFields)
 }
 
 func (p *UserLookupUsersByUsernameParams) Body() io.Reader {
 	return nil
+}
+
+func resolveUserLookupQuery(q url.Values, expansions, tweetFields, userFields []string) string {
+	if expansions != nil {
+		q.Add("expansions", util.QueryValue(expansions))
+	}
+
+	if tweetFields != nil {
+		q.Add("tweet.fields", util.QueryValue(tweetFields))
+	}
+
+	if userFields != nil {
+		q.Add("user.fields", util.QueryValue(userFields))
+	}
+
+	encoded := q.Encode()
+	if encoded == "" {
+		return ""
+	}
+
+	return "?" + encoded
 }

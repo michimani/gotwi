@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"github.com/michimani/gotwi"
+	"github.com/michimani/gotwi/internal/util"
 	"github.com/michimani/gotwi/users/types"
 )
 
@@ -17,93 +18,59 @@ const (
 )
 
 func UserLookupUsers(c *gotwi.TwitterClient, p *types.UserLookupUsersParams) (*types.UserLookupUsersResponse, error) {
-	req, err := c.Prepare(UserLookupUsersEndpoint, "GET", p)
-	if err != nil {
+	res := &types.UserLookupUsersResponse{}
+	if err := execUserLookupAPI(c, UserLookupUsersEndpoint, "GET", p, res); err != nil {
 		return nil, err
 	}
 
-	res, err := c.Exec(req)
-	if err != nil {
-		return nil, err
-	}
-
-	if res.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("An error occered. %s", res.Status)
-	}
-
-	var r types.UserLookupUsersResponse
-	if err := json.Unmarshal(res.Body, &r); err != nil {
-		return nil, err
-	}
-
-	return &r, nil
+	return res, nil
 }
 
 func UserLookupUsersID(c *gotwi.TwitterClient, p *types.UserLookupUsersIDParams) (*types.UserLookupUsersIDResponse, error) {
-	req, err := c.Prepare(UserLookupUsersIDEndpoint, "GET", p)
-	if err != nil {
+	res := &types.UserLookupUsersIDResponse{}
+	if err := execUserLookupAPI(c, UserLookupUsersIDEndpoint, "GET", p, res); err != nil {
 		return nil, err
 	}
 
-	res, err := c.Exec(req)
-	if err != nil {
-		return nil, err
-	}
-
-	if res.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("An error occered. %s", res.Status)
-	}
-
-	var r types.UserLookupUsersIDResponse
-	if err := json.Unmarshal(res.Body, &r); err != nil {
-		return nil, err
-	}
-
-	return &r, nil
+	return res, nil
 }
 
 func UserLookupUsersBy(c *gotwi.TwitterClient, p *types.UserLookupUsersByParams) (*types.UserLookupUsersByResponse, error) {
-	req, err := c.Prepare(UserLookupUsersByEndpoint, "GET", p)
-	if err != nil {
+	res := &types.UserLookupUsersByResponse{}
+	if err := execUserLookupAPI(c, UserLookupUsersByEndpoint, "GET", p, res); err != nil {
 		return nil, err
 	}
 
-	res, err := c.Exec(req)
-	if err != nil {
-		return nil, err
-	}
-
-	if res.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("An error occered. %s", res.Status)
-	}
-
-	var r types.UserLookupUsersByResponse
-	if err := json.Unmarshal(res.Body, &r); err != nil {
-		return nil, err
-	}
-
-	return &r, nil
+	return res, nil
 }
 
 func UserLookupUsersByUsername(c *gotwi.TwitterClient, p *types.UserLookupUsersByUsernameParams) (*types.UserLookupUsersByUsernameResponse, error) {
-	req, err := c.Prepare(UserLookupUsersByUsernameEndpoint, "GET", p)
-	if err != nil {
+	res := &types.UserLookupUsersByUsernameResponse{}
+	if err := execUserLookupAPI(c, UserLookupUsersByUsernameEndpoint, "GET", p, res); err != nil {
 		return nil, err
+	}
+
+	return res, nil
+}
+
+func execUserLookupAPI(c *gotwi.TwitterClient, endpoint, method string, p util.Parameters, i util.Response) error {
+	req, err := c.Prepare(endpoint, method, p)
+	if err != nil {
+		return err
 	}
 
 	res, err := c.Exec(req)
 	if err != nil {
-		return nil, err
+		return err
 	}
 
 	if res.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("An error occered. %s", res.Status)
+		return fmt.Errorf("An error occered. %s", res.Status)
 	}
 
-	var r types.UserLookupUsersByUsernameResponse
-	if err := json.Unmarshal(res.Body, &r); err != nil {
-		return nil, err
+	if err := json.Unmarshal(res.Body, &i); err != nil {
+		return err
 	}
 
-	return &r, nil
+	return nil
 }
