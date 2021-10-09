@@ -1,4 +1,4 @@
-package types
+package gotwierrors
 
 const (
 	ErrorClientNotReady string = "Twitter client is not ready."

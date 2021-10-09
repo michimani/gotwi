@@ -1,9 +1,9 @@
-package types_test
+package util_test
 
 import (
 	"testing"
 
-	"github.com/michimani/gotwi/types"
+	"github.com/michimani/gotwi/internal/util"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -37,7 +37,7 @@ func Test_QueryString(t *testing.T) {
 
 	for _, c := range cases {
 		t.Run(c.name, func(tt *testing.T) {
-			q := types.QueryValue(c.params)
+			q := util.QueryValue(c.params)
 			assert.Equal(tt, c.expect, q)
 		})
 	}
