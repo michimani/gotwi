@@ -9,7 +9,7 @@ const (
 	ConversationID     TweetField = "conversation_id"
 	TweetCreatedAt     TweetField = "created_at"
 	TweetEntities      TweetField = "entities"
-	Geo                TweetField = "geo"
+	TweetGeo           TweetField = "geo"
 	TweetID            TweetField = "id"
 	InReplyToUserID    TweetField = "in_reply_to_user_id"
 	Lang               TweetField = "lang"

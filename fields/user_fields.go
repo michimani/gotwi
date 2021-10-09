@@ -13,7 +13,7 @@ const (
 	ProfileImageURL   UserField = "profile_image_url"
 	Protected         UserField = "protected"
 	PublicMetrics     UserField = "public_metrics"
-	URL               UserField = "url"
+	UserURL           UserField = "url"
 	Username          UserField = "username"
 	Verified          UserField = "verified"
 	Withheld          UserField = "withheld"
