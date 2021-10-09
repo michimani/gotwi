@@ -6,11 +6,14 @@ import (
 	"net/http"
 	"net/url"
 	"strings"
-
-	"github.com/michimani/gotwi/types/response"
 )
 
 const OAuth2TokenEndpoint = "https://api.twitter.com/oauth2/token"
+
+type OAuth2TokenResponse struct {
+	TokenType   string `json:"token_type"`
+	AccessToken string `json:"access_token"`
+}
 
 func GenerateBearerToken(c *TwitterClient, apiKey, apiKeySecret string) (string, error) {
 	uv := url.Values{}
@@ -30,7 +33,7 @@ func GenerateBearerToken(c *TwitterClient, apiKey, apiKeySecret string) (string,
 		return "", err
 	}
 
-	var o2r response.Token
+	var o2r OAuth2TokenResponse
 	if err = json.Unmarshal(res.Body, &o2r); err != nil {
 		return "", err
 	}

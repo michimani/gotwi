@@ -7,8 +7,8 @@ import (
 	"os"
 	"time"
 
-	"github.com/michimani/gotwi/types"
-	"github.com/michimani/gotwi/types/response"
+	"github.com/michimani/gotwi/internal/gotwierrors"
+	"github.com/michimani/gotwi/internal/util"
 )
 
 const (
@@ -19,6 +19,12 @@ const (
 type TwitterClient struct {
 	Client      *http.Client
 	AccessToken string
+}
+
+type ClientResponse struct {
+	StatusCode int
+	Status     string
+	Body       []byte
 }
 
 func NewClient() *TwitterClient {
@@ -58,7 +64,7 @@ func (c *TwitterClient) IsReady() bool {
 	return true
 }
 
-func (c *TwitterClient) Exec(req *http.Request) (*response.ClientResponse, error) {
+func (c *TwitterClient) Exec(req *http.Request) (*ClientResponse, error) {
 	res, err := c.Client.Do(req)
 	if err != nil {
 		return nil, err
@@ -70,20 +76,20 @@ func (c *TwitterClient) Exec(req *http.Request) (*response.ClientResponse, error
 		return nil, err
 	}
 
-	return &response.ClientResponse{
+	return &ClientResponse{
 		StatusCode: res.StatusCode,
 		Status:     res.Status,
 		Body:       bytes,
 	}, nil
 }
 
-func (c *TwitterClient) Prepare(endpointBase, method string, p types.Parameters) (*http.Request, error) {
+func (c *TwitterClient) Prepare(endpointBase, method string, p util.Parameters) (*http.Request, error) {
 	if p == nil {
-		return nil, fmt.Errorf(types.ErrorParametersNil, endpointBase)
+		return nil, fmt.Errorf(gotwierrors.ErrorParametersNil, endpointBase)
 	}
 
 	if !c.IsReady() {
-		return nil, fmt.Errorf(types.ErrorClientNotReady)
+		return nil, fmt.Errorf(gotwierrors.ErrorClientNotReady)
 	}
 
 	endpoint := p.ResolveEndpoint(endpointBase)
@@ -91,7 +97,7 @@ func (c *TwitterClient) Prepare(endpointBase, method string, p types.Parameters)
 	return newRequest(endpoint, method, p)
 }
 
-func newRequest(endpoint, method string, p types.Parameters) (*http.Request, error) {
+func newRequest(endpoint, method string, p util.Parameters) (*http.Request, error) {
 	req, err := http.NewRequest(method, endpoint, p.Body())
 	if err != nil {
 		return nil, err
