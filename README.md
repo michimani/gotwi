@@ -4,6 +4,8 @@ gotwi
 This is a library for using the Twitter API v2 in the Go language. (It is still under development).
 
 # Supported APIs
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fmichimani%2Fgotwi.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fmichimani%2Fgotwi?ref=badge_shield)
+
 
 - Tweets
   - Tweet lookup
@@ -145,3 +147,6 @@ michimani210
 35097
 pinned tweet
 ```
+
+## License
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fmichimani%2Fgotwi.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fmichimani%2Fgotwi?ref=badge_large)
