@@ -1,11 +1,7 @@
 package users
 
 import (
-	"encoding/json"
-	"fmt"
-
 	"github.com/michimani/gotwi"
-	"github.com/michimani/gotwi/internal/util"
 	"github.com/michimani/gotwi/users/types"
 )
 
@@ -18,7 +14,7 @@ const (
 
 func UserLookupUsers(c *gotwi.TwitterClient, p *types.UserLookupUsersParams) (*types.UserLookupUsersResponse, error) {
 	res := &types.UserLookupUsersResponse{}
-	if err := execUserLookupAPI(c, UserLookupUsersEndpoint, "GET", p, res); err != nil {
+	if err := c.CallAPI(UserLookupUsersEndpoint, "GET", p, res); err != nil {
 		return nil, err
 	}
 
@@ -27,7 +23,7 @@ func UserLookupUsers(c *gotwi.TwitterClient, p *types.UserLookupUsersParams) (*t
 
 func UserLookupUsersID(c *gotwi.TwitterClient, p *types.UserLookupUsersIDParams) (*types.UserLookupUsersIDResponse, error) {
 	res := &types.UserLookupUsersIDResponse{}
-	if err := execUserLookupAPI(c, UserLookupUsersIDEndpoint, "GET", p, res); err != nil {
+	if err := c.CallAPI(UserLookupUsersIDEndpoint, "GET", p, res); err != nil {
 		return nil, err
 	}
 
@@ -36,7 +32,7 @@ func UserLookupUsersID(c *gotwi.TwitterClient, p *types.UserLookupUsersIDParams)
 
 func UserLookupUsersBy(c *gotwi.TwitterClient, p *types.UserLookupUsersByParams) (*types.UserLookupUsersByResponse, error) {
 	res := &types.UserLookupUsersByResponse{}
-	if err := execUserLookupAPI(c, UserLookupUsersByEndpoint, "GET", p, res); err != nil {
+	if err := c.CallAPI(UserLookupUsersByEndpoint, "GET", p, res); err != nil {
 		return nil, err
 	}
 
@@ -45,28 +41,9 @@ func UserLookupUsersBy(c *gotwi.TwitterClient, p *types.UserLookupUsersByParams)
 
 func UserLookupUsersByUsername(c *gotwi.TwitterClient, p *types.UserLookupUsersByUsernameParams) (*types.UserLookupUsersByUsernameResponse, error) {
 	res := &types.UserLookupUsersByUsernameResponse{}
-	if err := execUserLookupAPI(c, UserLookupUsersByUsernameEndpoint, "GET", p, res); err != nil {
+	if err := c.CallAPI(UserLookupUsersByUsernameEndpoint, "GET", p, res); err != nil {
 		return nil, err
 	}
 
 	return res, nil
-}
-
-func execUserLookupAPI(c *gotwi.TwitterClient, endpoint, method string, p util.Parameters, i util.Response) error {
-	req, err := c.Prepare(endpoint, method, p)
-	if err != nil {
-		return err
-	}
-
-	res, err := c.Exec(req)
-	if err != nil {
-		return err
-	}
-
-	fmt.Println(string(res.Body))
-	if err := json.Unmarshal(res.Body, &i); err != nil {
-		return err
-	}
-
-	return nil
 }

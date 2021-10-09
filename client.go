@@ -67,6 +67,24 @@ func (c *TwitterClient) IsReady() bool {
 	return true
 }
 
+func (c *TwitterClient) CallAPI(endpoint, method string, p util.Parameters, i util.Response) error {
+	req, err := c.prepare(endpoint, method, p)
+	if err != nil {
+		return err
+	}
+
+	res, err := c.Exec(req)
+	if err != nil {
+		return err
+	}
+
+	if err := json.Unmarshal(res.Body, &i); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func (c *TwitterClient) Exec(req *http.Request) (*ClientResponse, error) {
 	res, err := c.Client.Do(req)
 	if err != nil {
@@ -95,7 +113,7 @@ func (c *TwitterClient) Exec(req *http.Request) (*ClientResponse, error) {
 	}, nil
 }
 
-func (c *TwitterClient) Prepare(endpointBase, method string, p util.Parameters) (*http.Request, error) {
+func (c *TwitterClient) prepare(endpointBase, method string, p util.Parameters) (*http.Request, error) {
 	if p == nil {
 		return nil, fmt.Errorf(gotwierrors.ErrorParametersNil, endpointBase)
 	}
