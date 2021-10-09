@@ -8,7 +8,7 @@ This is a library for using the Twitter API v2 in the Go language. (It is still 
 - Tweets
   - Tweet lookup
     - [x] `GET /2/tweets`
-    - [ ] `GET /2/tweets/:id`
+    - [x] `GET /2/tweets/:id`
   - Search Tweets
     - [ ] `GET /2/tweets/search/recent`
     - [ ] `GET /2/tweets/search/all`

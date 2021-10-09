@@ -3,6 +3,7 @@ package types
 import (
 	"io"
 	"net/url"
+	"strings"
 
 	"github.com/michimani/gotwi/internal/util"
 )
@@ -37,36 +38,89 @@ func (p *TweetLookupTweetsParams) ResolveEndpoint(endpointBase string) string {
 
 	query := url.Values{}
 	query.Add("ids", util.QueryValue(p.IDs))
-	return endpoint + p.resolveTweetLookupQuery(query)
+	return endpoint + resolveTweetLookupQuery(query,
+		p.Expansions,
+		p.MediaFields,
+		p.PlaceFields,
+		p.PollFields,
+		p.TweetFields,
+		p.UserFields,
+	)
 }
 
 func (p *TweetLookupTweetsParams) Body() io.Reader {
 	return nil
 }
 
-func (p *TweetLookupTweetsParams) resolveTweetLookupQuery(q url.Values) string {
-	if p.Expansions != nil {
-		q.Add("expansions", util.QueryValue(p.Expansions))
+type TweetLookupTweetsIDParams struct {
+	accessToken string
+
+	// Path parameter
+	ID string
+
+	// Query parameters
+	Expansions  []string
+	MediaFields []string
+	PlaceFields []string
+	PollFields  []string
+	TweetFields []string
+	UserFields  []string
+}
+
+func (p *TweetLookupTweetsIDParams) SetAccessToken(token string) {
+	p.accessToken = token
+}
+
+func (p *TweetLookupTweetsIDParams) AccessToken() string {
+	return p.accessToken
+}
+
+func (p *TweetLookupTweetsIDParams) ResolveEndpoint(endpointBase string) string {
+	if p.ID == "" {
+		return ""
 	}
 
-	if p.MediaFields != nil {
-		q.Add("media.fields", util.QueryValue(p.MediaFields))
+	encoded := url.QueryEscape(p.ID)
+	endpoint := strings.Replace(endpointBase, ":id", encoded, 1)
+
+	query := url.Values{}
+	return endpoint + resolveTweetLookupQuery(query,
+		p.Expansions,
+		p.MediaFields,
+		p.PlaceFields,
+		p.PollFields,
+		p.TweetFields,
+		p.UserFields,
+	)
+}
+
+func (p *TweetLookupTweetsIDParams) Body() io.Reader {
+	return nil
+}
+
+func resolveTweetLookupQuery(q url.Values, expansions, mediaFields, placeFields, pollFields, tweetFields, userFields []string) string {
+	if expansions != nil {
+		q.Add("expansions", util.QueryValue(expansions))
 	}
 
-	if p.PlaceFields != nil {
-		q.Add("place.fields", util.QueryValue(p.PlaceFields))
+	if mediaFields != nil {
+		q.Add("media.fields", util.QueryValue(mediaFields))
 	}
 
-	if p.PollFields != nil {
-		q.Add("poll.fields", util.QueryValue(p.PollFields))
+	if placeFields != nil {
+		q.Add("place.fields", util.QueryValue(placeFields))
 	}
 
-	if p.TweetFields != nil {
-		q.Add("tweet.fields", util.QueryValue(p.TweetFields))
+	if pollFields != nil {
+		q.Add("poll.fields", util.QueryValue(pollFields))
 	}
 
-	if p.UserFields != nil {
-		q.Add("user.fields", util.QueryValue(p.UserFields))
+	if tweetFields != nil {
+		q.Add("tweet.fields", util.QueryValue(tweetFields))
+	}
+
+	if userFields != nil {
+		q.Add("user.fields", util.QueryValue(userFields))
 	}
 
 	encoded := q.Encode()
