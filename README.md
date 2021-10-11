@@ -42,7 +42,7 @@ This is a library for using the Twitter API v2 in the Go language. (It is still 
     - [x] `GET /2/users/by`
     - [x] `GET /2/users/by/username`
   - Follows
-    - [ ] `GET /2/users/:id/following`
+    - [x] `GET /2/users/:id/following`
     - [ ] `GET /2/users/:id/followers`
     - [ ] `POST /2/users/:id/following`
     - [ ] `DELETE /2/users/:source_user_id/following/:target_user_id`
