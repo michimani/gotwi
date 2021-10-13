@@ -13,7 +13,7 @@ This is a library for using the Twitter API v2 in the Go language. (It is still 
     - [x] `GET /2/tweets/:id`
   - Search Tweets
     - [x] `GET /2/tweets/search/recent`
-    - [ ] `GET /2/tweets/search/all`
+    - [x] `GET /2/tweets/search/all`
   - Tweet counts
     - [ ] `GET /2/tweets/counts/recent`
     - [ ] `GET /2/tweets/counts/all`

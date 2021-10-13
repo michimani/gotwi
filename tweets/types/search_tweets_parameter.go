@@ -67,6 +67,54 @@ func (p *SearchTweetsTweetsSearchRecentParams) Body() io.Reader {
 	return nil
 }
 
+type SearchTweetsTweetsSearchAllParams struct {
+	accessToken string
+
+	// Path parameters
+	Query       string
+	StartTime   *time.Time
+	EndTime     *time.Time
+	SinceID     string
+	UntileID    string
+	Expansions  []string
+	MediaFields []string
+	PlaceFields []string
+	PollFields  []string
+	TweetFields []string
+	UserFields  []string
+	NextToken   string
+	MaxResults  SearchTweetsMaxResult
+}
+
+func (p *SearchTweetsTweetsSearchAllParams) SetAccessToken(token string) {
+	p.accessToken = token
+}
+
+func (p *SearchTweetsTweetsSearchAllParams) AccessToken() string {
+	return p.accessToken
+}
+
+func (p *SearchTweetsTweetsSearchAllParams) ResolveEndpoint(endpointBase string) string {
+	endpoint := endpointBase
+
+	if p.Query == "" {
+		return ""
+	}
+
+	query := url.Values{}
+	query.Add("query", p.Query)
+	return endpoint + resolveSearchTweetsQuery(query,
+		p.Expansions, p.MediaFields, p.PlaceFields, p.PollFields, p.TweetFields, p.UserFields,
+		p.StartTime, p.EndTime,
+		p.SinceID, p.UntileID,
+		p.NextToken, p.MaxResults,
+	)
+}
+
+func (p *SearchTweetsTweetsSearchAllParams) Body() io.Reader {
+	return nil
+}
+
 func resolveSearchTweetsQuery(q url.Values,
 	expansions, mediaFields, placeFields, pollFields, tweetFields, userFields []string,
 	start, end *time.Time,
