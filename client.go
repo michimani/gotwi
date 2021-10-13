@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"os"
+	"strings"
 	"time"
 
 	"github.com/michimani/gotwi/internal/gotwierrors"
@@ -102,14 +103,11 @@ func (c *TwitterClient) Exec(req *http.Request) (*ClientResponse, *resources.Non
 	}
 
 	if res.StatusCode != http.StatusOK {
-		non200err := resources.Non200Error{}
-		if err := json.Unmarshal(bytes, &non200err); err != nil {
+		non200err, err := resolveNon200Response(res, bytes)
+		if err != nil {
 			return nil, nil, err
 		}
-
-		non200err.Status = res.Status
-		non200err.StatusCode = res.StatusCode
-		return nil, &non200err, nil
+		return nil, non200err, nil
 	}
 
 	return &ClientResponse{
@@ -143,4 +141,41 @@ func newRequest(endpoint, method string, p util.Parameters) (*http.Request, erro
 	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", p.AccessToken()))
 
 	return req, nil
+}
+
+func resolveNon200Response(res *http.Response, bodyBytes []byte) (*resources.Non200Error, error) {
+	non200err := resources.Non200Error{
+		Status:     res.Status,
+		StatusCode: res.StatusCode,
+	}
+
+	cts := util.HeaderValues("Content-Type", res.Header)
+	if len(cts) == 0 {
+		non200err.Errors = []resources.ErrorInformation{
+			{Message: "Content-Type is undefined."},
+		}
+		return &non200err, nil
+	}
+
+	if !strings.Contains(cts[0], "application/json") {
+		non200err.Errors = []resources.ErrorInformation{
+			{Message: strings.TrimRight(string(bodyBytes), "\n")},
+		}
+	} else {
+		if err := json.Unmarshal(bodyBytes, &non200err); err != nil {
+			return nil, err
+		}
+	}
+
+	// additional information for Rate Limit
+	if res.StatusCode == http.StatusTooManyRequests {
+		rri, err := util.GetRateLimitInformation(res)
+		if err != nil {
+			return nil, err
+		}
+
+		non200err.RateLimitInfo = rri
+	}
+
+	return &non200err, nil
 }
