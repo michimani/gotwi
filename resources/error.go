@@ -1,14 +1,19 @@
 package resources
 
-import "fmt"
+import (
+	"fmt"
+
+	"github.com/michimani/gotwi/internal/util"
+)
 
 type Non200Error struct {
-	Errors     []ErrorInformation `json:"errors"`
-	Title      string             `json:"title,omitempty"`
-	Detail     string             `json:"detail,omitempty"`
-	Type       string             `json:"type,omitempty"`
-	Status     string             `json:"-"`
-	StatusCode int                `json:"-"`
+	Errors        []ErrorInformation         `json:"errors"`
+	Title         string                     `json:"title,omitempty"`
+	Detail        string                     `json:"detail,omitempty"`
+	Type          string                     `json:"type,omitempty"`
+	Status        string                     `json:"-"`
+	StatusCode    int                        `json:"-"`
+	RateLimitInfo *util.RateLimitInformation `json:"-"`
 }
 
 type ErrorInformation struct {
@@ -42,6 +47,9 @@ func (e *Non200Error) Summary() string {
 			detail := er.Code.Detail()
 			summary = summary + fmt.Sprintf("errorCode=%d errorText=\"%s\" errorDescription=\"%s\" ", er.Code, detail.Text, detail.Description)
 		}
+	}
+	if e.RateLimitInfo != nil {
+		summary = summary + fmt.Sprintf("rateLimit=%d rateLimitRemaining=%d rateLimitReset=\"%s\"", e.RateLimitInfo.Limit, e.RateLimitInfo.Remaining, e.RateLimitInfo.ResetAt)
 	}
 
 	return summary
