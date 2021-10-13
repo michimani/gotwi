@@ -1,11 +1,50 @@
 package resources
 
+import "fmt"
+
 type Non200Error struct {
-	Title      string `json:"title"`
-	Detail     string `json:"detail"`
-	Type       string `json:"type"`
-	Status     string `json:"-"`
-	StatusCode int    `json:"-"`
+	Errors     []ErrorInformation `json:"errors"`
+	Title      string             `json:"title,omitempty"`
+	Detail     string             `json:"detail,omitempty"`
+	Type       string             `json:"type,omitempty"`
+	Status     string             `json:"-"`
+	StatusCode int                `json:"-"`
+}
+
+type ErrorInformation struct {
+	Message    string              `json:"message"`
+	Code       ErrorCode           `json:"code,omitempty"`
+	Label      string              `json:"label,omitempty"`
+	Parameters map[string][]string `json:"parameters,omitempty"`
+}
+
+func (e *Non200Error) Summary() string {
+	if e == nil {
+		return ""
+	}
+
+	summary := ""
+	if e.Status != "" {
+		summary = summary + fmt.Sprintf("httpStatus=\"%s\" ", e.Status)
+	}
+	if e.StatusCode > 0 {
+		summary = summary + fmt.Sprintf("httpStatusCode=%d ", e.StatusCode)
+	}
+	if e.Title != "" {
+		summary = summary + fmt.Sprintf("title=\"%s\" ", e.Title)
+	}
+	if e.Detail != "" {
+		summary = summary + fmt.Sprintf("detail=\"%s\" ", e.Detail)
+	}
+	for _, er := range e.Errors {
+		summary = summary + fmt.Sprintf("message=\"%s\" ", er.Message)
+		if er.Code > 0 {
+			detail := er.Code.Detail()
+			summary = summary + fmt.Sprintf("errorCode=%d errorText=\"%s\" errorDescription=\"%s\" ", er.Code, detail.Text, detail.Description)
+		}
+	}
+
+	return summary
 }
 
 type PartialError struct {

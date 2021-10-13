@@ -73,9 +73,13 @@ func (c *TwitterClient) CallAPI(endpoint, method string, p util.Parameters, i ut
 		return err
 	}
 
-	res, err := c.Exec(req)
+	res, not200err, err := c.Exec(req)
 	if err != nil {
 		return err
+	}
+
+	if not200err != nil {
+		return fmt.Errorf(gotwierrors.ErrorNon200Status, not200err.Summary())
 	}
 
 	if err := json.Unmarshal(res.Body, &i); err != nil {
@@ -85,32 +89,34 @@ func (c *TwitterClient) CallAPI(endpoint, method string, p util.Parameters, i ut
 	return nil
 }
 
-func (c *TwitterClient) Exec(req *http.Request) (*ClientResponse, error) {
+func (c *TwitterClient) Exec(req *http.Request) (*ClientResponse, *resources.Non200Error, error) {
 	res, err := c.Client.Do(req)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 	defer res.Body.Close()
 
 	bytes, err := ioutil.ReadAll(res.Body)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
 	if res.StatusCode != http.StatusOK {
 		non200err := resources.Non200Error{}
 		if err := json.Unmarshal(bytes, &non200err); err != nil {
-			return nil, err
+			return nil, nil, err
 		}
 
-		return nil, fmt.Errorf(gotwierrors.ErrorNon200Status, res.StatusCode, non200err.Title, non200err.Detail)
+		non200err.Status = res.Status
+		non200err.StatusCode = res.StatusCode
+		return nil, &non200err, nil
 	}
 
 	return &ClientResponse{
 		StatusCode: res.StatusCode,
 		Status:     res.Status,
 		Body:       bytes,
-	}, nil
+	}, nil, nil
 }
 
 func (c *TwitterClient) prepare(endpointBase, method string, p util.Parameters) (*http.Request, error) {

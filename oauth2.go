@@ -6,6 +6,8 @@ import (
 	"net/http"
 	"net/url"
 	"strings"
+
+	"github.com/michimani/gotwi/internal/gotwierrors"
 )
 
 const OAuth2TokenEndpoint = "https://api.twitter.com/oauth2/token"
@@ -28,9 +30,13 @@ func GenerateBearerToken(c *TwitterClient, apiKey, apiKeySecret string) (string,
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8")
 	req.SetBasicAuth(apiKey, apiKeySecret)
 
-	res, err := c.Exec(req)
+	res, not200err, err := c.Exec(req)
 	if err != nil {
 		return "", err
+	}
+
+	if not200err != nil {
+		return "", fmt.Errorf(gotwierrors.ErrorNon200Status, not200err.Summary())
 	}
 
 	var o2r OAuth2TokenResponse
