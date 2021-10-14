@@ -19,7 +19,7 @@ type SearchTweetsTweetsSearchRecentParams struct {
 	StartTime   *time.Time
 	EndTime     *time.Time
 	SinceID     string
-	UntileID    string
+	UntilID     string
 	Expansions  []string
 	MediaFields []string
 	PlaceFields []string
@@ -58,7 +58,7 @@ func (p *SearchTweetsTweetsSearchRecentParams) ResolveEndpoint(endpointBase stri
 	return endpoint + resolveSearchTweetsQuery(query,
 		p.Expansions, p.MediaFields, p.PlaceFields, p.PollFields, p.TweetFields, p.UserFields,
 		p.StartTime, p.EndTime,
-		p.SinceID, p.UntileID,
+		p.SinceID, p.UntilID,
 		p.NextToken, p.MaxResults,
 	)
 }
@@ -75,7 +75,7 @@ type SearchTweetsTweetsSearchAllParams struct {
 	StartTime   *time.Time
 	EndTime     *time.Time
 	SinceID     string
-	UntileID    string
+	UntilID     string
 	Expansions  []string
 	MediaFields []string
 	PlaceFields []string
@@ -106,7 +106,7 @@ func (p *SearchTweetsTweetsSearchAllParams) ResolveEndpoint(endpointBase string)
 	return endpoint + resolveSearchTweetsQuery(query,
 		p.Expansions, p.MediaFields, p.PlaceFields, p.PollFields, p.TweetFields, p.UserFields,
 		p.StartTime, p.EndTime,
-		p.SinceID, p.UntileID,
+		p.SinceID, p.UntilID,
 		p.NextToken, p.MaxResults,
 	)
 }
