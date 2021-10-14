@@ -2,6 +2,7 @@ package types_test
 
 import (
 	"testing"
+	"time"
 
 	"github.com/michimani/gotwi/tweets/types"
 	"github.com/stretchr/testify/assert"
@@ -36,6 +37,9 @@ func Test_SearchTweetsTweetsSearchRecent_SetAccessToken(t *testing.T) {
 
 func Test_SearchTweetsTweetsSearchRecent_ResolveEndpoint(t *testing.T) {
 	const endpointBase = "test/endpoint"
+	startTime := time.Date(2021, 10, 24, 0, 0, 0, 0, time.UTC)
+	endTime := time.Date(2021, 10, 24, 23, 59, 59, 59, time.UTC)
+
 	cases := []struct {
 		name   string
 		params *types.SearchTweetsTweetsSearchRecentParams
@@ -95,6 +99,38 @@ func Test_SearchTweetsTweetsSearchRecent_ResolveEndpoint(t *testing.T) {
 				UserFields: []string{"uf1", "uf2"},
 			},
 			expect: endpointBase + "?max_results=10&query=from%3Atestuser&user.fields=uf1%2Cuf2",
+		},
+		{
+			name: "with end_time",
+			params: &types.SearchTweetsTweetsSearchRecentParams{
+				Query:   "from:testuser",
+				EndTime: &endTime,
+			},
+			expect: endpointBase + "?end_time=2021-10-24T23%3A59%3A59Z&max_results=10&query=from%3Atestuser",
+		},
+		{
+			name: "with start_time",
+			params: &types.SearchTweetsTweetsSearchRecentParams{
+				Query:     "from:testuser",
+				StartTime: &startTime,
+			},
+			expect: endpointBase + "?max_results=10&query=from%3Atestuser&start_time=2021-10-24T00%3A00%3A00Z",
+		},
+		{
+			name: "with since_id",
+			params: &types.SearchTweetsTweetsSearchRecentParams{
+				Query:   "from:testuser",
+				SinceID: "sid",
+			},
+			expect: endpointBase + "?max_results=10&query=from%3Atestuser&since_id=sid",
+		},
+		{
+			name: "with until_id",
+			params: &types.SearchTweetsTweetsSearchRecentParams{
+				Query:   "from:testuser",
+				UntilID: "uid",
+			},
+			expect: endpointBase + "?max_results=10&query=from%3Atestuser&until_id=uid",
 		},
 		{
 			name: "all query parameters",
@@ -180,6 +216,9 @@ func Test_SearchTweetsTweetsSearchAll_SetAccessToken(t *testing.T) {
 
 func Test_SearchTweetsTweetsSearchAll_ResolveEndpoint(t *testing.T) {
 	const endpointBase = "test/endpoint"
+	startTime := time.Date(2021, 10, 24, 0, 0, 0, 0, time.UTC)
+	endTime := time.Date(2021, 10, 24, 23, 59, 59, 59, time.UTC)
+
 	cases := []struct {
 		name   string
 		params *types.SearchTweetsTweetsSearchAllParams
@@ -239,6 +278,38 @@ func Test_SearchTweetsTweetsSearchAll_ResolveEndpoint(t *testing.T) {
 				UserFields: []string{"uf1", "uf2"},
 			},
 			expect: endpointBase + "?max_results=10&query=from%3Atestuser&user.fields=uf1%2Cuf2",
+		},
+		{
+			name: "with end_time",
+			params: &types.SearchTweetsTweetsSearchAllParams{
+				Query:   "from:testuser",
+				EndTime: &endTime,
+			},
+			expect: endpointBase + "?end_time=2021-10-24T23%3A59%3A59Z&max_results=10&query=from%3Atestuser",
+		},
+		{
+			name: "with start_time",
+			params: &types.SearchTweetsTweetsSearchAllParams{
+				Query:     "from:testuser",
+				StartTime: &startTime,
+			},
+			expect: endpointBase + "?max_results=10&query=from%3Atestuser&start_time=2021-10-24T00%3A00%3A00Z",
+		},
+		{
+			name: "with since_id",
+			params: &types.SearchTweetsTweetsSearchAllParams{
+				Query:   "from:testuser",
+				SinceID: "sid",
+			},
+			expect: endpointBase + "?max_results=10&query=from%3Atestuser&since_id=sid",
+		},
+		{
+			name: "with until_id",
+			params: &types.SearchTweetsTweetsSearchAllParams{
+				Query:   "from:testuser",
+				UntilID: "uid",
+			},
+			expect: endpointBase + "?max_results=10&query=from%3Atestuser&until_id=uid",
 		},
 		{
 			name: "all query parameters",
