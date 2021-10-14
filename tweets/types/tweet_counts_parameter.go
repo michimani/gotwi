@@ -55,6 +55,7 @@ func (p *TweetCountsTweetsCountsRecentParams) ResolveEndpoint(endpointBase strin
 		p.StartTime, p.EndTime,
 		p.SinceID, p.UntilID,
 		p.Granularity,
+		"",
 	)
 }
 
@@ -62,7 +63,49 @@ func (p *TweetCountsTweetsCountsRecentParams) Body() io.Reader {
 	return nil
 }
 
-func resolveTweetCountsQuery(q url.Values, start, end *time.Time, since, until string, granularity TweetCountsGranularity) string {
+type TweetCountsTweetsCountsAllParams struct {
+	accessToken string
+
+	// Path parameters
+	Query       string
+	StartTime   *time.Time
+	EndTime     *time.Time
+	SinceID     string
+	UntilID     string
+	Granularity TweetCountsGranularity
+	NextToken   string
+}
+
+func (p *TweetCountsTweetsCountsAllParams) SetAccessToken(token string) {
+	p.accessToken = token
+}
+
+func (p *TweetCountsTweetsCountsAllParams) AccessToken() string {
+	return p.accessToken
+}
+
+func (p *TweetCountsTweetsCountsAllParams) ResolveEndpoint(endpointBase string) string {
+	endpoint := endpointBase
+
+	if p.Query == "" {
+		return ""
+	}
+
+	query := url.Values{}
+	query.Add("query", p.Query)
+	return endpoint + resolveTweetCountsQuery(query,
+		p.StartTime, p.EndTime,
+		p.SinceID, p.UntilID,
+		p.Granularity,
+		p.NextToken,
+	)
+}
+
+func (p *TweetCountsTweetsCountsAllParams) Body() io.Reader {
+	return nil
+}
+
+func resolveTweetCountsQuery(q url.Values, start, end *time.Time, since, until string, granularity TweetCountsGranularity, nextToken string) string {
 	if start != nil {
 		q.Add("start_time", start.Format(time.RFC3339))
 	}
@@ -83,6 +126,10 @@ func resolveTweetCountsQuery(q url.Values, start, end *time.Time, since, until s
 		q.Add("granularity", granularity.String())
 	} else {
 		q.Add("granularity", TweetCountsGranularityHour.String())
+	}
+
+	if nextToken != "" {
+		q.Add("next_token", nextToken)
 	}
 
 	encoded := q.Encode()
