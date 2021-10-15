@@ -8,7 +8,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func Test_TweetCountsTweetsCountsRecent_SetAccessToken(t *testing.T) {
+func Test_TweetCountsRecent_SetAccessToken(t *testing.T) {
 	cases := []struct {
 		name   string
 		token  string
@@ -28,33 +28,33 @@ func Test_TweetCountsTweetsCountsRecent_SetAccessToken(t *testing.T) {
 
 	for _, c := range cases {
 		t.Run(c.name, func(tt *testing.T) {
-			p := &types.TweetCountsTweetsCountsRecentParams{}
+			p := &types.TweetCountsRecentParams{}
 			p.SetAccessToken(c.token)
 			assert.Equal(tt, c.expect, p.AccessToken())
 		})
 	}
 }
 
-func Test_TweetCountsTweetsCountsRecent_ResolveEndpoint(t *testing.T) {
+func Test_TweetCountsRecent_ResolveEndpoint(t *testing.T) {
 	const endpointBase = "test/endpoint"
 	startTime := time.Date(2021, 10, 24, 0, 0, 0, 0, time.UTC)
 	endTime := time.Date(2021, 10, 24, 23, 59, 59, 59, time.UTC)
 
 	cases := []struct {
 		name   string
-		params *types.TweetCountsTweetsCountsRecentParams
+		params *types.TweetCountsRecentParams
 		expect string
 	}{
 		{
 			name: "only required parameter",
-			params: &types.TweetCountsTweetsCountsRecentParams{
+			params: &types.TweetCountsRecentParams{
 				Query: "from:testuser",
 			},
 			expect: endpointBase + "?granularity=hour&query=from%3Atestuser",
 		},
 		{
 			name: "with end_time",
-			params: &types.TweetCountsTweetsCountsRecentParams{
+			params: &types.TweetCountsRecentParams{
 				Query:   "from:testuser",
 				EndTime: &endTime,
 			},
@@ -62,7 +62,7 @@ func Test_TweetCountsTweetsCountsRecent_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "with start_time",
-			params: &types.TweetCountsTweetsCountsRecentParams{
+			params: &types.TweetCountsRecentParams{
 				Query:     "from:testuser",
 				StartTime: &startTime,
 			},
@@ -70,7 +70,7 @@ func Test_TweetCountsTweetsCountsRecent_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "with since_id",
-			params: &types.TweetCountsTweetsCountsRecentParams{
+			params: &types.TweetCountsRecentParams{
 				Query:   "from:testuser",
 				SinceID: "sid",
 			},
@@ -78,7 +78,7 @@ func Test_TweetCountsTweetsCountsRecent_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "with until_id",
-			params: &types.TweetCountsTweetsCountsRecentParams{
+			params: &types.TweetCountsRecentParams{
 				Query:   "from:testuser",
 				UntilID: "uid",
 			},
@@ -86,7 +86,7 @@ func Test_TweetCountsTweetsCountsRecent_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "with granularity",
-			params: &types.TweetCountsTweetsCountsRecentParams{
+			params: &types.TweetCountsRecentParams{
 				Query:       "from:testuser",
 				Granularity: types.TweetCountsGranularityDay,
 			},
@@ -94,7 +94,7 @@ func Test_TweetCountsTweetsCountsRecent_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "all query parameters",
-			params: &types.TweetCountsTweetsCountsRecentParams{
+			params: &types.TweetCountsRecentParams{
 				Query:       "from:testuser",
 				EndTime:     &endTime,
 				StartTime:   &startTime,
@@ -106,7 +106,7 @@ func Test_TweetCountsTweetsCountsRecent_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name:   "has no required parameter",
-			params: &types.TweetCountsTweetsCountsRecentParams{},
+			params: &types.TweetCountsRecentParams{},
 			expect: "",
 		},
 	}
@@ -119,18 +119,18 @@ func Test_TweetCountsTweetsCountsRecent_ResolveEndpoint(t *testing.T) {
 	}
 }
 
-func Test_TweetCountsTweetsCountsRecent_Body(t *testing.T) {
+func Test_TweetCountsRecent_Body(t *testing.T) {
 	cases := []struct {
 		name   string
-		params *types.TweetCountsTweetsCountsRecentParams
+		params *types.TweetCountsRecentParams
 	}{
 		{
 			name:   "empty params",
-			params: &types.TweetCountsTweetsCountsRecentParams{},
+			params: &types.TweetCountsRecentParams{},
 		},
 		{
 			name:   "some params",
-			params: &types.TweetCountsTweetsCountsRecentParams{Query: "from:testuser"},
+			params: &types.TweetCountsRecentParams{Query: "from:testuser"},
 		},
 	}
 
@@ -142,7 +142,7 @@ func Test_TweetCountsTweetsCountsRecent_Body(t *testing.T) {
 	}
 }
 
-func Test_TweetCountsTweetsCountsAll_SetAccessToken(t *testing.T) {
+func Test_TweetCountsAll_SetAccessToken(t *testing.T) {
 	cases := []struct {
 		name   string
 		token  string
@@ -162,33 +162,33 @@ func Test_TweetCountsTweetsCountsAll_SetAccessToken(t *testing.T) {
 
 	for _, c := range cases {
 		t.Run(c.name, func(tt *testing.T) {
-			p := &types.TweetCountsTweetsCountsAllParams{}
+			p := &types.TweetCountsAllParams{}
 			p.SetAccessToken(c.token)
 			assert.Equal(tt, c.expect, p.AccessToken())
 		})
 	}
 }
 
-func Test_TweetCountsTweetsCountsAll_ResolveEndpoint(t *testing.T) {
+func Test_TweetCountsAll_ResolveEndpoint(t *testing.T) {
 	const endpointBase = "test/endpoint"
 	startTime := time.Date(2021, 10, 24, 0, 0, 0, 0, time.UTC)
 	endTime := time.Date(2021, 10, 24, 23, 59, 59, 59, time.UTC)
 
 	cases := []struct {
 		name   string
-		params *types.TweetCountsTweetsCountsAllParams
+		params *types.TweetCountsAllParams
 		expect string
 	}{
 		{
 			name: "only required parameter",
-			params: &types.TweetCountsTweetsCountsAllParams{
+			params: &types.TweetCountsAllParams{
 				Query: "from:testuser",
 			},
 			expect: endpointBase + "?granularity=hour&query=from%3Atestuser",
 		},
 		{
 			name: "with end_time",
-			params: &types.TweetCountsTweetsCountsAllParams{
+			params: &types.TweetCountsAllParams{
 				Query:   "from:testuser",
 				EndTime: &endTime,
 			},
@@ -196,7 +196,7 @@ func Test_TweetCountsTweetsCountsAll_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "with start_time",
-			params: &types.TweetCountsTweetsCountsAllParams{
+			params: &types.TweetCountsAllParams{
 				Query:     "from:testuser",
 				StartTime: &startTime,
 			},
@@ -204,7 +204,7 @@ func Test_TweetCountsTweetsCountsAll_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "with since_id",
-			params: &types.TweetCountsTweetsCountsAllParams{
+			params: &types.TweetCountsAllParams{
 				Query:   "from:testuser",
 				SinceID: "sid",
 			},
@@ -212,7 +212,7 @@ func Test_TweetCountsTweetsCountsAll_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "with until_id",
-			params: &types.TweetCountsTweetsCountsAllParams{
+			params: &types.TweetCountsAllParams{
 				Query:   "from:testuser",
 				UntilID: "uid",
 			},
@@ -220,7 +220,7 @@ func Test_TweetCountsTweetsCountsAll_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "with granularity",
-			params: &types.TweetCountsTweetsCountsAllParams{
+			params: &types.TweetCountsAllParams{
 				Query:       "from:testuser",
 				Granularity: types.TweetCountsGranularityDay,
 			},
@@ -228,7 +228,7 @@ func Test_TweetCountsTweetsCountsAll_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "with next_token",
-			params: &types.TweetCountsTweetsCountsAllParams{
+			params: &types.TweetCountsAllParams{
 				Query:     "from:testuser",
 				NextToken: "n_token",
 			},
@@ -236,7 +236,7 @@ func Test_TweetCountsTweetsCountsAll_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "all query parameters",
-			params: &types.TweetCountsTweetsCountsAllParams{
+			params: &types.TweetCountsAllParams{
 				Query:       "from:testuser",
 				EndTime:     &endTime,
 				StartTime:   &startTime,
@@ -249,7 +249,7 @@ func Test_TweetCountsTweetsCountsAll_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name:   "has no required parameter",
-			params: &types.TweetCountsTweetsCountsAllParams{},
+			params: &types.TweetCountsAllParams{},
 			expect: "",
 		},
 	}
@@ -262,18 +262,18 @@ func Test_TweetCountsTweetsCountsAll_ResolveEndpoint(t *testing.T) {
 	}
 }
 
-func Test_TweetCountsTweetsCountsAll_Body(t *testing.T) {
+func Test_TweetCountsAll_Body(t *testing.T) {
 	cases := []struct {
 		name   string
-		params *types.TweetCountsTweetsCountsAllParams
+		params *types.TweetCountsAllParams
 	}{
 		{
 			name:   "empty params",
-			params: &types.TweetCountsTweetsCountsAllParams{},
+			params: &types.TweetCountsAllParams{},
 		},
 		{
 			name:   "some params",
-			params: &types.TweetCountsTweetsCountsAllParams{Query: "from:testuser"},
+			params: &types.TweetCountsAllParams{Query: "from:testuser"},
 		},
 	}
 

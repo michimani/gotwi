@@ -8,15 +8,15 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func Test_TweetCountsTweetsCountsRecent_HasPartialError(t *testing.T) {
+func Test_TweetCountsRecent_HasPartialError(t *testing.T) {
 	cases := []struct {
 		name   string
-		res    *types.TweetCountsTweetsCountsRecentResponse
+		res    *types.TweetCountsRecentResponse
 		expect bool
 	}{
 		{
 			name: "has partical error",
-			res: &types.TweetCountsTweetsCountsRecentResponse{
+			res: &types.TweetCountsRecentResponse{
 				Errors: []resources.PartialError{
 					{Title: "test partical error"},
 				}},
@@ -24,13 +24,13 @@ func Test_TweetCountsTweetsCountsRecent_HasPartialError(t *testing.T) {
 		},
 		{
 			name: "has no partical error",
-			res: &types.TweetCountsTweetsCountsRecentResponse{
+			res: &types.TweetCountsRecentResponse{
 				Errors: []resources.PartialError{}},
 			expect: false,
 		},
 		{
 			name: "partical error is nil",
-			res: &types.TweetCountsTweetsCountsRecentResponse{
+			res: &types.TweetCountsRecentResponse{
 				Errors: []resources.PartialError{}},
 			expect: false,
 		},
@@ -44,15 +44,15 @@ func Test_TweetCountsTweetsCountsRecent_HasPartialError(t *testing.T) {
 	}
 }
 
-func Test_TweetCountsTweetsCountsAll_HasPartialError(t *testing.T) {
+func Test_TweetCountsAll_HasPartialError(t *testing.T) {
 	cases := []struct {
 		name   string
-		res    *types.TweetCountsTweetsCountsAllResponse
+		res    *types.TweetCountsAllResponse
 		expect bool
 	}{
 		{
 			name: "has partical error",
-			res: &types.TweetCountsTweetsCountsAllResponse{
+			res: &types.TweetCountsAllResponse{
 				Errors: []resources.PartialError{
 					{Title: "test partical error"},
 				}},
@@ -60,13 +60,13 @@ func Test_TweetCountsTweetsCountsAll_HasPartialError(t *testing.T) {
 		},
 		{
 			name: "has no partical error",
-			res: &types.TweetCountsTweetsCountsAllResponse{
+			res: &types.TweetCountsAllResponse{
 				Errors: []resources.PartialError{}},
 			expect: false,
 		},
 		{
 			name: "partical error is nil",
-			res: &types.TweetCountsTweetsCountsAllResponse{
+			res: &types.TweetCountsAllResponse{
 				Errors: []resources.PartialError{}},
 			expect: false,
 		},
