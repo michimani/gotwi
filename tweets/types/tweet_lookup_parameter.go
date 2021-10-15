@@ -8,7 +8,7 @@ import (
 	"github.com/michimani/gotwi/internal/util"
 )
 
-type TweetLookupTweetsParams struct {
+type TweetLookupParams struct {
 	accessToken string
 
 	// Query parameters
@@ -21,15 +21,15 @@ type TweetLookupTweetsParams struct {
 	UserFields  []string
 }
 
-func (p *TweetLookupTweetsParams) SetAccessToken(token string) {
+func (p *TweetLookupParams) SetAccessToken(token string) {
 	p.accessToken = token
 }
 
-func (p *TweetLookupTweetsParams) AccessToken() string {
+func (p *TweetLookupParams) AccessToken() string {
 	return p.accessToken
 }
 
-func (p *TweetLookupTweetsParams) ResolveEndpoint(endpointBase string) string {
+func (p *TweetLookupParams) ResolveEndpoint(endpointBase string) string {
 	endpoint := endpointBase
 
 	if p.IDs == nil || len(p.IDs) == 0 {
@@ -48,11 +48,11 @@ func (p *TweetLookupTweetsParams) ResolveEndpoint(endpointBase string) string {
 	)
 }
 
-func (p *TweetLookupTweetsParams) Body() io.Reader {
+func (p *TweetLookupParams) Body() io.Reader {
 	return nil
 }
 
-type TweetLookupTweetsIDParams struct {
+type TweetLookupIDParams struct {
 	accessToken string
 
 	// Path parameter
@@ -67,15 +67,15 @@ type TweetLookupTweetsIDParams struct {
 	UserFields  []string
 }
 
-func (p *TweetLookupTweetsIDParams) SetAccessToken(token string) {
+func (p *TweetLookupIDParams) SetAccessToken(token string) {
 	p.accessToken = token
 }
 
-func (p *TweetLookupTweetsIDParams) AccessToken() string {
+func (p *TweetLookupIDParams) AccessToken() string {
 	return p.accessToken
 }
 
-func (p *TweetLookupTweetsIDParams) ResolveEndpoint(endpointBase string) string {
+func (p *TweetLookupIDParams) ResolveEndpoint(endpointBase string) string {
 	if p.ID == "" {
 		return ""
 	}
@@ -94,7 +94,7 @@ func (p *TweetLookupTweetsIDParams) ResolveEndpoint(endpointBase string) string 
 	)
 }
 
-func (p *TweetLookupTweetsIDParams) Body() io.Reader {
+func (p *TweetLookupIDParams) Body() io.Reader {
 	return nil
 }
 
