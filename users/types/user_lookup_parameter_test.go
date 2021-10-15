@@ -7,7 +7,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func Test_UserLookupUsersParams_SetAccessToken(t *testing.T) {
+func Test_UserLookupParams_SetAccessToken(t *testing.T) {
 	cases := []struct {
 		name   string
 		token  string
@@ -27,28 +27,28 @@ func Test_UserLookupUsersParams_SetAccessToken(t *testing.T) {
 
 	for _, c := range cases {
 		t.Run(c.name, func(tt *testing.T) {
-			p := &types.UserLookupUsersParams{}
+			p := &types.UserLookupParams{}
 			p.SetAccessToken(c.token)
 			assert.Equal(tt, c.expect, p.AccessToken())
 		})
 	}
 }
 
-func Test_UserLookupUsersParams_ResolveEndpoint(t *testing.T) {
+func Test_UserLookupParams_ResolveEndpoint(t *testing.T) {
 	const endpointBase = "test/endpoint"
 	cases := []struct {
 		name   string
-		params *types.UserLookupUsersParams
+		params *types.UserLookupParams
 		expect string
 	}{
 		{
 			name:   "normal: only required parameter",
-			params: &types.UserLookupUsersParams{IDs: []string{"test-id1", "test-id2"}},
+			params: &types.UserLookupParams{IDs: []string{"test-id1", "test-id2"}},
 			expect: endpointBase + "?ids=test-id1%2Ctest-id2",
 		},
 		{
 			name: "normal: with expansions",
-			params: &types.UserLookupUsersParams{
+			params: &types.UserLookupParams{
 				IDs:        []string{"test-id"},
 				Expansions: []string{"ex1", "ex2"},
 			},
@@ -56,7 +56,7 @@ func Test_UserLookupUsersParams_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "normal: with tweets.fields",
-			params: &types.UserLookupUsersParams{
+			params: &types.UserLookupParams{
 				IDs:         []string{"test-id"},
 				TweetFields: []string{"tf1", "tf2"},
 			},
@@ -64,7 +64,7 @@ func Test_UserLookupUsersParams_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "normal: with users.fields",
-			params: &types.UserLookupUsersParams{
+			params: &types.UserLookupParams{
 				IDs:        []string{"test-id"},
 				UserFields: []string{"uf1", "uf2"},
 			},
@@ -72,7 +72,7 @@ func Test_UserLookupUsersParams_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "normal: all query parameters",
-			params: &types.UserLookupUsersParams{
+			params: &types.UserLookupParams{
 				IDs:         []string{"test-id"},
 				Expansions:  []string{"ex"},
 				UserFields:  []string{"uf"},
@@ -82,7 +82,7 @@ func Test_UserLookupUsersParams_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "normal: has no required parameter",
-			params: &types.UserLookupUsersParams{
+			params: &types.UserLookupParams{
 				IDs:         []string{},
 				Expansions:  []string{"ex"},
 				UserFields:  []string{"uf"},
@@ -100,18 +100,18 @@ func Test_UserLookupUsersParams_ResolveEndpoint(t *testing.T) {
 	}
 }
 
-func Test_UserLookupUsersParams_Body(t *testing.T) {
+func Test_UserLookupParams_Body(t *testing.T) {
 	cases := []struct {
 		name   string
-		params *types.UserLookupUsersParams
+		params *types.UserLookupParams
 	}{
 		{
 			name:   "empty params",
-			params: &types.UserLookupUsersParams{},
+			params: &types.UserLookupParams{},
 		},
 		{
 			name:   "some params",
-			params: &types.UserLookupUsersParams{IDs: []string{"id"}},
+			params: &types.UserLookupParams{IDs: []string{"id"}},
 		},
 	}
 
@@ -123,7 +123,7 @@ func Test_UserLookupUsersParams_Body(t *testing.T) {
 	}
 }
 
-func Test_UserLookupUsersIDParams_SetAccessToken(t *testing.T) {
+func Test_UserLookupIDParams_SetAccessToken(t *testing.T) {
 	cases := []struct {
 		name   string
 		token  string
@@ -143,29 +143,29 @@ func Test_UserLookupUsersIDParams_SetAccessToken(t *testing.T) {
 
 	for _, c := range cases {
 		t.Run(c.name, func(tt *testing.T) {
-			p := &types.UserLookupUsersIDParams{}
+			p := &types.UserLookupIDParams{}
 			p.SetAccessToken(c.token)
 			assert.Equal(tt, c.expect, p.AccessToken())
 		})
 	}
 }
 
-func Test_UserLookupUsersIDParams_ResolveEndpoint(t *testing.T) {
+func Test_UserLookupIDParams_ResolveEndpoint(t *testing.T) {
 	const endpointRoot = "test/endpoint/"
 	const endpointBase = "test/endpoint/:id"
 	cases := []struct {
 		name   string
-		params *types.UserLookupUsersIDParams
+		params *types.UserLookupIDParams
 		expect string
 	}{
 		{
 			name:   "normal: only required parameter",
-			params: &types.UserLookupUsersIDParams{ID: "test-id"},
+			params: &types.UserLookupIDParams{ID: "test-id"},
 			expect: endpointRoot + "test-id",
 		},
 		{
 			name: "normal: with expansions",
-			params: &types.UserLookupUsersIDParams{
+			params: &types.UserLookupIDParams{
 				ID:         "test-id",
 				Expansions: []string{"ex1", "ex2"},
 			},
@@ -173,7 +173,7 @@ func Test_UserLookupUsersIDParams_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "normal: with tweets.fields",
-			params: &types.UserLookupUsersIDParams{
+			params: &types.UserLookupIDParams{
 				ID:          "test-id",
 				TweetFields: []string{"tf1", "tf2"},
 			},
@@ -181,7 +181,7 @@ func Test_UserLookupUsersIDParams_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "normal: with users.fields",
-			params: &types.UserLookupUsersIDParams{
+			params: &types.UserLookupIDParams{
 				ID:         "test-id",
 				UserFields: []string{"uf1", "uf2"},
 			},
@@ -189,7 +189,7 @@ func Test_UserLookupUsersIDParams_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "normal: all query parameters",
-			params: &types.UserLookupUsersIDParams{
+			params: &types.UserLookupIDParams{
 				ID:          "test-id",
 				Expansions:  []string{"ex"},
 				UserFields:  []string{"uf"},
@@ -199,7 +199,7 @@ func Test_UserLookupUsersIDParams_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "normal: has no required parameter",
-			params: &types.UserLookupUsersIDParams{
+			params: &types.UserLookupIDParams{
 				Expansions:  []string{"ex"},
 				UserFields:  []string{"uf"},
 				TweetFields: []string{"tf"},
@@ -216,18 +216,18 @@ func Test_UserLookupUsersIDParams_ResolveEndpoint(t *testing.T) {
 	}
 }
 
-func Test_UserLookupUsersIDParams_Body(t *testing.T) {
+func Test_UserLookupIDParams_Body(t *testing.T) {
 	cases := []struct {
 		name   string
-		params *types.UserLookupUsersIDParams
+		params *types.UserLookupIDParams
 	}{
 		{
 			name:   "empty params",
-			params: &types.UserLookupUsersIDParams{},
+			params: &types.UserLookupIDParams{},
 		},
 		{
 			name:   "some params",
-			params: &types.UserLookupUsersIDParams{ID: "id"},
+			params: &types.UserLookupIDParams{ID: "id"},
 		},
 	}
 
@@ -239,7 +239,7 @@ func Test_UserLookupUsersIDParams_Body(t *testing.T) {
 	}
 }
 
-func Test_UserLookupUsersByParams_SetAccessToken(t *testing.T) {
+func Test_UserLookupByParams_SetAccessToken(t *testing.T) {
 	cases := []struct {
 		name   string
 		token  string
@@ -259,28 +259,28 @@ func Test_UserLookupUsersByParams_SetAccessToken(t *testing.T) {
 
 	for _, c := range cases {
 		t.Run(c.name, func(tt *testing.T) {
-			p := &types.UserLookupUsersByParams{}
+			p := &types.UserLookupByParams{}
 			p.SetAccessToken(c.token)
 			assert.Equal(tt, c.expect, p.AccessToken())
 		})
 	}
 }
 
-func Test_UserLookupUsersByParams_ResolveEndpoint(t *testing.T) {
+func Test_UserLookupByParams_ResolveEndpoint(t *testing.T) {
 	const endpointBase = "test/endpoint"
 	cases := []struct {
 		name   string
-		params *types.UserLookupUsersByParams
+		params *types.UserLookupByParams
 		expect string
 	}{
 		{
 			name:   "normal: only required parameter",
-			params: &types.UserLookupUsersByParams{Usernames: []string{"test-un1", "test-un2"}},
+			params: &types.UserLookupByParams{Usernames: []string{"test-un1", "test-un2"}},
 			expect: endpointBase + "?usernames=test-un1%2Ctest-un2",
 		},
 		{
 			name: "normal: with expansions",
-			params: &types.UserLookupUsersByParams{
+			params: &types.UserLookupByParams{
 				Usernames:  []string{"test-un"},
 				Expansions: []string{"ex1", "ex2"},
 			},
@@ -288,7 +288,7 @@ func Test_UserLookupUsersByParams_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "normal: with tweets.fields",
-			params: &types.UserLookupUsersByParams{
+			params: &types.UserLookupByParams{
 				Usernames:   []string{"test-un"},
 				TweetFields: []string{"tf1", "tf2"},
 			},
@@ -296,7 +296,7 @@ func Test_UserLookupUsersByParams_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "normal: with users.fields",
-			params: &types.UserLookupUsersByParams{
+			params: &types.UserLookupByParams{
 				Usernames:  []string{"test-un"},
 				UserFields: []string{"uf1", "uf2"},
 			},
@@ -304,7 +304,7 @@ func Test_UserLookupUsersByParams_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "normal: all query parameters",
-			params: &types.UserLookupUsersByParams{
+			params: &types.UserLookupByParams{
 				Usernames:   []string{"test-un"},
 				Expansions:  []string{"ex"},
 				UserFields:  []string{"uf"},
@@ -314,7 +314,7 @@ func Test_UserLookupUsersByParams_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "normal: has no required parameter",
-			params: &types.UserLookupUsersByParams{
+			params: &types.UserLookupByParams{
 				Usernames:   []string{},
 				Expansions:  []string{"ex"},
 				UserFields:  []string{"uf"},
@@ -332,18 +332,18 @@ func Test_UserLookupUsersByParams_ResolveEndpoint(t *testing.T) {
 	}
 }
 
-func Test_UserLookupUsersByParams_Body(t *testing.T) {
+func Test_UserLookupByParams_Body(t *testing.T) {
 	cases := []struct {
 		name   string
-		params *types.UserLookupUsersByParams
+		params *types.UserLookupByParams
 	}{
 		{
 			name:   "empty params",
-			params: &types.UserLookupUsersByParams{},
+			params: &types.UserLookupByParams{},
 		},
 		{
 			name:   "some params",
-			params: &types.UserLookupUsersByParams{Usernames: []string{"id"}},
+			params: &types.UserLookupByParams{Usernames: []string{"id"}},
 		},
 	}
 
@@ -355,7 +355,7 @@ func Test_UserLookupUsersByParams_Body(t *testing.T) {
 	}
 }
 
-func Test_UserLookupUsersByUsernameParams_SetAccessToken(t *testing.T) {
+func Test_UserLookupByUsernameParams_SetAccessToken(t *testing.T) {
 	cases := []struct {
 		name   string
 		token  string
@@ -375,29 +375,29 @@ func Test_UserLookupUsersByUsernameParams_SetAccessToken(t *testing.T) {
 
 	for _, c := range cases {
 		t.Run(c.name, func(tt *testing.T) {
-			p := &types.UserLookupUsersByUsernameParams{}
+			p := &types.UserLookupByUsernameParams{}
 			p.SetAccessToken(c.token)
 			assert.Equal(tt, c.expect, p.AccessToken())
 		})
 	}
 }
 
-func Test_UserLookupUsersByUsernameParams_ResolveEndpoint(t *testing.T) {
+func Test_UserLookupByUsernameParams_ResolveEndpoint(t *testing.T) {
 	const endpointRoot = "test/endpoint/"
 	const endpointBase = "test/endpoint/:username"
 	cases := []struct {
 		name   string
-		params *types.UserLookupUsersByUsernameParams
+		params *types.UserLookupByUsernameParams
 		expect string
 	}{
 		{
 			name:   "normal: only required parameter",
-			params: &types.UserLookupUsersByUsernameParams{Username: "test-un"},
+			params: &types.UserLookupByUsernameParams{Username: "test-un"},
 			expect: endpointRoot + "test-un",
 		},
 		{
 			name: "normal: with expansions",
-			params: &types.UserLookupUsersByUsernameParams{
+			params: &types.UserLookupByUsernameParams{
 				Username:   "test-un",
 				Expansions: []string{"ex1", "ex2"},
 			},
@@ -405,7 +405,7 @@ func Test_UserLookupUsersByUsernameParams_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "normal: with tweets.fields",
-			params: &types.UserLookupUsersByUsernameParams{
+			params: &types.UserLookupByUsernameParams{
 				Username:    "test-un",
 				TweetFields: []string{"tf1", "tf2"},
 			},
@@ -413,7 +413,7 @@ func Test_UserLookupUsersByUsernameParams_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "normal: with users.fields",
-			params: &types.UserLookupUsersByUsernameParams{
+			params: &types.UserLookupByUsernameParams{
 				Username:   "test-un",
 				UserFields: []string{"uf1", "uf2"},
 			},
@@ -421,7 +421,7 @@ func Test_UserLookupUsersByUsernameParams_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "normal: all query parameters",
-			params: &types.UserLookupUsersByUsernameParams{
+			params: &types.UserLookupByUsernameParams{
 				Username:    "test-un",
 				Expansions:  []string{"ex"},
 				UserFields:  []string{"uf"},
@@ -431,7 +431,7 @@ func Test_UserLookupUsersByUsernameParams_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "normal: has no required parameter",
-			params: &types.UserLookupUsersByUsernameParams{
+			params: &types.UserLookupByUsernameParams{
 				Expansions:  []string{"ex"},
 				UserFields:  []string{"uf"},
 				TweetFields: []string{"tf"},
@@ -448,18 +448,18 @@ func Test_UserLookupUsersByUsernameParams_ResolveEndpoint(t *testing.T) {
 	}
 }
 
-func Test_UserLookupUsersByUsernameParams_Body(t *testing.T) {
+func Test_UserLookupByUsernameParams_Body(t *testing.T) {
 	cases := []struct {
 		name   string
-		params *types.UserLookupUsersByUsernameParams
+		params *types.UserLookupByUsernameParams
 	}{
 		{
 			name:   "empty params",
-			params: &types.UserLookupUsersByUsernameParams{},
+			params: &types.UserLookupByUsernameParams{},
 		},
 		{
 			name:   "some params",
-			params: &types.UserLookupUsersByUsernameParams{Username: "id"},
+			params: &types.UserLookupByUsernameParams{Username: "id"},
 		},
 	}
 

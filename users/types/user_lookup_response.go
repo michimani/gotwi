@@ -2,7 +2,7 @@ package types
 
 import "github.com/michimani/gotwi/resources"
 
-type UserLookupUsersResponse struct {
+type UserLookupResponse struct {
 	Data     []resources.User `json:"data"`
 	Includes struct {
 		Tweets []resources.Tweet `json:"tweets"`
@@ -10,11 +10,11 @@ type UserLookupUsersResponse struct {
 	Errors []resources.PartialError `json:"errors"`
 }
 
-func (r *UserLookupUsersResponse) HasPartialError() bool {
+func (r *UserLookupResponse) HasPartialError() bool {
 	return !(r.Errors == nil || len(r.Errors) == 0)
 }
 
-type UserLookupUsersIDResponse struct {
+type UserLookupIDResponse struct {
 	Data     resources.User `json:"data"`
 	Includes struct {
 		Tweets []resources.Tweet `json:"tweets"`
@@ -22,11 +22,11 @@ type UserLookupUsersIDResponse struct {
 	Errors []resources.PartialError `json:"errors"`
 }
 
-func (r *UserLookupUsersIDResponse) HasPartialError() bool {
+func (r *UserLookupIDResponse) HasPartialError() bool {
 	return !(r.Errors == nil || len(r.Errors) == 0)
 }
 
-type UserLookupUsersByResponse struct {
+type UserLookupByResponse struct {
 	Data     []resources.User `json:"data"`
 	Includes struct {
 		Tweets []resources.Tweet `json:"tweets"`
@@ -34,11 +34,11 @@ type UserLookupUsersByResponse struct {
 	Errors []resources.PartialError `json:"errors"`
 }
 
-func (r *UserLookupUsersByResponse) HasPartialError() bool {
+func (r *UserLookupByResponse) HasPartialError() bool {
 	return !(r.Errors == nil || len(r.Errors) == 0)
 }
 
-type UserLookupUsersByUsernameResponse struct {
+type UserLookupByUsernameResponse struct {
 	Data     resources.User `json:"data"`
 	Includes struct {
 		Tweets []resources.Tweet `json:"tweets"`
@@ -46,6 +46,6 @@ type UserLookupUsersByUsernameResponse struct {
 	Errors []resources.PartialError `json:"errors"`
 }
 
-func (r *UserLookupUsersByUsernameResponse) HasPartialError() bool {
+func (r *UserLookupByUsernameResponse) HasPartialError() bool {
 	return !(r.Errors == nil || len(r.Errors) == 0)
 }
