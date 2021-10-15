@@ -8,15 +8,15 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func Test_SearchTweetsTweetsSearchRecent_HasPartialError(t *testing.T) {
+func Test_SearchTweetsRecent_HasPartialError(t *testing.T) {
 	cases := []struct {
 		name   string
-		res    *types.SearchTweetsTweetsSearchRecentResponse
+		res    *types.SearchTweetsRecentResponse
 		expect bool
 	}{
 		{
 			name: "has partical error",
-			res: &types.SearchTweetsTweetsSearchRecentResponse{
+			res: &types.SearchTweetsRecentResponse{
 				Errors: []resources.PartialError{
 					{Title: "test partical error"},
 				}},
@@ -24,13 +24,13 @@ func Test_SearchTweetsTweetsSearchRecent_HasPartialError(t *testing.T) {
 		},
 		{
 			name: "has no partical error",
-			res: &types.SearchTweetsTweetsSearchRecentResponse{
+			res: &types.SearchTweetsRecentResponse{
 				Errors: []resources.PartialError{}},
 			expect: false,
 		},
 		{
 			name: "partical error is nil",
-			res: &types.SearchTweetsTweetsSearchRecentResponse{
+			res: &types.SearchTweetsRecentResponse{
 				Errors: []resources.PartialError{}},
 			expect: false,
 		},
@@ -44,15 +44,15 @@ func Test_SearchTweetsTweetsSearchRecent_HasPartialError(t *testing.T) {
 	}
 }
 
-func Test_SearchTweetsTweetsSearchAll_HasPartialError(t *testing.T) {
+func Test_SearchTweetsAll_HasPartialError(t *testing.T) {
 	cases := []struct {
 		name   string
-		res    *types.SearchTweetsTweetsSearchAllResponse
+		res    *types.SearchTweetsAllResponse
 		expect bool
 	}{
 		{
 			name: "has partical error",
-			res: &types.SearchTweetsTweetsSearchAllResponse{
+			res: &types.SearchTweetsAllResponse{
 				Errors: []resources.PartialError{
 					{Title: "test partical error"},
 				}},
@@ -60,13 +60,13 @@ func Test_SearchTweetsTweetsSearchAll_HasPartialError(t *testing.T) {
 		},
 		{
 			name: "has no partical error",
-			res: &types.SearchTweetsTweetsSearchAllResponse{
+			res: &types.SearchTweetsAllResponse{
 				Errors: []resources.PartialError{}},
 			expect: false,
 		},
 		{
 			name: "partical error is nil",
-			res: &types.SearchTweetsTweetsSearchAllResponse{
+			res: &types.SearchTweetsAllResponse{
 				Errors: []resources.PartialError{}},
 			expect: false,
 		},

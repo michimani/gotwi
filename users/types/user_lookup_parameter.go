@@ -8,7 +8,7 @@ import (
 	"github.com/michimani/gotwi/internal/util"
 )
 
-type UserLookupUsersParams struct {
+type UserLookupParams struct {
 	accessToken string
 
 	// Query parameters
@@ -18,15 +18,15 @@ type UserLookupUsersParams struct {
 	UserFields  []string
 }
 
-func (p *UserLookupUsersParams) SetAccessToken(token string) {
+func (p *UserLookupParams) SetAccessToken(token string) {
 	p.accessToken = token
 }
 
-func (p *UserLookupUsersParams) AccessToken() string {
+func (p *UserLookupParams) AccessToken() string {
 	return p.accessToken
 }
 
-func (p *UserLookupUsersParams) ResolveEndpoint(endpointBase string) string {
+func (p *UserLookupParams) ResolveEndpoint(endpointBase string) string {
 	endpoint := endpointBase
 
 	if p.IDs == nil || len(p.IDs) == 0 {
@@ -38,11 +38,11 @@ func (p *UserLookupUsersParams) ResolveEndpoint(endpointBase string) string {
 	return endpoint + resolveUserLookupQuery(query, p.Expansions, p.TweetFields, p.UserFields)
 }
 
-func (p *UserLookupUsersParams) Body() io.Reader {
+func (p *UserLookupParams) Body() io.Reader {
 	return nil
 }
 
-type UserLookupUsersIDParams struct {
+type UserLookupIDParams struct {
 	accessToken string
 
 	// Path parameters
@@ -54,15 +54,15 @@ type UserLookupUsersIDParams struct {
 	UserFields  []string
 }
 
-func (p *UserLookupUsersIDParams) SetAccessToken(token string) {
+func (p *UserLookupIDParams) SetAccessToken(token string) {
 	p.accessToken = token
 }
 
-func (p *UserLookupUsersIDParams) AccessToken() string {
+func (p *UserLookupIDParams) AccessToken() string {
 	return p.accessToken
 }
 
-func (p *UserLookupUsersIDParams) ResolveEndpoint(endpointBase string) string {
+func (p *UserLookupIDParams) ResolveEndpoint(endpointBase string) string {
 	if p.ID == "" {
 		return ""
 	}
@@ -74,11 +74,11 @@ func (p *UserLookupUsersIDParams) ResolveEndpoint(endpointBase string) string {
 	return endpoint + resolveUserLookupQuery(query, p.Expansions, p.TweetFields, p.UserFields)
 }
 
-func (p *UserLookupUsersIDParams) Body() io.Reader {
+func (p *UserLookupIDParams) Body() io.Reader {
 	return nil
 }
 
-type UserLookupUsersByParams struct {
+type UserLookupByParams struct {
 	accessToken string
 
 	// Query parameters
@@ -88,15 +88,15 @@ type UserLookupUsersByParams struct {
 	UserFields  []string
 }
 
-func (p *UserLookupUsersByParams) SetAccessToken(token string) {
+func (p *UserLookupByParams) SetAccessToken(token string) {
 	p.accessToken = token
 }
 
-func (p *UserLookupUsersByParams) AccessToken() string {
+func (p *UserLookupByParams) AccessToken() string {
 	return p.accessToken
 }
 
-func (p *UserLookupUsersByParams) ResolveEndpoint(endpointBase string) string {
+func (p *UserLookupByParams) ResolveEndpoint(endpointBase string) string {
 	endpoint := endpointBase
 
 	if p.Usernames == nil || len(p.Usernames) == 0 {
@@ -108,11 +108,11 @@ func (p *UserLookupUsersByParams) ResolveEndpoint(endpointBase string) string {
 	return endpoint + resolveUserLookupQuery(query, p.Expansions, p.TweetFields, p.UserFields)
 }
 
-func (p *UserLookupUsersByParams) Body() io.Reader {
+func (p *UserLookupByParams) Body() io.Reader {
 	return nil
 }
 
-type UserLookupUsersByUsernameParams struct {
+type UserLookupByUsernameParams struct {
 	accessToken string
 
 	// Path parameters
@@ -124,15 +124,15 @@ type UserLookupUsersByUsernameParams struct {
 	UserFields  []string
 }
 
-func (p *UserLookupUsersByUsernameParams) SetAccessToken(token string) {
+func (p *UserLookupByUsernameParams) SetAccessToken(token string) {
 	p.accessToken = token
 }
 
-func (p *UserLookupUsersByUsernameParams) AccessToken() string {
+func (p *UserLookupByUsernameParams) AccessToken() string {
 	return p.accessToken
 }
 
-func (p *UserLookupUsersByUsernameParams) ResolveEndpoint(endpointBase string) string {
+func (p *UserLookupByUsernameParams) ResolveEndpoint(endpointBase string) string {
 	if p.Username == "" {
 		return ""
 	}
@@ -144,7 +144,7 @@ func (p *UserLookupUsersByUsernameParams) ResolveEndpoint(endpointBase string) s
 	return endpoint + resolveUserLookupQuery(query, p.Expansions, p.TweetFields, p.UserFields)
 }
 
-func (p *UserLookupUsersByUsernameParams) Body() io.Reader {
+func (p *UserLookupByUsernameParams) Body() io.Reader {
 	return nil
 }
 

@@ -8,15 +8,15 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func Test_UserLookupUsers_HasPartialError(t *testing.T) {
+func Test_UserLookup_HasPartialError(t *testing.T) {
 	cases := []struct {
 		name   string
-		res    *types.UserLookupUsersResponse
+		res    *types.UserLookupResponse
 		expect bool
 	}{
 		{
 			name: "has partical error",
-			res: &types.UserLookupUsersResponse{
+			res: &types.UserLookupResponse{
 				Errors: []resources.PartialError{
 					{Title: "test partical error"},
 				}},
@@ -24,13 +24,13 @@ func Test_UserLookupUsers_HasPartialError(t *testing.T) {
 		},
 		{
 			name: "has no partical error",
-			res: &types.UserLookupUsersResponse{
+			res: &types.UserLookupResponse{
 				Errors: []resources.PartialError{}},
 			expect: false,
 		},
 		{
 			name: "partical error is nil",
-			res: &types.UserLookupUsersResponse{
+			res: &types.UserLookupResponse{
 				Errors: []resources.PartialError{}},
 			expect: false,
 		},
@@ -44,15 +44,15 @@ func Test_UserLookupUsers_HasPartialError(t *testing.T) {
 	}
 }
 
-func Test_UserLookupUsersID_HasPartialError(t *testing.T) {
+func Test_UserLookupID_HasPartialError(t *testing.T) {
 	cases := []struct {
 		name   string
-		res    *types.UserLookupUsersIDResponse
+		res    *types.UserLookupIDResponse
 		expect bool
 	}{
 		{
 			name: "has partical error",
-			res: &types.UserLookupUsersIDResponse{
+			res: &types.UserLookupIDResponse{
 				Errors: []resources.PartialError{
 					{Title: "test partical error"},
 				}},
@@ -60,13 +60,13 @@ func Test_UserLookupUsersID_HasPartialError(t *testing.T) {
 		},
 		{
 			name: "has no partical error",
-			res: &types.UserLookupUsersIDResponse{
+			res: &types.UserLookupIDResponse{
 				Errors: []resources.PartialError{}},
 			expect: false,
 		},
 		{
 			name: "partical error is nil",
-			res: &types.UserLookupUsersIDResponse{
+			res: &types.UserLookupIDResponse{
 				Errors: []resources.PartialError{}},
 			expect: false,
 		},
@@ -80,15 +80,15 @@ func Test_UserLookupUsersID_HasPartialError(t *testing.T) {
 	}
 }
 
-func Test_UserLookupUsersBy_HasPartialError(t *testing.T) {
+func Test_UserLookupBy_HasPartialError(t *testing.T) {
 	cases := []struct {
 		name   string
-		res    *types.UserLookupUsersByResponse
+		res    *types.UserLookupByResponse
 		expect bool
 	}{
 		{
 			name: "has partical error",
-			res: &types.UserLookupUsersByResponse{
+			res: &types.UserLookupByResponse{
 				Errors: []resources.PartialError{
 					{Title: "test partical error"},
 				}},
@@ -96,13 +96,13 @@ func Test_UserLookupUsersBy_HasPartialError(t *testing.T) {
 		},
 		{
 			name: "has no partical error",
-			res: &types.UserLookupUsersByResponse{
+			res: &types.UserLookupByResponse{
 				Errors: []resources.PartialError{}},
 			expect: false,
 		},
 		{
 			name: "partical error is nil",
-			res: &types.UserLookupUsersByResponse{
+			res: &types.UserLookupByResponse{
 				Errors: []resources.PartialError{}},
 			expect: false,
 		},
@@ -116,15 +116,15 @@ func Test_UserLookupUsersBy_HasPartialError(t *testing.T) {
 	}
 }
 
-func Test_UserLookupUsersByUsername_HasPartialError(t *testing.T) {
+func Test_UserLookupByUsername_HasPartialError(t *testing.T) {
 	cases := []struct {
 		name   string
-		res    *types.UserLookupUsersByUsernameResponse
+		res    *types.UserLookupByUsernameResponse
 		expect bool
 	}{
 		{
 			name: "has partical error",
-			res: &types.UserLookupUsersByUsernameResponse{
+			res: &types.UserLookupByUsernameResponse{
 				Errors: []resources.PartialError{
 					{Title: "test partical error"},
 				}},
@@ -132,13 +132,13 @@ func Test_UserLookupUsersByUsername_HasPartialError(t *testing.T) {
 		},
 		{
 			name: "has no partical error",
-			res: &types.UserLookupUsersByUsernameResponse{
+			res: &types.UserLookupByUsernameResponse{
 				Errors: []resources.PartialError{}},
 			expect: false,
 		},
 		{
 			name: "partical error is nil",
-			res: &types.UserLookupUsersByUsernameResponse{
+			res: &types.UserLookupByUsernameResponse{
 				Errors: []resources.PartialError{}},
 			expect: false,
 		},

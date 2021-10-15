@@ -22,7 +22,7 @@ func (g TweetCountsGranularity) Valid() bool {
 	return g == TweetCountsGranularityMinute || g == TweetCountsGranularityHour || g == TweetCountsGranularityDay
 }
 
-type TweetCountsTweetsCountsRecentParams struct {
+type TweetCountsRecentParams struct {
 	accessToken string
 
 	// Path parameters
@@ -34,15 +34,15 @@ type TweetCountsTweetsCountsRecentParams struct {
 	Granularity TweetCountsGranularity
 }
 
-func (p *TweetCountsTweetsCountsRecentParams) SetAccessToken(token string) {
+func (p *TweetCountsRecentParams) SetAccessToken(token string) {
 	p.accessToken = token
 }
 
-func (p *TweetCountsTweetsCountsRecentParams) AccessToken() string {
+func (p *TweetCountsRecentParams) AccessToken() string {
 	return p.accessToken
 }
 
-func (p *TweetCountsTweetsCountsRecentParams) ResolveEndpoint(endpointBase string) string {
+func (p *TweetCountsRecentParams) ResolveEndpoint(endpointBase string) string {
 	endpoint := endpointBase
 
 	if p.Query == "" {
@@ -59,11 +59,11 @@ func (p *TweetCountsTweetsCountsRecentParams) ResolveEndpoint(endpointBase strin
 	)
 }
 
-func (p *TweetCountsTweetsCountsRecentParams) Body() io.Reader {
+func (p *TweetCountsRecentParams) Body() io.Reader {
 	return nil
 }
 
-type TweetCountsTweetsCountsAllParams struct {
+type TweetCountsAllParams struct {
 	accessToken string
 
 	// Path parameters
@@ -76,15 +76,15 @@ type TweetCountsTweetsCountsAllParams struct {
 	NextToken   string
 }
 
-func (p *TweetCountsTweetsCountsAllParams) SetAccessToken(token string) {
+func (p *TweetCountsAllParams) SetAccessToken(token string) {
 	p.accessToken = token
 }
 
-func (p *TweetCountsTweetsCountsAllParams) AccessToken() string {
+func (p *TweetCountsAllParams) AccessToken() string {
 	return p.accessToken
 }
 
-func (p *TweetCountsTweetsCountsAllParams) ResolveEndpoint(endpointBase string) string {
+func (p *TweetCountsAllParams) ResolveEndpoint(endpointBase string) string {
 	endpoint := endpointBase
 
 	if p.Query == "" {
@@ -101,7 +101,7 @@ func (p *TweetCountsTweetsCountsAllParams) ResolveEndpoint(endpointBase string) 
 	)
 }
 
-func (p *TweetCountsTweetsCountsAllParams) Body() io.Reader {
+func (p *TweetCountsAllParams) Body() io.Reader {
 	return nil
 }
 

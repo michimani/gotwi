@@ -6,17 +6,17 @@ import (
 )
 
 const (
-	UserLookupUsersEndpoint           = "https://api.twitter.com/2/users"
-	UserLookupUsersIDEndpoint         = "https://api.twitter.com/2/users/:id"
-	UserLookupUsersByEndpoint         = "https://api.twitter.com/2/users/by"
-	UserLookupUsersByUsernameEndpoint = "https://api.twitter.com/2/users/by/username/:username"
+	UserLookupEndpoint           = "https://api.twitter.com/2/users"
+	UserLookupIDEndpoint         = "https://api.twitter.com/2/users/:id"
+	UserLookupByEndpoint         = "https://api.twitter.com/2/users/by"
+	UserLookupByUsernameEndpoint = "https://api.twitter.com/2/users/by/username/:username"
 )
 
 // Returns a variety of information about one or more users specified by the requested IDs.
 // https://developer.twitter.com/en/docs/twitter-api/users/lookup/api-reference/get-users
-func UserLookupUsers(c *gotwi.TwitterClient, p *types.UserLookupUsersParams) (*types.UserLookupUsersResponse, error) {
-	res := &types.UserLookupUsersResponse{}
-	if err := c.CallAPI(UserLookupUsersEndpoint, "GET", p, res); err != nil {
+func UserLookup(c *gotwi.TwitterClient, p *types.UserLookupParams) (*types.UserLookupResponse, error) {
+	res := &types.UserLookupResponse{}
+	if err := c.CallAPI(UserLookupEndpoint, "GET", p, res); err != nil {
 		return nil, err
 	}
 
@@ -25,9 +25,9 @@ func UserLookupUsers(c *gotwi.TwitterClient, p *types.UserLookupUsersParams) (*t
 
 // Returns a variety of information about a single user specified by the requested ID.
 // https://developer.twitter.com/en/docs/twitter-api/users/lookup/api-reference/get-users-id
-func UserLookupUsersID(c *gotwi.TwitterClient, p *types.UserLookupUsersIDParams) (*types.UserLookupUsersIDResponse, error) {
-	res := &types.UserLookupUsersIDResponse{}
-	if err := c.CallAPI(UserLookupUsersIDEndpoint, "GET", p, res); err != nil {
+func UserLookupID(c *gotwi.TwitterClient, p *types.UserLookupIDParams) (*types.UserLookupIDResponse, error) {
+	res := &types.UserLookupIDResponse{}
+	if err := c.CallAPI(UserLookupIDEndpoint, "GET", p, res); err != nil {
 		return nil, err
 	}
 
@@ -36,9 +36,9 @@ func UserLookupUsersID(c *gotwi.TwitterClient, p *types.UserLookupUsersIDParams)
 
 // Returns a variety of information about one or more users specified by their usernames.
 // https://developer.twitter.com/en/docs/twitter-api/users/lookup/api-reference/get-users-by
-func UserLookupUsersBy(c *gotwi.TwitterClient, p *types.UserLookupUsersByParams) (*types.UserLookupUsersByResponse, error) {
-	res := &types.UserLookupUsersByResponse{}
-	if err := c.CallAPI(UserLookupUsersByEndpoint, "GET", p, res); err != nil {
+func UserLookupBy(c *gotwi.TwitterClient, p *types.UserLookupByParams) (*types.UserLookupByResponse, error) {
+	res := &types.UserLookupByResponse{}
+	if err := c.CallAPI(UserLookupByEndpoint, "GET", p, res); err != nil {
 		return nil, err
 	}
 
@@ -47,9 +47,9 @@ func UserLookupUsersBy(c *gotwi.TwitterClient, p *types.UserLookupUsersByParams)
 
 // Returns a variety of information about one or more users specified by their usernames.
 // https://developer.twitter.com/en/docs/twitter-api/users/lookup/api-reference/get-users-by-username-username
-func UserLookupUsersByUsername(c *gotwi.TwitterClient, p *types.UserLookupUsersByUsernameParams) (*types.UserLookupUsersByUsernameResponse, error) {
-	res := &types.UserLookupUsersByUsernameResponse{}
-	if err := c.CallAPI(UserLookupUsersByUsernameEndpoint, "GET", p, res); err != nil {
+func UserLookupByUsername(c *gotwi.TwitterClient, p *types.UserLookupByUsernameParams) (*types.UserLookupByUsernameResponse, error) {
+	res := &types.UserLookupByUsernameResponse{}
+	if err := c.CallAPI(UserLookupByUsernameEndpoint, "GET", p, res); err != nil {
 		return nil, err
 	}
 

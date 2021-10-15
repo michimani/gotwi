@@ -2,7 +2,7 @@ package types
 
 import "github.com/michimani/gotwi/resources"
 
-type TweetLookupTweetsResponse struct {
+type TweetLookupResponse struct {
 	Data     []resources.Tweet `json:"data"`
 	Includes struct {
 		Users []resources.User `json:"users"`
@@ -10,11 +10,11 @@ type TweetLookupTweetsResponse struct {
 	Errors []resources.PartialError `json:"errors"`
 }
 
-func (r *TweetLookupTweetsResponse) HasPartialError() bool {
+func (r *TweetLookupResponse) HasPartialError() bool {
 	return !(r.Errors == nil || len(r.Errors) == 0)
 }
 
-type TweetLookupTweetsIDResponse struct {
+type TweetLookupIDResponse struct {
 	Data     resources.Tweet `json:"data"`
 	Includes struct {
 		Users []resources.User `json:"users"`
@@ -22,6 +22,6 @@ type TweetLookupTweetsIDResponse struct {
 	Errors []resources.PartialError `json:"errors"`
 }
 
-func (r *TweetLookupTweetsIDResponse) HasPartialError() bool {
+func (r *TweetLookupIDResponse) HasPartialError() bool {
 	return !(r.Errors == nil || len(r.Errors) == 0)
 }

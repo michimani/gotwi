@@ -6,15 +6,15 @@ import (
 )
 
 const (
-	TweetLookupTweetsEndpoint   = "https://api.twitter.com/2/tweets"
-	TweetLookupTweetsIDEndpoint = "https://api.twitter.com/2/tweets/:id"
+	TweetLookupEndpoint   = "https://api.twitter.com/2/tweets"
+	TweetLookupIDEndpoint = "https://api.twitter.com/2/tweets/:id"
 )
 
 // Returns a variety of information about the Tweet specified by the requested ID or list of IDs.
 // https://developer.twitter.com/en/docs/twitter-api/tweets/lookup/api-reference/get-tweets
-func TweetLookupTweets(c *gotwi.TwitterClient, p *types.TweetLookupTweetsParams) (*types.TweetLookupTweetsResponse, error) {
-	res := &types.TweetLookupTweetsResponse{}
-	if err := c.CallAPI(TweetLookupTweetsEndpoint, "GET", p, res); err != nil {
+func TweetLookup(c *gotwi.TwitterClient, p *types.TweetLookupParams) (*types.TweetLookupResponse, error) {
+	res := &types.TweetLookupResponse{}
+	if err := c.CallAPI(TweetLookupEndpoint, "GET", p, res); err != nil {
 		return nil, err
 	}
 
@@ -23,9 +23,9 @@ func TweetLookupTweets(c *gotwi.TwitterClient, p *types.TweetLookupTweetsParams)
 
 // Returns a variety of information about a single Tweet specified by the requested ID.
 // https://developer.twitter.com/en/docs/twitter-api/tweets/lookup/api-reference/get-tweets-id
-func TweetLookupTweetsID(c *gotwi.TwitterClient, p *types.TweetLookupTweetsIDParams) (*types.TweetLookupTweetsIDResponse, error) {
-	res := &types.TweetLookupTweetsIDResponse{}
-	if err := c.CallAPI(TweetLookupTweetsIDEndpoint, "GET", p, res); err != nil {
+func TweetLookupID(c *gotwi.TwitterClient, p *types.TweetLookupIDParams) (*types.TweetLookupIDResponse, error) {
+	res := &types.TweetLookupIDResponse{}
+	if err := c.CallAPI(TweetLookupIDEndpoint, "GET", p, res); err != nil {
 		return nil, err
 	}
 

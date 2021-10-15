@@ -7,7 +7,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func Test_TweetLookupTweetsParams_SetAccessToken(t *testing.T) {
+func Test_TweetLookupParams_SetAccessToken(t *testing.T) {
 	cases := []struct {
 		name   string
 		token  string
@@ -27,28 +27,28 @@ func Test_TweetLookupTweetsParams_SetAccessToken(t *testing.T) {
 
 	for _, c := range cases {
 		t.Run(c.name, func(tt *testing.T) {
-			p := &types.TweetLookupTweetsParams{}
+			p := &types.TweetLookupParams{}
 			p.SetAccessToken(c.token)
 			assert.Equal(tt, c.expect, p.AccessToken())
 		})
 	}
 }
 
-func Test_TweetLookupTweetsParams_ResolveEndpoint(t *testing.T) {
+func Test_TweetLookupParams_ResolveEndpoint(t *testing.T) {
 	const endpointBase = "test/endpoint"
 	cases := []struct {
 		name   string
-		params *types.TweetLookupTweetsParams
+		params *types.TweetLookupParams
 		expect string
 	}{
 		{
 			name:   "only required parameter",
-			params: &types.TweetLookupTweetsParams{IDs: []string{"test-id1", "test-id2"}},
+			params: &types.TweetLookupParams{IDs: []string{"test-id1", "test-id2"}},
 			expect: endpointBase + "?ids=test-id1%2Ctest-id2",
 		},
 		{
 			name: "with expansions",
-			params: &types.TweetLookupTweetsParams{
+			params: &types.TweetLookupParams{
 				IDs:        []string{"test-id"},
 				Expansions: []string{"ex1", "ex2"},
 			},
@@ -56,7 +56,7 @@ func Test_TweetLookupTweetsParams_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "with media.fields",
-			params: &types.TweetLookupTweetsParams{
+			params: &types.TweetLookupParams{
 				IDs:         []string{"test-id"},
 				MediaFields: []string{"tf1", "tf2"},
 			},
@@ -64,7 +64,7 @@ func Test_TweetLookupTweetsParams_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "with place.fields",
-			params: &types.TweetLookupTweetsParams{
+			params: &types.TweetLookupParams{
 				IDs:         []string{"test-id"},
 				PlaceFields: []string{"tf1", "tf2"},
 			},
@@ -72,7 +72,7 @@ func Test_TweetLookupTweetsParams_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "with poll.fields",
-			params: &types.TweetLookupTweetsParams{
+			params: &types.TweetLookupParams{
 				IDs:        []string{"test-id"},
 				PollFields: []string{"tf1", "tf2"},
 			},
@@ -80,7 +80,7 @@ func Test_TweetLookupTweetsParams_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "with tweets.fields",
-			params: &types.TweetLookupTweetsParams{
+			params: &types.TweetLookupParams{
 				IDs:         []string{"test-id"},
 				TweetFields: []string{"tf1", "tf2"},
 			},
@@ -88,7 +88,7 @@ func Test_TweetLookupTweetsParams_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "with users.fields",
-			params: &types.TweetLookupTweetsParams{
+			params: &types.TweetLookupParams{
 				IDs:        []string{"test-id"},
 				UserFields: []string{"uf1", "uf2"},
 			},
@@ -96,7 +96,7 @@ func Test_TweetLookupTweetsParams_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "all query parameters",
-			params: &types.TweetLookupTweetsParams{
+			params: &types.TweetLookupParams{
 				IDs:         []string{"test-id"},
 				Expansions:  []string{"ex"},
 				MediaFields: []string{"mf"},
@@ -109,7 +109,7 @@ func Test_TweetLookupTweetsParams_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "has no required parameter",
-			params: &types.TweetLookupTweetsParams{
+			params: &types.TweetLookupParams{
 				IDs:         []string{},
 				Expansions:  []string{"ex"},
 				UserFields:  []string{"uf"},
@@ -127,18 +127,18 @@ func Test_TweetLookupTweetsParams_ResolveEndpoint(t *testing.T) {
 	}
 }
 
-func Test_TweetLookupTweetsParams_Body(t *testing.T) {
+func Test_TweetLookupParams_Body(t *testing.T) {
 	cases := []struct {
 		name   string
-		params *types.TweetLookupTweetsParams
+		params *types.TweetLookupParams
 	}{
 		{
 			name:   "empty params",
-			params: &types.TweetLookupTweetsParams{},
+			params: &types.TweetLookupParams{},
 		},
 		{
 			name:   "some params",
-			params: &types.TweetLookupTweetsParams{IDs: []string{"id"}},
+			params: &types.TweetLookupParams{IDs: []string{"id"}},
 		},
 	}
 
@@ -150,7 +150,7 @@ func Test_TweetLookupTweetsParams_Body(t *testing.T) {
 	}
 }
 
-func Test_TweetLookupTweetsIDParams_SetAccessToken(t *testing.T) {
+func Test_TweetLookupIDParams_SetAccessToken(t *testing.T) {
 	cases := []struct {
 		name   string
 		token  string
@@ -170,29 +170,29 @@ func Test_TweetLookupTweetsIDParams_SetAccessToken(t *testing.T) {
 
 	for _, c := range cases {
 		t.Run(c.name, func(tt *testing.T) {
-			p := &types.TweetLookupTweetsIDParams{}
+			p := &types.TweetLookupIDParams{}
 			p.SetAccessToken(c.token)
 			assert.Equal(tt, c.expect, p.AccessToken())
 		})
 	}
 }
 
-func Test_TweetLookupTweetsIDParams_ResolveEndpoint(t *testing.T) {
+func Test_TweetLookupIDParams_ResolveEndpoint(t *testing.T) {
 	const endpointRoot = "test/endpoint/"
 	const endpointBase = endpointRoot + ":id"
 	cases := []struct {
 		name   string
-		params *types.TweetLookupTweetsIDParams
+		params *types.TweetLookupIDParams
 		expect string
 	}{
 		{
 			name:   "only required parameter",
-			params: &types.TweetLookupTweetsIDParams{ID: "test-id"},
+			params: &types.TweetLookupIDParams{ID: "test-id"},
 			expect: endpointRoot + "test-id",
 		},
 		{
 			name: "with expansions",
-			params: &types.TweetLookupTweetsIDParams{
+			params: &types.TweetLookupIDParams{
 				ID:         "test-id",
 				Expansions: []string{"ex1", "ex2"},
 			},
@@ -200,7 +200,7 @@ func Test_TweetLookupTweetsIDParams_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "with media.fields",
-			params: &types.TweetLookupTweetsIDParams{
+			params: &types.TweetLookupIDParams{
 				ID:          "test-id",
 				MediaFields: []string{"tf1", "tf2"},
 			},
@@ -208,7 +208,7 @@ func Test_TweetLookupTweetsIDParams_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "with place.fields",
-			params: &types.TweetLookupTweetsIDParams{
+			params: &types.TweetLookupIDParams{
 				ID:          "test-id",
 				PlaceFields: []string{"tf1", "tf2"},
 			},
@@ -216,7 +216,7 @@ func Test_TweetLookupTweetsIDParams_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "with poll.fields",
-			params: &types.TweetLookupTweetsIDParams{
+			params: &types.TweetLookupIDParams{
 				ID:         "test-id",
 				PollFields: []string{"tf1", "tf2"},
 			},
@@ -224,7 +224,7 @@ func Test_TweetLookupTweetsIDParams_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "with tweets.fields",
-			params: &types.TweetLookupTweetsIDParams{
+			params: &types.TweetLookupIDParams{
 				ID:          "test-id",
 				TweetFields: []string{"tf1", "tf2"},
 			},
@@ -232,7 +232,7 @@ func Test_TweetLookupTweetsIDParams_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "with users.fields",
-			params: &types.TweetLookupTweetsIDParams{
+			params: &types.TweetLookupIDParams{
 				ID:         "test-id",
 				UserFields: []string{"uf1", "uf2"},
 			},
@@ -240,7 +240,7 @@ func Test_TweetLookupTweetsIDParams_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "all query parameters",
-			params: &types.TweetLookupTweetsIDParams{
+			params: &types.TweetLookupIDParams{
 				ID:          "test-id",
 				Expansions:  []string{"ex"},
 				MediaFields: []string{"mf"},
@@ -253,7 +253,7 @@ func Test_TweetLookupTweetsIDParams_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "has no required parameter",
-			params: &types.TweetLookupTweetsIDParams{
+			params: &types.TweetLookupIDParams{
 				Expansions:  []string{"ex"},
 				UserFields:  []string{"uf"},
 				TweetFields: []string{"tf"},
@@ -270,18 +270,18 @@ func Test_TweetLookupTweetsIDParams_ResolveEndpoint(t *testing.T) {
 	}
 }
 
-func Test_TweetLookupTweetsIDParams_Body(t *testing.T) {
+func Test_TweetLookupIDParams_Body(t *testing.T) {
 	cases := []struct {
 		name   string
-		params *types.TweetLookupTweetsIDParams
+		params *types.TweetLookupIDParams
 	}{
 		{
 			name:   "empty params",
-			params: &types.TweetLookupTweetsIDParams{},
+			params: &types.TweetLookupIDParams{},
 		},
 		{
 			name:   "some params",
-			params: &types.TweetLookupTweetsIDParams{ID: "id"},
+			params: &types.TweetLookupIDParams{ID: "id"},
 		},
 	}
 

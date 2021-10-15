@@ -8,15 +8,15 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func Test_TweetLookupTweets_HasPartialError(t *testing.T) {
+func Test_TweetLookup_HasPartialError(t *testing.T) {
 	cases := []struct {
 		name   string
-		res    *types.TweetLookupTweetsResponse
+		res    *types.TweetLookupResponse
 		expect bool
 	}{
 		{
 			name: "has partical error",
-			res: &types.TweetLookupTweetsResponse{
+			res: &types.TweetLookupResponse{
 				Errors: []resources.PartialError{
 					{Title: "test partical error"},
 				}},
@@ -24,13 +24,13 @@ func Test_TweetLookupTweets_HasPartialError(t *testing.T) {
 		},
 		{
 			name: "has no partical error",
-			res: &types.TweetLookupTweetsResponse{
+			res: &types.TweetLookupResponse{
 				Errors: []resources.PartialError{}},
 			expect: false,
 		},
 		{
 			name: "partical error is nil",
-			res: &types.TweetLookupTweetsResponse{
+			res: &types.TweetLookupResponse{
 				Errors: []resources.PartialError{}},
 			expect: false,
 		},
@@ -44,15 +44,15 @@ func Test_TweetLookupTweets_HasPartialError(t *testing.T) {
 	}
 }
 
-func Test_TweetLookupTweetsID_HasPartialError(t *testing.T) {
+func Test_TweetLookupID_HasPartialError(t *testing.T) {
 	cases := []struct {
 		name   string
-		res    *types.TweetLookupTweetsIDResponse
+		res    *types.TweetLookupIDResponse
 		expect bool
 	}{
 		{
 			name: "has partical error",
-			res: &types.TweetLookupTweetsIDResponse{
+			res: &types.TweetLookupIDResponse{
 				Errors: []resources.PartialError{
 					{Title: "test partical error"},
 				}},
@@ -60,13 +60,13 @@ func Test_TweetLookupTweetsID_HasPartialError(t *testing.T) {
 		},
 		{
 			name: "has no partical error",
-			res: &types.TweetLookupTweetsIDResponse{
+			res: &types.TweetLookupIDResponse{
 				Errors: []resources.PartialError{}},
 			expect: false,
 		},
 		{
 			name: "partical error is nil",
-			res: &types.TweetLookupTweetsIDResponse{
+			res: &types.TweetLookupIDResponse{
 				Errors: []resources.PartialError{}},
 			expect: false,
 		},
