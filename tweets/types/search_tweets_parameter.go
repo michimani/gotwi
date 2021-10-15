@@ -11,7 +11,7 @@ import (
 
 type SearchTweetsMaxResult int
 
-type SearchTweetsTweetsSearchRecentParams struct {
+type SearchTweetsRecentParams struct {
 	accessToken string
 
 	// Path parameters
@@ -38,15 +38,15 @@ func (m SearchTweetsMaxResult) String() string {
 	return strconv.Itoa(int(m))
 }
 
-func (p *SearchTweetsTweetsSearchRecentParams) SetAccessToken(token string) {
+func (p *SearchTweetsRecentParams) SetAccessToken(token string) {
 	p.accessToken = token
 }
 
-func (p *SearchTweetsTweetsSearchRecentParams) AccessToken() string {
+func (p *SearchTweetsRecentParams) AccessToken() string {
 	return p.accessToken
 }
 
-func (p *SearchTweetsTweetsSearchRecentParams) ResolveEndpoint(endpointBase string) string {
+func (p *SearchTweetsRecentParams) ResolveEndpoint(endpointBase string) string {
 	endpoint := endpointBase
 
 	if p.Query == "" {
@@ -63,11 +63,11 @@ func (p *SearchTweetsTweetsSearchRecentParams) ResolveEndpoint(endpointBase stri
 	)
 }
 
-func (p *SearchTweetsTweetsSearchRecentParams) Body() io.Reader {
+func (p *SearchTweetsRecentParams) Body() io.Reader {
 	return nil
 }
 
-type SearchTweetsTweetsSearchAllParams struct {
+type SearchTweetsAllParams struct {
 	accessToken string
 
 	// Path parameters
@@ -86,15 +86,15 @@ type SearchTweetsTweetsSearchAllParams struct {
 	MaxResults  SearchTweetsMaxResult
 }
 
-func (p *SearchTweetsTweetsSearchAllParams) SetAccessToken(token string) {
+func (p *SearchTweetsAllParams) SetAccessToken(token string) {
 	p.accessToken = token
 }
 
-func (p *SearchTweetsTweetsSearchAllParams) AccessToken() string {
+func (p *SearchTweetsAllParams) AccessToken() string {
 	return p.accessToken
 }
 
-func (p *SearchTweetsTweetsSearchAllParams) ResolveEndpoint(endpointBase string) string {
+func (p *SearchTweetsAllParams) ResolveEndpoint(endpointBase string) string {
 	endpoint := endpointBase
 
 	if p.Query == "" {
@@ -111,7 +111,7 @@ func (p *SearchTweetsTweetsSearchAllParams) ResolveEndpoint(endpointBase string)
 	)
 }
 
-func (p *SearchTweetsTweetsSearchAllParams) Body() io.Reader {
+func (p *SearchTweetsAllParams) Body() io.Reader {
 	return nil
 }
 

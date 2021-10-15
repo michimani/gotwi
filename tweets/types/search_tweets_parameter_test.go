@@ -8,7 +8,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func Test_SearchTweetsTweetsSearchRecent_SetAccessToken(t *testing.T) {
+func Test_SearchTweetsRecent_SetAccessToken(t *testing.T) {
 	cases := []struct {
 		name   string
 		token  string
@@ -28,33 +28,33 @@ func Test_SearchTweetsTweetsSearchRecent_SetAccessToken(t *testing.T) {
 
 	for _, c := range cases {
 		t.Run(c.name, func(tt *testing.T) {
-			p := &types.SearchTweetsTweetsSearchRecentParams{}
+			p := &types.SearchTweetsRecentParams{}
 			p.SetAccessToken(c.token)
 			assert.Equal(tt, c.expect, p.AccessToken())
 		})
 	}
 }
 
-func Test_SearchTweetsTweetsSearchRecent_ResolveEndpoint(t *testing.T) {
+func Test_SearchTweetsRecent_ResolveEndpoint(t *testing.T) {
 	const endpointBase = "test/endpoint"
 	startTime := time.Date(2021, 10, 24, 0, 0, 0, 0, time.UTC)
 	endTime := time.Date(2021, 10, 24, 23, 59, 59, 59, time.UTC)
 
 	cases := []struct {
 		name   string
-		params *types.SearchTweetsTweetsSearchRecentParams
+		params *types.SearchTweetsRecentParams
 		expect string
 	}{
 		{
 			name: "only required parameter",
-			params: &types.SearchTweetsTweetsSearchRecentParams{
+			params: &types.SearchTweetsRecentParams{
 				Query: "from:testuser",
 			},
 			expect: endpointBase + "?max_results=10&query=from%3Atestuser",
 		},
 		{
 			name: "with expansions",
-			params: &types.SearchTweetsTweetsSearchRecentParams{
+			params: &types.SearchTweetsRecentParams{
 				Query:      "from:testuser",
 				Expansions: []string{"ex1", "ex2"},
 			},
@@ -62,7 +62,7 @@ func Test_SearchTweetsTweetsSearchRecent_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "with media.fields",
-			params: &types.SearchTweetsTweetsSearchRecentParams{
+			params: &types.SearchTweetsRecentParams{
 				Query:       "from:testuser",
 				MediaFields: []string{"tf1", "tf2"},
 			},
@@ -70,7 +70,7 @@ func Test_SearchTweetsTweetsSearchRecent_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "with place.fields",
-			params: &types.SearchTweetsTweetsSearchRecentParams{
+			params: &types.SearchTweetsRecentParams{
 				Query:       "from:testuser",
 				PlaceFields: []string{"tf1", "tf2"},
 			},
@@ -78,7 +78,7 @@ func Test_SearchTweetsTweetsSearchRecent_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "with poll.fields",
-			params: &types.SearchTweetsTweetsSearchRecentParams{
+			params: &types.SearchTweetsRecentParams{
 				Query:      "from:testuser",
 				PollFields: []string{"tf1", "tf2"},
 			},
@@ -86,7 +86,7 @@ func Test_SearchTweetsTweetsSearchRecent_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "with tweets.fields",
-			params: &types.SearchTweetsTweetsSearchRecentParams{
+			params: &types.SearchTweetsRecentParams{
 				Query:       "from:testuser",
 				TweetFields: []string{"tf1", "tf2"},
 			},
@@ -94,7 +94,7 @@ func Test_SearchTweetsTweetsSearchRecent_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "with users.fields",
-			params: &types.SearchTweetsTweetsSearchRecentParams{
+			params: &types.SearchTweetsRecentParams{
 				Query:      "from:testuser",
 				UserFields: []string{"uf1", "uf2"},
 			},
@@ -102,7 +102,7 @@ func Test_SearchTweetsTweetsSearchRecent_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "with end_time",
-			params: &types.SearchTweetsTweetsSearchRecentParams{
+			params: &types.SearchTweetsRecentParams{
 				Query:   "from:testuser",
 				EndTime: &endTime,
 			},
@@ -110,7 +110,7 @@ func Test_SearchTweetsTweetsSearchRecent_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "with start_time",
-			params: &types.SearchTweetsTweetsSearchRecentParams{
+			params: &types.SearchTweetsRecentParams{
 				Query:     "from:testuser",
 				StartTime: &startTime,
 			},
@@ -118,7 +118,7 @@ func Test_SearchTweetsTweetsSearchRecent_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "with since_id",
-			params: &types.SearchTweetsTweetsSearchRecentParams{
+			params: &types.SearchTweetsRecentParams{
 				Query:   "from:testuser",
 				SinceID: "sid",
 			},
@@ -126,7 +126,7 @@ func Test_SearchTweetsTweetsSearchRecent_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "with until_id",
-			params: &types.SearchTweetsTweetsSearchRecentParams{
+			params: &types.SearchTweetsRecentParams{
 				Query:   "from:testuser",
 				UntilID: "uid",
 			},
@@ -134,7 +134,7 @@ func Test_SearchTweetsTweetsSearchRecent_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "all query parameters",
-			params: &types.SearchTweetsTweetsSearchRecentParams{
+			params: &types.SearchTweetsRecentParams{
 				Query:       "from:testuser",
 				Expansions:  []string{"ex"},
 				MediaFields: []string{"mf"},
@@ -147,7 +147,7 @@ func Test_SearchTweetsTweetsSearchRecent_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "has no required parameter",
-			params: &types.SearchTweetsTweetsSearchRecentParams{
+			params: &types.SearchTweetsRecentParams{
 				Expansions:  []string{"ex"},
 				UserFields:  []string{"uf"},
 				TweetFields: []string{"tf"},
@@ -164,18 +164,18 @@ func Test_SearchTweetsTweetsSearchRecent_ResolveEndpoint(t *testing.T) {
 	}
 }
 
-func Test_SearchTweetsTweetsSearchRecent_Body(t *testing.T) {
+func Test_SearchTweetsRecent_Body(t *testing.T) {
 	cases := []struct {
 		name   string
-		params *types.SearchTweetsTweetsSearchRecentParams
+		params *types.SearchTweetsRecentParams
 	}{
 		{
 			name:   "empty params",
-			params: &types.SearchTweetsTweetsSearchRecentParams{},
+			params: &types.SearchTweetsRecentParams{},
 		},
 		{
 			name:   "some params",
-			params: &types.SearchTweetsTweetsSearchRecentParams{Query: "from:testuser"},
+			params: &types.SearchTweetsRecentParams{Query: "from:testuser"},
 		},
 	}
 
@@ -187,7 +187,7 @@ func Test_SearchTweetsTweetsSearchRecent_Body(t *testing.T) {
 	}
 }
 
-func Test_SearchTweetsTweetsSearchAll_SetAccessToken(t *testing.T) {
+func Test_SearchTweetsAll_SetAccessToken(t *testing.T) {
 	cases := []struct {
 		name   string
 		token  string
@@ -207,33 +207,33 @@ func Test_SearchTweetsTweetsSearchAll_SetAccessToken(t *testing.T) {
 
 	for _, c := range cases {
 		t.Run(c.name, func(tt *testing.T) {
-			p := &types.SearchTweetsTweetsSearchAllParams{}
+			p := &types.SearchTweetsAllParams{}
 			p.SetAccessToken(c.token)
 			assert.Equal(tt, c.expect, p.AccessToken())
 		})
 	}
 }
 
-func Test_SearchTweetsTweetsSearchAll_ResolveEndpoint(t *testing.T) {
+func Test_SearchTweetsAll_ResolveEndpoint(t *testing.T) {
 	const endpointBase = "test/endpoint"
 	startTime := time.Date(2021, 10, 24, 0, 0, 0, 0, time.UTC)
 	endTime := time.Date(2021, 10, 24, 23, 59, 59, 59, time.UTC)
 
 	cases := []struct {
 		name   string
-		params *types.SearchTweetsTweetsSearchAllParams
+		params *types.SearchTweetsAllParams
 		expect string
 	}{
 		{
 			name: "only required parameter",
-			params: &types.SearchTweetsTweetsSearchAllParams{
+			params: &types.SearchTweetsAllParams{
 				Query: "from:testuser",
 			},
 			expect: endpointBase + "?max_results=10&query=from%3Atestuser",
 		},
 		{
 			name: "with expansions",
-			params: &types.SearchTweetsTweetsSearchAllParams{
+			params: &types.SearchTweetsAllParams{
 				Query:      "from:testuser",
 				Expansions: []string{"ex1", "ex2"},
 			},
@@ -241,7 +241,7 @@ func Test_SearchTweetsTweetsSearchAll_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "with media.fields",
-			params: &types.SearchTweetsTweetsSearchAllParams{
+			params: &types.SearchTweetsAllParams{
 				Query:       "from:testuser",
 				MediaFields: []string{"tf1", "tf2"},
 			},
@@ -249,7 +249,7 @@ func Test_SearchTweetsTweetsSearchAll_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "with place.fields",
-			params: &types.SearchTweetsTweetsSearchAllParams{
+			params: &types.SearchTweetsAllParams{
 				Query:       "from:testuser",
 				PlaceFields: []string{"tf1", "tf2"},
 			},
@@ -257,7 +257,7 @@ func Test_SearchTweetsTweetsSearchAll_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "with poll.fields",
-			params: &types.SearchTweetsTweetsSearchAllParams{
+			params: &types.SearchTweetsAllParams{
 				Query:      "from:testuser",
 				PollFields: []string{"tf1", "tf2"},
 			},
@@ -265,7 +265,7 @@ func Test_SearchTweetsTweetsSearchAll_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "with tweets.fields",
-			params: &types.SearchTweetsTweetsSearchAllParams{
+			params: &types.SearchTweetsAllParams{
 				Query:       "from:testuser",
 				TweetFields: []string{"tf1", "tf2"},
 			},
@@ -273,7 +273,7 @@ func Test_SearchTweetsTweetsSearchAll_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "with users.fields",
-			params: &types.SearchTweetsTweetsSearchAllParams{
+			params: &types.SearchTweetsAllParams{
 				Query:      "from:testuser",
 				UserFields: []string{"uf1", "uf2"},
 			},
@@ -281,7 +281,7 @@ func Test_SearchTweetsTweetsSearchAll_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "with end_time",
-			params: &types.SearchTweetsTweetsSearchAllParams{
+			params: &types.SearchTweetsAllParams{
 				Query:   "from:testuser",
 				EndTime: &endTime,
 			},
@@ -289,7 +289,7 @@ func Test_SearchTweetsTweetsSearchAll_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "with start_time",
-			params: &types.SearchTweetsTweetsSearchAllParams{
+			params: &types.SearchTweetsAllParams{
 				Query:     "from:testuser",
 				StartTime: &startTime,
 			},
@@ -297,7 +297,7 @@ func Test_SearchTweetsTweetsSearchAll_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "with since_id",
-			params: &types.SearchTweetsTweetsSearchAllParams{
+			params: &types.SearchTweetsAllParams{
 				Query:   "from:testuser",
 				SinceID: "sid",
 			},
@@ -305,7 +305,7 @@ func Test_SearchTweetsTweetsSearchAll_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "with until_id",
-			params: &types.SearchTweetsTweetsSearchAllParams{
+			params: &types.SearchTweetsAllParams{
 				Query:   "from:testuser",
 				UntilID: "uid",
 			},
@@ -313,7 +313,7 @@ func Test_SearchTweetsTweetsSearchAll_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "all query parameters",
-			params: &types.SearchTweetsTweetsSearchAllParams{
+			params: &types.SearchTweetsAllParams{
 				Query:       "from:testuser",
 				Expansions:  []string{"ex"},
 				MediaFields: []string{"mf"},
@@ -326,7 +326,7 @@ func Test_SearchTweetsTweetsSearchAll_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "has no required parameter",
-			params: &types.SearchTweetsTweetsSearchAllParams{
+			params: &types.SearchTweetsAllParams{
 				Expansions:  []string{"ex"},
 				UserFields:  []string{"uf"},
 				TweetFields: []string{"tf"},
@@ -343,18 +343,18 @@ func Test_SearchTweetsTweetsSearchAll_ResolveEndpoint(t *testing.T) {
 	}
 }
 
-func Test_SearchTweetsTweetsSearchAll_Body(t *testing.T) {
+func Test_SearchTweetsAll_Body(t *testing.T) {
 	cases := []struct {
 		name   string
-		params *types.SearchTweetsTweetsSearchAllParams
+		params *types.SearchTweetsAllParams
 	}{
 		{
 			name:   "empty params",
-			params: &types.SearchTweetsTweetsSearchAllParams{},
+			params: &types.SearchTweetsAllParams{},
 		},
 		{
 			name:   "some params",
-			params: &types.SearchTweetsTweetsSearchAllParams{Query: "from:testuser"},
+			params: &types.SearchTweetsAllParams{Query: "from:testuser"},
 		},
 	}
 

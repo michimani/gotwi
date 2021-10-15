@@ -2,7 +2,7 @@ package types
 
 import "github.com/michimani/gotwi/resources"
 
-type SearchTweetsTweetsSearchRecentResponse struct {
+type SearchTweetsRecentResponse struct {
 	Data     []resources.Tweet `json:"data"`
 	Meta     resources.Meta    `json:"meta"`
 	Includes struct {
@@ -11,11 +11,11 @@ type SearchTweetsTweetsSearchRecentResponse struct {
 	Errors []resources.PartialError `json:"errors"`
 }
 
-func (r *SearchTweetsTweetsSearchRecentResponse) HasPartialError() bool {
+func (r *SearchTweetsRecentResponse) HasPartialError() bool {
 	return !(r.Errors == nil || len(r.Errors) == 0)
 }
 
-type SearchTweetsTweetsSearchAllResponse struct {
+type SearchTweetsAllResponse struct {
 	Data     []resources.Tweet `json:"data"`
 	Meta     resources.Meta    `json:"meta"`
 	Includes struct {
@@ -24,6 +24,6 @@ type SearchTweetsTweetsSearchAllResponse struct {
 	Errors []resources.PartialError `json:"errors"`
 }
 
-func (r *SearchTweetsTweetsSearchAllResponse) HasPartialError() bool {
+func (r *SearchTweetsAllResponse) HasPartialError() bool {
 	return !(r.Errors == nil || len(r.Errors) == 0)
 }
