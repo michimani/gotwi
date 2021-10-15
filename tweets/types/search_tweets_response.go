@@ -3,8 +3,8 @@ package types
 import "github.com/michimani/gotwi/resources"
 
 type SearchTweetsRecentResponse struct {
-	Data     []resources.Tweet `json:"data"`
-	Meta     resources.Meta    `json:"meta"`
+	Data     []resources.Tweet        `json:"data"`
+	Meta     resources.PaginationMeta `json:"meta"`
 	Includes struct {
 		Users []resources.User `json:"users"`
 	} `json:"includes"`
@@ -16,8 +16,8 @@ func (r *SearchTweetsRecentResponse) HasPartialError() bool {
 }
 
 type SearchTweetsAllResponse struct {
-	Data     []resources.Tweet `json:"data"`
-	Meta     resources.Meta    `json:"meta"`
+	Data     []resources.Tweet        `json:"data"`
+	Meta     resources.PaginationMeta `json:"meta"`
 	Includes struct {
 		Users []resources.User `json:"users"`
 	} `json:"includes"`
