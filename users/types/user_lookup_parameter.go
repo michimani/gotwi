@@ -42,6 +42,12 @@ func (p *UserLookupParams) Body() io.Reader {
 	return nil
 }
 
+func (p *UserLookupParams) ParameterMap() map[string]string {
+	m := map[string]string{}
+
+	return m
+}
+
 type UserLookupIDParams struct {
 	accessToken string
 
@@ -78,6 +84,12 @@ func (p *UserLookupIDParams) Body() io.Reader {
 	return nil
 }
 
+func (p *UserLookupIDParams) ParameterMap() map[string]string {
+	m := map[string]string{}
+
+	return m
+}
+
 type UserLookupByParams struct {
 	accessToken string
 
@@ -110,6 +122,12 @@ func (p *UserLookupByParams) ResolveEndpoint(endpointBase string) string {
 
 func (p *UserLookupByParams) Body() io.Reader {
 	return nil
+}
+
+func (p *UserLookupByParams) ParameterMap() map[string]string {
+	m := map[string]string{}
+
+	return m
 }
 
 type UserLookupByUsernameParams struct {
@@ -146,6 +164,12 @@ func (p *UserLookupByUsernameParams) ResolveEndpoint(endpointBase string) string
 
 func (p *UserLookupByUsernameParams) Body() io.Reader {
 	return nil
+}
+
+func (p *UserLookupByUsernameParams) ParameterMap() map[string]string {
+	m := map[string]string{}
+
+	return m
 }
 
 func resolveUserLookupQuery(q url.Values, expansions, tweetFields, userFields []string) string {

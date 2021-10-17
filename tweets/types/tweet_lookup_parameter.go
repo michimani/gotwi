@@ -52,6 +52,12 @@ func (p *TweetLookupParams) Body() io.Reader {
 	return nil
 }
 
+func (p *TweetLookupParams) ParameterMap() map[string]string {
+	m := map[string]string{}
+
+	return m
+}
+
 type TweetLookupIDParams struct {
 	accessToken string
 
@@ -96,6 +102,12 @@ func (p *TweetLookupIDParams) ResolveEndpoint(endpointBase string) string {
 
 func (p *TweetLookupIDParams) Body() io.Reader {
 	return nil
+}
+
+func (p *TweetLookupIDParams) ParameterMap() map[string]string {
+	m := map[string]string{}
+
+	return m
 }
 
 func resolveTweetLookupQuery(q url.Values, expansions, mediaFields, placeFields, pollFields, tweetFields, userFields []string) string {
