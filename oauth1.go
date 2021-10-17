@@ -7,7 +7,6 @@ import (
 	"encoding/base64"
 	"fmt"
 	"io"
-	"net/http"
 	"net/url"
 	"strings"
 	"time"
@@ -43,64 +42,45 @@ type CreateOAthSignatureOutput struct {
 	OAuthSignature       string
 }
 
-const oauth1header = `OAuth oauth_consumer_key="%s",oauth_nonce="%s",oauth_signature="%s",oauth_signature_method="%s",oauth_timestamp="%s",oauth_token="%s",oauth_version="%s"`
-
-// SetOAuth1Header returns http.Request with the header information required for OAuth1.0a authentication.
-func (c *TwitterClient) SetOAuth1Header(r *http.Request, paramsMap map[string]string) (*http.Request, error) {
-	in := &CreateOAthSignatureInput{
-		HTTPMethod:       r.Method,
-		RawEndpoint:      r.URL.String(),
-		OAuthConsumerKey: c.OAuthConsumerKey,
-		OAuthToken:       c.OAuthToken,
-		SigningKey:       c.SigningKey,
-		ParameterMap:     paramsMap,
-	}
-
-	out, err := createOAuthSignature(in)
-	if err != nil {
-		return nil, err
-	}
-
-	r.Header.Add("Authorization", fmt.Sprintf(oauth1header,
-		url.QueryEscape(c.OAuthConsumerKey),
-		url.QueryEscape(out.OAuthNonce),
-		url.QueryEscape(out.OAuthSignature),
-		url.QueryEscape(out.OAuthSignatureMethod),
-		url.QueryEscape(out.OAuthTimestamp),
-		url.QueryEscape(c.OAuthToken),
-		url.QueryEscape(out.OAuthVersion),
-	))
-
-	return r, nil
-}
-
-func createOAuthSignature(in *CreateOAthSignatureInput) (*CreateOAthSignatureOutput, error) {
+func CreateOAuthSignature(in *CreateOAthSignatureInput) (*CreateOAthSignatureOutput, error) {
 	out := CreateOAthSignatureOutput{
 		OAuthSignatureMethod: OAuthSignatureMethodHMACSHA1,
 		OAuthVersion:         OAuthVersion10,
 	}
-	nonce := generateOAthNonce()
+	nonce, err := generateOAthNonce()
+	if err != nil {
+		return nil, err
+	}
 	out.OAuthNonce = nonce
+
 	ts := fmt.Sprintf("%d", time.Now().Unix())
 	out.OAuthTimestamp = ts
 	endpointBase := endpointBase(in.RawEndpoint)
 
 	parameterString := createParameterString(in.ParameterMap, nonce, ts, in)
 	sigBase := createSignatureBase(in.HTTPMethod, endpointBase, parameterString)
-	sig := calculateSignature(sigBase, in.SigningKey)
+	sig, err := calculateSignature(sigBase, in.SigningKey)
+	if err != nil {
+		return nil, err
+	}
 	out.OAuthSignature = sig
+
 	return &out, nil
 }
 
-func generateOAthNonce() string {
+func generateOAthNonce() (string, error) {
 	key := make([]byte, 32)
-	rand.Read(key)
+	_, err := rand.Read(key)
+	if err != nil {
+		return "", err
+	}
+
 	nonce := base64.StdEncoding.EncodeToString(key)
 	symbols := []string{"+", "/", "="}
 	for _, s := range symbols {
 		nonce = strings.Replace(nonce, s, "", -1)
 	}
-	return nonce
+	return nonce, nil
 }
 
 func endpointBase(e string) string {
@@ -172,9 +152,12 @@ func createSignatureBase(method, endpointBase, parameterString string) string {
 	)
 }
 
-func calculateSignature(base, key string) string {
+func calculateSignature(base, key string) (string, error) {
 	b := []byte(key)
 	h := hmac.New(sha1.New, b)
-	io.WriteString(h, base)
-	return base64.StdEncoding.EncodeToString(h.Sum(nil))
+	_, err := io.WriteString(h, base)
+	if err != nil {
+		return "", err
+	}
+	return base64.StdEncoding.EncodeToString(h.Sum(nil)), nil
 }

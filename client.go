@@ -100,6 +100,11 @@ func (c *TwitterClient) IsReady() bool {
 	if c == nil {
 		return false
 	}
+
+	if !c.AuthenticationMethod.Valid() {
+		return false
+	}
+
 	switch c.AuthenticationMethod {
 	case AuthenMethodOAuth1UserContext:
 		if c.OAuthToken == "" || c.SigningKey == "" {
@@ -184,7 +189,7 @@ func (c *TwitterClient) prepare(endpointBase, method string, p util.Parameters) 
 	switch c.AuthenticationMethod {
 	case AuthenMethodOAuth1UserContext:
 		pm := p.ParameterMap()
-		req, err = c.SetOAuth1Header(req, pm)
+		req, err = c.setOAuth1Header(req, pm)
 		if err != nil {
 			return nil, err
 		}
@@ -195,6 +200,37 @@ func (c *TwitterClient) prepare(endpointBase, method string, p util.Parameters) 
 	}
 
 	return req, nil
+}
+
+const oauth1header = `OAuth oauth_consumer_key="%s",oauth_nonce="%s",oauth_signature="%s",oauth_signature_method="%s",oauth_timestamp="%s",oauth_token="%s",oauth_version="%s"`
+
+// setOAuth1Header returns http.Request with the header information required for OAuth1.0a authentication.
+func (c *TwitterClient) setOAuth1Header(r *http.Request, paramsMap map[string]string) (*http.Request, error) {
+	in := &CreateOAthSignatureInput{
+		HTTPMethod:       r.Method,
+		RawEndpoint:      r.URL.String(),
+		OAuthConsumerKey: c.OAuthConsumerKey,
+		OAuthToken:       c.OAuthToken,
+		SigningKey:       c.SigningKey,
+		ParameterMap:     paramsMap,
+	}
+
+	out, err := CreateOAuthSignature(in)
+	if err != nil {
+		return nil, err
+	}
+
+	r.Header.Add("Authorization", fmt.Sprintf(oauth1header,
+		url.QueryEscape(c.OAuthConsumerKey),
+		url.QueryEscape(out.OAuthNonce),
+		url.QueryEscape(out.OAuthSignature),
+		url.QueryEscape(out.OAuthSignatureMethod),
+		url.QueryEscape(out.OAuthTimestamp),
+		url.QueryEscape(c.OAuthToken),
+		url.QueryEscape(out.OAuthVersion),
+	))
+
+	return r, nil
 }
 
 func newRequest(endpoint, method string, p util.Parameters) (*http.Request, error) {
