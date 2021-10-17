@@ -63,6 +63,12 @@ func (p *TweetCountsRecentParams) Body() io.Reader {
 	return nil
 }
 
+func (p *TweetCountsRecentParams) ParameterMap() map[string]string {
+	m := map[string]string{}
+
+	return m
+}
+
 type TweetCountsAllParams struct {
 	accessToken string
 
@@ -103,6 +109,12 @@ func (p *TweetCountsAllParams) ResolveEndpoint(endpointBase string) string {
 
 func (p *TweetCountsAllParams) Body() io.Reader {
 	return nil
+}
+
+func (p *TweetCountsAllParams) ParameterMap() map[string]string {
+	m := map[string]string{}
+
+	return m
 }
 
 func resolveTweetCountsQuery(q url.Values, start, end *time.Time, since, until string, granularity TweetCountsGranularity, nextToken string) string {

@@ -10,6 +10,7 @@ type Parameters interface {
 	AccessToken() string
 	ResolveEndpoint(endpointBase string) string
 	Body() io.Reader
+	ParameterMap() map[string]string
 }
 
 func QueryValue(params []string) string {

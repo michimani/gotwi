@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"net/url"
 	"os"
 	"strings"
 	"time"
@@ -17,11 +18,28 @@ import (
 const (
 	APIKeyEnvName       = "GOTWI_API_KEY"
 	APIKeySecretEnvName = "GOTWI_API_KEY_SECRET"
+	OAuthToken          = "GOTWI_ACCESS_TOKEN"
+	OAuthTokenSecret    = "GOTWI_ACCESS_TOKEN_SECRET"
 )
 
+type AuthenticationMethod string
+
+const (
+	AuthenMethodOAuth1UserContext = "OAuth 1.0a User context"
+	AuthenMethodOAuth2BearerToken = "OAuth 2.0 Bearer token"
+)
+
+func (a AuthenticationMethod) Valid() bool {
+	return a == AuthenMethodOAuth1UserContext || a == AuthenMethodOAuth2BearerToken
+}
+
 type TwitterClient struct {
-	Client      *http.Client
-	AccessToken string
+	Client               *http.Client
+	AuthenticationMethod AuthenticationMethod
+	AccessToken          string
+	OAuthToken           string
+	SigningKey           string
+	OAuthConsumerKey     string
 }
 
 type ClientResponse struct {
@@ -39,20 +57,42 @@ func NewClient() *TwitterClient {
 	}
 }
 
-func NewAuthorizedClient() (*TwitterClient, error) {
+func NewAuthorizedClient(authnMethod AuthenticationMethod) (*TwitterClient, error) {
 	c := NewClient()
-	return Authorize(c)
+	c.AuthenticationMethod = authnMethod
+	return Authorize(c, authnMethod)
 }
 
-func Authorize(c *TwitterClient) (*TwitterClient, error) {
-	apiKey := os.Getenv(APIKeyEnvName)
-	apiKeySecret := os.Getenv(APIKeySecretEnvName)
-	accessToken, err := GenerateBearerToken(c, apiKey, apiKeySecret)
-	if err != nil {
-		return nil, err
+func Authorize(c *TwitterClient, authnMethod AuthenticationMethod) (*TwitterClient, error) {
+	if !authnMethod.Valid() {
+		return nil, fmt.Errorf("invalid authnMethod")
 	}
 
-	c.AccessToken = accessToken
+	apiKey := os.Getenv(APIKeyEnvName)
+	apiKeySecret := os.Getenv(APIKeySecretEnvName)
+	c.OAuthConsumerKey = apiKey
+
+	switch authnMethod {
+	case AuthenMethodOAuth1UserContext:
+		oauthToken := os.Getenv(OAuthToken)
+		oauthTokenSecret := os.Getenv(OAuthTokenSecret)
+		if oauthToken != "" && oauthTokenSecret != "" {
+			c.OAuthToken = oauthToken
+			c.SigningKey = fmt.Sprintf("%s&%s",
+				url.QueryEscape(apiKeySecret),
+				url.QueryEscape(oauthTokenSecret))
+		}
+	case AuthenMethodOAuth2BearerToken:
+		accessToken, err := GenerateBearerToken(c, apiKey, apiKeySecret)
+		if err != nil {
+			return nil, err
+		}
+
+		c.AccessToken = accessToken
+	default:
+		// noop
+	}
+
 	return c, nil
 }
 
@@ -60,9 +100,17 @@ func (c *TwitterClient) IsReady() bool {
 	if c == nil {
 		return false
 	}
-
-	if c.AccessToken == "" {
-		return false
+	switch c.AuthenticationMethod {
+	case AuthenMethodOAuth1UserContext:
+		if c.OAuthToken == "" || c.SigningKey == "" {
+			return false
+		}
+	case AuthenMethodOAuth2BearerToken:
+		if c.AccessToken == "" {
+			return false
+		}
+	default:
+		// noop
 	}
 
 	return true
@@ -128,7 +176,27 @@ func (c *TwitterClient) prepare(endpointBase, method string, p util.Parameters) 
 
 	endpoint := p.ResolveEndpoint(endpointBase)
 	p.SetAccessToken(c.AccessToken)
-	return newRequest(endpoint, method, p)
+	req, err := newRequest(endpoint, method, p)
+	if err != nil {
+		return nil, err
+	}
+
+	switch c.AuthenticationMethod {
+	case AuthenMethodOAuth1UserContext:
+		pm := p.ParameterMap()
+		req, err = c.SetOAuth1Header(req, pm)
+		if err != nil {
+			return nil, err
+		}
+
+		fmt.Printf("%#+v\n", req)
+	case AuthenMethodOAuth2BearerToken:
+		req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", p.AccessToken()))
+	default:
+		// noop
+	}
+
+	return req, nil
 }
 
 func newRequest(endpoint, method string, p util.Parameters) (*http.Request, error) {
@@ -138,7 +206,6 @@ func newRequest(endpoint, method string, p util.Parameters) (*http.Request, erro
 	}
 
 	req.Header.Set("Content-Type", "application/json;charset=UTF-8")
-	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", p.AccessToken()))
 
 	return req, nil
 }

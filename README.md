@@ -49,7 +49,7 @@ This is a library for using the Twitter API v2 in the Go language. (It is still 
     - [ ] `POST /2/users/:id/following`
     - [ ] `DELETE /2/users/:source_user_id/following/:target_user_id`
   - Blocks
-    - [ ] `GET /2/users/:id/blocking`
+    - [x] `GET /2/users/:id/blocking`
     - [ ] `POST /2/users/:id/blocking`
     - [ ] `DELETE /2/users/:source_user_id/blocking/:target_user_id`
   - Mutes
@@ -97,7 +97,7 @@ import (
 )
 
 func main() {
-	c, err := gotwi.NewAuthorizedClient()
+	c, err := gotwi.NewAuthorizedClient(gotwi.AuthenMethodOAuth2BearerToken)
 	if err != nil {
 		fmt.Println(err)
 		return

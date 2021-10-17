@@ -67,6 +67,12 @@ func (p *SearchTweetsRecentParams) Body() io.Reader {
 	return nil
 }
 
+func (p *SearchTweetsRecentParams) ParameterMap() map[string]string {
+	m := map[string]string{}
+
+	return m
+}
+
 type SearchTweetsAllParams struct {
 	accessToken string
 
@@ -113,6 +119,12 @@ func (p *SearchTweetsAllParams) ResolveEndpoint(endpointBase string) string {
 
 func (p *SearchTweetsAllParams) Body() io.Reader {
 	return nil
+}
+
+func (p *SearchTweetsAllParams) ParameterMap() map[string]string {
+	m := map[string]string{}
+
+	return m
 }
 
 func resolveSearchTweetsQuery(q url.Values,

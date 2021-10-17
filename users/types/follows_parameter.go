@@ -57,6 +57,12 @@ func (p *FollowsFollowingGetParams) Body() io.Reader {
 	return nil
 }
 
+func (p *FollowsFollowingGetParams) ParameterMap() map[string]string {
+	m := map[string]string{}
+
+	return m
+}
+
 type FollowsFollowersParams struct {
 	accessToken string
 
@@ -93,6 +99,12 @@ func (p *FollowsFollowersParams) ResolveEndpoint(endpointBase string) string {
 
 func (p *FollowsFollowersParams) Body() io.Reader {
 	return nil
+}
+
+func (p *FollowsFollowersParams) ParameterMap() map[string]string {
+	m := map[string]string{}
+
+	return m
 }
 
 func resolveFollowsQuery(q url.Values, max FollowsMaxResult, paginationToken string, expansions, tweetFields, userFields []string) string {
