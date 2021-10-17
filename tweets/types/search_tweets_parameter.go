@@ -2,7 +2,6 @@ package types
 
 import (
 	"io"
-	"net/url"
 	"strconv"
 	"time"
 
@@ -30,6 +29,22 @@ type SearchTweetsRecentParams struct {
 	MaxResults  SearchTweetsMaxResult
 }
 
+var SearchTweetsRecentQueryParams = map[string]struct{}{
+	"query":        {},
+	"expansions":   {},
+	"media.fields": {},
+	"place.fields": {},
+	"poll.fields":  {},
+	"tweet.fields": {},
+	"user.fields":  {},
+	"start_time":   {},
+	"end_time":     {},
+	"since_id":     {},
+	"until_id":     {},
+	"max_results":  {},
+	"next_token":   {},
+}
+
 func (m SearchTweetsMaxResult) Valid() bool {
 	return m > 10 && m <= 100
 }
@@ -53,14 +68,14 @@ func (p *SearchTweetsRecentParams) ResolveEndpoint(endpointBase string) string {
 		return ""
 	}
 
-	query := url.Values{}
-	query.Add("query", p.Query)
-	return endpoint + resolveSearchTweetsQuery(query,
-		p.Expansions, p.MediaFields, p.PlaceFields, p.PollFields, p.TweetFields, p.UserFields,
-		p.StartTime, p.EndTime,
-		p.SinceID, p.UntilID,
-		p.NextToken, p.MaxResults,
-	)
+	pm := p.ParameterMap()
+	qs := util.QueryString(pm, SearchTweetsRecentQueryParams)
+
+	if qs == "" {
+		return endpoint
+	}
+
+	return endpoint + "?" + qs
 }
 
 func (p *SearchTweetsRecentParams) Body() io.Reader {
@@ -69,6 +84,58 @@ func (p *SearchTweetsRecentParams) Body() io.Reader {
 
 func (p *SearchTweetsRecentParams) ParameterMap() map[string]string {
 	m := map[string]string{}
+
+	m["query"] = p.Query
+
+	if p.Expansions != nil && len(p.Expansions) > 0 {
+		m["expansions"] = util.QueryValue(p.Expansions)
+	}
+
+	if p.MediaFields != nil && len(p.MediaFields) > 0 {
+		m["media.fields"] = util.QueryValue(p.MediaFields)
+	}
+
+	if p.PlaceFields != nil && len(p.PlaceFields) > 0 {
+		m["place.fields"] = util.QueryValue(p.PlaceFields)
+	}
+
+	if p.PollFields != nil && len(p.PollFields) > 0 {
+		m["poll.fields"] = util.QueryValue(p.PollFields)
+	}
+
+	if p.TweetFields != nil && len(p.TweetFields) > 0 {
+		m["tweet.fields"] = util.QueryValue(p.TweetFields)
+	}
+
+	if p.UserFields != nil && len(p.UserFields) > 0 {
+		m["user.fields"] = util.QueryValue(p.UserFields)
+	}
+
+	if p.StartTime != nil {
+		m["start_time"] = p.StartTime.Format(time.RFC3339)
+	}
+
+	if p.EndTime != nil {
+		m["end_time"] = p.EndTime.Format(time.RFC3339)
+	}
+
+	if p.SinceID != "" {
+		m["since_id"] = p.SinceID
+	}
+
+	if p.UntilID != "" {
+		m["until_id"] = p.UntilID
+	}
+
+	if p.MaxResults.Valid() {
+		m["max_results"] = p.MaxResults.String()
+	} else {
+		m["max_results"] = "10"
+	}
+
+	if p.NextToken != "" {
+		m["next_token"] = p.NextToken
+	}
 
 	return m
 }
@@ -92,6 +159,22 @@ type SearchTweetsAllParams struct {
 	MaxResults  SearchTweetsMaxResult
 }
 
+var SearchTweetsAllQueryParams = map[string]struct{}{
+	"query":        {},
+	"expansions":   {},
+	"media.fields": {},
+	"place.fields": {},
+	"poll.fields":  {},
+	"tweet.fields": {},
+	"user.fields":  {},
+	"start_time":   {},
+	"end_time":     {},
+	"since_id":     {},
+	"until_id":     {},
+	"max_results":  {},
+	"next_token":   {},
+}
+
 func (p *SearchTweetsAllParams) SetAccessToken(token string) {
 	p.accessToken = token
 }
@@ -107,14 +190,14 @@ func (p *SearchTweetsAllParams) ResolveEndpoint(endpointBase string) string {
 		return ""
 	}
 
-	query := url.Values{}
-	query.Add("query", p.Query)
-	return endpoint + resolveSearchTweetsQuery(query,
-		p.Expansions, p.MediaFields, p.PlaceFields, p.PollFields, p.TweetFields, p.UserFields,
-		p.StartTime, p.EndTime,
-		p.SinceID, p.UntilID,
-		p.NextToken, p.MaxResults,
-	)
+	pm := p.ParameterMap()
+	qs := util.QueryString(pm, SearchTweetsAllQueryParams)
+
+	if qs == "" {
+		return endpoint
+	}
+
+	return endpoint + "?" + qs
 }
 
 func (p *SearchTweetsAllParams) Body() io.Reader {
@@ -124,69 +207,57 @@ func (p *SearchTweetsAllParams) Body() io.Reader {
 func (p *SearchTweetsAllParams) ParameterMap() map[string]string {
 	m := map[string]string{}
 
-	return m
-}
+	m["query"] = p.Query
 
-func resolveSearchTweetsQuery(q url.Values,
-	expansions, mediaFields, placeFields, pollFields, tweetFields, userFields []string,
-	start, end *time.Time,
-	since, until string,
-	nextToken string, max SearchTweetsMaxResult,
-) string {
-	if expansions != nil {
-		q.Add("expansions", util.QueryValue(expansions))
+	if p.Expansions != nil && len(p.Expansions) > 0 {
+		m["expansions"] = util.QueryValue(p.Expansions)
 	}
 
-	if mediaFields != nil {
-		q.Add("media.fields", util.QueryValue(mediaFields))
+	if p.MediaFields != nil && len(p.MediaFields) > 0 {
+		m["media.fields"] = util.QueryValue(p.MediaFields)
 	}
 
-	if placeFields != nil {
-		q.Add("place.fields", util.QueryValue(placeFields))
+	if p.PlaceFields != nil && len(p.PlaceFields) > 0 {
+		m["place.fields"] = util.QueryValue(p.PlaceFields)
 	}
 
-	if pollFields != nil {
-		q.Add("poll.fields", util.QueryValue(pollFields))
+	if p.PollFields != nil && len(p.PollFields) > 0 {
+		m["poll.fields"] = util.QueryValue(p.PollFields)
 	}
 
-	if tweetFields != nil {
-		q.Add("tweet.fields", util.QueryValue(tweetFields))
+	if p.TweetFields != nil && len(p.TweetFields) > 0 {
+		m["tweet.fields"] = util.QueryValue(p.TweetFields)
 	}
 
-	if userFields != nil {
-		q.Add("user.fields", util.QueryValue(userFields))
+	if p.UserFields != nil && len(p.UserFields) > 0 {
+		m["user.fields"] = util.QueryValue(p.UserFields)
 	}
 
-	if start != nil {
-		q.Add("start_time", start.Format(time.RFC3339))
+	if p.StartTime != nil {
+		m["start_time"] = p.StartTime.Format(time.RFC3339)
 	}
 
-	if end != nil {
-		q.Add("end_time", end.Format(time.RFC3339))
+	if p.EndTime != nil {
+		m["end_time"] = p.EndTime.Format(time.RFC3339)
 	}
 
-	if since != "" {
-		q.Add("since_id", since)
+	if p.SinceID != "" {
+		m["since_id"] = p.SinceID
 	}
 
-	if until != "" {
-		q.Add("until_id", until)
+	if p.UntilID != "" {
+		m["until_id"] = p.UntilID
 	}
 
-	if max.Valid() {
-		q.Add("max_results", max.String())
+	if p.MaxResults.Valid() {
+		m["max_results"] = p.MaxResults.String()
 	} else {
-		q.Add("max_results", "10")
+		m["max_results"] = "10"
 	}
 
-	if nextToken != "" {
-		q.Add("next_token", nextToken)
+	if p.NextToken != "" {
+		m["next_token"] = p.NextToken
 	}
 
-	encoded := q.Encode()
-	if encoded == "" {
-		return ""
-	}
-
-	return "?" + encoded
+	return m
 }

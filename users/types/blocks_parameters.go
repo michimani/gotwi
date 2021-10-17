@@ -25,6 +25,14 @@ type BlocksBlockingGetParams struct {
 	UserFields      []string
 }
 
+var BlocksBlockingGetQueryParams = map[string]struct{}{
+	"max_results":      {},
+	"pagination_token": {},
+	"expansions":       {},
+	"tweet.fields":     {},
+	"user.fields":      {},
+}
+
 func (m BlocksMaxResult) Valid() bool {
 	return m > 0 && m <= 1000
 }
@@ -49,8 +57,14 @@ func (p *BlocksBlockingGetParams) ResolveEndpoint(endpointBase string) string {
 	encoded := url.QueryEscape(p.ID)
 	endpoint := strings.Replace(endpointBase, ":id", encoded, 1)
 
-	query := url.Values{}
-	return endpoint + resolveBlocksQuery(query, p.MaxResult, p.PaginationToken, p.Expansions, p.TweetFields, p.UserFields)
+	pm := p.ParameterMap()
+	qs := util.QueryString(pm, BlocksBlockingGetQueryParams)
+
+	if qs == "" {
+		return endpoint
+	}
+
+	return endpoint + "?" + qs
 }
 
 func (p *BlocksBlockingGetParams) Body() io.Reader {
@@ -69,48 +83,16 @@ func (p *BlocksBlockingGetParams) ParameterMap() map[string]string {
 	}
 
 	if p.Expansions != nil && len(p.Expansions) > 0 {
-		extensions := strings.Join(p.Expansions, ",")
-		m["extensions"] = extensions
+		m["expansions"] = util.QueryValue(p.Expansions)
 	}
 
 	if p.TweetFields != nil && len(p.TweetFields) > 0 {
-		tweetField := strings.Join(p.TweetFields, ",")
-		m["tweet.fields"] = tweetField
+		m["tweet.fields"] = util.QueryValue(p.TweetFields)
 	}
 
 	if p.UserFields != nil && len(p.UserFields) > 0 {
-		userFields := strings.Join(p.UserFields, ",")
-		m["user.fields"] = userFields
+		m["user.fields"] = util.QueryValue(p.UserFields)
 	}
 
 	return m
-}
-
-func resolveBlocksQuery(q url.Values, max BlocksMaxResult, paginationToken string, expansions, tweetFields, userFields []string) string {
-	if max.Valid() {
-		q.Add("max_results", max.String())
-	}
-
-	if paginationToken != "" {
-		q.Add("pagination_token", paginationToken)
-	}
-
-	if expansions != nil {
-		q.Add("expansions", util.QueryValue(expansions))
-	}
-
-	if tweetFields != nil {
-		q.Add("tweet.fields", util.QueryValue(tweetFields))
-	}
-
-	if userFields != nil {
-		q.Add("user.fields", util.QueryValue(userFields))
-	}
-
-	encoded := q.Encode()
-	if encoded == "" {
-		return ""
-	}
-
-	return "?" + encoded
 }
