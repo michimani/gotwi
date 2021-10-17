@@ -55,6 +55,30 @@ func (p *TweetLookupParams) Body() io.Reader {
 func (p *TweetLookupParams) ParameterMap() map[string]string {
 	m := map[string]string{}
 
+	if p.Expansions != nil && len(p.Expansions) > 0 {
+		m["expansions"] = util.QueryValue(p.Expansions)
+	}
+
+	if p.MediaFields != nil && len(p.MediaFields) > 0 {
+		m["media.fields"] = util.QueryValue(p.MediaFields)
+	}
+
+	if p.PlaceFields != nil && len(p.PlaceFields) > 0 {
+		m["place.fields"] = util.QueryValue(p.PlaceFields)
+	}
+
+	if p.PollFields != nil && len(p.PollFields) > 0 {
+		m["poll.fields"] = util.QueryValue(p.PollFields)
+	}
+
+	if p.TweetFields != nil && len(p.TweetFields) > 0 {
+		m["tweet.fields"] = util.QueryValue(p.TweetFields)
+	}
+
+	if p.UserFields != nil && len(p.UserFields) > 0 {
+		m["user.fields"] = util.QueryValue(p.UserFields)
+	}
+
 	return m
 }
 
@@ -106,6 +130,30 @@ func (p *TweetLookupIDParams) Body() io.Reader {
 
 func (p *TweetLookupIDParams) ParameterMap() map[string]string {
 	m := map[string]string{}
+
+	if p.Expansions != nil && len(p.Expansions) > 0 {
+		m["expansions"] = util.QueryValue(p.Expansions)
+	}
+
+	if p.MediaFields != nil && len(p.MediaFields) > 0 {
+		m["media.fields"] = util.QueryValue(p.MediaFields)
+	}
+
+	if p.PlaceFields != nil && len(p.PlaceFields) > 0 {
+		m["place.fields"] = util.QueryValue(p.PlaceFields)
+	}
+
+	if p.PollFields != nil && len(p.PollFields) > 0 {
+		m["poll.fields"] = util.QueryValue(p.PollFields)
+	}
+
+	if p.TweetFields != nil && len(p.TweetFields) > 0 {
+		m["tweet.fields"] = util.QueryValue(p.TweetFields)
+	}
+
+	if p.UserFields != nil && len(p.UserFields) > 0 {
+		m["user.fields"] = util.QueryValue(p.UserFields)
+	}
 
 	return m
 }

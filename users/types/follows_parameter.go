@@ -60,6 +60,27 @@ func (p *FollowsFollowingGetParams) Body() io.Reader {
 func (p *FollowsFollowingGetParams) ParameterMap() map[string]string {
 	m := map[string]string{}
 
+	if p.MaxResult.Valid() {
+		m["max_results"] = p.MaxResult.String()
+	}
+
+	if p.PaginationToken != "" {
+		m["pagination_token"] = p.PaginationToken
+	}
+
+	if p.Expansions != nil && len(p.Expansions) > 0 {
+
+		m["expansions"] = util.QueryValue(p.Expansions)
+	}
+
+	if p.TweetFields != nil && len(p.TweetFields) > 0 {
+		m["tweet.fields"] = util.QueryValue(p.TweetFields)
+	}
+
+	if p.UserFields != nil && len(p.UserFields) > 0 {
+		m["user.fields"] = util.QueryValue(p.UserFields)
+	}
+
 	return m
 }
 
@@ -103,6 +124,27 @@ func (p *FollowsFollowersParams) Body() io.Reader {
 
 func (p *FollowsFollowersParams) ParameterMap() map[string]string {
 	m := map[string]string{}
+
+	if p.MaxResult.Valid() {
+		m["max_results"] = p.MaxResult.String()
+	}
+
+	if p.PaginationToken != "" {
+		m["pagination_token"] = p.PaginationToken
+	}
+
+	if p.Expansions != nil && len(p.Expansions) > 0 {
+
+		m["expansions"] = util.QueryValue(p.Expansions)
+	}
+
+	if p.TweetFields != nil && len(p.TweetFields) > 0 {
+		m["tweet.fields"] = util.QueryValue(p.TweetFields)
+	}
+
+	if p.UserFields != nil && len(p.UserFields) > 0 {
+		m["user.fields"] = util.QueryValue(p.UserFields)
+	}
 
 	return m
 }

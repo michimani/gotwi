@@ -66,6 +66,30 @@ func (p *TweetCountsRecentParams) Body() io.Reader {
 func (p *TweetCountsRecentParams) ParameterMap() map[string]string {
 	m := map[string]string{}
 
+	m["query"] = p.Query
+
+	if p.StartTime != nil {
+		m["start_time"] = p.StartTime.Format(time.RFC3339)
+	}
+
+	if p.EndTime != nil {
+		m["end_time"] = p.EndTime.Format(time.RFC3339)
+	}
+
+	if p.SinceID != "" {
+		m["since_id"] = p.SinceID
+	}
+
+	if p.UntilID != "" {
+		m["until_id"] = p.UntilID
+	}
+
+	if p.Granularity.Valid() {
+		m["granularity"] = p.Granularity.String()
+	} else {
+		m["granularity"] = TweetCountsGranularityHour.String()
+	}
+
 	return m
 }
 
@@ -113,6 +137,34 @@ func (p *TweetCountsAllParams) Body() io.Reader {
 
 func (p *TweetCountsAllParams) ParameterMap() map[string]string {
 	m := map[string]string{}
+
+	m["query"] = p.Query
+
+	if p.StartTime != nil {
+		m["start_time"] = p.StartTime.Format(time.RFC3339)
+	}
+
+	if p.EndTime != nil {
+		m["end_time"] = p.EndTime.Format(time.RFC3339)
+	}
+
+	if p.SinceID != "" {
+		m["since_id"] = p.SinceID
+	}
+
+	if p.UntilID != "" {
+		m["until_id"] = p.UntilID
+	}
+
+	if p.Granularity.Valid() {
+		m["granularity"] = p.Granularity.String()
+	} else {
+		m["granularity"] = TweetCountsGranularityHour.String()
+	}
+
+	if p.NextToken != "" {
+		m["next_token"] = p.NextToken
+	}
 
 	return m
 }

@@ -45,6 +45,20 @@ func (p *UserLookupParams) Body() io.Reader {
 func (p *UserLookupParams) ParameterMap() map[string]string {
 	m := map[string]string{}
 
+	m["ids"] = util.QueryValue(p.IDs)
+
+	if p.Expansions != nil && len(p.Expansions) > 0 {
+		m["expansions"] = util.QueryValue(p.Expansions)
+	}
+
+	if p.TweetFields != nil && len(p.TweetFields) > 0 {
+		m["tweet.fields"] = util.QueryValue(p.TweetFields)
+	}
+
+	if p.UserFields != nil && len(p.UserFields) > 0 {
+		m["user.fields"] = util.QueryValue(p.UserFields)
+	}
+
 	return m
 }
 
@@ -87,6 +101,18 @@ func (p *UserLookupIDParams) Body() io.Reader {
 func (p *UserLookupIDParams) ParameterMap() map[string]string {
 	m := map[string]string{}
 
+	if p.Expansions != nil && len(p.Expansions) > 0 {
+		m["expansions"] = util.QueryValue(p.Expansions)
+	}
+
+	if p.TweetFields != nil && len(p.TweetFields) > 0 {
+		m["tweet.fields"] = util.QueryValue(p.TweetFields)
+	}
+
+	if p.UserFields != nil && len(p.UserFields) > 0 {
+		m["user.fields"] = util.QueryValue(p.UserFields)
+	}
+
 	return m
 }
 
@@ -126,6 +152,20 @@ func (p *UserLookupByParams) Body() io.Reader {
 
 func (p *UserLookupByParams) ParameterMap() map[string]string {
 	m := map[string]string{}
+
+	m["usernames"] = util.QueryValue(p.Usernames)
+
+	if p.Expansions != nil && len(p.Expansions) > 0 {
+		m["expansions"] = util.QueryValue(p.Expansions)
+	}
+
+	if p.TweetFields != nil && len(p.TweetFields) > 0 {
+		m["tweet.fields"] = util.QueryValue(p.TweetFields)
+	}
+
+	if p.UserFields != nil && len(p.UserFields) > 0 {
+		m["user.fields"] = util.QueryValue(p.UserFields)
+	}
 
 	return m
 }
@@ -168,6 +208,19 @@ func (p *UserLookupByUsernameParams) Body() io.Reader {
 
 func (p *UserLookupByUsernameParams) ParameterMap() map[string]string {
 	m := map[string]string{}
+
+	if p.Expansions != nil && len(p.Expansions) > 0 {
+
+		m["expansions"] = util.QueryValue(p.Expansions)
+	}
+
+	if p.TweetFields != nil && len(p.TweetFields) > 0 {
+		m["tweet.fields"] = util.QueryValue(p.TweetFields)
+	}
+
+	if p.UserFields != nil && len(p.UserFields) > 0 {
+		m["user.fields"] = util.QueryValue(p.UserFields)
+	}
 
 	return m
 }

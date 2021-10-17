@@ -69,18 +69,15 @@ func (p *BlocksBlockingGetParams) ParameterMap() map[string]string {
 	}
 
 	if p.Expansions != nil && len(p.Expansions) > 0 {
-		extensions := strings.Join(p.Expansions, ",")
-		m["extensions"] = extensions
+		m["expansions"] = util.QueryValue(p.Expansions)
 	}
 
 	if p.TweetFields != nil && len(p.TweetFields) > 0 {
-		tweetField := strings.Join(p.TweetFields, ",")
-		m["tweet.fields"] = tweetField
+		m["tweet.fields"] = util.QueryValue(p.TweetFields)
 	}
 
 	if p.UserFields != nil && len(p.UserFields) > 0 {
-		userFields := strings.Join(p.UserFields, ",")
-		m["user.fields"] = userFields
+		m["user.fields"] = util.QueryValue(p.UserFields)
 	}
 
 	return m

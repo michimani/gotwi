@@ -70,6 +70,58 @@ func (p *SearchTweetsRecentParams) Body() io.Reader {
 func (p *SearchTweetsRecentParams) ParameterMap() map[string]string {
 	m := map[string]string{}
 
+	m["query"] = p.Query
+
+	if p.Expansions != nil && len(p.Expansions) > 0 {
+		m["expansions"] = util.QueryValue(p.Expansions)
+	}
+
+	if p.MediaFields != nil && len(p.MediaFields) > 0 {
+		m["media.fields"] = util.QueryValue(p.MediaFields)
+	}
+
+	if p.PlaceFields != nil && len(p.PlaceFields) > 0 {
+		m["place.fields"] = util.QueryValue(p.PlaceFields)
+	}
+
+	if p.PollFields != nil && len(p.PollFields) > 0 {
+		m["poll.fields"] = util.QueryValue(p.PollFields)
+	}
+
+	if p.TweetFields != nil && len(p.TweetFields) > 0 {
+		m["tweet.fields"] = util.QueryValue(p.TweetFields)
+	}
+
+	if p.UserFields != nil && len(p.UserFields) > 0 {
+		m["user.fields"] = util.QueryValue(p.UserFields)
+	}
+
+	if p.StartTime != nil {
+		m["start_time"] = p.StartTime.Format(time.RFC3339)
+	}
+
+	if p.EndTime != nil {
+		m["end_time"] = p.EndTime.Format(time.RFC3339)
+	}
+
+	if p.SinceID != "" {
+		m["since_id"] = p.SinceID
+	}
+
+	if p.UntilID != "" {
+		m["until_id"] = p.UntilID
+	}
+
+	if p.MaxResults.Valid() {
+		m["max_results"] = p.MaxResults.String()
+	} else {
+		m["max_results"] = "10"
+	}
+
+	if p.NextToken != "" {
+		m["next_token"] = p.NextToken
+	}
+
 	return m
 }
 
@@ -123,6 +175,58 @@ func (p *SearchTweetsAllParams) Body() io.Reader {
 
 func (p *SearchTweetsAllParams) ParameterMap() map[string]string {
 	m := map[string]string{}
+
+	m["query"] = p.Query
+
+	if p.Expansions != nil && len(p.Expansions) > 0 {
+		m["expansions"] = util.QueryValue(p.Expansions)
+	}
+
+	if p.MediaFields != nil && len(p.MediaFields) > 0 {
+		m["media.fields"] = util.QueryValue(p.MediaFields)
+	}
+
+	if p.PlaceFields != nil && len(p.PlaceFields) > 0 {
+		m["place.fields"] = util.QueryValue(p.PlaceFields)
+	}
+
+	if p.PollFields != nil && len(p.PollFields) > 0 {
+		m["poll.fields"] = util.QueryValue(p.PollFields)
+	}
+
+	if p.TweetFields != nil && len(p.TweetFields) > 0 {
+		m["tweet.fields"] = util.QueryValue(p.TweetFields)
+	}
+
+	if p.UserFields != nil && len(p.UserFields) > 0 {
+		m["user.fields"] = util.QueryValue(p.UserFields)
+	}
+
+	if p.StartTime != nil {
+		m["start_time"] = p.StartTime.Format(time.RFC3339)
+	}
+
+	if p.EndTime != nil {
+		m["end_time"] = p.EndTime.Format(time.RFC3339)
+	}
+
+	if p.SinceID != "" {
+		m["since_id"] = p.SinceID
+	}
+
+	if p.UntilID != "" {
+		m["until_id"] = p.UntilID
+	}
+
+	if p.MaxResults.Valid() {
+		m["max_results"] = p.MaxResults.String()
+	} else {
+		m["max_results"] = "10"
+	}
+
+	if p.NextToken != "" {
+		m["next_token"] = p.NextToken
+	}
 
 	return m
 }
