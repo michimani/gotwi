@@ -188,8 +188,6 @@ func (c *TwitterClient) prepare(endpointBase, method string, p util.Parameters) 
 		if err != nil {
 			return nil, err
 		}
-
-		fmt.Printf("%#+v\n", req)
 	case AuthenMethodOAuth2BearerToken:
 		req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", p.AccessToken()))
 	default:
