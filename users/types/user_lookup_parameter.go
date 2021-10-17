@@ -18,6 +18,13 @@ type UserLookupParams struct {
 	UserFields  []string
 }
 
+var UserLookupQueryParams = map[string]struct{}{
+	"ids":          {},
+	"expansions":   {},
+	"tweet.fields": {},
+	"user.fields":  {},
+}
+
 func (p *UserLookupParams) SetAccessToken(token string) {
 	p.accessToken = token
 }
@@ -33,9 +40,14 @@ func (p *UserLookupParams) ResolveEndpoint(endpointBase string) string {
 		return ""
 	}
 
-	query := url.Values{}
-	query.Add("ids", util.QueryValue(p.IDs))
-	return endpoint + resolveUserLookupQuery(query, p.Expansions, p.TweetFields, p.UserFields)
+	pm := p.ParameterMap()
+	qs := util.QueryString(pm, UserLookupQueryParams)
+
+	if qs == "" {
+		return endpoint
+	}
+
+	return endpoint + "?" + qs
 }
 
 func (p *UserLookupParams) Body() io.Reader {
@@ -74,6 +86,12 @@ type UserLookupIDParams struct {
 	UserFields  []string
 }
 
+var UserLookupIDQueryParams = map[string]struct{}{
+	"expansions":   {},
+	"tweet.fields": {},
+	"user.fields":  {},
+}
+
 func (p *UserLookupIDParams) SetAccessToken(token string) {
 	p.accessToken = token
 }
@@ -90,8 +108,14 @@ func (p *UserLookupIDParams) ResolveEndpoint(endpointBase string) string {
 	encoded := url.QueryEscape(p.ID)
 	endpoint := strings.Replace(endpointBase, ":id", encoded, 1)
 
-	query := url.Values{}
-	return endpoint + resolveUserLookupQuery(query, p.Expansions, p.TweetFields, p.UserFields)
+	pm := p.ParameterMap()
+	qs := util.QueryString(pm, UserLookupIDQueryParams)
+
+	if qs == "" {
+		return endpoint
+	}
+
+	return endpoint + "?" + qs
 }
 
 func (p *UserLookupIDParams) Body() io.Reader {
@@ -126,6 +150,13 @@ type UserLookupByParams struct {
 	UserFields  []string
 }
 
+var UserLookupByQueryParams = map[string]struct{}{
+	"usernames":    {},
+	"expansions":   {},
+	"tweet.fields": {},
+	"user.fields":  {},
+}
+
 func (p *UserLookupByParams) SetAccessToken(token string) {
 	p.accessToken = token
 }
@@ -141,9 +172,14 @@ func (p *UserLookupByParams) ResolveEndpoint(endpointBase string) string {
 		return ""
 	}
 
-	query := url.Values{}
-	query.Add("usernames", util.QueryValue(p.Usernames))
-	return endpoint + resolveUserLookupQuery(query, p.Expansions, p.TweetFields, p.UserFields)
+	pm := p.ParameterMap()
+	qs := util.QueryString(pm, UserLookupByQueryParams)
+
+	if qs == "" {
+		return endpoint
+	}
+
+	return endpoint + "?" + qs
 }
 
 func (p *UserLookupByParams) Body() io.Reader {
@@ -182,6 +218,12 @@ type UserLookupByUsernameParams struct {
 	UserFields  []string
 }
 
+var UserLookupByUsernameQueryParams = map[string]struct{}{
+	"expansions":   {},
+	"tweet.fields": {},
+	"user.fields":  {},
+}
+
 func (p *UserLookupByUsernameParams) SetAccessToken(token string) {
 	p.accessToken = token
 }
@@ -198,8 +240,14 @@ func (p *UserLookupByUsernameParams) ResolveEndpoint(endpointBase string) string
 	encoded := url.QueryEscape(p.Username)
 	endpoint := strings.Replace(endpointBase, ":username", encoded, 1)
 
-	query := url.Values{}
-	return endpoint + resolveUserLookupQuery(query, p.Expansions, p.TweetFields, p.UserFields)
+	pm := p.ParameterMap()
+	qs := util.QueryString(pm, UserLookupByUsernameQueryParams)
+
+	if qs == "" {
+		return endpoint
+	}
+
+	return endpoint + "?" + qs
 }
 
 func (p *UserLookupByUsernameParams) Body() io.Reader {
@@ -210,7 +258,6 @@ func (p *UserLookupByUsernameParams) ParameterMap() map[string]string {
 	m := map[string]string{}
 
 	if p.Expansions != nil && len(p.Expansions) > 0 {
-
 		m["expansions"] = util.QueryValue(p.Expansions)
 	}
 
@@ -223,25 +270,4 @@ func (p *UserLookupByUsernameParams) ParameterMap() map[string]string {
 	}
 
 	return m
-}
-
-func resolveUserLookupQuery(q url.Values, expansions, tweetFields, userFields []string) string {
-	if expansions != nil {
-		q.Add("expansions", util.QueryValue(expansions))
-	}
-
-	if tweetFields != nil {
-		q.Add("tweet.fields", util.QueryValue(tweetFields))
-	}
-
-	if userFields != nil {
-		q.Add("user.fields", util.QueryValue(userFields))
-	}
-
-	encoded := q.Encode()
-	if encoded == "" {
-		return ""
-	}
-
-	return "?" + encoded
 }

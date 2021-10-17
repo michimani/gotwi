@@ -25,6 +25,14 @@ type FollowsFollowingGetParams struct {
 	UserFields      []string
 }
 
+var FollowsFollowingGetQueryParams = map[string]struct{}{
+	"max_results":      {},
+	"pagination_token": {},
+	"expansions":       {},
+	"tweet.fields":     {},
+	"user.fields":      {},
+}
+
 func (m FollowsMaxResult) Valid() bool {
 	return m > 0 && m <= 1000
 }
@@ -49,8 +57,14 @@ func (p *FollowsFollowingGetParams) ResolveEndpoint(endpointBase string) string 
 	encoded := url.QueryEscape(p.ID)
 	endpoint := strings.Replace(endpointBase, ":id", encoded, 1)
 
-	query := url.Values{}
-	return endpoint + resolveFollowsQuery(query, p.MaxResult, p.PaginationToken, p.Expansions, p.TweetFields, p.UserFields)
+	pm := p.ParameterMap()
+	qs := util.QueryString(pm, FollowsFollowingGetQueryParams)
+
+	if qs == "" {
+		return endpoint
+	}
+
+	return endpoint + "?" + qs
 }
 
 func (p *FollowsFollowingGetParams) Body() io.Reader {
@@ -69,7 +83,6 @@ func (p *FollowsFollowingGetParams) ParameterMap() map[string]string {
 	}
 
 	if p.Expansions != nil && len(p.Expansions) > 0 {
-
 		m["expansions"] = util.QueryValue(p.Expansions)
 	}
 
@@ -98,6 +111,14 @@ type FollowsFollowersParams struct {
 	UserFields      []string
 }
 
+var FollowsFollowersQueryParams = map[string]struct{}{
+	"max_results":      {},
+	"pagination_token": {},
+	"expansions":       {},
+	"tweet.fields":     {},
+	"user.fields":      {},
+}
+
 func (p *FollowsFollowersParams) SetAccessToken(token string) {
 	p.accessToken = token
 }
@@ -114,8 +135,14 @@ func (p *FollowsFollowersParams) ResolveEndpoint(endpointBase string) string {
 	encoded := url.QueryEscape(p.ID)
 	endpoint := strings.Replace(endpointBase, ":id", encoded, 1)
 
-	query := url.Values{}
-	return endpoint + resolveFollowsQuery(query, p.MaxResult, p.PaginationToken, p.Expansions, p.TweetFields, p.UserFields)
+	pm := p.ParameterMap()
+	qs := util.QueryString(pm, FollowsFollowersQueryParams)
+
+	if qs == "" {
+		return endpoint
+	}
+
+	return endpoint + "?" + qs
 }
 
 func (p *FollowsFollowersParams) Body() io.Reader {
@@ -134,7 +161,6 @@ func (p *FollowsFollowersParams) ParameterMap() map[string]string {
 	}
 
 	if p.Expansions != nil && len(p.Expansions) > 0 {
-
 		m["expansions"] = util.QueryValue(p.Expansions)
 	}
 
@@ -147,33 +173,4 @@ func (p *FollowsFollowersParams) ParameterMap() map[string]string {
 	}
 
 	return m
-}
-
-func resolveFollowsQuery(q url.Values, max FollowsMaxResult, paginationToken string, expansions, tweetFields, userFields []string) string {
-	if max.Valid() {
-		q.Add("max_results", max.String())
-	}
-
-	if paginationToken != "" {
-		q.Add("pagination_token", paginationToken)
-	}
-
-	if expansions != nil {
-		q.Add("expansions", util.QueryValue(expansions))
-	}
-
-	if tweetFields != nil {
-		q.Add("tweet.fields", util.QueryValue(tweetFields))
-	}
-
-	if userFields != nil {
-		q.Add("user.fields", util.QueryValue(userFields))
-	}
-
-	encoded := q.Encode()
-	if encoded == "" {
-		return ""
-	}
-
-	return "?" + encoded
 }

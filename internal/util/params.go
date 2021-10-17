@@ -2,6 +2,7 @@ package util
 
 import (
 	"io"
+	"net/url"
 	"strings"
 )
 
@@ -19,4 +20,15 @@ func QueryValue(params []string) string {
 	}
 
 	return strings.Join(params, ",")
+}
+
+func QueryString(paramsMap map[string]string, includes map[string]struct{}) string {
+	q := url.Values{}
+	for k, v := range paramsMap {
+		if _, ok := includes[k]; ok {
+			q.Add(k, v)
+		}
+	}
+
+	return q.Encode()
 }

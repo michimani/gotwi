@@ -7,7 +7,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func Test_QueryString(t *testing.T) {
+func Test_QueryValue(t *testing.T) {
 	cases := []struct {
 		name   string
 		params []string
