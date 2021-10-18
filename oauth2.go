@@ -17,7 +17,7 @@ type OAuth2TokenResponse struct {
 	AccessToken string `json:"access_token"`
 }
 
-func GenerateBearerToken(c *TwitterClient, apiKey, apiKeySecret string) (string, error) {
+func GenerateBearerToken(c *GotwiClient, apiKey, apiKeySecret string) (string, error) {
 	uv := url.Values{}
 	uv.Add("grant_type", "client_credentials")
 	body := strings.NewReader(uv.Encode())

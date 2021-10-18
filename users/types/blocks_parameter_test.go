@@ -7,35 +7,35 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func Test_BlocksMaxResult_Valid(t *testing.T) {
+func Test_BlocksMaxResults_Valid(t *testing.T) {
 	cases := []struct {
 		name   string
-		max    types.BlocksMaxResult
+		max    types.BlocksMaxResults
 		expect bool
 	}{
 		{
 			name:   "ok: 1",
-			max:    types.BlocksMaxResult(1),
+			max:    types.BlocksMaxResults(1),
 			expect: true,
 		},
 		{
 			name:   "ok: 1000",
-			max:    types.BlocksMaxResult(1000),
+			max:    types.BlocksMaxResults(1000),
 			expect: true,
 		},
 		{
 			name:   "ng: 0",
-			max:    types.BlocksMaxResult(0),
+			max:    types.BlocksMaxResults(0),
 			expect: false,
 		},
 		{
 			name:   "ng: 1001",
-			max:    types.BlocksMaxResult(1001),
+			max:    types.BlocksMaxResults(1001),
 			expect: false,
 		},
 		{
 			name:   "ng: -1",
-			max:    types.BlocksMaxResult(-1),
+			max:    types.BlocksMaxResults(-1),
 			expect: false,
 		},
 	}
@@ -48,25 +48,25 @@ func Test_BlocksMaxResult_Valid(t *testing.T) {
 	}
 }
 
-func Test_BlocksMaxResult_String(t *testing.T) {
+func Test_BlocksMaxResults_String(t *testing.T) {
 	cases := []struct {
 		name   string
-		max    types.BlocksMaxResult
+		max    types.BlocksMaxResults
 		expect string
 	}{
 		{
 			name:   "ok: 1",
-			max:    types.BlocksMaxResult(1),
+			max:    types.BlocksMaxResults(1),
 			expect: "1",
 		},
 		{
 			name:   "ok: 0",
-			max:    types.BlocksMaxResult(0),
+			max:    types.BlocksMaxResults(0),
 			expect: "0",
 		},
 		{
 			name:   "ok: -1",
-			max:    types.BlocksMaxResult(-1),
+			max:    types.BlocksMaxResults(-1),
 			expect: "-1",
 		},
 	}
@@ -122,8 +122,8 @@ func Test_BlocksBlockingGetParams_ResolveEndpoint(t *testing.T) {
 		{
 			name: "normal: with specific max_result",
 			params: &types.BlocksBlockingGetParams{
-				ID:        "test-id",
-				MaxResult: 111,
+				ID:         "test-id",
+				MaxResults: 111,
 			},
 			expect: endpointRoot + "test-id?max_results=111",
 		},
@@ -163,7 +163,7 @@ func Test_BlocksBlockingGetParams_ResolveEndpoint(t *testing.T) {
 			name: "normal: all query parameters",
 			params: &types.BlocksBlockingGetParams{
 				ID:              "test-id",
-				MaxResult:       111,
+				MaxResults:      111,
 				PaginationToken: "p-token",
 				Expansions:      []string{"ex"},
 				UserFields:      []string{"uf"},

@@ -9,7 +9,7 @@ import (
 	"github.com/michimani/gotwi/internal/util"
 )
 
-type BlocksMaxResult int
+type BlocksMaxResults int
 
 type BlocksBlockingGetParams struct {
 	accessToken string
@@ -18,7 +18,7 @@ type BlocksBlockingGetParams struct {
 	ID string
 
 	// Query parameters
-	MaxResult       BlocksMaxResult
+	MaxResults      BlocksMaxResults
 	PaginationToken string
 	Expansions      []string
 	TweetFields     []string
@@ -33,11 +33,11 @@ var BlocksBlockingGetQueryParams = map[string]struct{}{
 	"user.fields":      {},
 }
 
-func (m BlocksMaxResult) Valid() bool {
+func (m BlocksMaxResults) Valid() bool {
 	return m > 0 && m <= 1000
 }
 
-func (m BlocksMaxResult) String() string {
+func (m BlocksMaxResults) String() string {
 	return strconv.Itoa(int(m))
 }
 
@@ -74,8 +74,8 @@ func (p *BlocksBlockingGetParams) Body() io.Reader {
 func (p *BlocksBlockingGetParams) ParameterMap() map[string]string {
 	m := map[string]string{}
 
-	if p.MaxResult.Valid() {
-		m["max_results"] = p.MaxResult.String()
+	if p.MaxResults.Valid() {
+		m["max_results"] = p.MaxResults.String()
 	}
 
 	if p.PaginationToken != "" {
