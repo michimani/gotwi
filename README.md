@@ -19,7 +19,7 @@ This is a library for using the Twitter API v2 in the Go language. (It is still 
     - [x] `GET /2/tweets/counts/all`
   - Timelines
     - [x] `GET /2/users/:id/tweets`
-    - [ ] `GET /2/users/:id/mentions` 
+    - [x] `GET /2/users/:id/mentions` 
   - Filtered stream
     - [ ] `POST /2/tweets/search/stream/rules`
     - [ ] `GET /2/tweets/search/stream/rules`
