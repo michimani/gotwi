@@ -14,3 +14,11 @@ type TweetCountAllMeta struct {
 	TotalTweetCount int    `json:"total_tweet_count"`
 	NextToken       string `json:"next_token"`
 }
+
+type TweetTimelineMeta struct {
+	Count         int    `json:"count"`
+	NewestID      string `json:"newest_id"`
+	OldestID      string `json:"oldest_id"`
+	NextToken     string `json:"next_token"`
+	PreviousToken string `json:"previous_token"`
+}
