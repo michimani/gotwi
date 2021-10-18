@@ -82,7 +82,9 @@ export GOTWI_API_KEY=your-api-key
 export GOTWI_API_KEY_SECRET=your-api-key-secret
 ```
 
-## Get a user by user name
+## Request with OAuth 2.0 Bearer Token
+
+- Get a user by user name.
 
 ```go
 package main
@@ -97,13 +99,17 @@ import (
 )
 
 func main() {
-	c, err := gotwi.NewAuthorizedClient(gotwi.AuthenMethodOAuth2BearerToken)
+	in := &gotwi.NewGotwiClientInput{
+		AuthenticationMethod: gotwi.AuthenMethodOAuth2BearerToken,
+	}
+
+	c, err := gotwi.NewGotwiClient(in)
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
 
-	p := &types.UserLookupUsersByUsernameParams{
+	p := &types.UserLookupByUsernameParams{
 		Username: "michimani210",
 		Expansions: []string{
 			string(fields.UserPinnedTweetID),
@@ -115,18 +121,17 @@ func main() {
 			string(fields.TweetCreatedAt),
 		},
 	}
-
-	u, err := users.UserLookupUsersByUsername(c, p)
+	res, err := users.UserLookupByUsername(c, p)
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
 
-	fmt.Println("ID: ", u.Data.ID)
-	fmt.Println("Name: ", u.Data.Name)
-	fmt.Println("Username: ", u.Data.Username)
-	fmt.Println("CreatedAt: ", u.Data.CreatedAt)
-	for _, t := range u.Includes.Tweets {
+	fmt.Println("ID: ", res.Data.ID)
+	fmt.Println("Name: ", res.Data.Name)
+	fmt.Println("Username: ", res.Data.Username)
+	fmt.Println("CreatedAt: ", res.Data.CreatedAt)
+	for _, t := range res.Includes.Tweets {
 		fmt.Println("PinnedTweet: ", t.Text)
 	}
 }
@@ -144,4 +149,53 @@ Name:  michimani Lv.859
 Username:  michimani210
 CreatedAt:  2012-05-16 12:07:04 +0000 UTC
 PinnedTweet:  pinned tweet
+```
+
+## Request with OAuth 1.0a User Context
+
+- Get blocking users.
+
+```go
+func main() {
+	in := &gotwi.NewGotwiClientInput{
+		AuthenticationMethod: gotwi.AuthenMethodOAuth1UserContext,
+		OAuthToken:           "your-twitter-acount-oauth-token",
+		OAuthTokenSecret:     "your-twitter-acount-oauth-token-secret",
+	}
+
+	c, err := gotwi.NewGotwiClient(in)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	p := &types.BlocksBlockingGetParams{
+		ID:        "your-twitter-acount-id",
+		MaxResults: 5,
+	}
+
+	res, err := users.BlocksBlockingGet(c, p)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	for _, b := range res.Data {
+		fmt.Println(b.Name)
+	}
+}
+```
+
+```
+go run main.go
+```
+
+You will get the output like following.
+
+```
+blockingUser1
+blockingUser2
+blockingUser3
+blockingUser4
+blockingUser5
 ```

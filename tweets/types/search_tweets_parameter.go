@@ -8,7 +8,7 @@ import (
 	"github.com/michimani/gotwi/internal/util"
 )
 
-type SearchTweetsMaxResult int
+type SearchTweetsMaxResults int
 
 type SearchTweetsRecentParams struct {
 	accessToken string
@@ -26,7 +26,7 @@ type SearchTweetsRecentParams struct {
 	TweetFields []string
 	UserFields  []string
 	NextToken   string
-	MaxResults  SearchTweetsMaxResult
+	MaxResults  SearchTweetsMaxResults
 }
 
 var SearchTweetsRecentQueryParams = map[string]struct{}{
@@ -45,11 +45,11 @@ var SearchTweetsRecentQueryParams = map[string]struct{}{
 	"next_token":   {},
 }
 
-func (m SearchTweetsMaxResult) Valid() bool {
+func (m SearchTweetsMaxResults) Valid() bool {
 	return m > 10 && m <= 100
 }
 
-func (m SearchTweetsMaxResult) String() string {
+func (m SearchTweetsMaxResults) String() string {
 	return strconv.Itoa(int(m))
 }
 
@@ -156,7 +156,7 @@ type SearchTweetsAllParams struct {
 	TweetFields []string
 	UserFields  []string
 	NextToken   string
-	MaxResults  SearchTweetsMaxResult
+	MaxResults  SearchTweetsMaxResults
 }
 
 var SearchTweetsAllQueryParams = map[string]struct{}{

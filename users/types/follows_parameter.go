@@ -9,7 +9,7 @@ import (
 	"github.com/michimani/gotwi/internal/util"
 )
 
-type FollowsMaxResult int
+type FollowsMaxResults int
 
 type FollowsFollowingGetParams struct {
 	accessToken string
@@ -18,7 +18,7 @@ type FollowsFollowingGetParams struct {
 	ID string
 
 	// Query parameters
-	MaxResult       FollowsMaxResult
+	MaxResults      FollowsMaxResults
 	PaginationToken string
 	Expansions      []string
 	TweetFields     []string
@@ -33,11 +33,11 @@ var FollowsFollowingGetQueryParams = map[string]struct{}{
 	"user.fields":      {},
 }
 
-func (m FollowsMaxResult) Valid() bool {
+func (m FollowsMaxResults) Valid() bool {
 	return m > 0 && m <= 1000
 }
 
-func (m FollowsMaxResult) String() string {
+func (m FollowsMaxResults) String() string {
 	return strconv.Itoa(int(m))
 }
 
@@ -74,8 +74,8 @@ func (p *FollowsFollowingGetParams) Body() io.Reader {
 func (p *FollowsFollowingGetParams) ParameterMap() map[string]string {
 	m := map[string]string{}
 
-	if p.MaxResult.Valid() {
-		m["max_results"] = p.MaxResult.String()
+	if p.MaxResults.Valid() {
+		m["max_results"] = p.MaxResults.String()
 	}
 
 	if p.PaginationToken != "" {
@@ -104,7 +104,7 @@ type FollowsFollowersParams struct {
 	ID string
 
 	// Query parameters
-	MaxResult       FollowsMaxResult
+	MaxResults      FollowsMaxResults
 	PaginationToken string
 	Expansions      []string
 	TweetFields     []string
@@ -152,8 +152,8 @@ func (p *FollowsFollowersParams) Body() io.Reader {
 func (p *FollowsFollowersParams) ParameterMap() map[string]string {
 	m := map[string]string{}
 
-	if p.MaxResult.Valid() {
-		m["max_results"] = p.MaxResult.String()
+	if p.MaxResults.Valid() {
+		m["max_results"] = p.MaxResults.String()
 	}
 
 	if p.PaginationToken != "" {

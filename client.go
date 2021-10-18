@@ -18,8 +18,6 @@ import (
 const (
 	APIKeyEnvName       = "GOTWI_API_KEY"
 	APIKeySecretEnvName = "GOTWI_API_KEY_SECRET"
-	OAuthToken          = "GOTWI_ACCESS_TOKEN"
-	OAuthTokenSecret    = "GOTWI_ACCESS_TOKEN_SECRET"
 )
 
 type AuthenticationMethod string
@@ -33,7 +31,14 @@ func (a AuthenticationMethod) Valid() bool {
 	return a == AuthenMethodOAuth1UserContext || a == AuthenMethodOAuth2BearerToken
 }
 
-type TwitterClient struct {
+type NewGotwiClientInput struct {
+	HTTPClient           *http.Client
+	AuthenticationMethod AuthenticationMethod
+	OAuthToken           string
+	OAuthTokenSecret     string
+}
+
+type GotwiClient struct {
 	Client               *http.Client
 	AuthenticationMethod AuthenticationMethod
 	AccessToken          string
@@ -49,43 +54,57 @@ type ClientResponse struct {
 	Body       []byte
 }
 
-func NewClient() *TwitterClient {
-	return &TwitterClient{
-		Client: &http.Client{
-			Timeout: time.Duration(30) * time.Second,
-		},
-	}
+var defaultHTTPClient = &http.Client{
+	Timeout: time.Duration(30) * time.Second,
 }
 
-func NewAuthorizedClient(authnMethod AuthenticationMethod) (*TwitterClient, error) {
-	c := NewClient()
-	c.AuthenticationMethod = authnMethod
-	return Authorize(c, authnMethod)
-}
-
-func Authorize(c *TwitterClient, authnMethod AuthenticationMethod) (*TwitterClient, error) {
-	if !authnMethod.Valid() {
-		return nil, fmt.Errorf("invalid authnMethod")
+func NewGotwiClient(in *NewGotwiClientInput) (*GotwiClient, error) {
+	if in == nil {
+		return nil, fmt.Errorf("NewGotwiClientInput is nil.")
 	}
 
+	if !in.AuthenticationMethod.Valid() {
+		return nil, fmt.Errorf("AuthenticationMethod is invalid.")
+	}
+
+	c := GotwiClient{
+		Client:               defaultHTTPClient,
+		AuthenticationMethod: in.AuthenticationMethod,
+	}
+
+	if in.HTTPClient != nil {
+		c.Client = in.HTTPClient
+	}
+
+	if err := c.authorize(in.OAuthToken, in.OAuthTokenSecret); err != nil {
+		return nil, err
+	}
+
+	return &c, nil
+}
+
+func (c *GotwiClient) authorize(oauthToken, oauthTokenSecret string) error {
 	apiKey := os.Getenv(APIKeyEnvName)
 	apiKeySecret := os.Getenv(APIKeySecretEnvName)
+	if apiKey == "" || apiKeySecret == "" {
+		return fmt.Errorf("env '%s' and '%s' is required.", APIKeyEnvName, APIKeySecretEnvName)
+	}
 	c.OAuthConsumerKey = apiKey
 
-	switch authnMethod {
+	switch c.AuthenticationMethod {
 	case AuthenMethodOAuth1UserContext:
-		oauthToken := os.Getenv(OAuthToken)
-		oauthTokenSecret := os.Getenv(OAuthTokenSecret)
-		if oauthToken != "" && oauthTokenSecret != "" {
-			c.OAuthToken = oauthToken
-			c.SigningKey = fmt.Sprintf("%s&%s",
-				url.QueryEscape(apiKeySecret),
-				url.QueryEscape(oauthTokenSecret))
+		if oauthToken == "" || oauthTokenSecret == "" {
+			return fmt.Errorf("OAuthToken and OAuthTokenSecret is required for using %s.", AuthenMethodOAuth1UserContext)
 		}
+
+		c.OAuthToken = oauthToken
+		c.SigningKey = fmt.Sprintf("%s&%s",
+			url.QueryEscape(apiKeySecret),
+			url.QueryEscape(oauthTokenSecret))
 	case AuthenMethodOAuth2BearerToken:
 		accessToken, err := GenerateBearerToken(c, apiKey, apiKeySecret)
 		if err != nil {
-			return nil, err
+			return err
 		}
 
 		c.AccessToken = accessToken
@@ -93,10 +112,10 @@ func Authorize(c *TwitterClient, authnMethod AuthenticationMethod) (*TwitterClie
 		// noop
 	}
 
-	return c, nil
+	return nil
 }
 
-func (c *TwitterClient) IsReady() bool {
+func (c *GotwiClient) IsReady() bool {
 	if c == nil {
 		return false
 	}
@@ -121,7 +140,7 @@ func (c *TwitterClient) IsReady() bool {
 	return true
 }
 
-func (c *TwitterClient) CallAPI(endpoint, method string, p util.Parameters, i util.Response) error {
+func (c *GotwiClient) CallAPI(endpoint, method string, p util.Parameters, i util.Response) error {
 	req, err := c.prepare(endpoint, method, p)
 	if err != nil {
 		return err
@@ -143,7 +162,7 @@ func (c *TwitterClient) CallAPI(endpoint, method string, p util.Parameters, i ut
 	return nil
 }
 
-func (c *TwitterClient) Exec(req *http.Request) (*ClientResponse, *resources.Non200Error, error) {
+func (c *GotwiClient) Exec(req *http.Request) (*ClientResponse, *resources.Non200Error, error) {
 	res, err := c.Client.Do(req)
 	if err != nil {
 		return nil, nil, err
@@ -170,7 +189,7 @@ func (c *TwitterClient) Exec(req *http.Request) (*ClientResponse, *resources.Non
 	}, nil, nil
 }
 
-func (c *TwitterClient) prepare(endpointBase, method string, p util.Parameters) (*http.Request, error) {
+func (c *GotwiClient) prepare(endpointBase, method string, p util.Parameters) (*http.Request, error) {
 	if p == nil {
 		return nil, fmt.Errorf(gotwierrors.ErrorParametersNil, endpointBase)
 	}
@@ -205,7 +224,7 @@ func (c *TwitterClient) prepare(endpointBase, method string, p util.Parameters) 
 const oauth1header = `OAuth oauth_consumer_key="%s",oauth_nonce="%s",oauth_signature="%s",oauth_signature_method="%s",oauth_timestamp="%s",oauth_token="%s",oauth_version="%s"`
 
 // setOAuth1Header returns http.Request with the header information required for OAuth1.0a authentication.
-func (c *TwitterClient) setOAuth1Header(r *http.Request, paramsMap map[string]string) (*http.Request, error) {
+func (c *GotwiClient) setOAuth1Header(r *http.Request, paramsMap map[string]string) (*http.Request, error) {
 	in := &CreateOAthSignatureInput{
 		HTTPMethod:       r.Method,
 		RawEndpoint:      r.URL.String(),

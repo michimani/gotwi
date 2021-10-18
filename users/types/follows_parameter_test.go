@@ -7,35 +7,35 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func Test_FollowsMaxResult_Valid(t *testing.T) {
+func Test_FollowsMaxResults_Valid(t *testing.T) {
 	cases := []struct {
 		name   string
-		max    types.FollowsMaxResult
+		max    types.FollowsMaxResults
 		expect bool
 	}{
 		{
 			name:   "ok: 1",
-			max:    types.FollowsMaxResult(1),
+			max:    types.FollowsMaxResults(1),
 			expect: true,
 		},
 		{
 			name:   "ok: 1000",
-			max:    types.FollowsMaxResult(1000),
+			max:    types.FollowsMaxResults(1000),
 			expect: true,
 		},
 		{
 			name:   "ng: 0",
-			max:    types.FollowsMaxResult(0),
+			max:    types.FollowsMaxResults(0),
 			expect: false,
 		},
 		{
 			name:   "ng: 1001",
-			max:    types.FollowsMaxResult(1001),
+			max:    types.FollowsMaxResults(1001),
 			expect: false,
 		},
 		{
 			name:   "ng: -1",
-			max:    types.FollowsMaxResult(-1),
+			max:    types.FollowsMaxResults(-1),
 			expect: false,
 		},
 	}
@@ -48,25 +48,25 @@ func Test_FollowsMaxResult_Valid(t *testing.T) {
 	}
 }
 
-func Test_FollowsMaxResult_String(t *testing.T) {
+func Test_FollowsMaxResults_String(t *testing.T) {
 	cases := []struct {
 		name   string
-		max    types.FollowsMaxResult
+		max    types.FollowsMaxResults
 		expect string
 	}{
 		{
 			name:   "ok: 1",
-			max:    types.FollowsMaxResult(1),
+			max:    types.FollowsMaxResults(1),
 			expect: "1",
 		},
 		{
 			name:   "ok: 0",
-			max:    types.FollowsMaxResult(0),
+			max:    types.FollowsMaxResults(0),
 			expect: "0",
 		},
 		{
 			name:   "ok: -1",
-			max:    types.FollowsMaxResult(-1),
+			max:    types.FollowsMaxResults(-1),
 			expect: "-1",
 		},
 	}
@@ -122,8 +122,8 @@ func Test_FollowsFollowingGetParams_ResolveEndpoint(t *testing.T) {
 		{
 			name: "normal: with specific max_result",
 			params: &types.FollowsFollowingGetParams{
-				ID:        "test-id",
-				MaxResult: 111,
+				ID:         "test-id",
+				MaxResults: 111,
 			},
 			expect: endpointRoot + "test-id?max_results=111",
 		},
@@ -163,7 +163,7 @@ func Test_FollowsFollowingGetParams_ResolveEndpoint(t *testing.T) {
 			name: "normal: all query parameters",
 			params: &types.FollowsFollowingGetParams{
 				ID:              "test-id",
-				MaxResult:       111,
+				MaxResults:      111,
 				PaginationToken: "p-token",
 				Expansions:      []string{"ex"},
 				UserFields:      []string{"uf"},
@@ -256,8 +256,8 @@ func Test_FollowsFollowersParams_ResolveEndpoint(t *testing.T) {
 		{
 			name: "normal: with specific max_result",
 			params: &types.FollowsFollowersParams{
-				ID:        "test-id",
-				MaxResult: 111,
+				ID:         "test-id",
+				MaxResults: 111,
 			},
 			expect: endpointRoot + "test-id?max_results=111",
 		},
@@ -297,7 +297,7 @@ func Test_FollowsFollowersParams_ResolveEndpoint(t *testing.T) {
 			name: "normal: all query parameters",
 			params: &types.FollowsFollowersParams{
 				ID:              "test-id",
-				MaxResult:       111,
+				MaxResults:      111,
 				PaginationToken: "p-token",
 				Expansions:      []string{"ex"},
 				UserFields:      []string{"uf"},
