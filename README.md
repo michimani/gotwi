@@ -53,7 +53,7 @@ This is a library for using the Twitter API v2 in the Go language. (It is still 
     - [ ] `POST /2/users/:id/blocking`
     - [ ] `DELETE /2/users/:source_user_id/blocking/:target_user_id`
   - Mutes
-    - [ ] `GET /2/users/:id/muting`
+    - [x] `GET /2/users/:id/muting`
     - [ ] `POST /2/users/:id/muting`
     - [ ] `DELETE /2/users/:source_user_id/muting/:target_user_id`
 - Lists
