@@ -1,6 +1,7 @@
 package types
 
 import (
+	"encoding/json"
 	"io"
 	"net/url"
 	"strconv"
@@ -95,4 +96,46 @@ func (p *MutesMutingGetParams) ParameterMap() map[string]string {
 	}
 
 	return m
+}
+
+type MutesMutingPostParams struct {
+	accessToken string
+
+	// Path parameter
+	ID string `json:"-"` // The authenticated user ID
+
+	// JSON body parameter
+	TargetUserID string `json:"target_user_id"`
+}
+
+func (p *MutesMutingPostParams) SetAccessToken(token string) {
+	p.accessToken = token
+}
+
+func (p *MutesMutingPostParams) AccessToken() string {
+	return p.accessToken
+}
+
+func (p *MutesMutingPostParams) ResolveEndpoint(endpointBase string) string {
+	if p.ID == "" {
+		return ""
+	}
+
+	escaped := url.QueryEscape(p.ID)
+	endpoint := strings.Replace(endpointBase, ":id", escaped, 1)
+
+	return endpoint
+}
+
+func (p *MutesMutingPostParams) Body() (io.Reader, error) {
+	json, err := json.Marshal(p)
+	if err != nil {
+		return nil, err
+	}
+
+	return strings.NewReader(string(json)), nil
+}
+
+func (p *MutesMutingPostParams) ParameterMap() map[string]string {
+	return map[string]string{}
 }
