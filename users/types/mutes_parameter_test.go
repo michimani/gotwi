@@ -275,3 +275,73 @@ func Test_MutesMutingPostParams_Body(t *testing.T) {
 		})
 	}
 }
+
+func Test_MutesMutingDeleteParams_ResolveEndpoint(t *testing.T) {
+	const endpointRoot = "test/endpoint/"
+	const endpointBase = "test/endpoint/:source_user_id/:target_user_id"
+	cases := []struct {
+		name   string
+		params *types.MutesMutingDeleteParams
+		expect string
+	}{
+		{
+			name: "normal: only required parameter",
+			params: &types.MutesMutingDeleteParams{
+				SourceUserID: "sid",
+				TargetUserID: "tid",
+			},
+			expect: endpointRoot + "sid" + "/" + "tid",
+		},
+		{
+			name: "normal: has no required parameter",
+			params: &types.MutesMutingDeleteParams{
+				SourceUserID: "sid",
+			},
+			expect: "",
+		},
+		{
+			name: "normal: has no required parameter",
+			params: &types.MutesMutingDeleteParams{
+				TargetUserID: "tid",
+			},
+			expect: "",
+		},
+	}
+
+	for _, c := range cases {
+		t.Run(c.name, func(tt *testing.T) {
+			ep := c.params.ResolveEndpoint(endpointBase)
+			assert.Equal(tt, c.expect, ep)
+		})
+	}
+}
+
+func Test_MutesMutingDeleteParams_Body(t *testing.T) {
+	cases := []struct {
+		name   string
+		params *types.MutesMutingDeleteParams
+		expect io.Reader
+	}{
+		{
+			name: "ok: has required parameters",
+			params: &types.MutesMutingDeleteParams{
+				SourceUserID: "sid",
+				TargetUserID: "tid",
+			},
+			expect: nil,
+		},
+		{
+			name:   "ok: has no required parameters",
+			params: &types.MutesMutingDeleteParams{},
+			expect: nil,
+		},
+	}
+
+	for _, c := range cases {
+		t.Run(c.name, func(tt *testing.T) {
+			r, err := c.params.Body()
+			assert.NoError(tt, err)
+			assert.Equal(tt, c.expect, r)
+		})
+	}
+}

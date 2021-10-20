@@ -24,3 +24,13 @@ type MutesMutingPostResponse struct {
 func (r *MutesMutingPostResponse) HasPartialError() bool {
 	return false
 }
+
+type MutesMutingDeleteResponse struct {
+	Data struct {
+		Muting bool `json:"muting"`
+	} `json:"data"`
+}
+
+func (r *MutesMutingDeleteResponse) HasPartialError() bool {
+	return false
+}

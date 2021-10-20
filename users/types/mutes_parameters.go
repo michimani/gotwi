@@ -139,3 +139,40 @@ func (p *MutesMutingPostParams) Body() (io.Reader, error) {
 func (p *MutesMutingPostParams) ParameterMap() map[string]string {
 	return map[string]string{}
 }
+
+type MutesMutingDeleteParams struct {
+	accessToken string
+
+	// Path parameters
+	SourceUserID string // The authenticated user ID
+	TargetUserID string // The user ID for unfollow
+}
+
+func (p *MutesMutingDeleteParams) SetAccessToken(token string) {
+	p.accessToken = token
+}
+
+func (p *MutesMutingDeleteParams) AccessToken() string {
+	return p.accessToken
+}
+
+func (p *MutesMutingDeleteParams) ResolveEndpoint(endpointBase string) string {
+	if p.SourceUserID == "" || p.TargetUserID == "" {
+		return ""
+	}
+
+	escapedSID := url.QueryEscape(p.SourceUserID)
+	endpoint := strings.Replace(endpointBase, ":source_user_id", escapedSID, 1)
+	escapedTID := url.QueryEscape(p.TargetUserID)
+	endpoint = strings.Replace(endpoint, ":target_user_id", escapedTID, 1)
+
+	return endpoint
+}
+
+func (p *MutesMutingDeleteParams) Body() (io.Reader, error) {
+	return nil, nil
+}
+
+func (p *MutesMutingDeleteParams) ParameterMap() map[string]string {
+	return map[string]string{}
+}
