@@ -11,6 +11,14 @@ import (
 
 type FollowsMaxResults int
 
+func (m FollowsMaxResults) Valid() bool {
+	return m > 0 && m <= 1000
+}
+
+func (m FollowsMaxResults) String() string {
+	return strconv.Itoa(int(m))
+}
+
 type FollowsFollowingGetParams struct {
 	accessToken string
 
@@ -31,14 +39,6 @@ var FollowsFollowingGetQueryParams = map[string]struct{}{
 	"expansions":       {},
 	"tweet.fields":     {},
 	"user.fields":      {},
-}
-
-func (m FollowsMaxResults) Valid() bool {
-	return m > 0 && m <= 1000
-}
-
-func (m FollowsMaxResults) String() string {
-	return strconv.Itoa(int(m))
 }
 
 func (p *FollowsFollowingGetParams) SetAccessToken(token string) {
@@ -67,8 +67,8 @@ func (p *FollowsFollowingGetParams) ResolveEndpoint(endpointBase string) string 
 	return endpoint + "?" + qs
 }
 
-func (p *FollowsFollowingGetParams) Body() io.Reader {
-	return nil
+func (p *FollowsFollowingGetParams) Body() (io.Reader, error) {
+	return nil, nil
 }
 
 func (p *FollowsFollowingGetParams) ParameterMap() map[string]string {
@@ -145,8 +145,8 @@ func (p *FollowsFollowersParams) ResolveEndpoint(endpointBase string) string {
 	return endpoint + "?" + qs
 }
 
-func (p *FollowsFollowersParams) Body() io.Reader {
-	return nil
+func (p *FollowsFollowersParams) Body() (io.Reader, error) {
+	return nil, nil
 }
 
 func (p *FollowsFollowersParams) ParameterMap() map[string]string {

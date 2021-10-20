@@ -69,8 +69,8 @@ func (p *TweetCountsRecentParams) ResolveEndpoint(endpointBase string) string {
 	return endpoint + "?" + qs
 }
 
-func (p *TweetCountsRecentParams) Body() io.Reader {
-	return nil
+func (p *TweetCountsRecentParams) Body() (io.Reader, error) {
+	return nil, nil
 }
 
 func (p *TweetCountsRecentParams) ParameterMap() map[string]string {
@@ -151,8 +151,8 @@ func (p *TweetCountsAllParams) ResolveEndpoint(endpointBase string) string {
 	return endpoint + "?" + qs
 }
 
-func (p *TweetCountsAllParams) Body() io.Reader {
-	return nil
+func (p *TweetCountsAllParams) Body() (io.Reader, error) {
+	return nil, nil
 }
 
 func (p *TweetCountsAllParams) ParameterMap() map[string]string {

@@ -56,8 +56,8 @@ func (p *TweetLookupParams) ResolveEndpoint(endpointBase string) string {
 	return endpoint + "?" + qs
 }
 
-func (p *TweetLookupParams) Body() io.Reader {
-	return nil
+func (p *TweetLookupParams) Body() (io.Reader, error) {
+	return nil, nil
 }
 
 func (p *TweetLookupParams) ParameterMap() map[string]string {
@@ -142,8 +142,8 @@ func (p *TweetLookupIDParams) ResolveEndpoint(endpointBase string) string {
 	return endpoint + "?" + qs
 }
 
-func (p *TweetLookupIDParams) Body() io.Reader {
-	return nil
+func (p *TweetLookupIDParams) Body() (io.Reader, error) {
+	return nil, nil
 }
 
 func (p *TweetLookupIDParams) ParameterMap() map[string]string {

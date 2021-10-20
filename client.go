@@ -253,7 +253,11 @@ func (c *GotwiClient) setOAuth1Header(r *http.Request, paramsMap map[string]stri
 }
 
 func newRequest(endpoint, method string, p util.Parameters) (*http.Request, error) {
-	req, err := http.NewRequest(method, endpoint, p.Body())
+	body, err := p.Body()
+	if err != nil {
+		return nil, err
+	}
+	req, err := http.NewRequest(method, endpoint, body)
 	if err != nil {
 		return nil, err
 	}

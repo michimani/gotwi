@@ -78,8 +78,8 @@ func (p *SearchTweetsRecentParams) ResolveEndpoint(endpointBase string) string {
 	return endpoint + "?" + qs
 }
 
-func (p *SearchTweetsRecentParams) Body() io.Reader {
-	return nil
+func (p *SearchTweetsRecentParams) Body() (io.Reader, error) {
+	return nil, nil
 }
 
 func (p *SearchTweetsRecentParams) ParameterMap() map[string]string {
@@ -200,8 +200,8 @@ func (p *SearchTweetsAllParams) ResolveEndpoint(endpointBase string) string {
 	return endpoint + "?" + qs
 }
 
-func (p *SearchTweetsAllParams) Body() io.Reader {
-	return nil
+func (p *SearchTweetsAllParams) Body() (io.Reader, error) {
+	return nil, nil
 }
 
 func (p *SearchTweetsAllParams) ParameterMap() map[string]string {

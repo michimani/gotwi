@@ -67,8 +67,8 @@ func (p *MutesMutingGetParams) ResolveEndpoint(endpointBase string) string {
 	return endpoint + "?" + qs
 }
 
-func (p *MutesMutingGetParams) Body() io.Reader {
-	return nil
+func (p *MutesMutingGetParams) Body() (io.Reader, error) {
+	return nil, nil
 }
 
 func (p *MutesMutingGetParams) ParameterMap() map[string]string {

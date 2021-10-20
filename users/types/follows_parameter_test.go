@@ -207,7 +207,8 @@ func Test_FollowsFollowingGetParams_Body(t *testing.T) {
 
 	for _, c := range cases {
 		t.Run(c.name, func(tt *testing.T) {
-			r := c.params.Body()
+			r, err := c.params.Body()
+			assert.NoError(tt, err)
 			assert.Nil(tt, r)
 		})
 	}
@@ -341,7 +342,8 @@ func Test_FollowsFollowersParams_Body(t *testing.T) {
 
 	for _, c := range cases {
 		t.Run(c.name, func(tt *testing.T) {
-			r := c.params.Body()
+			r, err := c.params.Body()
+			assert.NoError(tt, err)
 			assert.Nil(tt, r)
 		})
 	}
