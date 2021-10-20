@@ -39,7 +39,7 @@ Progress of supporting API: 20/43
     - [ ] `DELETE /2/users/:id/likes/:tweet_id`
   - Hide replies
     - [ ] `PUT /2/tweets/:id/hidden`
-- **Users** (10/14)
+- **Users** (12/14)
   - User lookup
     - [x] `GET /2/users`
     - [x] `GET /2/users/:id`
@@ -52,8 +52,8 @@ Progress of supporting API: 20/43
     - [x] `DELETE /2/users/:source_user_id/following/:target_user_id`
   - Blocks
     - [x] `GET /2/users/:id/blocking`
-    - [ ] `POST /2/users/:id/blocking`
-    - [ ] `DELETE /2/users/:source_user_id/blocking/:target_user_id`
+    - [x] `POST /2/users/:id/blocking`
+    - [x] `DELETE /2/users/:source_user_id/blocking/:target_user_id`
   - Mutes
     - [x] `GET /2/users/:id/muting`
     - [ ] `POST /2/users/:id/muting`
