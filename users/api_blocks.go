@@ -6,8 +6,9 @@ import (
 )
 
 const (
-	BlocksBlockingGetEndpoint  = "https://api.twitter.com/2/users/:id/blocking"
-	BlocksBlockingPostEndpoint = "https://api.twitter.com/2/users/:id/blocking"
+	BlocksBlockingGetEndpoint    = "https://api.twitter.com/2/users/:id/blocking"
+	BlocksBlockingPostEndpoint   = "https://api.twitter.com/2/users/:id/blocking"
+	BlocksBlockingDeleteEndpoint = "https://api.twitter.com/2/users/:source_user_id/blocking/:target_user_id"
 )
 
 // Returns a list of users who are blocked by the specified user ID.
@@ -25,7 +26,19 @@ func BlocksBlockingGet(c *gotwi.GotwiClient, p *types.BlocksBlockingGetParams) (
 // https://developer.twitter.com/en/docs/twitter-api/users/blocks/api-reference/post-users-user_id-blocking
 func BlocksBlockingPost(c *gotwi.GotwiClient, p *types.BlocksBlockingPostParams) (*types.BlocksBlockingPostResponse, error) {
 	res := &types.BlocksBlockingPostResponse{}
-	if err := c.CallAPI(BlocksBlockingPostEndpoint, "Post", p, res); err != nil {
+	if err := c.CallAPI(BlocksBlockingPostEndpoint, "POST", p, res); err != nil {
+		return nil, err
+	}
+
+	return res, nil
+}
+
+// Allows a user or authenticated user ID to unblock another user.
+// The request succeeds with no action when the user sends a request to a user they're not blocking or have already unblocked.
+// https://developer.twitter.com/en/docs/twitter-api/users/blocks/api-reference/delete-users-user_id-blocking
+func BlocksBlockingDelete(c *gotwi.GotwiClient, p *types.BlocksBlockingDeleteParams) (*types.BlocksBlockingDeleteResponse, error) {
+	res := &types.BlocksBlockingDeleteResponse{}
+	if err := c.CallAPI(BlocksBlockingDeleteEndpoint, "DELETE", p, res); err != nil {
 		return nil, err
 	}
 

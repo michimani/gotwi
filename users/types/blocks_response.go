@@ -24,3 +24,13 @@ type BlocksBlockingPostResponse struct {
 func (r *BlocksBlockingPostResponse) HasPartialError() bool {
 	return false
 }
+
+type BlocksBlockingDeleteResponse struct {
+	Data struct {
+		Blocking bool `json:"blocking"`
+	} `json:"data"`
+}
+
+func (r *BlocksBlockingDeleteResponse) HasPartialError() bool {
+	return false
+}

@@ -139,3 +139,40 @@ func (p *BlocksBlockingPostParams) Body() (io.Reader, error) {
 func (p *BlocksBlockingPostParams) ParameterMap() map[string]string {
 	return map[string]string{}
 }
+
+type BlocksBlockingDeleteParams struct {
+	accessToken string
+
+	// Path parameters
+	SourceUserID string // The authenticated user ID
+	TargetUserID string // The user ID for unfollow
+}
+
+func (p *BlocksBlockingDeleteParams) SetAccessToken(token string) {
+	p.accessToken = token
+}
+
+func (p *BlocksBlockingDeleteParams) AccessToken() string {
+	return p.accessToken
+}
+
+func (p *BlocksBlockingDeleteParams) ResolveEndpoint(endpointBase string) string {
+	if p.SourceUserID == "" || p.TargetUserID == "" {
+		return ""
+	}
+
+	escapedSID := url.QueryEscape(p.SourceUserID)
+	endpoint := strings.Replace(endpointBase, ":source_user_id", escapedSID, 1)
+	escapedTID := url.QueryEscape(p.TargetUserID)
+	endpoint = strings.Replace(endpoint, ":target_user_id", escapedTID, 1)
+
+	return endpoint
+}
+
+func (p *BlocksBlockingDeleteParams) Body() (io.Reader, error) {
+	return nil, nil
+}
+
+func (p *BlocksBlockingDeleteParams) ParameterMap() map[string]string {
+	return map[string]string{}
+}

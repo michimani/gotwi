@@ -275,3 +275,73 @@ func Test_BlocksBlockingPostParams_Body(t *testing.T) {
 		})
 	}
 }
+
+func Test_BlocksBlockingDeleteParams_ResolveEndpoint(t *testing.T) {
+	const endpointRoot = "test/endpoint/"
+	const endpointBase = "test/endpoint/:source_user_id/:target_user_id"
+	cases := []struct {
+		name   string
+		params *types.BlocksBlockingDeleteParams
+		expect string
+	}{
+		{
+			name: "normal: only required parameter",
+			params: &types.BlocksBlockingDeleteParams{
+				SourceUserID: "sid",
+				TargetUserID: "tid",
+			},
+			expect: endpointRoot + "sid" + "/" + "tid",
+		},
+		{
+			name: "normal: has no required parameter",
+			params: &types.BlocksBlockingDeleteParams{
+				SourceUserID: "sid",
+			},
+			expect: "",
+		},
+		{
+			name: "normal: has no required parameter",
+			params: &types.BlocksBlockingDeleteParams{
+				TargetUserID: "tid",
+			},
+			expect: "",
+		},
+	}
+
+	for _, c := range cases {
+		t.Run(c.name, func(tt *testing.T) {
+			ep := c.params.ResolveEndpoint(endpointBase)
+			assert.Equal(tt, c.expect, ep)
+		})
+	}
+}
+
+func Test_BlocksBlockingDeleteParams_Body(t *testing.T) {
+	cases := []struct {
+		name   string
+		params *types.BlocksBlockingDeleteParams
+		expect io.Reader
+	}{
+		{
+			name: "ok: has required parameters",
+			params: &types.BlocksBlockingDeleteParams{
+				SourceUserID: "sid",
+				TargetUserID: "tid",
+			},
+			expect: nil,
+		},
+		{
+			name:   "ok: has no required parameters",
+			params: &types.BlocksBlockingDeleteParams{},
+			expect: nil,
+		},
+	}
+
+	for _, c := range cases {
+		t.Run(c.name, func(tt *testing.T) {
+			r, err := c.params.Body()
+			assert.NoError(tt, err)
+			assert.Equal(tt, c.expect, r)
+		})
+	}
+}
