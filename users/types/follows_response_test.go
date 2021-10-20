@@ -31,7 +31,7 @@ func Test_FollowsFollowingGet_HasPartialError(t *testing.T) {
 		{
 			name: "partical error is nil",
 			res: &types.FollowsFollowingGetResponse{
-				Errors: []resources.PartialError{}},
+				Errors: nil},
 			expect: false,
 		},
 	}
@@ -67,7 +67,7 @@ func Test_FollowsFollowers_HasPartialError(t *testing.T) {
 		{
 			name: "partical error is nil",
 			res: &types.FollowsFollowersResponse{
-				Errors: []resources.PartialError{}},
+				Errors: nil},
 			expect: false,
 		},
 	}

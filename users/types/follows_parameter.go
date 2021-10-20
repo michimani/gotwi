@@ -1,6 +1,7 @@
 package types
 
 import (
+	"encoding/json"
 	"io"
 	"net/url"
 	"strconv"
@@ -10,6 +11,14 @@ import (
 )
 
 type FollowsMaxResults int
+
+func (m FollowsMaxResults) Valid() bool {
+	return m > 0 && m <= 1000
+}
+
+func (m FollowsMaxResults) String() string {
+	return strconv.Itoa(int(m))
+}
 
 type FollowsFollowingGetParams struct {
 	accessToken string
@@ -31,14 +40,6 @@ var FollowsFollowingGetQueryParams = map[string]struct{}{
 	"expansions":       {},
 	"tweet.fields":     {},
 	"user.fields":      {},
-}
-
-func (m FollowsMaxResults) Valid() bool {
-	return m > 0 && m <= 1000
-}
-
-func (m FollowsMaxResults) String() string {
-	return strconv.Itoa(int(m))
 }
 
 func (p *FollowsFollowingGetParams) SetAccessToken(token string) {
@@ -67,8 +68,8 @@ func (p *FollowsFollowingGetParams) ResolveEndpoint(endpointBase string) string 
 	return endpoint + "?" + qs
 }
 
-func (p *FollowsFollowingGetParams) Body() io.Reader {
-	return nil
+func (p *FollowsFollowingGetParams) Body() (io.Reader, error) {
+	return nil, nil
 }
 
 func (p *FollowsFollowingGetParams) ParameterMap() map[string]string {
@@ -145,8 +146,8 @@ func (p *FollowsFollowersParams) ResolveEndpoint(endpointBase string) string {
 	return endpoint + "?" + qs
 }
 
-func (p *FollowsFollowersParams) Body() io.Reader {
-	return nil
+func (p *FollowsFollowersParams) Body() (io.Reader, error) {
+	return nil, nil
 }
 
 func (p *FollowsFollowersParams) ParameterMap() map[string]string {
@@ -172,5 +173,50 @@ func (p *FollowsFollowersParams) ParameterMap() map[string]string {
 		m["user.fields"] = util.QueryValue(p.UserFields)
 	}
 
+	return m
+}
+
+type FollowsFollowingPostParams struct {
+	accessToken string
+
+	// Path parameter
+	ID string `json:"-"` // The authenticated user ID
+
+	// JSON body parameter
+	TargetUserID string `json:"target_user_id"`
+}
+
+var FollowsFollowingPostQueryParams = map[string]struct{}{}
+
+func (p *FollowsFollowingPostParams) SetAccessToken(token string) {
+	p.accessToken = token
+}
+
+func (p *FollowsFollowingPostParams) AccessToken() string {
+	return p.accessToken
+}
+
+func (p *FollowsFollowingPostParams) ResolveEndpoint(endpointBase string) string {
+	if p.ID == "" {
+		return ""
+	}
+
+	encoded := url.QueryEscape(p.ID)
+	endpoint := strings.Replace(endpointBase, ":id", encoded, 1)
+
+	return endpoint
+}
+
+func (p *FollowsFollowingPostParams) Body() (io.Reader, error) {
+	json, err := json.Marshal(p)
+	if err != nil {
+		return nil, err
+	}
+
+	return strings.NewReader(string(json)), nil
+}
+
+func (p *FollowsFollowingPostParams) ParameterMap() map[string]string {
+	m := map[string]string{}
 	return m
 }

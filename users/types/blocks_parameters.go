@@ -67,8 +67,8 @@ func (p *BlocksBlockingGetParams) ResolveEndpoint(endpointBase string) string {
 	return endpoint + "?" + qs
 }
 
-func (p *BlocksBlockingGetParams) Body() io.Reader {
-	return nil
+func (p *BlocksBlockingGetParams) Body() (io.Reader, error) {
+	return nil, nil
 }
 
 func (p *BlocksBlockingGetParams) ParameterMap() map[string]string {

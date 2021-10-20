@@ -85,8 +85,8 @@ func (p *TweetTimelinesTweetsParams) ResolveEndpoint(endpointBase string) string
 	return endpoint + "?" + qs
 }
 
-func (p *TweetTimelinesTweetsParams) Body() io.Reader {
-	return nil
+func (p *TweetTimelinesTweetsParams) Body() (io.Reader, error) {
+	return nil, nil
 }
 
 func (p *TweetTimelinesTweetsParams) ParameterMap() map[string]string {
@@ -212,8 +212,8 @@ func (p *TweetTimelinesMentionsParams) ResolveEndpoint(endpointBase string) stri
 	return endpoint + "?" + qs
 }
 
-func (p *TweetTimelinesMentionsParams) Body() io.Reader {
-	return nil
+func (p *TweetTimelinesMentionsParams) Body() (io.Reader, error) {
+	return nil, nil
 }
 
 func (p *TweetTimelinesMentionsParams) ParameterMap() map[string]string {

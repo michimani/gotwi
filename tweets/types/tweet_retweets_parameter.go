@@ -59,8 +59,8 @@ func (p *TweetRetweetsRetweetedByParams) ResolveEndpoint(endpointBase string) st
 	return endpoint + "?" + qs
 }
 
-func (p *TweetRetweetsRetweetedByParams) Body() io.Reader {
-	return nil
+func (p *TweetRetweetsRetweetedByParams) Body() (io.Reader, error) {
+	return nil, nil
 }
 
 func (p *TweetRetweetsRetweetedByParams) ParameterMap() map[string]string {

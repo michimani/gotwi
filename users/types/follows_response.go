@@ -27,3 +27,14 @@ type FollowsFollowersResponse struct {
 func (r *FollowsFollowersResponse) HasPartialError() bool {
 	return !(r.Errors == nil || len(r.Errors) == 0)
 }
+
+type FollowsFollowingPostResponse struct {
+	Data struct {
+		Following     bool `json:"following"`
+		PendingFollow bool `json:"pending_follow"`
+	} `json:"data"`
+}
+
+func (r *FollowsFollowingPostResponse) HasPartialError() bool {
+	return false
+}

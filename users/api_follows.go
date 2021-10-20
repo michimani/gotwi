@@ -6,8 +6,9 @@ import (
 )
 
 const (
-	FollowsFollowingGetEndpoint = "https://api.twitter.com/2/users/:id/following"
-	FollowsFollowersEndpoint    = "https://api.twitter.com/2/users/:id/followers"
+	FollowsFollowingGetEndpoint  = "https://api.twitter.com/2/users/:id/following"
+	FollowsFollowersEndpoint     = "https://api.twitter.com/2/users/:id/followers"
+	FollowsFollowingPostEndpoint = "https://api.twitter.com/2/users/:id/following"
 )
 
 // Returns a list of users the specified user ID is following.
@@ -26,6 +27,20 @@ func FollowsFollowingGet(c *gotwi.GotwiClient, p *types.FollowsFollowingGetParam
 func FollowsFollowers(c *gotwi.GotwiClient, p *types.FollowsFollowersParams) (*types.FollowsFollowersResponse, error) {
 	res := &types.FollowsFollowersResponse{}
 	if err := c.CallAPI(FollowsFollowersEndpoint, "GET", p, res); err != nil {
+		return nil, err
+	}
+
+	return res, nil
+}
+
+// Allows a user ID to follow another user.
+// If the target user does not have public Tweets, this endpoint will send a follow request.
+// The request succeeds with no action when the authenticated user sends a request to a user
+// they're already following, or if they're sending a follower request to a user that does not have public Tweets.
+// https://developer.twitter.com/en/docs/twitter-api/users/follows/api-reference/post-users-source_user_id-following
+func FollowsFollowingPost(c *gotwi.GotwiClient, p *types.FollowsFollowingPostParams) (*types.FollowsFollowingPostResponse, error) {
+	res := &types.FollowsFollowingPostResponse{}
+	if err := c.CallAPI(FollowsFollowingPostEndpoint, "POST", p, res); err != nil {
 		return nil, err
 	}
 

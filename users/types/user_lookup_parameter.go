@@ -50,8 +50,8 @@ func (p *UserLookupParams) ResolveEndpoint(endpointBase string) string {
 	return endpoint + "?" + qs
 }
 
-func (p *UserLookupParams) Body() io.Reader {
-	return nil
+func (p *UserLookupParams) Body() (io.Reader, error) {
+	return nil, nil
 }
 
 func (p *UserLookupParams) ParameterMap() map[string]string {
@@ -118,8 +118,8 @@ func (p *UserLookupIDParams) ResolveEndpoint(endpointBase string) string {
 	return endpoint + "?" + qs
 }
 
-func (p *UserLookupIDParams) Body() io.Reader {
-	return nil
+func (p *UserLookupIDParams) Body() (io.Reader, error) {
+	return nil, nil
 }
 
 func (p *UserLookupIDParams) ParameterMap() map[string]string {
@@ -182,8 +182,8 @@ func (p *UserLookupByParams) ResolveEndpoint(endpointBase string) string {
 	return endpoint + "?" + qs
 }
 
-func (p *UserLookupByParams) Body() io.Reader {
-	return nil
+func (p *UserLookupByParams) Body() (io.Reader, error) {
+	return nil, nil
 }
 
 func (p *UserLookupByParams) ParameterMap() map[string]string {
@@ -250,8 +250,8 @@ func (p *UserLookupByUsernameParams) ResolveEndpoint(endpointBase string) string
 	return endpoint + "?" + qs
 }
 
-func (p *UserLookupByUsernameParams) Body() io.Reader {
-	return nil
+func (p *UserLookupByUsernameParams) Body() (io.Reader, error) {
+	return nil, nil
 }
 
 func (p *UserLookupByUsernameParams) ParameterMap() map[string]string {

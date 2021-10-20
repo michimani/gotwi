@@ -10,7 +10,7 @@ type Parameters interface {
 	SetAccessToken(token string)
 	AccessToken() string
 	ResolveEndpoint(endpointBase string) string
-	Body() io.Reader
+	Body() (io.Reader, error)
 	ParameterMap() map[string]string
 }
 

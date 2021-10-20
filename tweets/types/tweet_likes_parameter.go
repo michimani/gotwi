@@ -59,8 +59,8 @@ func (p *TweetLikesLikingUsersParams) ResolveEndpoint(endpointBase string) strin
 	return endpoint + "?" + qs
 }
 
-func (p *TweetLikesLikingUsersParams) Body() io.Reader {
-	return nil
+func (p *TweetLikesLikingUsersParams) Body() (io.Reader, error) {
+	return nil, nil
 }
 
 func (p *TweetLikesLikingUsersParams) ParameterMap() map[string]string {
