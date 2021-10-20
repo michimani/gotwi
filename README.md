@@ -7,7 +7,7 @@ This is a library for using the Twitter API v2 in the Go language. (It is still 
 
 [What's New with Twitter API v2 | Docs | Twitter Developer Platform](https://developer.twitter.com/en/docs/twitter-api/early-access)
 
-Progress of supporting API: 20/43
+Progress of supporting API: 24/43
 
 - **Tweets** (10/20)
   - Tweet lookup
@@ -39,7 +39,7 @@ Progress of supporting API: 20/43
     - [ ] `DELETE /2/users/:id/likes/:tweet_id`
   - Hide replies
     - [ ] `PUT /2/tweets/:id/hidden`
-- **Users** (12/14)
+- ✅ **Users** (14/14)
   - User lookup
     - [x] `GET /2/users`
     - [x] `GET /2/users/:id`
@@ -56,8 +56,8 @@ Progress of supporting API: 20/43
     - [x] `DELETE /2/users/:source_user_id/blocking/:target_user_id`
   - Mutes
     - [x] `GET /2/users/:id/muting`
-    - [ ] `POST /2/users/:id/muting`
-    - [ ] `DELETE /2/users/:source_user_id/muting/:target_user_id`
+    - [x] `POST /2/users/:id/muting`
+    - [x] `DELETE /2/users/:source_user_id/muting/:target_user_id`
 - **Lists** (0/9)
   - Manage Lists
     - [ ] `POST /2/lists`
