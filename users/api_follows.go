@@ -6,9 +6,10 @@ import (
 )
 
 const (
-	FollowsFollowingGetEndpoint  = "https://api.twitter.com/2/users/:id/following"
-	FollowsFollowersEndpoint     = "https://api.twitter.com/2/users/:id/followers"
-	FollowsFollowingPostEndpoint = "https://api.twitter.com/2/users/:id/following"
+	FollowsFollowingGetEndpoint    = "https://api.twitter.com/2/users/:id/following"
+	FollowsFollowersEndpoint       = "https://api.twitter.com/2/users/:id/followers"
+	FollowsFollowingPostEndpoint   = "https://api.twitter.com/2/users/:id/following"
+	FollowsFollowingDeleteEndpoint = "https://api.twitter.com/2/users/:source_user_id/following/:target_user_id"
 )
 
 // Returns a list of users the specified user ID is following.
@@ -41,6 +42,18 @@ func FollowsFollowers(c *gotwi.GotwiClient, p *types.FollowsFollowersParams) (*t
 func FollowsFollowingPost(c *gotwi.GotwiClient, p *types.FollowsFollowingPostParams) (*types.FollowsFollowingPostResponse, error) {
 	res := &types.FollowsFollowingPostResponse{}
 	if err := c.CallAPI(FollowsFollowingPostEndpoint, "POST", p, res); err != nil {
+		return nil, err
+	}
+
+	return res, nil
+}
+
+// Allows a user ID to unfollow another user.
+// The request succeeds with no action when the authenticated user sends a request to a user they're not following or have already unfollowed.
+// https://developer.twitter.com/en/docs/twitter-api/users/follows/api-reference/delete-users-source_id-following
+func FollowsFollowingDelete(c *gotwi.GotwiClient, p *types.FollowsFollowingDeleteParams) (*types.FollowsFollowingDeleteResponse, error) {
+	res := &types.FollowsFollowingDeleteResponse{}
+	if err := c.CallAPI(FollowsFollowingDeleteEndpoint, "DELETE", p, res); err != nil {
 		return nil, err
 	}
 

@@ -55,8 +55,8 @@ func (p *FollowsFollowingGetParams) ResolveEndpoint(endpointBase string) string 
 		return ""
 	}
 
-	encoded := url.QueryEscape(p.ID)
-	endpoint := strings.Replace(endpointBase, ":id", encoded, 1)
+	escaped := url.QueryEscape(p.ID)
+	endpoint := strings.Replace(endpointBase, ":id", escaped, 1)
 
 	pm := p.ParameterMap()
 	qs := util.QueryString(pm, FollowsFollowingGetQueryParams)
@@ -133,8 +133,8 @@ func (p *FollowsFollowersParams) ResolveEndpoint(endpointBase string) string {
 		return ""
 	}
 
-	encoded := url.QueryEscape(p.ID)
-	endpoint := strings.Replace(endpointBase, ":id", encoded, 1)
+	escaped := url.QueryEscape(p.ID)
+	endpoint := strings.Replace(endpointBase, ":id", escaped, 1)
 
 	pm := p.ParameterMap()
 	qs := util.QueryString(pm, FollowsFollowersQueryParams)
@@ -186,8 +186,6 @@ type FollowsFollowingPostParams struct {
 	TargetUserID string `json:"target_user_id"`
 }
 
-var FollowsFollowingPostQueryParams = map[string]struct{}{}
-
 func (p *FollowsFollowingPostParams) SetAccessToken(token string) {
 	p.accessToken = token
 }
@@ -201,8 +199,8 @@ func (p *FollowsFollowingPostParams) ResolveEndpoint(endpointBase string) string
 		return ""
 	}
 
-	encoded := url.QueryEscape(p.ID)
-	endpoint := strings.Replace(endpointBase, ":id", encoded, 1)
+	escaped := url.QueryEscape(p.ID)
+	endpoint := strings.Replace(endpointBase, ":id", escaped, 1)
 
 	return endpoint
 }
@@ -217,6 +215,42 @@ func (p *FollowsFollowingPostParams) Body() (io.Reader, error) {
 }
 
 func (p *FollowsFollowingPostParams) ParameterMap() map[string]string {
-	m := map[string]string{}
-	return m
+	return map[string]string{}
+}
+
+type FollowsFollowingDeleteParams struct {
+	accessToken string
+
+	// Path parameters
+	SourceUserID string // The authenticated user ID
+	TargetUserID string // The user ID for unfollow
+}
+
+func (p *FollowsFollowingDeleteParams) SetAccessToken(token string) {
+	p.accessToken = token
+}
+
+func (p *FollowsFollowingDeleteParams) AccessToken() string {
+	return p.accessToken
+}
+
+func (p *FollowsFollowingDeleteParams) ResolveEndpoint(endpointBase string) string {
+	if p.SourceUserID == "" || p.TargetUserID == "" {
+		return ""
+	}
+
+	escapedSID := url.QueryEscape(p.SourceUserID)
+	endpoint := strings.Replace(endpointBase, ":source_user_id", escapedSID, 1)
+	escapedTID := url.QueryEscape(p.TargetUserID)
+	endpoint = strings.Replace(endpoint, ":target_user_id", escapedTID, 1)
+
+	return endpoint
+}
+
+func (p *FollowsFollowingDeleteParams) Body() (io.Reader, error) {
+	return nil, nil
+}
+
+func (p *FollowsFollowingDeleteParams) ParameterMap() map[string]string {
+	return map[string]string{}
 }

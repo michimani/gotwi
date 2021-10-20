@@ -7,9 +7,9 @@ This is a library for using the Twitter API v2 in the Go language. (It is still 
 
 [What's New with Twitter API v2 | Docs | Twitter Developer Platform](https://developer.twitter.com/en/docs/twitter-api/early-access)
 
-Progress of supporting API: 18/43
+Progress of supporting API: 20/43
 
-- Tweets
+- **Tweets** (10/20)
   - Tweet lookup
     - [x] `GET /2/tweets`
     - [x] `GET /2/tweets/:id`
@@ -39,7 +39,7 @@ Progress of supporting API: 18/43
     - [ ] `DELETE /2/users/:id/likes/:tweet_id`
   - Hide replies
     - [ ] `PUT /2/tweets/:id/hidden`
-- Users
+- **Users** (10/14)
   - User lookup
     - [x] `GET /2/users`
     - [x] `GET /2/users/:id`
@@ -49,7 +49,7 @@ Progress of supporting API: 18/43
     - [x] `GET /2/users/:id/following`
     - [x] `GET /2/users/:id/followers`
     - [x] `POST /2/users/:id/following`
-    - [ ] `DELETE /2/users/:source_user_id/following/:target_user_id`
+    - [x] `DELETE /2/users/:source_user_id/following/:target_user_id`
   - Blocks
     - [x] `GET /2/users/:id/blocking`
     - [ ] `POST /2/users/:id/blocking`
@@ -58,7 +58,7 @@ Progress of supporting API: 18/43
     - [x] `GET /2/users/:id/muting`
     - [ ] `POST /2/users/:id/muting`
     - [ ] `DELETE /2/users/:source_user_id/muting/:target_user_id`
-- Lists
+- **Lists** (0/9)
   - Manage Lists
     - [ ] `POST /2/lists`
     - [ ] `DELETE /2/lists/:id`
