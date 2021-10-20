@@ -38,3 +38,13 @@ type FollowsFollowingPostResponse struct {
 func (r *FollowsFollowingPostResponse) HasPartialError() bool {
 	return false
 }
+
+type FollowsFollowingDeleteResponse struct {
+	Data struct {
+		Following bool `json:"following"`
+	} `json:"data"`
+}
+
+func (r *FollowsFollowingDeleteResponse) HasPartialError() bool {
+	return false
+}
