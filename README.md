@@ -48,7 +48,7 @@ Progress of supporting API: 18/43
   - Follows
     - [x] `GET /2/users/:id/following`
     - [x] `GET /2/users/:id/followers`
-    - [ ] `POST /2/users/:id/following`
+    - [x] `POST /2/users/:id/following`
     - [ ] `DELETE /2/users/:source_user_id/following/:target_user_id`
   - Blocks
     - [x] `GET /2/users/:id/blocking`

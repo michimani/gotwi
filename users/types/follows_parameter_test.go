@@ -1,6 +1,8 @@
 package types_test
 
 import (
+	"io"
+	"strings"
 	"testing"
 
 	"github.com/michimani/gotwi/users/types"
@@ -345,6 +347,66 @@ func Test_FollowsFollowersParams_Body(t *testing.T) {
 			r, err := c.params.Body()
 			assert.NoError(tt, err)
 			assert.Nil(tt, r)
+		})
+	}
+}
+
+func Test_FollowsFollowingPostParams_ResolveEndpoint(t *testing.T) {
+	const endpointRoot = "test/endpoint/"
+	const endpointBase = "test/endpoint/:id"
+	cases := []struct {
+		name   string
+		params *types.FollowsFollowingPostParams
+		expect string
+	}{
+		{
+			name:   "normal: only required parameter",
+			params: &types.FollowsFollowingPostParams{ID: "test-id"},
+			expect: endpointRoot + "test-id",
+		},
+		{
+			name: "normal: has no required parameter",
+			params: &types.FollowsFollowingPostParams{
+				TargetUserID: "tid",
+			},
+			expect: "",
+		},
+	}
+
+	for _, c := range cases {
+		t.Run(c.name, func(tt *testing.T) {
+			ep := c.params.ResolveEndpoint(endpointBase)
+			assert.Equal(tt, c.expect, ep)
+		})
+	}
+}
+
+func Test_FollowsFollowingPostParams_Body(t *testing.T) {
+	cases := []struct {
+		name   string
+		params *types.FollowsFollowingPostParams
+		expect io.Reader
+	}{
+		{
+			name: "ok: has required parameters",
+			params: &types.FollowsFollowingPostParams{
+				ID:           "test-id",
+				TargetUserID: "tid",
+			},
+			expect: strings.NewReader(`{"target_user_id":"tid"}`),
+		},
+		{
+			name:   "ok: has no required parameters",
+			params: &types.FollowsFollowingPostParams{ID: "id"},
+			expect: strings.NewReader(`{"target_user_id":""}`),
+		},
+	}
+
+	for _, c := range cases {
+		t.Run(c.name, func(tt *testing.T) {
+			r, err := c.params.Body()
+			assert.NoError(tt, err)
+			assert.Equal(tt, c.expect, r)
 		})
 	}
 }

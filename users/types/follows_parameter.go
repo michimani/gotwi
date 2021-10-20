@@ -1,6 +1,7 @@
 package types
 
 import (
+	"encoding/json"
 	"io"
 	"net/url"
 	"strconv"
@@ -172,5 +173,50 @@ func (p *FollowsFollowersParams) ParameterMap() map[string]string {
 		m["user.fields"] = util.QueryValue(p.UserFields)
 	}
 
+	return m
+}
+
+type FollowsFollowingPostParams struct {
+	accessToken string
+
+	// Path parameter
+	ID string `json:"-"` // The authenticated user ID
+
+	// JSON body parameter
+	TargetUserID string `json:"target_user_id"`
+}
+
+var FollowsFollowingPostQueryParams = map[string]struct{}{}
+
+func (p *FollowsFollowingPostParams) SetAccessToken(token string) {
+	p.accessToken = token
+}
+
+func (p *FollowsFollowingPostParams) AccessToken() string {
+	return p.accessToken
+}
+
+func (p *FollowsFollowingPostParams) ResolveEndpoint(endpointBase string) string {
+	if p.ID == "" {
+		return ""
+	}
+
+	encoded := url.QueryEscape(p.ID)
+	endpoint := strings.Replace(endpointBase, ":id", encoded, 1)
+
+	return endpoint
+}
+
+func (p *FollowsFollowingPostParams) Body() (io.Reader, error) {
+	json, err := json.Marshal(p)
+	if err != nil {
+		return nil, err
+	}
+
+	return strings.NewReader(string(json)), nil
+}
+
+func (p *FollowsFollowingPostParams) ParameterMap() map[string]string {
+	m := map[string]string{}
 	return m
 }
