@@ -135,3 +135,40 @@ func (p *TweetRetweetsPostParams) Body() (io.Reader, error) {
 func (p *TweetRetweetsPostParams) ParameterMap() map[string]string {
 	return map[string]string{}
 }
+
+type TweetRetweetsDeleteParams struct {
+	accessToken string
+
+	// Path parameter
+	ID            string // The authenticated user ID
+	SourceTweetID string
+}
+
+func (p *TweetRetweetsDeleteParams) SetAccessToken(token string) {
+	p.accessToken = token
+}
+
+func (p *TweetRetweetsDeleteParams) AccessToken() string {
+	return p.accessToken
+}
+
+func (p *TweetRetweetsDeleteParams) ResolveEndpoint(endpointBase string) string {
+	if p.ID == "" || p.SourceTweetID == "" {
+		return ""
+	}
+
+	escapedSID := url.QueryEscape(p.ID)
+	endpoint := strings.Replace(endpointBase, ":id", escapedSID, 1)
+	escapedTID := url.QueryEscape(p.SourceTweetID)
+	endpoint = strings.Replace(endpoint, ":source_tweet_id", escapedTID, 1)
+
+	return endpoint
+}
+
+func (p *TweetRetweetsDeleteParams) Body() (io.Reader, error) {
+	return nil, nil
+}
+
+func (p *TweetRetweetsDeleteParams) ParameterMap() map[string]string {
+	return map[string]string{}
+}
