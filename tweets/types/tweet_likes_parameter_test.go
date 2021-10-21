@@ -1,6 +1,8 @@
 package types_test
 
 import (
+	"io"
+	"strings"
 	"testing"
 
 	"github.com/michimani/gotwi/tweets/types"
@@ -291,6 +293,36 @@ func Test_TweetLikesLikedTweetsParams_Body(t *testing.T) {
 			r, err := c.params.Body()
 			assert.NoError(tt, err)
 			assert.Nil(tt, r)
+		})
+	}
+}
+
+func Test_TweetLikesPostParams_Body(t *testing.T) {
+	cases := []struct {
+		name   string
+		params *types.TweetLikesPostParams
+		expect io.Reader
+	}{
+		{
+			name: "ok: has required parameters",
+			params: &types.TweetLikesPostParams{
+				ID:      "test-id",
+				TweetID: "tid",
+			},
+			expect: strings.NewReader(`{"tweet_id":"tid"}`),
+		},
+		{
+			name:   "ok: has no required parameters",
+			params: &types.TweetLikesPostParams{ID: "id"},
+			expect: strings.NewReader(`{"tweet_id":""}`),
+		},
+	}
+
+	for _, c := range cases {
+		t.Run(c.name, func(tt *testing.T) {
+			r, err := c.params.Body()
+			assert.NoError(tt, err)
+			assert.Equal(tt, c.expect, r)
 		})
 	}
 }

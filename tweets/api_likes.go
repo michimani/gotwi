@@ -8,6 +8,7 @@ import (
 const (
 	TweetLikesLikingUsersEndpoint = "https://api.twitter.com/2/tweets/:id/liking_users"
 	TweetLikesLikedTweetsEndpoint = "https://api.twitter.com/2/users/:id/liked_tweets"
+	TweetLikesPostEndpoint        = "https://api.twitter.com/2/users/:id/likes"
 )
 
 // Allows you to get information about a Tweet’s liking users.
@@ -28,6 +29,17 @@ func TweetLikesLikingUsers(c *gotwi.GotwiClient, p *types.TweetLikesLikingUsersP
 func TweetLikesLikedTweets(c *gotwi.GotwiClient, p *types.TweetLikesLikedTweetsParams) (*types.TweetLikesLikedTweetsResponse, error) {
 	res := &types.TweetLikesLikedTweetsResponse{}
 	if err := c.CallAPI(TweetLikesLikedTweetsEndpoint, "GET", p, res); err != nil {
+		return nil, err
+	}
+
+	return res, nil
+}
+
+// Causes the user ID identified in the path parameter to Like the target Tweet.
+// https://developer.twitter.com/en/docs/twitter-api/tweets/likes/api-reference/post-users-id-likes
+func TweetLikesPost(c *gotwi.GotwiClient, p *types.TweetLikesPostParams) (*types.TweetLikesPostResponse, error) {
+	res := &types.TweetLikesPostResponse{}
+	if err := c.CallAPI(TweetLikesPostEndpoint, "POST", p, res); err != nil {
 		return nil, err
 	}
 

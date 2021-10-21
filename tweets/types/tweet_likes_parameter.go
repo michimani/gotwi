@@ -1,6 +1,7 @@
 package types
 
 import (
+	"encoding/json"
 	"io"
 	"net/url"
 	"strconv"
@@ -197,4 +198,46 @@ func (p *TweetLikesLikedTweetsParams) ParameterMap() map[string]string {
 	}
 
 	return m
+}
+
+type TweetLikesPostParams struct {
+	accessToken string
+
+	// Path parameter
+	ID string `json:"-"` // The authenticated user ID
+
+	// JSON body parameter
+	TweetID string `json:"tweet_id"`
+}
+
+func (p *TweetLikesPostParams) SetAccessToken(token string) {
+	p.accessToken = token
+}
+
+func (p *TweetLikesPostParams) AccessToken() string {
+	return p.accessToken
+}
+
+func (p *TweetLikesPostParams) ResolveEndpoint(endpointBase string) string {
+	if p.ID == "" {
+		return ""
+	}
+
+	escaped := url.QueryEscape(p.ID)
+	endpoint := strings.Replace(endpointBase, ":id", escaped, 1)
+
+	return endpoint
+}
+
+func (p *TweetLikesPostParams) Body() (io.Reader, error) {
+	json, err := json.Marshal(p)
+	if err != nil {
+		return nil, err
+	}
+
+	return strings.NewReader(string(json)), nil
+}
+
+func (p *TweetLikesPostParams) ParameterMap() map[string]string {
+	return map[string]string{}
 }
