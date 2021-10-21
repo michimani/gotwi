@@ -1,6 +1,8 @@
 package types_test
 
 import (
+	"io"
+	"strings"
 	"testing"
 
 	"github.com/michimani/gotwi/tweets/types"
@@ -147,6 +149,136 @@ func Test_TweetRetweetsRetweetedByParams_Body(t *testing.T) {
 			r, err := c.params.Body()
 			assert.NoError(tt, err)
 			assert.Nil(tt, r)
+		})
+	}
+}
+
+func Test_TweetRetweetsPostParams_ResolveEndpoint(t *testing.T) {
+	const endpointRoot = "test/endpoint/"
+	const endpointBase = "test/endpoint/:id"
+	cases := []struct {
+		name   string
+		params *types.TweetRetweetsPostParams
+		expect string
+	}{
+		{
+			name:   "normal: only required parameter",
+			params: &types.TweetRetweetsPostParams{ID: "test-id"},
+			expect: endpointRoot + "test-id",
+		},
+		{
+			name: "normal: has no required parameter",
+			params: &types.TweetRetweetsPostParams{
+				TweetID: "tid",
+			},
+			expect: "",
+		},
+	}
+
+	for _, c := range cases {
+		t.Run(c.name, func(tt *testing.T) {
+			ep := c.params.ResolveEndpoint(endpointBase)
+			assert.Equal(tt, c.expect, ep)
+		})
+	}
+}
+
+func Test_TweetRetweetsPostParams_Body(t *testing.T) {
+	cases := []struct {
+		name   string
+		params *types.TweetRetweetsPostParams
+		expect io.Reader
+	}{
+		{
+			name: "ok: has required parameters",
+			params: &types.TweetRetweetsPostParams{
+				ID:      "test-id",
+				TweetID: "tid",
+			},
+			expect: strings.NewReader(`{"tweet_id":"tid"}`),
+		},
+		{
+			name:   "ok: has no required parameters",
+			params: &types.TweetRetweetsPostParams{ID: "id"},
+			expect: strings.NewReader(`{"tweet_id":""}`),
+		},
+	}
+
+	for _, c := range cases {
+		t.Run(c.name, func(tt *testing.T) {
+			r, err := c.params.Body()
+			assert.NoError(tt, err)
+			assert.Equal(tt, c.expect, r)
+		})
+	}
+}
+
+func Test_TweetRetweetsDeleteParams_ResolveEndpoint(t *testing.T) {
+	const endpointRoot = "test/endpoint/"
+	const endpointBase = "test/endpoint/:id/:source_tweet_id"
+	cases := []struct {
+		name   string
+		params *types.TweetRetweetsDeleteParams
+		expect string
+	}{
+		{
+			name: "normal: only required parameter",
+			params: &types.TweetRetweetsDeleteParams{
+				ID:            "uid",
+				SourceTweetID: "sid",
+			},
+			expect: endpointRoot + "uid" + "/" + "sid",
+		},
+		{
+			name: "normal: has no required parameter",
+			params: &types.TweetRetweetsDeleteParams{
+				ID: "uid",
+			},
+			expect: "",
+		},
+		{
+			name: "normal: has no required parameter",
+			params: &types.TweetRetweetsDeleteParams{
+				SourceTweetID: "sid",
+			},
+			expect: "",
+		},
+	}
+
+	for _, c := range cases {
+		t.Run(c.name, func(tt *testing.T) {
+			ep := c.params.ResolveEndpoint(endpointBase)
+			assert.Equal(tt, c.expect, ep)
+		})
+	}
+}
+
+func Test_TweetRetweetsDeleteParams_Body(t *testing.T) {
+	cases := []struct {
+		name   string
+		params *types.TweetRetweetsDeleteParams
+		expect io.Reader
+	}{
+		{
+			name: "ok: has required parameters",
+			params: &types.TweetRetweetsDeleteParams{
+				ID:            "uid",
+				SourceTweetID: "sid",
+			},
+			expect: nil,
+		},
+		{
+			name:   "ok: has no required parameters",
+			params: &types.TweetRetweetsDeleteParams{},
+			expect: nil,
+		},
+	}
+
+	for _, c := range cases {
+		t.Run(c.name, func(tt *testing.T) {
+			r, err := c.params.Body()
+			assert.NoError(tt, err)
+			assert.Equal(tt, c.expect, r)
 		})
 	}
 }
