@@ -16,3 +16,13 @@ type TweetRetweetsRetweetedByResponse struct {
 func (r *TweetRetweetsRetweetedByResponse) HasPartialError() bool {
 	return !(r.Errors == nil || len(r.Errors) == 0)
 }
+
+type TweetRetweetsPostResponse struct {
+	Data struct {
+		Retweeted bool `json:"retweeted"`
+	} `json:"data"`
+}
+
+func (r *TweetRetweetsPostResponse) HasPartialError() bool {
+	return false
+}
