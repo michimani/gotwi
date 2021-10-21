@@ -42,3 +42,13 @@ type TweetLikesPostResponse struct {
 func (r *TweetLikesPostResponse) HasPartialError() bool {
 	return false
 }
+
+type TweetLikesDeleteResponse struct {
+	Data struct {
+		Liked bool `json:"liked"`
+	} `json:"data"`
+}
+
+func (r *TweetLikesDeleteResponse) HasPartialError() bool {
+	return false
+}

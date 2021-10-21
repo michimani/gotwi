@@ -241,3 +241,40 @@ func (p *TweetLikesPostParams) Body() (io.Reader, error) {
 func (p *TweetLikesPostParams) ParameterMap() map[string]string {
 	return map[string]string{}
 }
+
+type TweetLikesDeleteParams struct {
+	accessToken string
+
+	// Path parameter
+	ID      string // The authenticated user ID
+	TweetID string
+}
+
+func (p *TweetLikesDeleteParams) SetAccessToken(token string) {
+	p.accessToken = token
+}
+
+func (p *TweetLikesDeleteParams) AccessToken() string {
+	return p.accessToken
+}
+
+func (p *TweetLikesDeleteParams) ResolveEndpoint(endpointBase string) string {
+	if p.ID == "" || p.TweetID == "" {
+		return ""
+	}
+
+	escapedSID := url.QueryEscape(p.ID)
+	endpoint := strings.Replace(endpointBase, ":id", escapedSID, 1)
+	escapedTID := url.QueryEscape(p.TweetID)
+	endpoint = strings.Replace(endpoint, ":tweet_id", escapedTID, 1)
+
+	return endpoint
+}
+
+func (p *TweetLikesDeleteParams) Body() (io.Reader, error) {
+	return nil, nil
+}
+
+func (p *TweetLikesDeleteParams) ParameterMap() map[string]string {
+	return map[string]string{}
+}
