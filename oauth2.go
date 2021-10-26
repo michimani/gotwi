@@ -36,7 +36,7 @@ func GenerateBearerToken(c *GotwiClient, apiKey, apiKeySecret string) (string, e
 	}
 
 	if not200err != nil {
-		return "", fmt.Errorf(gotwierrors.ErrorNon200Status, not200err.Summary())
+		return "", fmt.Errorf(gotwierrors.ErrorNon2XXStatus, not200err.Summary())
 	}
 
 	var o2r OAuth2TokenResponse

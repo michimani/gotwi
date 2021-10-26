@@ -6,7 +6,7 @@ import (
 	"github.com/michimani/gotwi/internal/util"
 )
 
-type Non200Error struct {
+type Non2XXError struct {
 	Errors        []ErrorInformation         `json:"errors"`
 	Title         string                     `json:"title,omitempty"`
 	Detail        string                     `json:"detail,omitempty"`
@@ -23,7 +23,7 @@ type ErrorInformation struct {
 	Parameters map[string][]string `json:"parameters,omitempty"`
 }
 
-func (e *Non200Error) Summary() string {
+func (e *Non2XXError) Summary() string {
 	if e == nil {
 		return ""
 	}
