@@ -50,7 +50,7 @@ type GotwiClient struct {
 type ClientResponse struct {
 	StatusCode int
 	Status     string
-	Error      *resources.Non200Error
+	Error      *resources.Non2XXError
 	Body       []byte
 }
 
@@ -152,7 +152,7 @@ func (c *GotwiClient) CallAPI(endpoint, method string, p util.Parameters, i util
 	}
 
 	if not200err != nil {
-		return fmt.Errorf(gotwierrors.ErrorNon200Status, not200err.Summary())
+		return fmt.Errorf(gotwierrors.ErrorNon2XXStatus, not200err.Summary())
 	}
 
 	if err := json.Unmarshal(res.Body, &i); err != nil {
@@ -162,7 +162,12 @@ func (c *GotwiClient) CallAPI(endpoint, method string, p util.Parameters, i util
 	return nil
 }
 
-func (c *GotwiClient) Exec(req *http.Request) (*ClientResponse, *resources.Non200Error, error) {
+var okCodes map[int]struct{} = map[int]struct{}{
+	http.StatusOK:      {},
+	http.StatusCreated: {},
+}
+
+func (c *GotwiClient) Exec(req *http.Request) (*ClientResponse, *resources.Non2XXError, error) {
 	res, err := c.Client.Do(req)
 	if err != nil {
 		return nil, nil, err
@@ -174,8 +179,8 @@ func (c *GotwiClient) Exec(req *http.Request) (*ClientResponse, *resources.Non20
 		return nil, nil, err
 	}
 
-	if res.StatusCode != http.StatusOK {
-		non200err, err := resolveNon200Response(res, bytes)
+	if _, ok := okCodes[res.StatusCode]; !ok {
+		non200err, err := resolveNon2XXResponse(res, bytes)
 		if err != nil {
 			return nil, nil, err
 		}
@@ -267,8 +272,8 @@ func newRequest(endpoint, method string, p util.Parameters) (*http.Request, erro
 	return req, nil
 }
 
-func resolveNon200Response(res *http.Response, bodyBytes []byte) (*resources.Non200Error, error) {
-	non200err := resources.Non200Error{
+func resolveNon2XXResponse(res *http.Response, bodyBytes []byte) (*resources.Non2XXError, error) {
+	non200err := resources.Non2XXError{
 		Status:     res.Status,
 		StatusCode: res.StatusCode,
 	}
