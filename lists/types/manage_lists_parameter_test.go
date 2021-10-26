@@ -82,3 +82,142 @@ func Test_ManageListsPostParams_Body(t *testing.T) {
 		})
 	}
 }
+
+func Test_ManageListsPutParams_ResolveEndpoint(t *testing.T) {
+	const endpointRoot = "test/endpoint/"
+	const endpointBase = "test/endpoint/:id"
+	cases := []struct {
+		name   string
+		params *types.ManageListsPutParams
+		expect string
+	}{
+		{
+			name:   "normal: only required parameter",
+			params: &types.ManageListsPutParams{ID: "test-id"},
+			expect: endpointRoot + "test-id",
+		},
+		{
+			name:   "normal: has no required parameter",
+			params: &types.ManageListsPutParams{},
+			expect: "",
+		},
+	}
+
+	for _, c := range cases {
+		t.Run(c.name, func(tt *testing.T) {
+			ep := c.params.ResolveEndpoint(endpointBase)
+			assert.Equal(tt, c.expect, ep)
+		})
+	}
+}
+
+func Test_ManageListsPutParams_Body(t *testing.T) {
+	cases := []struct {
+		name   string
+		params *types.ManageListsPutParams
+		expect io.Reader
+	}{
+		{
+			name: "ok: has required parameters",
+			params: &types.ManageListsPutParams{
+				ID: "test-id",
+			},
+			expect: strings.NewReader(`{}`),
+		},
+		{
+			name: "ok: has some parameters",
+			params: &types.ManageListsPutParams{
+				ID:          "test-id",
+				Name:        gotwi.String("test-list-name"),
+				Description: gotwi.String("test description"),
+			},
+			expect: strings.NewReader(`{"name":"test-list-name","description":"test description"}`),
+		},
+		{
+			name: "ok: has some parameters",
+			params: &types.ManageListsPutParams{
+				ID:          "test-id",
+				Name:        gotwi.String("test-list-name"),
+				Description: gotwi.String("test description"),
+				Private:     gotwi.Bool(true),
+			},
+			expect: strings.NewReader(`{"name":"test-list-name","description":"test description","private":true}`),
+		},
+		{
+			name: "ok: has no required parameters (no effect)",
+			params: &types.ManageListsPutParams{
+				Name:        gotwi.String("test-list-name"),
+				Description: gotwi.String("test description"),
+				Private:     gotwi.Bool(true),
+			},
+			expect: strings.NewReader(`{"name":"test-list-name","description":"test description","private":true}`),
+		},
+	}
+
+	for _, c := range cases {
+		t.Run(c.name, func(tt *testing.T) {
+			r, err := c.params.Body()
+			assert.NoError(tt, err)
+			assert.Equal(tt, c.expect, r)
+		})
+	}
+}
+
+func Test_ManageListsDeleteParams_ResolveEndpoint(t *testing.T) {
+	const endpointRoot = "test/endpoint/"
+	const endpointBase = "test/endpoint/:id"
+	cases := []struct {
+		name   string
+		params *types.ManageListsDeleteParams
+		expect string
+	}{
+		{
+			name: "normal: only required parameter",
+			params: &types.ManageListsDeleteParams{
+				ID: "lid",
+			},
+			expect: endpointRoot + "lid",
+		},
+		{
+			name:   "normal: has no required parameter",
+			params: &types.ManageListsDeleteParams{},
+			expect: "",
+		},
+	}
+
+	for _, c := range cases {
+		t.Run(c.name, func(tt *testing.T) {
+			ep := c.params.ResolveEndpoint(endpointBase)
+			assert.Equal(tt, c.expect, ep)
+		})
+	}
+}
+
+func Test_ManageListsDeleteParams_Body(t *testing.T) {
+	cases := []struct {
+		name   string
+		params *types.ManageListsDeleteParams
+		expect io.Reader
+	}{
+		{
+			name: "ok: has required parameters",
+			params: &types.ManageListsDeleteParams{
+				ID: "lid",
+			},
+			expect: nil,
+		},
+		{
+			name:   "ok: has no required parameters",
+			params: &types.ManageListsDeleteParams{},
+			expect: nil,
+		},
+	}
+
+	for _, c := range cases {
+		t.Run(c.name, func(tt *testing.T) {
+			r, err := c.params.Body()
+			assert.NoError(tt, err)
+			assert.Equal(tt, c.expect, r)
+		})
+	}
+}
