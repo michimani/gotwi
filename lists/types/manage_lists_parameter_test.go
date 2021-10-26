@@ -162,3 +162,62 @@ func Test_ManageListsPutParams_Body(t *testing.T) {
 		})
 	}
 }
+
+func Test_ManageListsDeleteParams_ResolveEndpoint(t *testing.T) {
+	const endpointRoot = "test/endpoint/"
+	const endpointBase = "test/endpoint/:id"
+	cases := []struct {
+		name   string
+		params *types.ManageListsDeleteParams
+		expect string
+	}{
+		{
+			name: "normal: only required parameter",
+			params: &types.ManageListsDeleteParams{
+				ID: "lid",
+			},
+			expect: endpointRoot + "lid",
+		},
+		{
+			name:   "normal: has no required parameter",
+			params: &types.ManageListsDeleteParams{},
+			expect: "",
+		},
+	}
+
+	for _, c := range cases {
+		t.Run(c.name, func(tt *testing.T) {
+			ep := c.params.ResolveEndpoint(endpointBase)
+			assert.Equal(tt, c.expect, ep)
+		})
+	}
+}
+
+func Test_ManageListsDeleteParams_Body(t *testing.T) {
+	cases := []struct {
+		name   string
+		params *types.ManageListsDeleteParams
+		expect io.Reader
+	}{
+		{
+			name: "ok: has required parameters",
+			params: &types.ManageListsDeleteParams{
+				ID: "lid",
+			},
+			expect: nil,
+		},
+		{
+			name:   "ok: has no required parameters",
+			params: &types.ManageListsDeleteParams{},
+			expect: nil,
+		},
+	}
+
+	for _, c := range cases {
+		t.Run(c.name, func(tt *testing.T) {
+			r, err := c.params.Body()
+			assert.NoError(tt, err)
+			assert.Equal(tt, c.expect, r)
+		})
+	}
+}
