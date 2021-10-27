@@ -105,7 +105,7 @@ type BlocksBlockingPostParams struct {
 	ID string `json:"-"` // The authenticated user ID
 
 	// JSON body parameter
-	TargetUserID string `json:"target_user_id"`
+	TargetUserID *string `json:"target_user_id,omitempty"`
 }
 
 func (p *BlocksBlockingPostParams) SetAccessToken(token string) {

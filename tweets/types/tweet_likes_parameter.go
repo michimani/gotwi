@@ -207,7 +207,7 @@ type TweetLikesPostParams struct {
 	ID string `json:"-"` // The authenticated user ID
 
 	// JSON body parameter
-	TweetID string `json:"tweet_id"`
+	TweetID *string `json:"tweet_id,omitempty"`
 }
 
 func (p *TweetLikesPostParams) SetAccessToken(token string) {

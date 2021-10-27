@@ -14,7 +14,7 @@ type HideRepliesParams struct {
 	ID string `json:"-"` // The tweet ID to hide or unhide
 
 	// JSON body parameter
-	Hidden bool `json:"hidden"`
+	Hidden *bool `json:"hidden,omitempty"`
 }
 
 func (p *HideRepliesParams) SetAccessToken(token string) {
