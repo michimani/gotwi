@@ -3,6 +3,7 @@ package types_test
 import (
 	"testing"
 
+	"github.com/michimani/gotwi/fields"
 	"github.com/michimani/gotwi/tweets/types"
 	"github.com/stretchr/testify/assert"
 )
@@ -51,7 +52,7 @@ func Test_TweetTimelinesTweetsParams_ResolveEndpoint(t *testing.T) {
 			name: "with exclude",
 			params: &types.TweetTimelinesTweetsParams{
 				ID:      "test-id",
-				Exclude: []string{"exc1", "exc2"},
+				Exclude: fields.ExcludeList{"exc1", "exc2"},
 			},
 			expect: endpointRoot + "test-id" + "?exclude=exc1%2Cexc2",
 		},
@@ -59,7 +60,7 @@ func Test_TweetTimelinesTweetsParams_ResolveEndpoint(t *testing.T) {
 			name: "with expansions",
 			params: &types.TweetTimelinesTweetsParams{
 				ID:         "test-id",
-				Expansions: []string{"ex1", "ex2"},
+				Expansions: fields.ExpansionList{"ex1", "ex2"},
 			},
 			expect: endpointRoot + "test-id" + "?expansions=ex1%2Cex2",
 		},
@@ -75,7 +76,7 @@ func Test_TweetTimelinesTweetsParams_ResolveEndpoint(t *testing.T) {
 			name: "with media.fields",
 			params: &types.TweetTimelinesTweetsParams{
 				ID:          "test-id",
-				MediaFields: []string{"tf1", "tf2"},
+				MediaFields: fields.MediaFieldList{"tf1", "tf2"},
 			},
 			expect: endpointRoot + "test-id" + "?media.fields=tf1%2Ctf2",
 		},
@@ -83,7 +84,7 @@ func Test_TweetTimelinesTweetsParams_ResolveEndpoint(t *testing.T) {
 			name: "with place.fields",
 			params: &types.TweetTimelinesTweetsParams{
 				ID:          "test-id",
-				PlaceFields: []string{"tf1", "tf2"},
+				PlaceFields: fields.PlaceFieldList{"tf1", "tf2"},
 			},
 			expect: endpointRoot + "test-id" + "?place.fields=tf1%2Ctf2",
 		},
@@ -91,7 +92,7 @@ func Test_TweetTimelinesTweetsParams_ResolveEndpoint(t *testing.T) {
 			name: "with poll.fields",
 			params: &types.TweetTimelinesTweetsParams{
 				ID:         "test-id",
-				PollFields: []string{"tf1", "tf2"},
+				PollFields: fields.PollFieldList{"tf1", "tf2"},
 			},
 			expect: endpointRoot + "test-id" + "?poll.fields=tf1%2Ctf2",
 		},
@@ -99,7 +100,7 @@ func Test_TweetTimelinesTweetsParams_ResolveEndpoint(t *testing.T) {
 			name: "with tweets.fields",
 			params: &types.TweetTimelinesTweetsParams{
 				ID:          "test-id",
-				TweetFields: []string{"tf1", "tf2"},
+				TweetFields: fields.TweetFieldList{"tf1", "tf2"},
 			},
 			expect: endpointRoot + "test-id" + "?tweet.fields=tf1%2Ctf2",
 		},
@@ -107,7 +108,7 @@ func Test_TweetTimelinesTweetsParams_ResolveEndpoint(t *testing.T) {
 			name: "with users.fields",
 			params: &types.TweetTimelinesTweetsParams{
 				ID:         "test-id",
-				UserFields: []string{"uf1", "uf2"},
+				UserFields: fields.UserFieldList{"uf1", "uf2"},
 			},
 			expect: endpointRoot + "test-id" + "?user.fields=uf1%2Cuf2",
 		},
@@ -115,23 +116,23 @@ func Test_TweetTimelinesTweetsParams_ResolveEndpoint(t *testing.T) {
 			name: "all query parameters",
 			params: &types.TweetTimelinesTweetsParams{
 				ID:          "test-id",
-				Exclude:     []string{"exc"},
-				Expansions:  []string{"ex"},
+				Exclude:     fields.ExcludeList{"exc"},
+				Expansions:  fields.ExpansionList{"ex"},
 				MaxResults:  50,
-				MediaFields: []string{"mf"},
-				PlaceFields: []string{"plf"},
-				PollFields:  []string{"pof"},
-				UserFields:  []string{"uf"},
-				TweetFields: []string{"tf"},
+				MediaFields: fields.MediaFieldList{"mf"},
+				PlaceFields: fields.PlaceFieldList{"plf"},
+				PollFields:  fields.PollFieldList{"pof"},
+				UserFields:  fields.UserFieldList{"uf"},
+				TweetFields: fields.TweetFieldList{"tf"},
 			},
 			expect: endpointRoot + "test-id" + "?exclude=exc&expansions=ex&max_results=50&media.fields=mf&place.fields=plf&poll.fields=pof&tweet.fields=tf&user.fields=uf",
 		},
 		{
 			name: "has no required parameter",
 			params: &types.TweetTimelinesTweetsParams{
-				Expansions:  []string{"ex"},
-				UserFields:  []string{"uf"},
-				TweetFields: []string{"tf"},
+				Expansions:  fields.ExpansionList{"ex"},
+				UserFields:  fields.UserFieldList{"uf"},
+				TweetFields: fields.TweetFieldList{"tf"},
 			},
 			expect: "",
 		},

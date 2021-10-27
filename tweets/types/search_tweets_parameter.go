@@ -5,6 +5,7 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/michimani/gotwi/fields"
 	"github.com/michimani/gotwi/internal/util"
 )
 
@@ -19,12 +20,12 @@ type SearchTweetsRecentParams struct {
 	EndTime     *time.Time
 	SinceID     string
 	UntilID     string
-	Expansions  []string
-	MediaFields []string
-	PlaceFields []string
-	PollFields  []string
-	TweetFields []string
-	UserFields  []string
+	Expansions  fields.ExpansionList
+	MediaFields fields.MediaFieldList
+	PlaceFields fields.PlaceFieldList
+	PollFields  fields.PollFieldList
+	TweetFields fields.TweetFieldList
+	UserFields  fields.UserFieldList
 	NextToken   string
 	MaxResults  SearchTweetsMaxResults
 }
@@ -88,27 +89,27 @@ func (p *SearchTweetsRecentParams) ParameterMap() map[string]string {
 	m["query"] = p.Query
 
 	if p.Expansions != nil && len(p.Expansions) > 0 {
-		m["expansions"] = util.QueryValue(p.Expansions)
+		m["expansions"] = util.QueryValue(p.Expansions.Values())
 	}
 
 	if p.MediaFields != nil && len(p.MediaFields) > 0 {
-		m["media.fields"] = util.QueryValue(p.MediaFields)
+		m["media.fields"] = util.QueryValue(p.MediaFields.Values())
 	}
 
 	if p.PlaceFields != nil && len(p.PlaceFields) > 0 {
-		m["place.fields"] = util.QueryValue(p.PlaceFields)
+		m["place.fields"] = util.QueryValue(p.PlaceFields.Values())
 	}
 
 	if p.PollFields != nil && len(p.PollFields) > 0 {
-		m["poll.fields"] = util.QueryValue(p.PollFields)
+		m["poll.fields"] = util.QueryValue(p.PollFields.Values())
 	}
 
 	if p.TweetFields != nil && len(p.TweetFields) > 0 {
-		m["tweet.fields"] = util.QueryValue(p.TweetFields)
+		m["tweet.fields"] = util.QueryValue(p.TweetFields.Values())
 	}
 
 	if p.UserFields != nil && len(p.UserFields) > 0 {
-		m["user.fields"] = util.QueryValue(p.UserFields)
+		m["user.fields"] = util.QueryValue(p.UserFields.Values())
 	}
 
 	if p.StartTime != nil {
@@ -149,12 +150,12 @@ type SearchTweetsAllParams struct {
 	EndTime     *time.Time
 	SinceID     string
 	UntilID     string
-	Expansions  []string
-	MediaFields []string
-	PlaceFields []string
-	PollFields  []string
-	TweetFields []string
-	UserFields  []string
+	Expansions  fields.ExpansionList
+	MediaFields fields.MediaFieldList
+	PlaceFields fields.PlaceFieldList
+	PollFields  fields.PollFieldList
+	TweetFields fields.TweetFieldList
+	UserFields  fields.UserFieldList
 	NextToken   string
 	MaxResults  SearchTweetsMaxResults
 }
@@ -209,29 +210,7 @@ func (p *SearchTweetsAllParams) ParameterMap() map[string]string {
 
 	m["query"] = p.Query
 
-	if p.Expansions != nil && len(p.Expansions) > 0 {
-		m["expansions"] = util.QueryValue(p.Expansions)
-	}
-
-	if p.MediaFields != nil && len(p.MediaFields) > 0 {
-		m["media.fields"] = util.QueryValue(p.MediaFields)
-	}
-
-	if p.PlaceFields != nil && len(p.PlaceFields) > 0 {
-		m["place.fields"] = util.QueryValue(p.PlaceFields)
-	}
-
-	if p.PollFields != nil && len(p.PollFields) > 0 {
-		m["poll.fields"] = util.QueryValue(p.PollFields)
-	}
-
-	if p.TweetFields != nil && len(p.TweetFields) > 0 {
-		m["tweet.fields"] = util.QueryValue(p.TweetFields)
-	}
-
-	if p.UserFields != nil && len(p.UserFields) > 0 {
-		m["user.fields"] = util.QueryValue(p.UserFields)
-	}
+	m = fields.SetFieldsParams(m, p.Expansions, p.MediaFields, p.PlaceFields, p.PollFields, p.TweetFields, p.UserFields)
 
 	if p.StartTime != nil {
 		m["start_time"] = p.StartTime.Format(time.RFC3339)
