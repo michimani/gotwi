@@ -7,6 +7,7 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/michimani/gotwi/fields"
 	"github.com/michimani/gotwi/internal/util"
 )
 
@@ -21,9 +22,9 @@ type MutesMutingGetParams struct {
 	// Query parameters
 	MaxResults      MutesMaxResults
 	PaginationToken string
-	Expansions      []string
-	TweetFields     []string
-	UserFields      []string
+	Expansions      fields.ExpansionList
+	TweetFields     fields.TweetFieldList
+	UserFields      fields.UserFieldList
 }
 
 var MutesMutingGetQueryParams = map[string]struct{}{
@@ -83,17 +84,7 @@ func (p *MutesMutingGetParams) ParameterMap() map[string]string {
 		m["pagination_token"] = p.PaginationToken
 	}
 
-	if p.Expansions != nil && len(p.Expansions) > 0 {
-		m["expansions"] = util.QueryValue(p.Expansions)
-	}
-
-	if p.TweetFields != nil && len(p.TweetFields) > 0 {
-		m["tweet.fields"] = util.QueryValue(p.TweetFields)
-	}
-
-	if p.UserFields != nil && len(p.UserFields) > 0 {
-		m["user.fields"] = util.QueryValue(p.UserFields)
-	}
+	m = fields.SetFieldsParams(m, p.Expansions, p.TweetFields, p.UserFields)
 
 	return m
 }

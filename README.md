@@ -101,7 +101,7 @@ import (
 )
 
 func main() {
-	in := &gotwi.NewGotwiClientInput{
+		in := &gotwi.NewGotwiClientInput{
 		AuthenticationMethod: gotwi.AuthenMethodOAuth2BearerToken,
 	}
 
@@ -113,14 +113,14 @@ func main() {
 
 	p := &types.UserLookupByUsernameParams{
 		Username: "michimani210",
-		Expansions: []string{
-			string(fields.UserPinnedTweetID),
+		Expansions: fields.ExpansionList{
+			fields.ExpansionPinnedTweetID,
 		},
-		UserFields: []string{
-			string(fields.UserCreatedAt),
+		UserFields: fields.UserFieldList{
+			fields.UserFieldCreatedAt,
 		},
-		TweetFields: []string{
-			string(fields.TweetCreatedAt),
+		TweetFields: fields.TweetFieldList{
+			fields.TweetFieldCreatedAt,
 		},
 	}
 	res, err := users.UserLookupByUsername(c, p)

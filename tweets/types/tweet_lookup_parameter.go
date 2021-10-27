@@ -5,6 +5,7 @@ import (
 	"net/url"
 	"strings"
 
+	"github.com/michimani/gotwi/fields"
 	"github.com/michimani/gotwi/internal/util"
 )
 
@@ -13,12 +14,12 @@ type TweetLookupParams struct {
 
 	// Query parameters
 	IDs         []string
-	Expansions  []string
-	MediaFields []string
-	PlaceFields []string
-	PollFields  []string
-	TweetFields []string
-	UserFields  []string
+	Expansions  fields.ExpansionList
+	MediaFields fields.MediaFieldList
+	PlaceFields fields.PlaceFieldList
+	PollFields  fields.PollFieldList
+	TweetFields fields.TweetFieldList
+	UserFields  fields.UserFieldList
 }
 
 var TweetLookupQueryParams = map[string]struct{}{
@@ -65,29 +66,7 @@ func (p *TweetLookupParams) ParameterMap() map[string]string {
 
 	m["ids"] = util.QueryValue(p.IDs)
 
-	if p.Expansions != nil && len(p.Expansions) > 0 {
-		m["expansions"] = util.QueryValue(p.Expansions)
-	}
-
-	if p.MediaFields != nil && len(p.MediaFields) > 0 {
-		m["media.fields"] = util.QueryValue(p.MediaFields)
-	}
-
-	if p.PlaceFields != nil && len(p.PlaceFields) > 0 {
-		m["place.fields"] = util.QueryValue(p.PlaceFields)
-	}
-
-	if p.PollFields != nil && len(p.PollFields) > 0 {
-		m["poll.fields"] = util.QueryValue(p.PollFields)
-	}
-
-	if p.TweetFields != nil && len(p.TweetFields) > 0 {
-		m["tweet.fields"] = util.QueryValue(p.TweetFields)
-	}
-
-	if p.UserFields != nil && len(p.UserFields) > 0 {
-		m["user.fields"] = util.QueryValue(p.UserFields)
-	}
+	m = fields.SetFieldsParams(m, p.Expansions, p.MediaFields, p.PlaceFields, p.PollFields, p.TweetFields, p.UserFields)
 
 	return m
 }
@@ -99,12 +78,12 @@ type TweetLookupIDParams struct {
 	ID string
 
 	// Query parameters
-	Expansions  []string
-	MediaFields []string
-	PlaceFields []string
-	PollFields  []string
-	TweetFields []string
-	UserFields  []string
+	Expansions  fields.ExpansionList
+	MediaFields fields.MediaFieldList
+	PlaceFields fields.PlaceFieldList
+	PollFields  fields.PollFieldList
+	TweetFields fields.TweetFieldList
+	UserFields  fields.UserFieldList
 }
 
 var TweetLookupIDQueryParams = map[string]struct{}{
@@ -148,30 +127,7 @@ func (p *TweetLookupIDParams) Body() (io.Reader, error) {
 
 func (p *TweetLookupIDParams) ParameterMap() map[string]string {
 	m := map[string]string{}
-
-	if p.Expansions != nil && len(p.Expansions) > 0 {
-		m["expansions"] = util.QueryValue(p.Expansions)
-	}
-
-	if p.MediaFields != nil && len(p.MediaFields) > 0 {
-		m["media.fields"] = util.QueryValue(p.MediaFields)
-	}
-
-	if p.PlaceFields != nil && len(p.PlaceFields) > 0 {
-		m["place.fields"] = util.QueryValue(p.PlaceFields)
-	}
-
-	if p.PollFields != nil && len(p.PollFields) > 0 {
-		m["poll.fields"] = util.QueryValue(p.PollFields)
-	}
-
-	if p.TweetFields != nil && len(p.TweetFields) > 0 {
-		m["tweet.fields"] = util.QueryValue(p.TweetFields)
-	}
-
-	if p.UserFields != nil && len(p.UserFields) > 0 {
-		m["user.fields"] = util.QueryValue(p.UserFields)
-	}
+	m = fields.SetFieldsParams(m, p.Expansions, p.MediaFields, p.PlaceFields, p.PollFields, p.TweetFields, p.UserFields)
 
 	return m
 }

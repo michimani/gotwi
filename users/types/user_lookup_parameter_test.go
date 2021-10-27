@@ -3,6 +3,7 @@ package types_test
 import (
 	"testing"
 
+	"github.com/michimani/gotwi/fields"
 	"github.com/michimani/gotwi/users/types"
 	"github.com/stretchr/testify/assert"
 )
@@ -50,7 +51,7 @@ func Test_UserLookupParams_ResolveEndpoint(t *testing.T) {
 			name: "normal: with expansions",
 			params: &types.UserLookupParams{
 				IDs:        []string{"test-id"},
-				Expansions: []string{"ex1", "ex2"},
+				Expansions: fields.ExpansionList{"ex1", "ex2"},
 			},
 			expect: endpointBase + "?expansions=ex1%2Cex2&ids=test-id",
 		},
@@ -58,7 +59,7 @@ func Test_UserLookupParams_ResolveEndpoint(t *testing.T) {
 			name: "normal: with tweets.fields",
 			params: &types.UserLookupParams{
 				IDs:         []string{"test-id"},
-				TweetFields: []string{"tf1", "tf2"},
+				TweetFields: fields.TweetFieldList{"tf1", "tf2"},
 			},
 			expect: endpointBase + "?ids=test-id&tweet.fields=tf1%2Ctf2",
 		},
@@ -66,7 +67,7 @@ func Test_UserLookupParams_ResolveEndpoint(t *testing.T) {
 			name: "normal: with users.fields",
 			params: &types.UserLookupParams{
 				IDs:        []string{"test-id"},
-				UserFields: []string{"uf1", "uf2"},
+				UserFields: fields.UserFieldList{"uf1", "uf2"},
 			},
 			expect: endpointBase + "?ids=test-id&user.fields=uf1%2Cuf2",
 		},
@@ -74,9 +75,9 @@ func Test_UserLookupParams_ResolveEndpoint(t *testing.T) {
 			name: "normal: all query parameters",
 			params: &types.UserLookupParams{
 				IDs:         []string{"test-id"},
-				Expansions:  []string{"ex"},
-				UserFields:  []string{"uf"},
-				TweetFields: []string{"tf"},
+				Expansions:  fields.ExpansionList{"ex"},
+				UserFields:  fields.UserFieldList{"uf"},
+				TweetFields: fields.TweetFieldList{"tf"},
 			},
 			expect: endpointBase + "?expansions=ex&ids=test-id&tweet.fields=tf&user.fields=uf",
 		},
@@ -84,9 +85,9 @@ func Test_UserLookupParams_ResolveEndpoint(t *testing.T) {
 			name: "normal: has no required parameter",
 			params: &types.UserLookupParams{
 				IDs:         []string{},
-				Expansions:  []string{"ex"},
-				UserFields:  []string{"uf"},
-				TweetFields: []string{"tf"},
+				Expansions:  fields.ExpansionList{"ex"},
+				UserFields:  fields.UserFieldList{"uf"},
+				TweetFields: fields.TweetFieldList{"tf"},
 			},
 			expect: "",
 		},
@@ -168,7 +169,7 @@ func Test_UserLookupIDParams_ResolveEndpoint(t *testing.T) {
 			name: "normal: with expansions",
 			params: &types.UserLookupIDParams{
 				ID:         "test-id",
-				Expansions: []string{"ex1", "ex2"},
+				Expansions: fields.ExpansionList{"ex1", "ex2"},
 			},
 			expect: endpointRoot + "test-id?expansions=ex1%2Cex2",
 		},
@@ -176,7 +177,7 @@ func Test_UserLookupIDParams_ResolveEndpoint(t *testing.T) {
 			name: "normal: with tweets.fields",
 			params: &types.UserLookupIDParams{
 				ID:          "test-id",
-				TweetFields: []string{"tf1", "tf2"},
+				TweetFields: fields.TweetFieldList{"tf1", "tf2"},
 			},
 			expect: endpointRoot + "test-id?tweet.fields=tf1%2Ctf2",
 		},
@@ -184,7 +185,7 @@ func Test_UserLookupIDParams_ResolveEndpoint(t *testing.T) {
 			name: "normal: with users.fields",
 			params: &types.UserLookupIDParams{
 				ID:         "test-id",
-				UserFields: []string{"uf1", "uf2"},
+				UserFields: fields.UserFieldList{"uf1", "uf2"},
 			},
 			expect: endpointRoot + "test-id?user.fields=uf1%2Cuf2",
 		},
@@ -192,18 +193,18 @@ func Test_UserLookupIDParams_ResolveEndpoint(t *testing.T) {
 			name: "normal: all query parameters",
 			params: &types.UserLookupIDParams{
 				ID:          "test-id",
-				Expansions:  []string{"ex"},
-				UserFields:  []string{"uf"},
-				TweetFields: []string{"tf"},
+				Expansions:  fields.ExpansionList{"ex"},
+				UserFields:  fields.UserFieldList{"uf"},
+				TweetFields: fields.TweetFieldList{"tf"},
 			},
 			expect: endpointRoot + "test-id?expansions=ex&tweet.fields=tf&user.fields=uf",
 		},
 		{
 			name: "normal: has no required parameter",
 			params: &types.UserLookupIDParams{
-				Expansions:  []string{"ex"},
-				UserFields:  []string{"uf"},
-				TweetFields: []string{"tf"},
+				Expansions:  fields.ExpansionList{"ex"},
+				UserFields:  fields.UserFieldList{"uf"},
+				TweetFields: fields.TweetFieldList{"tf"},
 			},
 			expect: "",
 		},
@@ -284,7 +285,7 @@ func Test_UserLookupByParams_ResolveEndpoint(t *testing.T) {
 			name: "normal: with expansions",
 			params: &types.UserLookupByParams{
 				Usernames:  []string{"test-un"},
-				Expansions: []string{"ex1", "ex2"},
+				Expansions: fields.ExpansionList{"ex1", "ex2"},
 			},
 			expect: endpointBase + "?expansions=ex1%2Cex2&usernames=test-un",
 		},
@@ -292,7 +293,7 @@ func Test_UserLookupByParams_ResolveEndpoint(t *testing.T) {
 			name: "normal: with tweets.fields",
 			params: &types.UserLookupByParams{
 				Usernames:   []string{"test-un"},
-				TweetFields: []string{"tf1", "tf2"},
+				TweetFields: fields.TweetFieldList{"tf1", "tf2"},
 			},
 			expect: endpointBase + "?tweet.fields=tf1%2Ctf2&usernames=test-un",
 		},
@@ -300,7 +301,7 @@ func Test_UserLookupByParams_ResolveEndpoint(t *testing.T) {
 			name: "normal: with users.fields",
 			params: &types.UserLookupByParams{
 				Usernames:  []string{"test-un"},
-				UserFields: []string{"uf1", "uf2"},
+				UserFields: fields.UserFieldList{"uf1", "uf2"},
 			},
 			expect: endpointBase + "?user.fields=uf1%2Cuf2&usernames=test-un",
 		},
@@ -308,9 +309,9 @@ func Test_UserLookupByParams_ResolveEndpoint(t *testing.T) {
 			name: "normal: all query parameters",
 			params: &types.UserLookupByParams{
 				Usernames:   []string{"test-un"},
-				Expansions:  []string{"ex"},
-				UserFields:  []string{"uf"},
-				TweetFields: []string{"tf"},
+				Expansions:  fields.ExpansionList{"ex"},
+				UserFields:  fields.UserFieldList{"uf"},
+				TweetFields: fields.TweetFieldList{"tf"},
 			},
 			expect: endpointBase + "?expansions=ex&tweet.fields=tf&user.fields=uf&usernames=test-un",
 		},
@@ -318,9 +319,9 @@ func Test_UserLookupByParams_ResolveEndpoint(t *testing.T) {
 			name: "normal: has no required parameter",
 			params: &types.UserLookupByParams{
 				Usernames:   []string{},
-				Expansions:  []string{"ex"},
-				UserFields:  []string{"uf"},
-				TweetFields: []string{"tf"},
+				Expansions:  fields.ExpansionList{"ex"},
+				UserFields:  fields.UserFieldList{"uf"},
+				TweetFields: fields.TweetFieldList{"tf"},
 			},
 			expect: "",
 		},
@@ -402,7 +403,7 @@ func Test_UserLookupByUsernameParams_ResolveEndpoint(t *testing.T) {
 			name: "normal: with expansions",
 			params: &types.UserLookupByUsernameParams{
 				Username:   "test-un",
-				Expansions: []string{"ex1", "ex2"},
+				Expansions: fields.ExpansionList{"ex1", "ex2"},
 			},
 			expect: endpointRoot + "test-un?expansions=ex1%2Cex2",
 		},
@@ -410,7 +411,7 @@ func Test_UserLookupByUsernameParams_ResolveEndpoint(t *testing.T) {
 			name: "normal: with tweets.fields",
 			params: &types.UserLookupByUsernameParams{
 				Username:    "test-un",
-				TweetFields: []string{"tf1", "tf2"},
+				TweetFields: fields.TweetFieldList{"tf1", "tf2"},
 			},
 			expect: endpointRoot + "test-un?tweet.fields=tf1%2Ctf2",
 		},
@@ -418,7 +419,7 @@ func Test_UserLookupByUsernameParams_ResolveEndpoint(t *testing.T) {
 			name: "normal: with users.fields",
 			params: &types.UserLookupByUsernameParams{
 				Username:   "test-un",
-				UserFields: []string{"uf1", "uf2"},
+				UserFields: fields.UserFieldList{"uf1", "uf2"},
 			},
 			expect: endpointRoot + "test-un?user.fields=uf1%2Cuf2",
 		},
@@ -426,18 +427,18 @@ func Test_UserLookupByUsernameParams_ResolveEndpoint(t *testing.T) {
 			name: "normal: all query parameters",
 			params: &types.UserLookupByUsernameParams{
 				Username:    "test-un",
-				Expansions:  []string{"ex"},
-				UserFields:  []string{"uf"},
-				TweetFields: []string{"tf"},
+				Expansions:  fields.ExpansionList{"ex"},
+				UserFields:  fields.UserFieldList{"uf"},
+				TweetFields: fields.TweetFieldList{"tf"},
 			},
 			expect: endpointRoot + "test-un?expansions=ex&tweet.fields=tf&user.fields=uf",
 		},
 		{
 			name: "normal: has no required parameter",
 			params: &types.UserLookupByUsernameParams{
-				Expansions:  []string{"ex"},
-				UserFields:  []string{"uf"},
-				TweetFields: []string{"tf"},
+				Expansions:  fields.ExpansionList{"ex"},
+				UserFields:  fields.UserFieldList{"uf"},
+				TweetFields: fields.TweetFieldList{"tf"},
 			},
 			expect: "",
 		},

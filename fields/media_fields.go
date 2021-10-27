@@ -3,16 +3,39 @@ package fields
 type MediaField string
 
 const (
-	DurationMs            MediaField = "duration_ms"
-	Height                MediaField = "height"
-	MediaKey              MediaField = "media_key"
-	PreviewImageURL       MediaField = "preview_image_url"
-	Type                  MediaField = "type"
-	MediaURL              MediaField = "url"
-	Width                 MediaField = "width"
-	MediaPublicMetrics    MediaField = "public_metrics"
-	MediaNonPublicMetrics MediaField = "non_public_metrics"
-	MediaOrganicMetrics   MediaField = "organic_metrics"
-	MediaPromotedMetrics  MediaField = "promoted_metrics"
-	AltText               MediaField = "alt_text"
+	MediaFieldDurationMs       MediaField = "duration_ms"
+	MediaFieldHeight           MediaField = "height"
+	MediaFieldMediaKey         MediaField = "media_key"
+	MediaFieldPreviewImageUrl  MediaField = "preview_image_url"
+	MediaFieldType             MediaField = "type"
+	MediaFieldUrl              MediaField = "url"
+	MediaFieldWidth            MediaField = "width"
+	MediaFieldPublicMetrics    MediaField = "public_metrics"
+	MediaFieldNonPublicMetrics MediaField = "non_public_metrics"
+	MediaFieldOrganicMetrics   MediaField = "organic_metrics"
+	MediaFieldPromotedMetrics  MediaField = "promoted_metrics"
+	MediaFieldAltText          MediaField = "alt_text"
 )
+
+func (f MediaField) String() string {
+	return string(f)
+}
+
+type MediaFieldList []MediaField
+
+func (fl MediaFieldList) FieldsName() string {
+	return "media.fields"
+}
+
+func (fl MediaFieldList) Values() []string {
+	if fl == nil {
+		return []string{}
+	}
+
+	s := []string{}
+	for _, f := range fl {
+		s = append(s, f.String())
+	}
+
+	return s
+}

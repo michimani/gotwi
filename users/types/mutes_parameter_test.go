@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	"github.com/michimani/gotwi"
+	"github.com/michimani/gotwi/fields"
 	"github.com/michimani/gotwi/users/types"
 	"github.com/stretchr/testify/assert"
 )
@@ -142,7 +143,7 @@ func Test_MutesMutingGetParams_ResolveEndpoint(t *testing.T) {
 			name: "normal: with expansions",
 			params: &types.MutesMutingGetParams{
 				ID:         "test-id",
-				Expansions: []string{"ex1", "ex2"},
+				Expansions: fields.ExpansionList{"ex1", "ex2"},
 			},
 			expect: endpointRoot + "test-id?expansions=ex1%2Cex2",
 		},
@@ -150,7 +151,7 @@ func Test_MutesMutingGetParams_ResolveEndpoint(t *testing.T) {
 			name: "normal: with tweets.fields",
 			params: &types.MutesMutingGetParams{
 				ID:          "test-id",
-				TweetFields: []string{"tf1", "tf2"},
+				TweetFields: fields.TweetFieldList{"tf1", "tf2"},
 			},
 			expect: endpointRoot + "test-id?tweet.fields=tf1%2Ctf2",
 		},
@@ -158,7 +159,7 @@ func Test_MutesMutingGetParams_ResolveEndpoint(t *testing.T) {
 			name: "normal: with users.fields",
 			params: &types.MutesMutingGetParams{
 				ID:         "test-id",
-				UserFields: []string{"uf1", "uf2"},
+				UserFields: fields.UserFieldList{"uf1", "uf2"},
 			},
 			expect: endpointRoot + "test-id?user.fields=uf1%2Cuf2",
 		},
@@ -168,18 +169,18 @@ func Test_MutesMutingGetParams_ResolveEndpoint(t *testing.T) {
 				ID:              "test-id",
 				MaxResults:      111,
 				PaginationToken: "p-token",
-				Expansions:      []string{"ex"},
-				UserFields:      []string{"uf"},
-				TweetFields:     []string{"tf"},
+				Expansions:      fields.ExpansionList{"ex"},
+				UserFields:      fields.UserFieldList{"uf"},
+				TweetFields:     fields.TweetFieldList{"tf"},
 			},
 			expect: endpointRoot + "test-id?expansions=ex&max_results=111&pagination_token=p-token&tweet.fields=tf&user.fields=uf",
 		},
 		{
 			name: "normal: has no required parameter",
 			params: &types.MutesMutingGetParams{
-				Expansions:  []string{"ex"},
-				UserFields:  []string{"uf"},
-				TweetFields: []string{"tf"},
+				Expansions:  fields.ExpansionList{"ex"},
+				UserFields:  fields.UserFieldList{"uf"},
+				TweetFields: fields.TweetFieldList{"tf"},
 			},
 			expect: "",
 		},

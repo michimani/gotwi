@@ -7,6 +7,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/michimani/gotwi/fields"
 	"github.com/michimani/gotwi/internal/util"
 )
 
@@ -31,13 +32,13 @@ type TweetTimelinesTweetsParams struct {
 	EndTime         *time.Time
 	SinceID         string
 	UntilID         string
-	Exclude         []string
-	Expansions      []string
-	MediaFields     []string
-	PlaceFields     []string
-	PollFields      []string
-	TweetFields     []string
-	UserFields      []string
+	Exclude         fields.ExcludeList
+	Expansions      fields.ExpansionList
+	MediaFields     fields.MediaFieldList
+	PlaceFields     fields.PlaceFieldList
+	PollFields      fields.PollFieldList
+	TweetFields     fields.TweetFieldList
+	UserFields      fields.UserFieldList
 	PaginationToken string
 	MaxResults      TweetTimelinesMaxResults
 }
@@ -91,34 +92,7 @@ func (p *TweetTimelinesTweetsParams) Body() (io.Reader, error) {
 
 func (p *TweetTimelinesTweetsParams) ParameterMap() map[string]string {
 	m := map[string]string{}
-
-	if p.Exclude != nil && len(p.Exclude) > 0 {
-		m["exclude"] = util.QueryValue(p.Exclude)
-	}
-
-	if p.Expansions != nil && len(p.Expansions) > 0 {
-		m["expansions"] = util.QueryValue(p.Expansions)
-	}
-
-	if p.MediaFields != nil && len(p.MediaFields) > 0 {
-		m["media.fields"] = util.QueryValue(p.MediaFields)
-	}
-
-	if p.PlaceFields != nil && len(p.PlaceFields) > 0 {
-		m["place.fields"] = util.QueryValue(p.PlaceFields)
-	}
-
-	if p.PollFields != nil && len(p.PollFields) > 0 {
-		m["poll.fields"] = util.QueryValue(p.PollFields)
-	}
-
-	if p.TweetFields != nil && len(p.TweetFields) > 0 {
-		m["tweet.fields"] = util.QueryValue(p.TweetFields)
-	}
-
-	if p.UserFields != nil && len(p.UserFields) > 0 {
-		m["user.fields"] = util.QueryValue(p.UserFields)
-	}
+	m = fields.SetFieldsParams(m, p.Exclude, p.Expansions, p.MediaFields, p.PlaceFields, p.PollFields, p.TweetFields, p.UserFields)
 
 	if p.StartTime != nil {
 		m["start_time"] = p.StartTime.Format(time.RFC3339)
@@ -158,13 +132,13 @@ type TweetTimelinesMentionsParams struct {
 	EndTime         *time.Time
 	SinceID         string
 	UntilID         string
-	Exclude         []string
-	Expansions      []string
-	MediaFields     []string
-	PlaceFields     []string
-	PollFields      []string
-	TweetFields     []string
-	UserFields      []string
+	Exclude         fields.ExcludeList
+	Expansions      fields.ExpansionList
+	MediaFields     fields.MediaFieldList
+	PlaceFields     fields.PlaceFieldList
+	PollFields      fields.PollFieldList
+	TweetFields     fields.TweetFieldList
+	UserFields      fields.UserFieldList
 	PaginationToken string
 	MaxResults      TweetTimelinesMaxResults
 }
@@ -218,34 +192,7 @@ func (p *TweetTimelinesMentionsParams) Body() (io.Reader, error) {
 
 func (p *TweetTimelinesMentionsParams) ParameterMap() map[string]string {
 	m := map[string]string{}
-
-	if p.Exclude != nil && len(p.Exclude) > 0 {
-		m["exclude"] = util.QueryValue(p.Exclude)
-	}
-
-	if p.Expansions != nil && len(p.Expansions) > 0 {
-		m["expansions"] = util.QueryValue(p.Expansions)
-	}
-
-	if p.MediaFields != nil && len(p.MediaFields) > 0 {
-		m["media.fields"] = util.QueryValue(p.MediaFields)
-	}
-
-	if p.PlaceFields != nil && len(p.PlaceFields) > 0 {
-		m["place.fields"] = util.QueryValue(p.PlaceFields)
-	}
-
-	if p.PollFields != nil && len(p.PollFields) > 0 {
-		m["poll.fields"] = util.QueryValue(p.PollFields)
-	}
-
-	if p.TweetFields != nil && len(p.TweetFields) > 0 {
-		m["tweet.fields"] = util.QueryValue(p.TweetFields)
-	}
-
-	if p.UserFields != nil && len(p.UserFields) > 0 {
-		m["user.fields"] = util.QueryValue(p.UserFields)
-	}
+	m = fields.SetFieldsParams(m, p.Exclude, p.Expansions, p.MediaFields, p.PlaceFields, p.PollFields, p.TweetFields, p.UserFields)
 
 	if p.StartTime != nil {
 		m["start_time"] = p.StartTime.Format(time.RFC3339)
