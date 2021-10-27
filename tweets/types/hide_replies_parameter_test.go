@@ -5,6 +5,7 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/michimani/gotwi"
 	"github.com/michimani/gotwi/tweets/types"
 	"github.com/stretchr/testify/assert"
 )
@@ -25,7 +26,7 @@ func Test_HideRepliesParams_ResolveEndpoint(t *testing.T) {
 		{
 			name: "normal: has no required parameter",
 			params: &types.HideRepliesParams{
-				Hidden: true,
+				Hidden: gotwi.Bool(true),
 			},
 			expect: "",
 		},
@@ -46,25 +47,25 @@ func Test_HideRepliesParams_Body(t *testing.T) {
 		expect io.Reader
 	}{
 		{
-			name: "ok: has required parameters",
+			name: "ok: has both of path and json parameters",
 			params: &types.HideRepliesParams{
 				ID:     "test-id",
-				Hidden: true,
+				Hidden: gotwi.Bool(true),
 			},
 			expect: strings.NewReader(`{"hidden":true}`),
 		},
 		{
-			name: "ok: has required parameters",
+			name: "ok: has both of path and json parameters",
 			params: &types.HideRepliesParams{
 				ID:     "test-id",
-				Hidden: false,
+				Hidden: gotwi.Bool(false),
 			},
 			expect: strings.NewReader(`{"hidden":false}`),
 		},
 		{
-			name:   "ok: has no required parameters",
+			name:   "ok: has no json parameters",
 			params: &types.HideRepliesParams{ID: "id"},
-			expect: strings.NewReader(`{"hidden":false}`),
+			expect: strings.NewReader(`{}`),
 		},
 	}
 

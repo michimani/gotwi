@@ -5,6 +5,7 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/michimani/gotwi"
 	"github.com/michimani/gotwi/users/types"
 	"github.com/stretchr/testify/assert"
 )
@@ -232,7 +233,7 @@ func Test_MutesMutingPostParams_ResolveEndpoint(t *testing.T) {
 		{
 			name: "normal: has no required parameter",
 			params: &types.MutesMutingPostParams{
-				TargetUserID: "tid",
+				TargetUserID: gotwi.String("tid"),
 			},
 			expect: "",
 		},
@@ -253,17 +254,17 @@ func Test_MutesMutingPostParams_Body(t *testing.T) {
 		expect io.Reader
 	}{
 		{
-			name: "ok: has required parameters",
+			name: "ok: has both of path and json parameters",
 			params: &types.MutesMutingPostParams{
 				ID:           "test-id",
-				TargetUserID: "tid",
+				TargetUserID: gotwi.String("tid"),
 			},
 			expect: strings.NewReader(`{"target_user_id":"tid"}`),
 		},
 		{
-			name:   "ok: has no required parameters",
+			name:   "ok: has no json parameters",
 			params: &types.MutesMutingPostParams{ID: "id"},
-			expect: strings.NewReader(`{"target_user_id":""}`),
+			expect: strings.NewReader(`{}`),
 		},
 	}
 
