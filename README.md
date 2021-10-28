@@ -92,6 +92,7 @@ export GOTWI_API_KEY_SECRET=your-api-key-secret
 package main
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/michimani/gotwi"
@@ -101,7 +102,7 @@ import (
 )
 
 func main() {
-		in := &gotwi.NewGotwiClientInput{
+	in := &gotwi.NewGotwiClientInput{
 		AuthenticationMethod: gotwi.AuthenMethodOAuth2BearerToken,
 	}
 
@@ -123,7 +124,7 @@ func main() {
 			fields.TweetFieldCreatedAt,
 		},
 	}
-	res, err := users.UserLookupByUsername(c, p)
+	res, err := users.UserLookupByUsername(context.Background(), c, p)
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -158,6 +159,18 @@ PinnedTweet:  pinned tweet
 - Get blocking users.
 
 ```go
+package main
+
+import (
+	"context"
+	"fmt"
+
+	"github.com/michimani/gotwi"
+	"github.com/michimani/gotwi/fields"
+	"github.com/michimani/gotwi/users"
+	"github.com/michimani/gotwi/users/types"
+)
+
 func main() {
 	in := &gotwi.NewGotwiClientInput{
 		AuthenticationMethod: gotwi.AuthenMethodOAuth1UserContext,
@@ -176,7 +189,7 @@ func main() {
 		MaxResults: 5,
 	}
 
-	res, err := users.BlocksBlockingGet(c, p)
+	res, err := users.BlocksBlockingGet(context.Background(), c, p)
 	if err != nil {
 		fmt.Println(err)
 		return

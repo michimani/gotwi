@@ -1,6 +1,8 @@
 package users
 
 import (
+	"context"
+
 	"github.com/michimani/gotwi"
 	"github.com/michimani/gotwi/users/types"
 )
@@ -14,9 +16,9 @@ const (
 
 // Returns a list of users the specified user ID is following.
 // https://developer.twitter.com/en/docs/twitter-api/users/follows/api-reference/get-users-id-following
-func FollowsFollowingGet(c *gotwi.GotwiClient, p *types.FollowsFollowingGetParams) (*types.FollowsFollowingGetResponse, error) {
+func FollowsFollowingGet(ctx context.Context, c *gotwi.GotwiClient, p *types.FollowsFollowingGetParams) (*types.FollowsFollowingGetResponse, error) {
 	res := &types.FollowsFollowingGetResponse{}
-	if err := c.CallAPI(FollowsFollowingGetEndpoint, "GET", p, res); err != nil {
+	if err := c.CallAPI(ctx, FollowsFollowingGetEndpoint, "GET", p, res); err != nil {
 		return nil, err
 	}
 
@@ -25,9 +27,9 @@ func FollowsFollowingGet(c *gotwi.GotwiClient, p *types.FollowsFollowingGetParam
 
 // Returns a list of users who are followers of the specified user ID.
 // https://developer.twitter.com/en/docs/twitter-api/users/follows/api-reference/get-users-id-followers
-func FollowsFollowers(c *gotwi.GotwiClient, p *types.FollowsFollowersParams) (*types.FollowsFollowersResponse, error) {
+func FollowsFollowers(ctx context.Context, c *gotwi.GotwiClient, p *types.FollowsFollowersParams) (*types.FollowsFollowersResponse, error) {
 	res := &types.FollowsFollowersResponse{}
-	if err := c.CallAPI(FollowsFollowersEndpoint, "GET", p, res); err != nil {
+	if err := c.CallAPI(ctx, FollowsFollowersEndpoint, "GET", p, res); err != nil {
 		return nil, err
 	}
 
@@ -39,9 +41,9 @@ func FollowsFollowers(c *gotwi.GotwiClient, p *types.FollowsFollowersParams) (*t
 // The request succeeds with no action when the authenticated user sends a request to a user
 // they're already following, or if they're sending a follower request to a user that does not have public Tweets.
 // https://developer.twitter.com/en/docs/twitter-api/users/follows/api-reference/post-users-source_user_id-following
-func FollowsFollowingPost(c *gotwi.GotwiClient, p *types.FollowsFollowingPostParams) (*types.FollowsFollowingPostResponse, error) {
+func FollowsFollowingPost(ctx context.Context, c *gotwi.GotwiClient, p *types.FollowsFollowingPostParams) (*types.FollowsFollowingPostResponse, error) {
 	res := &types.FollowsFollowingPostResponse{}
-	if err := c.CallAPI(FollowsFollowingPostEndpoint, "POST", p, res); err != nil {
+	if err := c.CallAPI(ctx, FollowsFollowingPostEndpoint, "POST", p, res); err != nil {
 		return nil, err
 	}
 
@@ -51,9 +53,9 @@ func FollowsFollowingPost(c *gotwi.GotwiClient, p *types.FollowsFollowingPostPar
 // Allows a user ID to unfollow another user.
 // The request succeeds with no action when the authenticated user sends a request to a user they're not following or have already unfollowed.
 // https://developer.twitter.com/en/docs/twitter-api/users/follows/api-reference/delete-users-source_id-following
-func FollowsFollowingDelete(c *gotwi.GotwiClient, p *types.FollowsFollowingDeleteParams) (*types.FollowsFollowingDeleteResponse, error) {
+func FollowsFollowingDelete(ctx context.Context, c *gotwi.GotwiClient, p *types.FollowsFollowingDeleteParams) (*types.FollowsFollowingDeleteResponse, error) {
 	res := &types.FollowsFollowingDeleteResponse{}
-	if err := c.CallAPI(FollowsFollowingDeleteEndpoint, "DELETE", p, res); err != nil {
+	if err := c.CallAPI(ctx, FollowsFollowingDeleteEndpoint, "DELETE", p, res); err != nil {
 		return nil, err
 	}
 
