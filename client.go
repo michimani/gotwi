@@ -53,6 +53,7 @@ type ClientResponse struct {
 	Status     string
 	Error      *resources.Non2XXError
 	Body       []byte
+	Response   util.Response
 }
 
 var defaultHTTPClient = &http.Client{
@@ -147,17 +148,13 @@ func (c *GotwiClient) CallAPI(ctx context.Context, endpoint, method string, p ut
 		return err
 	}
 
-	res, not200err, err := c.Exec(req)
+	not200err, err := c.Exec(req, i)
 	if err != nil {
 		return err
 	}
 
 	if not200err != nil {
 		return fmt.Errorf(gotwierrors.ErrorNon2XXStatus, not200err.Summary())
-	}
-
-	if err := json.Unmarshal(res.Body, &i); err != nil {
-		return err
 	}
 
 	return nil
@@ -168,31 +165,26 @@ var okCodes map[int]struct{} = map[int]struct{}{
 	http.StatusCreated: {},
 }
 
-func (c *GotwiClient) Exec(req *http.Request) (*ClientResponse, *resources.Non2XXError, error) {
+func (c *GotwiClient) Exec(req *http.Request, i util.Response) (*resources.Non2XXError, error) {
 	res, err := c.Client.Do(req)
 	if err != nil {
-		return nil, nil, err
+		return nil, err
 	}
 	defer res.Body.Close()
 
-	bytes, err := ioutil.ReadAll(res.Body)
-	if err != nil {
-		return nil, nil, err
-	}
-
 	if _, ok := okCodes[res.StatusCode]; !ok {
-		non200err, err := resolveNon2XXResponse(res, bytes)
+		non200err, err := resolveNon2XXResponse(res)
 		if err != nil {
-			return nil, nil, err
+			return nil, err
 		}
-		return nil, non200err, nil
+		return non200err, nil
 	}
 
-	return &ClientResponse{
-		StatusCode: res.StatusCode,
-		Status:     res.Status,
-		Body:       bytes,
-	}, nil, nil
+	if err := json.NewDecoder(res.Body).Decode(i); err != nil {
+		return nil, err
+	}
+
+	return nil, nil
 }
 
 func (c *GotwiClient) prepare(ctx context.Context, endpointBase, method string, p util.Parameters) (*http.Request, error) {
@@ -273,8 +265,8 @@ func newRequest(ctx context.Context, endpoint, method string, p util.Parameters)
 	return req, nil
 }
 
-func resolveNon2XXResponse(res *http.Response, bodyBytes []byte) (*resources.Non2XXError, error) {
-	non200err := resources.Non2XXError{
+func resolveNon2XXResponse(res *http.Response) (*resources.Non2XXError, error) {
+	non200err := &resources.Non2XXError{
 		Status:     res.Status,
 		StatusCode: res.StatusCode,
 	}
@@ -284,15 +276,19 @@ func resolveNon2XXResponse(res *http.Response, bodyBytes []byte) (*resources.Non
 		non200err.Errors = []resources.ErrorInformation{
 			{Message: "Content-Type is undefined."},
 		}
-		return &non200err, nil
+		return non200err, nil
 	}
 
 	if !strings.Contains(cts[0], "application/json") {
+		bytes, err := ioutil.ReadAll(res.Body)
+		if err != nil {
+			return nil, err
+		}
 		non200err.Errors = []resources.ErrorInformation{
-			{Message: strings.TrimRight(string(bodyBytes), "\n")},
+			{Message: strings.TrimRight(string(bytes), "\n")},
 		}
 	} else {
-		if err := json.Unmarshal(bodyBytes, &non200err); err != nil {
+		if err := json.NewDecoder(res.Body).Decode(non200err); err != nil {
 			return nil, err
 		}
 	}
@@ -307,5 +303,5 @@ func resolveNon2XXResponse(res *http.Response, bodyBytes []byte) (*resources.Non
 		non200err.RateLimitInfo = rri
 	}
 
-	return &non200err, nil
+	return non200err, nil
 }

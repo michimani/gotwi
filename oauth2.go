@@ -1,7 +1,6 @@
 package gotwi
 
 import (
-	"encoding/json"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -17,6 +16,8 @@ type OAuth2TokenResponse struct {
 	AccessToken string `json:"access_token"`
 }
 
+func (o OAuth2TokenResponse) HasPartialError() bool { return false }
+
 func GenerateBearerToken(c *GotwiClient, apiKey, apiKeySecret string) (string, error) {
 	uv := url.Values{}
 	uv.Add("grant_type", "client_credentials")
@@ -30,18 +31,14 @@ func GenerateBearerToken(c *GotwiClient, apiKey, apiKeySecret string) (string, e
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded;charset=UTF-8")
 	req.SetBasicAuth(apiKey, apiKeySecret)
 
-	res, not200err, err := c.Exec(req)
+	o2r := OAuth2TokenResponse{}
+	not200err, err := c.Exec(req, &o2r)
 	if err != nil {
 		return "", err
 	}
 
 	if not200err != nil {
 		return "", fmt.Errorf(gotwierrors.ErrorNon2XXStatus, not200err.Summary())
-	}
-
-	var o2r OAuth2TokenResponse
-	if err = json.Unmarshal(res.Body, &o2r); err != nil {
-		return "", err
 	}
 
 	if o2r.AccessToken == "" {
