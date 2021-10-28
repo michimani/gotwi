@@ -1,6 +1,8 @@
 package lists
 
 import (
+	"context"
+
 	"github.com/michimani/gotwi"
 	"github.com/michimani/gotwi/lists/types"
 )
@@ -12,9 +14,9 @@ const (
 
 // Enables the authenticated user to follow a List.
 // https://developer.twitter.com/en/docs/twitter-api/lists/manage-lists/api-reference/post-users-id-followed-lists
-func ManageListFollowsPost(c *gotwi.GotwiClient, p *types.ManageListFollowsPostParams) (*types.ManageListFollowsPostResponse, error) {
+func ManageListFollowsPost(ctx context.Context, c *gotwi.GotwiClient, p *types.ManageListFollowsPostParams) (*types.ManageListFollowsPostResponse, error) {
 	res := &types.ManageListFollowsPostResponse{}
-	if err := c.CallAPI(ManageListFollowsPostEndpoint, "POST", p, res); err != nil {
+	if err := c.CallAPI(ctx, ManageListFollowsPostEndpoint, "POST", p, res); err != nil {
 		return nil, err
 	}
 
@@ -23,9 +25,9 @@ func ManageListFollowsPost(c *gotwi.GotwiClient, p *types.ManageListFollowsPostP
 
 // Enables the authenticated user to unfollow a List.
 // https://developer.twitter.com/en/docs/twitter-api/lists/manage-lists/api-reference/delete-users-id-followed-lists-list_id
-func ManageListFollowsDelete(c *gotwi.GotwiClient, p *types.ManageListFollowsDeleteParams) (*types.ManageListFollowsDeleteResponse, error) {
+func ManageListFollowsDelete(ctx context.Context, c *gotwi.GotwiClient, p *types.ManageListFollowsDeleteParams) (*types.ManageListFollowsDeleteResponse, error) {
 	res := &types.ManageListFollowsDeleteResponse{}
-	if err := c.CallAPI(ManageListFollowsDeleteEndpoint, "DELETE", p, res); err != nil {
+	if err := c.CallAPI(ctx, ManageListFollowsDeleteEndpoint, "DELETE", p, res); err != nil {
 		return nil, err
 	}
 

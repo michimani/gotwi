@@ -1,6 +1,7 @@
 package gotwi
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -140,8 +141,8 @@ func (c *GotwiClient) IsReady() bool {
 	return true
 }
 
-func (c *GotwiClient) CallAPI(endpoint, method string, p util.Parameters, i util.Response) error {
-	req, err := c.prepare(endpoint, method, p)
+func (c *GotwiClient) CallAPI(ctx context.Context, endpoint, method string, p util.Parameters, i util.Response) error {
+	req, err := c.prepare(ctx, endpoint, method, p)
 	if err != nil {
 		return err
 	}
@@ -194,7 +195,7 @@ func (c *GotwiClient) Exec(req *http.Request) (*ClientResponse, *resources.Non2X
 	}, nil, nil
 }
 
-func (c *GotwiClient) prepare(endpointBase, method string, p util.Parameters) (*http.Request, error) {
+func (c *GotwiClient) prepare(ctx context.Context, endpointBase, method string, p util.Parameters) (*http.Request, error) {
 	if p == nil {
 		return nil, fmt.Errorf(gotwierrors.ErrorParametersNil, endpointBase)
 	}
@@ -205,7 +206,7 @@ func (c *GotwiClient) prepare(endpointBase, method string, p util.Parameters) (*
 
 	endpoint := p.ResolveEndpoint(endpointBase)
 	p.SetAccessToken(c.AccessToken)
-	req, err := newRequest(endpoint, method, p)
+	req, err := newRequest(ctx, endpoint, method, p)
 	if err != nil {
 		return nil, err
 	}
@@ -257,12 +258,12 @@ func (c *GotwiClient) setOAuth1Header(r *http.Request, paramsMap map[string]stri
 	return r, nil
 }
 
-func newRequest(endpoint, method string, p util.Parameters) (*http.Request, error) {
+func newRequest(ctx context.Context, endpoint, method string, p util.Parameters) (*http.Request, error) {
 	body, err := p.Body()
 	if err != nil {
 		return nil, err
 	}
-	req, err := http.NewRequest(method, endpoint, body)
+	req, err := http.NewRequestWithContext(ctx, method, endpoint, body)
 	if err != nil {
 		return nil, err
 	}
