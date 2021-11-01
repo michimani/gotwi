@@ -1,30 +1,23 @@
 package fields
 
-type Expansion string
+type Exclude string
 
 const (
-	ExpansionPinnedTweetID              Expansion = "pinned_tweet_id"
-	ExpansionAttachmentsPollIDs         Expansion = "attachments.poll_ids"
-	ExpansionAttachmentsMediaKeys       Expansion = "attachments.media_keys"
-	ExpansionAuthorID                   Expansion = "author_id"
-	ExpansionEntitiesMentionsUsername   Expansion = "entities.mentions.username"
-	ExpansionGeoPlaceID                 Expansion = "geo.place_id"
-	ExpansionInReplyToUserID            Expansion = "in_reply_to_user_id"
-	ExpansionReferencedTweetsID         Expansion = "referenced_tweets.id"
-	ExpansionReferencedTweetsIDAuthorID Expansion = "referenced_tweets.id.author_id"
+	ExcludeRetweets Exclude = "retweets"
+	ExcludeReplies  Exclude = "replies"
 )
 
-func (e Expansion) String() string {
+func (e Exclude) String() string {
 	return string(e)
 }
 
-type ExpansionList []Expansion
+type ExcludeList []Exclude
 
-func (el ExpansionList) FieldsName() string {
-	return "expansions"
+func (el ExcludeList) FieldsName() string {
+	return "exclude"
 }
 
-func (el ExpansionList) Values() []string {
+func (el ExcludeList) Values() []string {
 	if el == nil {
 		return []string{}
 	}
