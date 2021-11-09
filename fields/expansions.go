@@ -12,6 +12,10 @@ const (
 	ExpansionInReplyToUserID            Expansion = "in_reply_to_user_id"
 	ExpansionReferencedTweetsID         Expansion = "referenced_tweets.id"
 	ExpansionReferencedTweetsIDAuthorID Expansion = "referenced_tweets.id.author_id"
+	ExpansionInvitedUserIDs             Expansion = "invited_user_ids"
+	ExpansionSpeakerIDs                 Expansion = "speaker_ids"
+	ExpansionCreatorID                  Expansion = "creator_id"
+	ExpansionHostIDs                    Expansion = "host_ids"
 )
 
 func (e Expansion) String() string {
