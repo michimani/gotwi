@@ -7,7 +7,7 @@ This is a library for using the Twitter API v2 in the Go language. (It is still 
 
 [What's New with Twitter API v2 | Docs | Twitter Developer Platform](https://developer.twitter.com/en/docs/twitter-api/early-access)
 
-Progress of supporting API: 40/51
+Progress of supporting API: 41/51
 
 - **Tweets** (16/20)
   - Tweet lookup
@@ -72,9 +72,9 @@ Progress of supporting API: 40/51
   - Manage pinned Lists
     - [x] `POST /2/users/:id/pinned_lists`
     - [x] `DELETE /2/users/:id/pinned_lists/:list_id`
-- **Spaces** (1/5)
+- **Spaces** (2/5)
 	- Lookup Spaces
-		- [ ] `GET /2/spaces/:id`
+		- [x] `GET /2/spaces/:id`
 		- [ ] `GET /2/spaces`
 		- [ ] `GET /2/spaces/by/creator_ids`
 	- Search Spaces
