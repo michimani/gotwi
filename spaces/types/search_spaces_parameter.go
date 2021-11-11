@@ -22,7 +22,7 @@ type SearchSpacesParams struct {
 	State       fields.State
 }
 
-var SearchTweetsRecentQueryParams = map[string]struct{}{
+var SearchSpacesQueryParams = map[string]struct{}{
 	"query":        {},
 	"expansions":   {},
 	"space.fields": {},
@@ -55,7 +55,7 @@ func (p *SearchSpacesParams) ResolveEndpoint(endpointBase string) string {
 	}
 
 	pm := p.ParameterMap()
-	qs := util.QueryString(pm, SearchTweetsRecentQueryParams)
+	qs := util.QueryString(pm, SearchSpacesQueryParams)
 
 	if qs == "" {
 		return endpoint
