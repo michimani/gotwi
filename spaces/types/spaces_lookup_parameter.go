@@ -62,3 +62,58 @@ func (p *SpacesLookupIDParams) ParameterMap() map[string]string {
 	m = fields.SetFieldsParams(m, p.Expansions, p.SpaceFields, p.UserFields)
 	return m
 }
+
+// SpacesLookupParams is struct of parameters
+// for request GET /2/spaces
+type SpacesLookupParams struct {
+	accessToken string
+
+	// Query parameters
+	IDs         []string
+	Expansions  fields.ExpansionList
+	SpaceFields fields.SpaceFieldList
+	UserFields  fields.UserFieldList
+}
+
+var SpacesLookupQueryParams = map[string]struct{}{
+	"ids":          {},
+	"expansions":   {},
+	"space.fields": {},
+	"user.fields":  {},
+}
+
+func (p *SpacesLookupParams) SetAccessToken(token string) {
+	p.accessToken = token
+}
+
+func (p *SpacesLookupParams) AccessToken() string {
+	return p.accessToken
+}
+
+func (p *SpacesLookupParams) ResolveEndpoint(endpointBase string) string {
+	if p.IDs == nil || len(p.IDs) == 0 {
+		return ""
+	}
+
+	endpoint := endpointBase
+
+	pm := p.ParameterMap()
+	qs := util.QueryString(pm, SpacesLookupQueryParams)
+
+	if qs == "" {
+		return endpoint
+	}
+
+	return endpoint + "?" + qs
+}
+
+func (p *SpacesLookupParams) Body() (io.Reader, error) {
+	return nil, nil
+}
+
+func (p *SpacesLookupParams) ParameterMap() map[string]string {
+	m := map[string]string{}
+	m["ids"] = util.QueryValue(p.IDs)
+	m = fields.SetFieldsParams(m, p.Expansions, p.SpaceFields, p.UserFields)
+	return m
+}

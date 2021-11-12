@@ -43,3 +43,39 @@ func Test_SpacesLookupID_HasPartialError(t *testing.T) {
 		})
 	}
 }
+
+func Test_SpacesLookup_HasPartialError(t *testing.T) {
+	cases := []struct {
+		name   string
+		res    *types.SpacesLookupResponse
+		expect bool
+	}{
+		{
+			name: "has partical error",
+			res: &types.SpacesLookupResponse{
+				Errors: []resources.PartialError{
+					{Title: "test partical error"},
+				}},
+			expect: true,
+		},
+		{
+			name: "has no partical error",
+			res: &types.SpacesLookupResponse{
+				Errors: []resources.PartialError{}},
+			expect: false,
+		},
+		{
+			name: "partical error is nil",
+			res: &types.SpacesLookupResponse{
+				Errors: []resources.PartialError{}},
+			expect: false,
+		},
+	}
+
+	for _, c := range cases {
+		t.Run(c.name, func(tt *testing.T) {
+			hpe := c.res.HasPartialError()
+			assert.Equal(tt, c.expect, hpe)
+		})
+	}
+}

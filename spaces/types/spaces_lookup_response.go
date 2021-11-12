@@ -13,3 +13,15 @@ type SpacesLookupIDResponse struct {
 func (r *SpacesLookupIDResponse) HasPartialError() bool {
 	return !(r.Errors == nil || len(r.Errors) == 0)
 }
+
+type SpacesLookupResponse struct {
+	Data     []resources.Space `json:"data"`
+	Includes struct {
+		Users []resources.User `json:"users"`
+	} `json:"includes"`
+	Errors []resources.PartialError `json:"errors"`
+}
+
+func (r *SpacesLookupResponse) HasPartialError() bool {
+	return !(r.Errors == nil || len(r.Errors) == 0)
+}
