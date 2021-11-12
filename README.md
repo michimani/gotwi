@@ -72,11 +72,11 @@ Progress of supporting API: 42/51
   - Manage pinned Lists
     - [x] `POST /2/users/:id/pinned_lists`
     - [x] `DELETE /2/users/:id/pinned_lists/:list_id`
-- **Spaces** (3/4)
+- ✅ 　**Spaces** (4/4)
 	- Lookup Spaces
 		- [x] `GET /2/spaces/:id`
 		- [x] `GET /2/spaces`
-		- [ ] `GET /2/spaces/by/creator_ids`
+		- [x] `GET /2/spaces/by/creator_ids`
 	- Search Spaces
 		- [x] `GET /2/spaces/search`
 - **Compliance** (0/3)

@@ -246,3 +246,95 @@ func Test_SpacesLookup_Body(t *testing.T) {
 		})
 	}
 }
+
+func Test_SpacesLookupByCreatorIDs_ResolveEndpoint(t *testing.T) {
+	const endpointBase = "test/endpoint/"
+
+	cases := []struct {
+		name   string
+		params *types.SpacesLookupByCreatorIDsParams
+		expect string
+	}{
+		{
+			name: "only required parameter",
+			params: &types.SpacesLookupByCreatorIDsParams{
+				UserIDs: []string{"uid1", "uid2"},
+			},
+			expect: endpointBase + "?user_ids=uid1%2Cuid2",
+		},
+		{
+			name: "with expansions",
+			params: &types.SpacesLookupByCreatorIDsParams{
+				UserIDs:    []string{"uid1", "uid2"},
+				Expansions: fields.ExpansionList{"ex1", "ex2"},
+			},
+			expect: endpointBase + "?expansions=ex1%2Cex2&user_ids=uid1%2Cuid2",
+		},
+		{
+			name: "with space.fields",
+			params: &types.SpacesLookupByCreatorIDsParams{
+				UserIDs:     []string{"uid1", "uid2"},
+				SpaceFields: fields.SpaceFieldList{"sf1", "sf2"},
+			},
+			expect: endpointBase + "?space.fields=sf1%2Csf2&user_ids=uid1%2Cuid2",
+		},
+		{
+			name: "with users.fields",
+			params: &types.SpacesLookupByCreatorIDsParams{
+				UserIDs:    []string{"uid1", "uid2"},
+				UserFields: fields.UserFieldList{"uf1", "uf2"},
+			},
+			expect: endpointBase + "?user.fields=uf1%2Cuf2&user_ids=uid1%2Cuid2",
+		},
+		{
+			name: "all query parameters",
+			params: &types.SpacesLookupByCreatorIDsParams{
+				Expansions:  fields.ExpansionList{"ex"},
+				UserIDs:     []string{"uid1", "uid2"},
+				SpaceFields: fields.SpaceFieldList{"sf"},
+				UserFields:  fields.UserFieldList{"uf"},
+			},
+			expect: endpointBase + "?expansions=ex&space.fields=sf&user.fields=uf&user_ids=uid1%2Cuid2",
+		},
+		{
+			name: "has no required parameter",
+			params: &types.SpacesLookupByCreatorIDsParams{
+				Expansions:  fields.ExpansionList{"ex"},
+				UserFields:  fields.UserFieldList{"uf"},
+				SpaceFields: fields.SpaceFieldList{"sf"},
+			},
+			expect: "",
+		},
+	}
+
+	for _, c := range cases {
+		t.Run(c.name, func(tt *testing.T) {
+			ep := c.params.ResolveEndpoint(endpointBase)
+			assert.Equal(tt, c.expect, ep)
+		})
+	}
+}
+
+func Test_SpacesLookupByCreatorIDs_Body(t *testing.T) {
+	cases := []struct {
+		name   string
+		params *types.SpacesLookupByCreatorIDsParams
+	}{
+		{
+			name:   "empty params",
+			params: &types.SpacesLookupByCreatorIDsParams{},
+		},
+		{
+			name:   "some params",
+			params: &types.SpacesLookupByCreatorIDsParams{UserIDs: []string{"uid"}},
+		},
+	}
+
+	for _, c := range cases {
+		t.Run(c.name, func(tt *testing.T) {
+			r, err := c.params.Body()
+			assert.NoError(tt, err)
+			assert.Nil(tt, r)
+		})
+	}
+}

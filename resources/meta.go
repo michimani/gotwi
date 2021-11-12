@@ -22,3 +22,7 @@ type TweetTimelineMeta struct {
 	NextToken     string `json:"next_token"`
 	PreviousToken string `json:"previous_token"`
 }
+
+type SpacesLookupByCreatorsIDsMeta struct {
+	ResultCount int `json:"result_count"`
+}

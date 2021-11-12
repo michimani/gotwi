@@ -117,3 +117,58 @@ func (p *SpacesLookupParams) ParameterMap() map[string]string {
 	m = fields.SetFieldsParams(m, p.Expansions, p.SpaceFields, p.UserFields)
 	return m
 }
+
+// SpacesLookupByCreatorIDsParams is struct of parameters
+// for request GET /2/spaces/by/creator_ids
+type SpacesLookupByCreatorIDsParams struct {
+	accessToken string
+
+	// Query parameters
+	UserIDs     []string
+	Expansions  fields.ExpansionList
+	SpaceFields fields.SpaceFieldList
+	UserFields  fields.UserFieldList
+}
+
+var SpacesLookupByCreatorIDsQueryParams = map[string]struct{}{
+	"user_ids":     {},
+	"expansions":   {},
+	"space.fields": {},
+	"user.fields":  {},
+}
+
+func (p *SpacesLookupByCreatorIDsParams) SetAccessToken(token string) {
+	p.accessToken = token
+}
+
+func (p *SpacesLookupByCreatorIDsParams) AccessToken() string {
+	return p.accessToken
+}
+
+func (p *SpacesLookupByCreatorIDsParams) ResolveEndpoint(endpointBase string) string {
+	if p.UserIDs == nil || len(p.UserIDs) == 0 {
+		return ""
+	}
+
+	endpoint := endpointBase
+
+	pm := p.ParameterMap()
+	qs := util.QueryString(pm, SpacesLookupByCreatorIDsQueryParams)
+
+	if qs == "" {
+		return endpoint
+	}
+
+	return endpoint + "?" + qs
+}
+
+func (p *SpacesLookupByCreatorIDsParams) Body() (io.Reader, error) {
+	return nil, nil
+}
+
+func (p *SpacesLookupByCreatorIDsParams) ParameterMap() map[string]string {
+	m := map[string]string{}
+	m["user_ids"] = util.QueryValue(p.UserIDs)
+	m = fields.SetFieldsParams(m, p.Expansions, p.SpaceFields, p.UserFields)
+	return m
+}
