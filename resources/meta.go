@@ -1,5 +1,7 @@
 package resources
 
+import "time"
+
 type PaginationMeta struct {
 	ResultCount   int    `json:"result_count"`
 	NextToken     string `json:"next_token,omitempty"`
@@ -25,4 +27,8 @@ type TweetTimelineMeta struct {
 
 type SpacesLookupByCreatorsIDsMeta struct {
 	ResultCount int `json:"result_count"`
+}
+
+type FilterdStreamRulesGetMeta struct {
+	Sent *time.Time `json:"sent"`
 }

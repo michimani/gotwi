@@ -7,9 +7,9 @@ This is a library for using the Twitter API v2 in the Go language. (It is still 
 
 [What's New with Twitter API v2 | Docs | Twitter Developer Platform](https://developer.twitter.com/en/docs/twitter-api/early-access)
 
-Progress of supporting API: 42/51
+Progress of supporting API: 44/50
 
-- **Tweets** (16/20)
+- **Tweets** (17/20)
   - Tweet lookup
     - [x] `GET /2/tweets`
     - [x] `GET /2/tweets/:id`
@@ -24,7 +24,7 @@ Progress of supporting API: 42/51
     - [x] `GET /2/users/:id/mentions` 
   - Filtered stream
     - [ ] `POST /2/tweets/search/stream/rules`
-    - [ ] `GET /2/tweets/search/stream/rules`
+    - [x] `GET /2/tweets/search/stream/rules`
     - [ ] `GET /2/tweets/search/stream`
   - Sampled stream
     - [ ] `GET /2/tweets/sample/stream`
