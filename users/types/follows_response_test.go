@@ -9,6 +9,7 @@ import (
 )
 
 func Test_FollowsFollowingGet_HasPartialError(t *testing.T) {
+	var errorTitle string = "test partical error"
 	cases := []struct {
 		name   string
 		res    *types.FollowsFollowingGetResponse
@@ -18,7 +19,7 @@ func Test_FollowsFollowingGet_HasPartialError(t *testing.T) {
 			name: "has partical error",
 			res: &types.FollowsFollowingGetResponse{
 				Errors: []resources.PartialError{
-					{Title: "test partical error"},
+					{Title: &errorTitle},
 				}},
 			expect: true,
 		},
@@ -45,6 +46,7 @@ func Test_FollowsFollowingGet_HasPartialError(t *testing.T) {
 }
 
 func Test_FollowsFollowers_HasPartialError(t *testing.T) {
+	var errorTitle string = "test partical error"
 	cases := []struct {
 		name   string
 		res    *types.FollowsFollowersResponse
@@ -54,7 +56,7 @@ func Test_FollowsFollowers_HasPartialError(t *testing.T) {
 			name: "has partical error",
 			res: &types.FollowsFollowersResponse{
 				Errors: []resources.PartialError{
-					{Title: "test partical error"},
+					{Title: &errorTitle},
 				}},
 			expect: true,
 		},

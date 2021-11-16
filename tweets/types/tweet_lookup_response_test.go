@@ -9,6 +9,7 @@ import (
 )
 
 func Test_TweetLookup_HasPartialError(t *testing.T) {
+	var errorTitle string = "test partical error"
 	cases := []struct {
 		name   string
 		res    *types.TweetLookupResponse
@@ -18,7 +19,7 @@ func Test_TweetLookup_HasPartialError(t *testing.T) {
 			name: "has partical error",
 			res: &types.TweetLookupResponse{
 				Errors: []resources.PartialError{
-					{Title: "test partical error"},
+					{Title: &errorTitle},
 				}},
 			expect: true,
 		},
@@ -45,6 +46,7 @@ func Test_TweetLookup_HasPartialError(t *testing.T) {
 }
 
 func Test_TweetLookupID_HasPartialError(t *testing.T) {
+	var errorTitle string = "test partical error"
 	cases := []struct {
 		name   string
 		res    *types.TweetLookupIDResponse
@@ -54,7 +56,7 @@ func Test_TweetLookupID_HasPartialError(t *testing.T) {
 			name: "has partical error",
 			res: &types.TweetLookupIDResponse{
 				Errors: []resources.PartialError{
-					{Title: "test partical error"},
+					{Title: &errorTitle},
 				}},
 			expect: true,
 		},

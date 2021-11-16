@@ -9,6 +9,7 @@ import (
 )
 
 func Test_MutesMutingGet_HasPartialError(t *testing.T) {
+	var errorTitle string = "test partical error"
 	cases := []struct {
 		name   string
 		res    *types.MutesMutingGetResponse
@@ -18,7 +19,7 @@ func Test_MutesMutingGet_HasPartialError(t *testing.T) {
 			name: "has partical error",
 			res: &types.MutesMutingGetResponse{
 				Errors: []resources.PartialError{
-					{Title: "test partical error"},
+					{Title: &errorTitle},
 				}},
 			expect: true,
 		},
