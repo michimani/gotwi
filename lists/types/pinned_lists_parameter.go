@@ -7,7 +7,7 @@ import (
 	"strings"
 )
 
-type ManageListFollowsPostParams struct {
+type PinnedListsPostParams struct {
 	accessToken string
 
 	// Path parameter
@@ -17,15 +17,15 @@ type ManageListFollowsPostParams struct {
 	ListID *string `json:"list_id,omitempty"`
 }
 
-func (p *ManageListFollowsPostParams) SetAccessToken(token string) {
+func (p *PinnedListsPostParams) SetAccessToken(token string) {
 	p.accessToken = token
 }
 
-func (p *ManageListFollowsPostParams) AccessToken() string {
+func (p *PinnedListsPostParams) AccessToken() string {
 	return p.accessToken
 }
 
-func (p *ManageListFollowsPostParams) ResolveEndpoint(endpointBase string) string {
+func (p *PinnedListsPostParams) ResolveEndpoint(endpointBase string) string {
 	if p.ID == "" {
 		return ""
 	}
@@ -36,7 +36,7 @@ func (p *ManageListFollowsPostParams) ResolveEndpoint(endpointBase string) strin
 	return endpoint
 }
 
-func (p *ManageListFollowsPostParams) Body() (io.Reader, error) {
+func (p *PinnedListsPostParams) Body() (io.Reader, error) {
 	json, err := json.Marshal(p)
 	if err != nil {
 		return nil, err
@@ -45,11 +45,11 @@ func (p *ManageListFollowsPostParams) Body() (io.Reader, error) {
 	return strings.NewReader(string(json)), nil
 }
 
-func (p *ManageListFollowsPostParams) ParameterMap() map[string]string {
+func (p *PinnedListsPostParams) ParameterMap() map[string]string {
 	return map[string]string{}
 }
 
-type ManageListFollowsDeleteParams struct {
+type PinnedListsDeleteParams struct {
 	accessToken string
 
 	// Path parameter
@@ -57,15 +57,15 @@ type ManageListFollowsDeleteParams struct {
 	ListID string
 }
 
-func (p *ManageListFollowsDeleteParams) SetAccessToken(token string) {
+func (p *PinnedListsDeleteParams) SetAccessToken(token string) {
 	p.accessToken = token
 }
 
-func (p *ManageListFollowsDeleteParams) AccessToken() string {
+func (p *PinnedListsDeleteParams) AccessToken() string {
 	return p.accessToken
 }
 
-func (p *ManageListFollowsDeleteParams) ResolveEndpoint(endpointBase string) string {
+func (p *PinnedListsDeleteParams) ResolveEndpoint(endpointBase string) string {
 	if p.ID == "" || p.ListID == "" {
 		return ""
 	}
@@ -78,10 +78,10 @@ func (p *ManageListFollowsDeleteParams) ResolveEndpoint(endpointBase string) str
 	return endpoint
 }
 
-func (p *ManageListFollowsDeleteParams) Body() (io.Reader, error) {
+func (p *PinnedListsDeleteParams) Body() (io.Reader, error) {
 	return nil, nil
 }
 
-func (p *ManageListFollowsDeleteParams) ParameterMap() map[string]string {
+func (p *PinnedListsDeleteParams) ParameterMap() map[string]string {
 	return map[string]string{}
 }

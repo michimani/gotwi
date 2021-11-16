@@ -7,7 +7,7 @@ import (
 	"strings"
 )
 
-type ManageListMembersPostParams struct {
+type ListMembersPostParams struct {
 	accessToken string
 
 	// Path parameter
@@ -17,15 +17,15 @@ type ManageListMembersPostParams struct {
 	UserID *string `json:"user_id,omitempty"`
 }
 
-func (p *ManageListMembersPostParams) SetAccessToken(token string) {
+func (p *ListMembersPostParams) SetAccessToken(token string) {
 	p.accessToken = token
 }
 
-func (p *ManageListMembersPostParams) AccessToken() string {
+func (p *ListMembersPostParams) AccessToken() string {
 	return p.accessToken
 }
 
-func (p *ManageListMembersPostParams) ResolveEndpoint(endpointBase string) string {
+func (p *ListMembersPostParams) ResolveEndpoint(endpointBase string) string {
 	if p.ID == "" {
 		return ""
 	}
@@ -36,7 +36,7 @@ func (p *ManageListMembersPostParams) ResolveEndpoint(endpointBase string) strin
 	return endpoint
 }
 
-func (p *ManageListMembersPostParams) Body() (io.Reader, error) {
+func (p *ListMembersPostParams) Body() (io.Reader, error) {
 	json, err := json.Marshal(p)
 	if err != nil {
 		return nil, err
@@ -45,11 +45,11 @@ func (p *ManageListMembersPostParams) Body() (io.Reader, error) {
 	return strings.NewReader(string(json)), nil
 }
 
-func (p *ManageListMembersPostParams) ParameterMap() map[string]string {
+func (p *ListMembersPostParams) ParameterMap() map[string]string {
 	return map[string]string{}
 }
 
-type ManageListMembersDeleteParams struct {
+type ListMembersDeleteParams struct {
 	accessToken string
 
 	// Path parameter
@@ -57,15 +57,15 @@ type ManageListMembersDeleteParams struct {
 	UserID string
 }
 
-func (p *ManageListMembersDeleteParams) SetAccessToken(token string) {
+func (p *ListMembersDeleteParams) SetAccessToken(token string) {
 	p.accessToken = token
 }
 
-func (p *ManageListMembersDeleteParams) AccessToken() string {
+func (p *ListMembersDeleteParams) AccessToken() string {
 	return p.accessToken
 }
 
-func (p *ManageListMembersDeleteParams) ResolveEndpoint(endpointBase string) string {
+func (p *ListMembersDeleteParams) ResolveEndpoint(endpointBase string) string {
 	if p.ID == "" || p.UserID == "" {
 		return ""
 	}
@@ -78,10 +78,10 @@ func (p *ManageListMembersDeleteParams) ResolveEndpoint(endpointBase string) str
 	return endpoint
 }
 
-func (p *ManageListMembersDeleteParams) Body() (io.Reader, error) {
+func (p *ListMembersDeleteParams) Body() (io.Reader, error) {
 	return nil, nil
 }
 
-func (p *ManageListMembersDeleteParams) ParameterMap() map[string]string {
+func (p *ListMembersDeleteParams) ParameterMap() map[string]string {
 	return map[string]string{}
 }
