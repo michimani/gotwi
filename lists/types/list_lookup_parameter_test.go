@@ -201,7 +201,7 @@ func Test_ListLookupOwnedLists_ResolveEndpoint(t *testing.T) {
 				ID:         "uid",
 				MaxResults: 10,
 			},
-			expect: endpointRoot + "uid" + "?expansions=ex&max_results=10",
+			expect: endpointRoot + "uid" + "?max_results=10",
 		},
 		{
 			name: "with pagination_token",
@@ -209,7 +209,7 @@ func Test_ListLookupOwnedLists_ResolveEndpoint(t *testing.T) {
 				ID:              "uid",
 				PaginationToken: "ptoken",
 			},
-			expect: endpointRoot + "uid" + "?expansions=ex&pagination_token=ptoken",
+			expect: endpointRoot + "uid" + "?pagination_token=ptoken",
 		},
 		{
 			name: "all query parameters",

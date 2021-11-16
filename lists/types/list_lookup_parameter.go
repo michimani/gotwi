@@ -132,8 +132,6 @@ func (p *ListLookupOwnedListsParams) ParameterMap() map[string]string {
 
 	if p.MaxResults.Valid() {
 		m["max_results"] = p.MaxResults.String()
-	} else {
-		m["max_results"] = "100"
 	}
 
 	if p.PaginationToken != "" {
