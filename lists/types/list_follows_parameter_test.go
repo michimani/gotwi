@@ -10,21 +10,21 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func Test_ManagePinnedListPostParams_ResolveEndpoint(t *testing.T) {
+func Test_ListFollowsPostParams_ResolveEndpoint(t *testing.T) {
 	const endpointBase = "test/endpoint/"
 	cases := []struct {
 		name   string
-		params *types.ManagePinnedListPostParams
+		params *types.ListFollowsPostParams
 		expect string
 	}{
 		{
 			name:   "normal: only required parameter",
-			params: &types.ManagePinnedListPostParams{ID: "uid"},
+			params: &types.ListFollowsPostParams{ID: "uid"},
 			expect: endpointBase,
 		},
 		{
 			name:   "normal: has no required parameter",
-			params: &types.ManagePinnedListPostParams{},
+			params: &types.ListFollowsPostParams{},
 			expect: "",
 		},
 	}
@@ -37,15 +37,15 @@ func Test_ManagePinnedListPostParams_ResolveEndpoint(t *testing.T) {
 	}
 }
 
-func Test_ManagePinnedListPostParams_Body(t *testing.T) {
+func Test_ListFollowsPostParams_Body(t *testing.T) {
 	cases := []struct {
 		name   string
-		params *types.ManagePinnedListPostParams
+		params *types.ListFollowsPostParams
 		expect io.Reader
 	}{
 		{
 			name: "ok: has both of path and json parameters",
-			params: &types.ManagePinnedListPostParams{
+			params: &types.ListFollowsPostParams{
 				ID:     "uid",
 				ListID: gotwi.String("lid"),
 			},
@@ -53,7 +53,7 @@ func Test_ManagePinnedListPostParams_Body(t *testing.T) {
 		},
 		{
 			name: "ok: has no json parameters",
-			params: &types.ManagePinnedListPostParams{
+			params: &types.ListFollowsPostParams{
 				ID: "uid",
 			},
 			expect: strings.NewReader(`{}`),
@@ -69,17 +69,17 @@ func Test_ManagePinnedListPostParams_Body(t *testing.T) {
 	}
 }
 
-func Test_ManagePinnedListDeleteParams_ResolveEndpoint(t *testing.T) {
+func Test_ListFollowsDeleteParams_ResolveEndpoint(t *testing.T) {
 	const endpointRoot = "test/endpoint/"
 	const endpointBase = "test/endpoint/:id/:list_id"
 	cases := []struct {
 		name   string
-		params *types.ManagePinnedListDeleteParams
+		params *types.ListFollowsDeleteParams
 		expect string
 	}{
 		{
 			name: "normal: only required parameter",
-			params: &types.ManagePinnedListDeleteParams{
+			params: &types.ListFollowsDeleteParams{
 				ID:     "uid",
 				ListID: "lid",
 			},
@@ -87,7 +87,7 @@ func Test_ManagePinnedListDeleteParams_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name:   "normal: has no required parameter",
-			params: &types.ManagePinnedListDeleteParams{},
+			params: &types.ListFollowsDeleteParams{},
 			expect: "",
 		},
 	}
@@ -100,15 +100,15 @@ func Test_ManagePinnedListDeleteParams_ResolveEndpoint(t *testing.T) {
 	}
 }
 
-func Test_ManagePinnedListDeleteParams_Body(t *testing.T) {
+func Test_ListFollowsDeleteParams_Body(t *testing.T) {
 	cases := []struct {
 		name   string
-		params *types.ManagePinnedListDeleteParams
+		params *types.ListFollowsDeleteParams
 		expect io.Reader
 	}{
 		{
 			name: "ok: has required parameters",
-			params: &types.ManagePinnedListDeleteParams{
+			params: &types.ListFollowsDeleteParams{
 				ID:     "uid",
 				ListID: "lid",
 			},
@@ -116,7 +116,7 @@ func Test_ManagePinnedListDeleteParams_Body(t *testing.T) {
 		},
 		{
 			name:   "ok: has no required parameters",
-			params: &types.ManagePinnedListDeleteParams{},
+			params: &types.ListFollowsDeleteParams{},
 			expect: nil,
 		},
 	}

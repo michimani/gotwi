@@ -10,21 +10,21 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func Test_ManageListMembersPostParams_ResolveEndpoint(t *testing.T) {
+func Test_PinnedListsPostParams_ResolveEndpoint(t *testing.T) {
 	const endpointBase = "test/endpoint/"
 	cases := []struct {
 		name   string
-		params *types.ManageListMembersPostParams
+		params *types.PinnedListsPostParams
 		expect string
 	}{
 		{
 			name:   "normal: only required parameter",
-			params: &types.ManageListMembersPostParams{ID: "lid"},
+			params: &types.PinnedListsPostParams{ID: "uid"},
 			expect: endpointBase,
 		},
 		{
 			name:   "normal: has no required parameter",
-			params: &types.ManageListMembersPostParams{},
+			params: &types.PinnedListsPostParams{},
 			expect: "",
 		},
 	}
@@ -37,24 +37,24 @@ func Test_ManageListMembersPostParams_ResolveEndpoint(t *testing.T) {
 	}
 }
 
-func Test_ManageListMembersPostParams_Body(t *testing.T) {
+func Test_PinnedListsPostParams_Body(t *testing.T) {
 	cases := []struct {
 		name   string
-		params *types.ManageListMembersPostParams
+		params *types.PinnedListsPostParams
 		expect io.Reader
 	}{
 		{
 			name: "ok: has both of path and json parameters",
-			params: &types.ManageListMembersPostParams{
-				ID:     "lid",
-				UserID: gotwi.String("uid"),
+			params: &types.PinnedListsPostParams{
+				ID:     "uid",
+				ListID: gotwi.String("lid"),
 			},
-			expect: strings.NewReader(`{"user_id":"uid"}`),
+			expect: strings.NewReader(`{"list_id":"lid"}`),
 		},
 		{
 			name: "ok: has no json parameters",
-			params: &types.ManageListMembersPostParams{
-				ID: "lid",
+			params: &types.PinnedListsPostParams{
+				ID: "uid",
 			},
 			expect: strings.NewReader(`{}`),
 		},
@@ -69,25 +69,25 @@ func Test_ManageListMembersPostParams_Body(t *testing.T) {
 	}
 }
 
-func Test_ManageListMembersDeleteParams_ResolveEndpoint(t *testing.T) {
+func Test_PinnedListsDeleteParams_ResolveEndpoint(t *testing.T) {
 	const endpointRoot = "test/endpoint/"
-	const endpointBase = "test/endpoint/:id/:user_id"
+	const endpointBase = "test/endpoint/:id/:list_id"
 	cases := []struct {
 		name   string
-		params *types.ManageListMembersDeleteParams
+		params *types.PinnedListsDeleteParams
 		expect string
 	}{
 		{
 			name: "normal: only required parameter",
-			params: &types.ManageListMembersDeleteParams{
-				ID:     "lid",
-				UserID: "uid",
+			params: &types.PinnedListsDeleteParams{
+				ID:     "uid",
+				ListID: "lid",
 			},
-			expect: endpointRoot + "lid" + "/" + "uid",
+			expect: endpointRoot + "uid" + "/" + "lid",
 		},
 		{
 			name:   "normal: has no required parameter",
-			params: &types.ManageListMembersDeleteParams{},
+			params: &types.PinnedListsDeleteParams{},
 			expect: "",
 		},
 	}
@@ -100,23 +100,23 @@ func Test_ManageListMembersDeleteParams_ResolveEndpoint(t *testing.T) {
 	}
 }
 
-func Test_ManageListMembersDeleteParams_Body(t *testing.T) {
+func Test_PinnedListsDeleteParams_Body(t *testing.T) {
 	cases := []struct {
 		name   string
-		params *types.ManageListMembersDeleteParams
+		params *types.PinnedListsDeleteParams
 		expect io.Reader
 	}{
 		{
 			name: "ok: has required parameters",
-			params: &types.ManageListMembersDeleteParams{
-				ID:     "lid",
-				UserID: "uid",
+			params: &types.PinnedListsDeleteParams{
+				ID:     "uid",
+				ListID: "lid",
 			},
 			expect: nil,
 		},
 		{
 			name:   "ok: has no required parameters",
-			params: &types.ManageListMembersDeleteParams{},
+			params: &types.PinnedListsDeleteParams{},
 			expect: nil,
 		},
 	}

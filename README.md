@@ -7,9 +7,9 @@ This is a library for using the Twitter API v2 in the Go language. (It is still 
 
 [What's New with Twitter API v2 | Docs | Twitter Developer Platform](https://developer.twitter.com/en/docs/twitter-api/early-access)
 
-Progress of supporting API: 44/50
+Progress of supporting APIs:
 
-- **Tweets** (17/20)
+- **Tweets**
   - Tweet lookup
     - [x] `GET /2/tweets`
     - [x] `GET /2/tweets/:id`
@@ -39,7 +39,7 @@ Progress of supporting API: 44/50
     - [x] `DELETE /2/users/:id/likes/:tweet_id`
   - Hide replies
     - [x] `PUT /2/tweets/:id/hidden`
-- ✅ 　**Users** (14/14)
+- **Users**
   - User lookup
     - [x] `GET /2/users`
     - [x] `GET /2/users/:id`
@@ -58,28 +58,38 @@ Progress of supporting API: 44/50
     - [x] `GET /2/users/:id/muting`
     - [x] `POST /2/users/:id/muting`
     - [x] `DELETE /2/users/:source_user_id/muting/:target_user_id`
-- ✅ 　**Lists** (9/9)
+- **Lists**
+	- List lookup
+		- [ ] `GET /2/lists/:id`
+		- [ ] `GET /2/users/:id/owned_lists`
   - Manage Lists
     - [x] `POST /2/lists`
     - [x] `DELETE /2/lists/:id`
     - [x] `PUT /2/lists/:id`
-  - Manage List members
-    - [x] `POST /2/lists/members`
+	- List Tweets lookup
+		- [ ] `GET /2/lists/:id/tweets`
+  - List members
+		- [ ] `GET /2/users/:id/list_memberships`
+		- [ ] `GET /2/lists/:id/members`
+    - [x] `POST /2/lists/:id/members`
     - [x] `DELETE /2/lists/:id/members/:user_id`
-  - Manage List follows
+  - List follows
+		- [ ] `GET /2/lists/:id/followers`
+		- [ ] `GET /2/users/:id/followed_lists`
     - [x] `POST /2/users/:id/followed_lists`
     - [x] `DELETE /2/users/:id/followed_lists/:list_id`
   - Manage pinned Lists
+		- [ ] `GET /2/users/:id/pinned_lists`
     - [x] `POST /2/users/:id/pinned_lists`
     - [x] `DELETE /2/users/:id/pinned_lists/:list_id`
-- ✅ 　**Spaces** (4/4)
+- ✅ 　**Spaces**
 	- Lookup Spaces
 		- [x] `GET /2/spaces/:id`
 		- [x] `GET /2/spaces`
 		- [x] `GET /2/spaces/by/creator_ids`
 	- Search Spaces
 		- [x] `GET /2/spaces/search`
-- **Compliance** (0/3)
+- **Compliance**
 	- Batch compliance
 		- [ ] `GET /2/compliance/jobs/:id`
 		- [ ] `GET /2/compliance/jobs`
@@ -226,3 +236,12 @@ blockingUser3
 blockingUser4
 blockingUser5
 ```
+
+# Licence
+
+[MIT](https://github.com/michimani/gotwi/blob/main/LICENCE)
+
+# Author
+
+[michimani210](https://twitter.com/michimani210)
+
