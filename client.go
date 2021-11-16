@@ -267,14 +267,14 @@ func newRequest(ctx context.Context, endpoint, method string, p util.Parameters)
 
 func resolveNon2XXResponse(res *http.Response) (*resources.Non2XXError, error) {
 	non200err := &resources.Non2XXError{
-		Status:     res.Status,
-		StatusCode: res.StatusCode,
+		Status:     String(res.Status),
+		StatusCode: Int(res.StatusCode),
 	}
 
 	cts := util.HeaderValues("Content-Type", res.Header)
 	if len(cts) == 0 {
 		non200err.Errors = []resources.ErrorInformation{
-			{Message: "Content-Type is undefined."},
+			{Message: String("Content-Type is undefined.")},
 		}
 		return non200err, nil
 	}
@@ -285,7 +285,7 @@ func resolveNon2XXResponse(res *http.Response) (*resources.Non2XXError, error) {
 			return nil, err
 		}
 		non200err.Errors = []resources.ErrorInformation{
-			{Message: strings.TrimRight(string(bytes), "\n")},
+			{Message: String(strings.TrimRight(string(bytes), "\n"))},
 		}
 	} else {
 		if err := json.NewDecoder(res.Body).Decode(non200err); err != nil {

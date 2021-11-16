@@ -9,6 +9,7 @@ import (
 )
 
 func Test_UserLookup_HasPartialError(t *testing.T) {
+	var errorTitle string = "test partical error"
 	cases := []struct {
 		name   string
 		res    *types.UserLookupResponse
@@ -18,7 +19,7 @@ func Test_UserLookup_HasPartialError(t *testing.T) {
 			name: "has partical error",
 			res: &types.UserLookupResponse{
 				Errors: []resources.PartialError{
-					{Title: "test partical error"},
+					{Title: &errorTitle},
 				}},
 			expect: true,
 		},
@@ -45,6 +46,7 @@ func Test_UserLookup_HasPartialError(t *testing.T) {
 }
 
 func Test_UserLookupID_HasPartialError(t *testing.T) {
+	var errorTitle string = "test partical error"
 	cases := []struct {
 		name   string
 		res    *types.UserLookupIDResponse
@@ -54,7 +56,7 @@ func Test_UserLookupID_HasPartialError(t *testing.T) {
 			name: "has partical error",
 			res: &types.UserLookupIDResponse{
 				Errors: []resources.PartialError{
-					{Title: "test partical error"},
+					{Title: &errorTitle},
 				}},
 			expect: true,
 		},
@@ -81,6 +83,7 @@ func Test_UserLookupID_HasPartialError(t *testing.T) {
 }
 
 func Test_UserLookupBy_HasPartialError(t *testing.T) {
+	var errorTitle string = "test partical error"
 	cases := []struct {
 		name   string
 		res    *types.UserLookupByResponse
@@ -90,7 +93,7 @@ func Test_UserLookupBy_HasPartialError(t *testing.T) {
 			name: "has partical error",
 			res: &types.UserLookupByResponse{
 				Errors: []resources.PartialError{
-					{Title: "test partical error"},
+					{Title: &errorTitle},
 				}},
 			expect: true,
 		},
@@ -117,6 +120,7 @@ func Test_UserLookupBy_HasPartialError(t *testing.T) {
 }
 
 func Test_UserLookupByUsername_HasPartialError(t *testing.T) {
+	var errorTitle string = "test partical error"
 	cases := []struct {
 		name   string
 		res    *types.UserLookupByUsernameResponse
@@ -126,7 +130,7 @@ func Test_UserLookupByUsername_HasPartialError(t *testing.T) {
 			name: "has partical error",
 			res: &types.UserLookupByUsernameResponse{
 				Errors: []resources.PartialError{
-					{Title: "test partical error"},
+					{Title: &errorTitle},
 				}},
 			expect: true,
 		},

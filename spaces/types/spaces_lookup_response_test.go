@@ -9,6 +9,7 @@ import (
 )
 
 func Test_SpacesLookupID_HasPartialError(t *testing.T) {
+	var errorTitle string = "test partical error"
 	cases := []struct {
 		name   string
 		res    *types.SpacesLookupIDResponse
@@ -18,7 +19,7 @@ func Test_SpacesLookupID_HasPartialError(t *testing.T) {
 			name: "has partical error",
 			res: &types.SpacesLookupIDResponse{
 				Errors: []resources.PartialError{
-					{Title: "test partical error"},
+					{Title: &errorTitle},
 				}},
 			expect: true,
 		},
@@ -45,6 +46,7 @@ func Test_SpacesLookupID_HasPartialError(t *testing.T) {
 }
 
 func Test_SpacesLookup_HasPartialError(t *testing.T) {
+	var errorTitle string = "test partical error"
 	cases := []struct {
 		name   string
 		res    *types.SpacesLookupResponse
@@ -54,7 +56,7 @@ func Test_SpacesLookup_HasPartialError(t *testing.T) {
 			name: "has partical error",
 			res: &types.SpacesLookupResponse{
 				Errors: []resources.PartialError{
-					{Title: "test partical error"},
+					{Title: &errorTitle},
 				}},
 			expect: true,
 		},
@@ -81,6 +83,7 @@ func Test_SpacesLookup_HasPartialError(t *testing.T) {
 }
 
 func Test_SpacesLookupByCreatorIDs_HasPartialError(t *testing.T) {
+	var errorTitle string = "test partical error"
 	cases := []struct {
 		name   string
 		res    *types.SpacesLookupByCreatorIDsResponse
@@ -90,7 +93,7 @@ func Test_SpacesLookupByCreatorIDs_HasPartialError(t *testing.T) {
 			name: "has partical error",
 			res: &types.SpacesLookupByCreatorIDsResponse{
 				Errors: []resources.PartialError{
-					{Title: "test partical error"},
+					{Title: &errorTitle},
 				}},
 			expect: true,
 		},

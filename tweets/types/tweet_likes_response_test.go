@@ -9,6 +9,7 @@ import (
 )
 
 func Test_TweetLikesLikingUsers_HasPartialError(t *testing.T) {
+	var errorTitle string = "test partical error"
 	cases := []struct {
 		name   string
 		res    *types.TweetLikesLikingUsersResponse
@@ -18,7 +19,7 @@ func Test_TweetLikesLikingUsers_HasPartialError(t *testing.T) {
 			name: "has partical error",
 			res: &types.TweetLikesLikingUsersResponse{
 				Errors: []resources.PartialError{
-					{Title: "test partical error"},
+					{Title: &errorTitle},
 				}},
 			expect: true,
 		},
@@ -45,6 +46,7 @@ func Test_TweetLikesLikingUsers_HasPartialError(t *testing.T) {
 }
 
 func Test_TweetLikesLikedTweets_HasPartialError(t *testing.T) {
+	var errorTitle string = "test partical error"
 	cases := []struct {
 		name   string
 		res    *types.TweetLikesLikedTweetsResponse
@@ -54,7 +56,7 @@ func Test_TweetLikesLikedTweets_HasPartialError(t *testing.T) {
 			name: "has partical error",
 			res: &types.TweetLikesLikedTweetsResponse{
 				Errors: []resources.PartialError{
-					{Title: "test partical error"},
+					{Title: &errorTitle},
 				}},
 			expect: true,
 		},

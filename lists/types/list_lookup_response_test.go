@@ -9,6 +9,7 @@ import (
 )
 
 func Test_ListLookupID_HasPartialError(t *testing.T) {
+	var errorTitle string = "test partical error"
 	cases := []struct {
 		name   string
 		res    *types.ListLookupIDResponse
@@ -18,7 +19,7 @@ func Test_ListLookupID_HasPartialError(t *testing.T) {
 			name: "has partical error",
 			res: &types.ListLookupIDResponse{
 				Errors: []resources.PartialError{
-					{Title: "test partical error"},
+					{Title: &errorTitle},
 				}},
 			expect: true,
 		},

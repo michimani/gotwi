@@ -9,6 +9,7 @@ import (
 )
 
 func Test_TweetCountsRecent_HasPartialError(t *testing.T) {
+	var errorTitle string = "test partical error"
 	cases := []struct {
 		name   string
 		res    *types.TweetCountsRecentResponse
@@ -18,7 +19,7 @@ func Test_TweetCountsRecent_HasPartialError(t *testing.T) {
 			name: "has partical error",
 			res: &types.TweetCountsRecentResponse{
 				Errors: []resources.PartialError{
-					{Title: "test partical error"},
+					{Title: &errorTitle},
 				}},
 			expect: true,
 		},
@@ -45,6 +46,7 @@ func Test_TweetCountsRecent_HasPartialError(t *testing.T) {
 }
 
 func Test_TweetCountsAll_HasPartialError(t *testing.T) {
+	var errorTitle string = "test partical error"
 	cases := []struct {
 		name   string
 		res    *types.TweetCountsAllResponse
@@ -54,7 +56,7 @@ func Test_TweetCountsAll_HasPartialError(t *testing.T) {
 			name: "has partical error",
 			res: &types.TweetCountsAllResponse{
 				Errors: []resources.PartialError{
-					{Title: "test partical error"},
+					{Title: &errorTitle},
 				}},
 			expect: true,
 		},
