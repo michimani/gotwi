@@ -61,7 +61,7 @@ Progress of supporting APIs:
 - **Lists**
 	- List lookup
 		- [x] `GET /2/lists/:id`
-		- [ ] `GET /2/users/:id/owned_lists`
+		- [x] `GET /2/users/:id/owned_lists`
   - Manage Lists
     - [x] `POST /2/lists`
     - [x] `DELETE /2/lists/:id`
@@ -152,12 +152,14 @@ func main() {
 		return
 	}
 
-	fmt.Println("ID: ", res.Data.ID)
-	fmt.Println("Name: ", res.Data.Name)
-	fmt.Println("Username: ", res.Data.Username)
-	fmt.Println("CreatedAt: ", res.Data.CreatedAt)
-	for _, t := range res.Includes.Tweets {
-		fmt.Println("PinnedTweet: ", t.Text)
+	fmt.Println("ID: ", gotwi.StringValue(u.Data.ID))
+	fmt.Println("Name: ", gotwi.StringValue(u.Data.Name))
+	fmt.Println("Username: ", gotwi.StringValue(u.Data.Username))
+	fmt.Println("CreatedAt: ", u.Data.CreatedAt)
+	if u.Includes.Tweets != nil {
+		for _, t := range u.Includes.Tweets {
+			fmt.Println("PinnedTweet: ", gotwi.StringValue(t.Text))
+		}
 	}
 }
 ```
@@ -218,7 +220,7 @@ func main() {
 	}
 
 	for _, b := range res.Data {
-		fmt.Println(b.Name)
+		fmt.Println(gotwi.StringValue(b.Name))
 	}
 }
 ```
