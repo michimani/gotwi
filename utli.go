@@ -1,5 +1,7 @@
 package gotwi
 
+import "time"
+
 func String(s string) *string {
 	return &s
 }
@@ -31,4 +33,15 @@ func IntValue(i *int) int {
 		return 0
 	}
 	return *i
+}
+
+func Time(t time.Time) *time.Time {
+	return &t
+}
+
+func TimeValue(t *time.Time) time.Time {
+	if t == nil {
+		return time.Time{}
+	}
+	return *t
 }

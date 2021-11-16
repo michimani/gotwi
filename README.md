@@ -60,7 +60,7 @@ Progress of supporting APIs:
     - [x] `DELETE /2/users/:source_user_id/muting/:target_user_id`
 - **Lists**
 	- List lookup
-		- [ ] `GET /2/lists/:id`
+		- [x] `GET /2/lists/:id`
 		- [ ] `GET /2/users/:id/owned_lists`
   - Manage Lists
     - [x] `POST /2/lists`
@@ -82,7 +82,7 @@ Progress of supporting APIs:
 		- [ ] `GET /2/users/:id/pinned_lists`
     - [x] `POST /2/users/:id/pinned_lists`
     - [x] `DELETE /2/users/:id/pinned_lists/:list_id`
-- ✅ 　**Spaces**
+- **Spaces**
 	- Lookup Spaces
 		- [x] `GET /2/spaces/:id`
 		- [x] `GET /2/spaces`
