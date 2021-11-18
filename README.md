@@ -59,41 +59,41 @@ Progress of supporting APIs:
     - [x] `POST /2/users/:id/muting`
     - [x] `DELETE /2/users/:source_user_id/muting/:target_user_id`
 - **Lists**
-	- List lookup
-		- [x] `GET /2/lists/:id`
-		- [x] `GET /2/users/:id/owned_lists`
+  - List lookup
+    - [x] `GET /2/lists/:id`
+    - [x] `GET /2/users/:id/owned_lists`
   - Manage Lists
     - [x] `POST /2/lists`
     - [x] `DELETE /2/lists/:id`
     - [x] `PUT /2/lists/:id`
-	- List Tweets lookup
-		- [ ] `GET /2/lists/:id/tweets`
+  - List Tweets lookup
+    - [ ] `GET /2/lists/:id/tweets`
   - List members
-		- [ ] `GET /2/users/:id/list_memberships`
-		- [ ] `GET /2/lists/:id/members`
+    - [ ] `GET /2/users/:id/list_memberships`
+    - [ ] `GET /2/lists/:id/members`
     - [x] `POST /2/lists/:id/members`
     - [x] `DELETE /2/lists/:id/members/:user_id`
   - List follows
-		- [ ] `GET /2/lists/:id/followers`
-		- [ ] `GET /2/users/:id/followed_lists`
+    - [ ] `GET /2/lists/:id/followers`
+    - [ ] `GET /2/users/:id/followed_lists`
     - [x] `POST /2/users/:id/followed_lists`
     - [x] `DELETE /2/users/:id/followed_lists/:list_id`
   - Manage pinned Lists
-		- [ ] `GET /2/users/:id/pinned_lists`
+    - [ ] `GET /2/users/:id/pinned_lists`
     - [x] `POST /2/users/:id/pinned_lists`
     - [x] `DELETE /2/users/:id/pinned_lists/:list_id`
 - **Spaces**
-	- Lookup Spaces
-		- [x] `GET /2/spaces/:id`
-		- [x] `GET /2/spaces`
-		- [x] `GET /2/spaces/by/creator_ids`
-	- Search Spaces
-		- [x] `GET /2/spaces/search`
+  - Lookup Spaces
+    - [x] `GET /2/spaces/:id`
+    - [x] `GET /2/spaces`
+    - [x] `GET /2/spaces/by/creator_ids`
+  - Search Spaces
+    - [x] `GET /2/spaces/search`
 - **Compliance**
-	- Batch compliance
-		- [ ] `GET /2/compliance/jobs/:id`
-		- [ ] `GET /2/compliance/jobs`
-		- [ ] `POST /2/compliance/jobs`
+  - Batch compliance
+    - [ ] `GET /2/compliance/jobs/:id`
+    - [ ] `GET /2/compliance/jobs`
+    - [ ] `POST /2/compliance/jobs`
 
 # Sample
 
