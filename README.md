@@ -70,7 +70,7 @@ Progress of supporting APIs:
     - [ ] `GET /2/lists/:id/tweets`
   - List members
     - [ ] `GET /2/users/:id/list_memberships`
-    - [ ] `GET /2/lists/:id/members`
+    - [x] `GET /2/lists/:id/members`
     - [x] `POST /2/lists/:id/members`
     - [x] `DELETE /2/lists/:id/members/:user_id`
   - List follows

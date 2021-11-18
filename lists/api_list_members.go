@@ -8,9 +8,21 @@ import (
 )
 
 const (
+	ListMembersGetEndpoint    = "https://api.twitter.com/2/lists/:id/members"
 	ListMembersPostEndpoint   = "https://api.twitter.com/2/lists/:id/members"
 	ListMembersDeleteEndpoint = "https://api.twitter.com/2/lists/:id/members/:user_id"
 )
+
+// Returns a list of users who are members of the specified List.
+// https://developer.twitter.com/en/docs/twitter-api/lists/list-members/api-reference/get-lists-id-members
+func ListMembersGet(ctx context.Context, c *gotwi.GotwiClient, p *types.ListMembersGetParams) (*types.ListMembersGetResponse, error) {
+	res := &types.ListMembersGetResponse{}
+	if err := c.CallAPI(ctx, ListMembersGetEndpoint, "GET", p, res); err != nil {
+		return nil, err
+	}
+
+	return res, nil
+}
 
 // Enables the authenticated user to add a member to a List they own.
 // https://developer.twitter.com/en/docs/twitter-api/lists/manage-lists/api-reference/post-lists-id-members

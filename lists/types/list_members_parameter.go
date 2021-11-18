@@ -4,8 +4,81 @@ import (
 	"encoding/json"
 	"io"
 	"net/url"
+	"strconv"
 	"strings"
+
+	"github.com/michimani/gotwi/fields"
+	"github.com/michimani/gotwi/internal/util"
 )
+
+type ListMembersGetMaxResults int
+
+func (m ListMembersGetMaxResults) Valid() bool {
+	return m > 1 && m <= 100
+}
+
+func (m ListMembersGetMaxResults) String() string {
+	return strconv.Itoa(int(m))
+}
+
+type ListMembersGetParams struct {
+	accessToken string
+
+	// Path parameter
+	ID string // List ID
+
+	// Query parameters
+	Expansions      fields.ExpansionList
+	ListFields      fields.ListFieldList
+	UserFields      fields.UserFieldList
+	MaxResults      ListMembersGetMaxResults
+	PaginationToken string
+}
+
+func (p *ListMembersGetParams) SetAccessToken(token string) {
+	p.accessToken = token
+}
+
+func (p *ListMembersGetParams) AccessToken() string {
+	return p.accessToken
+}
+
+func (p *ListMembersGetParams) ResolveEndpoint(endpointBase string) string {
+	if p.ID == "" {
+		return ""
+	}
+
+	encoded := url.QueryEscape(p.ID)
+	endpoint := strings.Replace(endpointBase, ":id", encoded, 1)
+
+	pm := p.ParameterMap()
+	qs := util.QueryString(pm, ListLookupOwnedListsQueryParams)
+
+	if qs == "" {
+		return endpoint
+	}
+
+	return endpoint + "?" + qs
+}
+
+func (p *ListMembersGetParams) Body() (io.Reader, error) {
+	return nil, nil
+}
+
+func (p *ListMembersGetParams) ParameterMap() map[string]string {
+	m := map[string]string{}
+	m = fields.SetFieldsParams(m, p.Expansions, p.ListFields, p.UserFields)
+
+	if p.MaxResults.Valid() {
+		m["max_results"] = p.MaxResults.String()
+	}
+
+	if p.PaginationToken != "" {
+		m["pagination_token"] = p.PaginationToken
+	}
+
+	return m
+}
 
 type ListMembersPostParams struct {
 	accessToken string
