@@ -67,7 +67,7 @@ Progress of supporting APIs:
     - [x] `DELETE /2/lists/:id`
     - [x] `PUT /2/lists/:id`
   - List Tweets lookup
-    - [ ] `GET /2/lists/:id/tweets`
+    - [x] `GET /2/lists/:id/tweets`
   - List members
     - [ ] `GET /2/users/:id/list_memberships`
     - [x] `GET /2/lists/:id/members`
