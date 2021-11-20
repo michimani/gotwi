@@ -5,7 +5,64 @@ import (
 	"io"
 	"net/url"
 	"strings"
+
+	"github.com/michimani/gotwi/fields"
+	"github.com/michimani/gotwi/internal/util"
 )
+
+type PinnedListsGetParams struct {
+	accessToken string
+
+	// Path parameter
+	ID string // User ID
+
+	// Query parameter
+	Expansions fields.ExpansionList
+	ListFields fields.ListFieldList
+	UserFields fields.UserFieldList
+}
+
+var PinnedListsGetQueryParams = map[string]struct{}{
+	"expansions":  {},
+	"list.fields": {},
+	"user.fields": {},
+}
+
+func (p *PinnedListsGetParams) SetAccessToken(token string) {
+	p.accessToken = token
+}
+
+func (p *PinnedListsGetParams) AccessToken() string {
+	return p.accessToken
+}
+
+func (p *PinnedListsGetParams) ResolveEndpoint(endpointBase string) string {
+	if p.ID == "" {
+		return ""
+	}
+
+	escaped := url.QueryEscape(p.ID)
+	endpoint := strings.Replace(endpointBase, ":id", escaped, 1)
+
+	pm := p.ParameterMap()
+	qs := util.QueryString(pm, PinnedListsGetQueryParams)
+
+	if qs == "" {
+		return endpoint
+	}
+
+	return endpoint + "?" + qs
+}
+
+func (p *PinnedListsGetParams) Body() (io.Reader, error) {
+	return nil, nil
+}
+
+func (p *PinnedListsGetParams) ParameterMap() map[string]string {
+	m := map[string]string{}
+	m = fields.SetFieldsParams(m, p.Expansions, p.ListFields, p.UserFields)
+	return m
+}
 
 type PinnedListsPostParams struct {
 	accessToken string
