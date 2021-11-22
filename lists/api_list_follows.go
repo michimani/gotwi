@@ -8,9 +8,21 @@ import (
 )
 
 const (
-	ListFollowsPostEndpoint   = "https://api.twitter.com/2/users/:id/followed_lists"
-	ListFollowsDeleteEndpoint = "https://api.twitter.com/2/users/:id/followed_lists/:list_id"
+	ListFollowsFollowersEndpoint = "https://api.twitter.com/2/lists/:id/followers"
+	ListFollowsPostEndpoint      = "https://api.twitter.com/2/users/:id/followed_lists"
+	ListFollowsDeleteEndpoint    = "https://api.twitter.com/2/users/:id/followed_lists/:list_id"
 )
+
+// Returns a list of users who are followers of the specified List.
+// https://developer.twitter.com/en/docs/twitter-api/lists/list-follows/api-reference/get-lists-id-followers
+func ListFollowsFollowers(ctx context.Context, c *gotwi.GotwiClient, p *types.ListFollowsFollowersParams) (*types.ListFollowsFollowersResponse, error) {
+	res := &types.ListFollowsFollowersResponse{}
+	if err := c.CallAPI(ctx, ListFollowsFollowersEndpoint, "GET", p, res); err != nil {
+		return nil, err
+	}
+
+	return res, nil
+}
 
 // Enables the authenticated user to follow a List.
 // https://developer.twitter.com/en/docs/twitter-api/lists/manage-lists/api-reference/post-users-id-followed-lists
