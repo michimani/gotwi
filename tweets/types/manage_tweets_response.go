@@ -10,3 +10,13 @@ type ManageTweetsPostResponse struct {
 func (r *ManageTweetsPostResponse) HasPartialError() bool {
 	return false
 }
+
+type ManageTweetsDeleteResponse struct {
+	Data struct {
+		Deleted *bool `json:"deleted"`
+	} `json:"data"`
+}
+
+func (r *ManageTweetsDeleteResponse) HasPartialError() bool {
+	return false
+}
