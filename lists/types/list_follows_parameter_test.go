@@ -151,6 +151,146 @@ func Test_ListFollowsFollowers_Body(t *testing.T) {
 	}
 }
 
+func Test_ListFollowsFollowedLists_SetAccessToken(t *testing.T) {
+	cases := []struct {
+		name   string
+		token  string
+		expect string
+	}{
+		{
+			name:   "normal",
+			token:  "test-token",
+			expect: "test-token",
+		},
+		{
+			name:   "empty",
+			token:  "",
+			expect: "",
+		},
+	}
+
+	for _, c := range cases {
+		t.Run(c.name, func(tt *testing.T) {
+			p := &types.ListFollowsFollowedListsParams{}
+			p.SetAccessToken(c.token)
+			assert.Equal(tt, c.expect, p.AccessToken())
+		})
+	}
+}
+
+func Test_ListFollowsFollowedLists_ResolveEndpoint(t *testing.T) {
+	const endpointRoot = "test/endpoint/"
+	const endpointBase = "test/endpoint/:id"
+
+	cases := []struct {
+		name   string
+		params *types.ListFollowsFollowedListsParams
+		expect string
+	}{
+		{
+			name: "only required parameter",
+			params: &types.ListFollowsFollowedListsParams{
+				ID: "lid",
+			},
+			expect: endpointRoot + "lid",
+		},
+		{
+			name: "with expansions",
+			params: &types.ListFollowsFollowedListsParams{
+				ID:         "lid",
+				Expansions: fields.ExpansionList{"ex1", "ex2"},
+			},
+			expect: endpointRoot + "lid" + "?expansions=ex1%2Cex2",
+		},
+		{
+			name: "with list.fields",
+			params: &types.ListFollowsFollowedListsParams{
+				ID:         "lid",
+				ListFields: fields.ListFieldList{"lf1", "lf2"},
+			},
+			expect: endpointRoot + "lid" + "?list.fields=lf1%2Clf2",
+		},
+		{
+			name: "with users.fields",
+			params: &types.ListFollowsFollowedListsParams{
+				ID:         "lid",
+				UserFields: fields.UserFieldList{"uf1", "uf2"},
+			},
+			expect: endpointRoot + "lid" + "?user.fields=uf1%2Cuf2",
+		},
+		{
+			name: "with max_results",
+			params: &types.ListFollowsFollowedListsParams{
+				ID:         "lid",
+				MaxResults: 10,
+			},
+			expect: endpointRoot + "lid" + "?max_results=10",
+		},
+		{
+			name: "with pagination_token",
+			params: &types.ListFollowsFollowedListsParams{
+				ID:              "lid",
+				PaginationToken: "ptoken",
+			},
+			expect: endpointRoot + "lid" + "?pagination_token=ptoken",
+		},
+		{
+			name: "all query parameters",
+			params: &types.ListFollowsFollowedListsParams{
+				Expansions:      fields.ExpansionList{"ex"},
+				ID:              "lid",
+				ListFields:      fields.ListFieldList{"lf"},
+				MaxResults:      10,
+				PaginationToken: "ptoken",
+				UserFields:      fields.UserFieldList{"uf"},
+			},
+			expect: endpointRoot + "lid" + "?expansions=ex&list.fields=lf&max_results=10&pagination_token=ptoken&user.fields=uf",
+		},
+		{
+			name: "has no required parameter",
+			params: &types.ListFollowsFollowedListsParams{
+				Expansions:      fields.ExpansionList{"ex"},
+				UserFields:      fields.UserFieldList{"uf"},
+				ListFields:      fields.ListFieldList{"lf"},
+				MaxResults:      10,
+				PaginationToken: "pagination_token",
+			},
+			expect: "",
+		},
+	}
+
+	for _, c := range cases {
+		t.Run(c.name, func(tt *testing.T) {
+			ep := c.params.ResolveEndpoint(endpointBase)
+			assert.Equal(tt, c.expect, ep)
+		})
+	}
+}
+
+func Test_ListFollowsFollowedLists_Body(t *testing.T) {
+	cases := []struct {
+		name   string
+		params *types.ListFollowsFollowedListsParams
+	}{
+		{
+			name:   "empty params",
+			params: &types.ListFollowsFollowedListsParams{},
+		},
+		{
+			name:   "some params",
+			params: &types.ListFollowsFollowedListsParams{ID: "sid"},
+		},
+	}
+
+	for _, c := range cases {
+		t.Run(c.name, func(tt *testing.T) {
+			r, err := c.params.Body()
+			assert.NoError(tt, err)
+			assert.Nil(tt, r)
+		})
+	}
+}
+
 func Test_ListFollowsPostParams_ResolveEndpoint(t *testing.T) {
 	const endpointBase = "test/endpoint/"
 	cases := []struct {
