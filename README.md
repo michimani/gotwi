@@ -1,6 +1,8 @@
 gotwi
 ===
 
+[![pkg.go.dev][gopkg-badge]][gopkg]
+
 This is a library for using the Twitter API v2 in the Go language. (It is still under development).
 
 # Supported APIs
@@ -111,7 +113,9 @@ export GOTWI_API_KEY_SECRET=your-api-key-secret
 
 ## Request with OAuth 2.0 Bearer Token
 
-- Get a user by user name.
+This authentication method allows only read-only access to public information.
+
+### Example: Get a user by user name.
 
 ```go
 package main
@@ -171,7 +175,7 @@ func main() {
 go run main.go
 ```
 
-You will get the following output.
+You will get the output like following.
 
 ```
 ID:  581780917
@@ -183,7 +187,9 @@ PinnedTweet:  pinned tweet
 
 ## Request with OAuth 1.0a User Context
 
-- Get blocking users.
+With this authentication method, each operation will be performed as the authenticated Twitter account. For example, you can tweet as that account, or retrieve accounts that are blocked by that account.
+
+### Example: Tweet with poll.
 
 ```go
 package main
@@ -193,9 +199,8 @@ import (
 	"fmt"
 
 	"github.com/michimani/gotwi"
-	"github.com/michimani/gotwi/fields"
-	"github.com/michimani/gotwi/users"
-	"github.com/michimani/gotwi/users/types"
+	"github.com/michimani/gotwi/tweets"
+	"github.com/michimani/gotwi/tweets/types"
 )
 
 func main() {
@@ -211,20 +216,26 @@ func main() {
 		return
 	}
 
-	p := &types.BlocksBlockingGetParams{
-		ID:        "your-twitter-acount-id",
-		MaxResults: 5,
+	p := &types.ManageTweetsPostParams{
+		Text: gotwi.String("This is a test tweet with poll."),
+		Poll: &types.ManageTweetsPostParamsPoll{
+			DurationMinutes: gotwi.Int(5),
+			Options: []string{
+				"Cyan",
+				"Magenta",
+				"Yellow",
+				"Key plate",
+			},
+		},
 	}
 
-	res, err := users.BlocksBlockingGet(context.Background(), c, p)
+	res, err := tweets.ManageTweetsPost(context.Background(), c, p)
 	if err != nil {
-		fmt.Println(err)
+		fmt.Println(err.Error())
 		return
 	}
 
-	for _, b := range res.Data {
-		fmt.Println(gotwi.StringValue(b.Name))
-	}
+	fmt.Printf("[%s] %s\n", gotwi.StringValue(res.Data.ID), gotwi.StringValue(res.Data.Text))
 }
 ```
 
@@ -235,12 +246,12 @@ go run main.go
 You will get the output like following.
 
 ```
-blockingUser1
-blockingUser2
-blockingUser3
-blockingUser4
-blockingUser5
+[1462813519607263236] This is a test tweet with poll.
 ```
+
+## More examples
+
+See [_examples](https://github.com/michimani/gotwi/tree/main/_examples) directory.
 
 # Licence
 
