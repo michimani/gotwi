@@ -15,7 +15,7 @@ Progress of supporting APIs:
     - [x] `GET /2/tweets/:id`
   - Manage Tweet
     - [x] `POST /2/tweets`
-    - [ ] `DELETE /2/tweets/:id`
+    - [x] `DELETE /2/tweets/:id`
   - Search Tweets
     - [x] `GET /2/tweets/search/recent`
     - [x] `GET /2/tweets/search/all`

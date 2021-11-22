@@ -3,6 +3,7 @@ package types
 import (
 	"encoding/json"
 	"io"
+	"net/url"
 	"strings"
 )
 
@@ -61,5 +62,39 @@ func (p *ManageTweetsPostParams) Body() (io.Reader, error) {
 }
 
 func (p *ManageTweetsPostParams) ParameterMap() map[string]string {
+	return map[string]string{}
+}
+
+type ManageTweetsDeleteParams struct {
+	accessToken string
+
+	// Path parameter
+	ID string `json:"-"` // The tweet ID to delete
+}
+
+func (p *ManageTweetsDeleteParams) SetAccessToken(token string) {
+	p.accessToken = token
+}
+
+func (p *ManageTweetsDeleteParams) AccessToken() string {
+	return p.accessToken
+}
+
+func (p *ManageTweetsDeleteParams) ResolveEndpoint(endpointBase string) string {
+	if p.ID == "" {
+		return ""
+	}
+
+	escaped := url.QueryEscape(p.ID)
+	endpoint := strings.Replace(endpointBase, ":id", escaped, 1)
+
+	return endpoint
+}
+
+func (p *ManageTweetsDeleteParams) Body() (io.Reader, error) {
+	return nil, nil
+}
+
+func (p *ManageTweetsDeleteParams) ParameterMap() map[string]string {
 	return map[string]string{}
 }
