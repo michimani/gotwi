@@ -75,7 +75,7 @@ Progress of supporting APIs:
     - [x] `DELETE /2/lists/:id/members/:user_id`
   - List follows
     - [x] `GET /2/lists/:id/followers`
-    - [ ] `GET /2/users/:id/followed_lists`
+    - [x] `GET /2/users/:id/followed_lists`
     - [x] `POST /2/users/:id/followed_lists`
     - [x] `DELETE /2/users/:id/followed_lists/:list_id`
   - Manage pinned Lists

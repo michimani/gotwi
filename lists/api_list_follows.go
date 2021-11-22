@@ -8,9 +8,10 @@ import (
 )
 
 const (
-	ListFollowsFollowersEndpoint = "https://api.twitter.com/2/lists/:id/followers"
-	ListFollowsPostEndpoint      = "https://api.twitter.com/2/users/:id/followed_lists"
-	ListFollowsDeleteEndpoint    = "https://api.twitter.com/2/users/:id/followed_lists/:list_id"
+	ListFollowsFollowersEndpoint     = "https://api.twitter.com/2/lists/:id/followers"
+	ListFollowsFollowedListsEndpoint = "https://api.twitter.com/2/users/:id/followed_lists"
+	ListFollowsPostEndpoint          = "https://api.twitter.com/2/users/:id/followed_lists"
+	ListFollowsDeleteEndpoint        = "https://api.twitter.com/2/users/:id/followed_lists/:list_id"
 )
 
 // Returns a list of users who are followers of the specified List.
@@ -18,6 +19,17 @@ const (
 func ListFollowsFollowers(ctx context.Context, c *gotwi.GotwiClient, p *types.ListFollowsFollowersParams) (*types.ListFollowsFollowersResponse, error) {
 	res := &types.ListFollowsFollowersResponse{}
 	if err := c.CallAPI(ctx, ListFollowsFollowersEndpoint, "GET", p, res); err != nil {
+		return nil, err
+	}
+
+	return res, nil
+}
+
+// Returns all Lists a specified user follows.
+// https://developer.twitter.com/en/docs/twitter-api/lists/list-follows/api-reference/get-users-id-followed_lists
+func ListFollowsFollowedLists(ctx context.Context, c *gotwi.GotwiClient, p *types.ListFollowsFollowedListsParams) (*types.ListFollowsFollowedListsResponse, error) {
+	res := &types.ListFollowsFollowedListsResponse{}
+	if err := c.CallAPI(ctx, ListFollowsFollowedListsEndpoint, "GET", p, res); err != nil {
 		return nil, err
 	}
 
