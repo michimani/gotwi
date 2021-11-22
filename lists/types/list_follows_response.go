@@ -1,5 +1,20 @@
 package types
 
+import "github.com/michimani/gotwi/resources"
+
+type ListFollowsFollowersResponse struct {
+	Data     []resources.User `json:"data"`
+	Includes struct {
+		Tweets []resources.Tweet `json:"tweets"`
+	} `json:"includes"`
+	Meta   resources.ListFollowsFollowersMeta `json:"meta"`
+	Errors []resources.PartialError           `json:"errors"`
+}
+
+func (r *ListFollowsFollowersResponse) HasPartialError() bool {
+	return !(r.Errors == nil || len(r.Errors) == 0)
+}
+
 type ListFollowsPostResponse struct {
 	Data struct {
 		Following bool `json:"following"`
