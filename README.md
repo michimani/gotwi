@@ -1,7 +1,7 @@
 gotwi
 ===
 
-[![pkg.go.dev][gopkg-badge]][gopkg]
+[![Go Reference](https://pkg.go.dev/badge/github.com/michimani/gotwi.svg)](https://pkg.go.dev/github.com/michimani/gotwi)
 
 This is a library for using the Twitter API v2 in the Go language. (It is still under development).
 
