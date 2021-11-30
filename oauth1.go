@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"io"
 	"net/url"
+	"regexp"
 	"strings"
 	"time"
 )
@@ -25,7 +26,7 @@ type EndpointInfo struct {
 	EncodedQueryParameterMap map[string]string
 }
 
-type CreateOAthSignatureInput struct {
+type CreateOAuthSignatureInput struct {
 	HTTPMethod       string
 	RawEndpoint      string
 	OAuthConsumerKey string
@@ -34,7 +35,7 @@ type CreateOAthSignatureInput struct {
 	ParameterMap     map[string]string
 }
 
-type CreateOAthSignatureOutput struct {
+type CreateOAuthSignatureOutput struct {
 	OAuthNonce           string
 	OAuthSignatureMethod string
 	OAuthTimestamp       string
@@ -42,8 +43,8 @@ type CreateOAthSignatureOutput struct {
 	OAuthSignature       string
 }
 
-func CreateOAuthSignature(in *CreateOAthSignatureInput) (*CreateOAthSignatureOutput, error) {
-	out := CreateOAthSignatureOutput{
+func CreateOAuthSignature(in *CreateOAuthSignatureInput) (*CreateOAuthSignatureOutput, error) {
+	out := CreateOAuthSignatureOutput{
 		OAuthSignatureMethod: OAuthSignatureMethodHMACSHA1,
 		OAuthVersion:         OAuthVersion10,
 	}
@@ -127,7 +128,7 @@ func (e Endpoint) Detail() (*EndpointInfo, error) {
 	return &d, nil
 }
 
-func createParameterString(paramsMap map[string]string, nonce, ts string, in *CreateOAthSignatureInput) string {
+func createParameterString(paramsMap map[string]string, nonce, ts string, in *CreateOAuthSignatureInput) string {
 	qv := url.Values{}
 	for k, v := range paramsMap {
 		qv.Add(k, v)
@@ -140,7 +141,9 @@ func createParameterString(paramsMap map[string]string, nonce, ts string, in *Cr
 	qv.Add("oauth_token", in.OAuthToken)
 	qv.Add("oauth_version", OAuthVersion10)
 
-	return qv.Encode()
+	encoded := qv.Encode()
+	encoded = regexp.MustCompile(`([^%])(\+)`).ReplaceAllString(encoded, "$1%20")
+	return encoded
 }
 
 func createSignatureBase(method, endpointBase, parameterString string) string {
