@@ -223,7 +223,7 @@ const oauth1header = `OAuth oauth_consumer_key="%s",oauth_nonce="%s",oauth_signa
 
 // setOAuth1Header returns http.Request with the header information required for OAuth1.0a authentication.
 func (c *GotwiClient) setOAuth1Header(r *http.Request, paramsMap map[string]string) (*http.Request, error) {
-	in := &CreateOAthSignatureInput{
+	in := &CreateOAuthSignatureInput{
 		HTTPMethod:       r.Method,
 		RawEndpoint:      r.URL.String(),
 		OAuthConsumerKey: c.OAuthConsumerKey,

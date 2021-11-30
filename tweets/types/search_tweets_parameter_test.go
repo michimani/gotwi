@@ -51,7 +51,7 @@ func Test_SearchTweetsRecent_ResolveEndpoint(t *testing.T) {
 			params: &types.SearchTweetsRecentParams{
 				Query: "from:testuser",
 			},
-			expect: endpointBase + "?max_results=10&query=from%3Atestuser",
+			expect: endpointBase + "?query=from%3Atestuser",
 		},
 		{
 			name: "with expansions",
@@ -59,7 +59,7 @@ func Test_SearchTweetsRecent_ResolveEndpoint(t *testing.T) {
 				Query:      "from:testuser",
 				Expansions: fields.ExpansionList{"ex1", "ex2"},
 			},
-			expect: endpointBase + "?expansions=ex1%2Cex2&max_results=10&query=from%3Atestuser",
+			expect: endpointBase + "?expansions=ex1%2Cex2&query=from%3Atestuser",
 		},
 		{
 			name: "with media.fields",
@@ -67,7 +67,7 @@ func Test_SearchTweetsRecent_ResolveEndpoint(t *testing.T) {
 				Query:       "from:testuser",
 				MediaFields: fields.MediaFieldList{"tf1", "tf2"},
 			},
-			expect: endpointBase + "?max_results=10&media.fields=tf1%2Ctf2&query=from%3Atestuser",
+			expect: endpointBase + "?media.fields=tf1%2Ctf2&query=from%3Atestuser",
 		},
 		{
 			name: "with place.fields",
@@ -75,7 +75,7 @@ func Test_SearchTweetsRecent_ResolveEndpoint(t *testing.T) {
 				Query:       "from:testuser",
 				PlaceFields: fields.PlaceFieldList{"tf1", "tf2"},
 			},
-			expect: endpointBase + "?max_results=10&place.fields=tf1%2Ctf2&query=from%3Atestuser",
+			expect: endpointBase + "?place.fields=tf1%2Ctf2&query=from%3Atestuser",
 		},
 		{
 			name: "with poll.fields",
@@ -83,7 +83,7 @@ func Test_SearchTweetsRecent_ResolveEndpoint(t *testing.T) {
 				Query:      "from:testuser",
 				PollFields: fields.PollFieldList{"tf1", "tf2"},
 			},
-			expect: endpointBase + "?max_results=10&poll.fields=tf1%2Ctf2&query=from%3Atestuser",
+			expect: endpointBase + "?poll.fields=tf1%2Ctf2&query=from%3Atestuser",
 		},
 		{
 			name: "with tweets.fields",
@@ -91,7 +91,7 @@ func Test_SearchTweetsRecent_ResolveEndpoint(t *testing.T) {
 				Query:       "from:testuser",
 				TweetFields: fields.TweetFieldList{"tf1", "tf2"},
 			},
-			expect: endpointBase + "?max_results=10&query=from%3Atestuser&tweet.fields=tf1%2Ctf2",
+			expect: endpointBase + "?query=from%3Atestuser&tweet.fields=tf1%2Ctf2",
 		},
 		{
 			name: "with users.fields",
@@ -99,7 +99,7 @@ func Test_SearchTweetsRecent_ResolveEndpoint(t *testing.T) {
 				Query:      "from:testuser",
 				UserFields: fields.UserFieldList{"uf1", "uf2"},
 			},
-			expect: endpointBase + "?max_results=10&query=from%3Atestuser&user.fields=uf1%2Cuf2",
+			expect: endpointBase + "?query=from%3Atestuser&user.fields=uf1%2Cuf2",
 		},
 		{
 			name: "with end_time",
@@ -107,7 +107,7 @@ func Test_SearchTweetsRecent_ResolveEndpoint(t *testing.T) {
 				Query:   "from:testuser",
 				EndTime: &endTime,
 			},
-			expect: endpointBase + "?end_time=2021-10-24T23%3A59%3A59Z&max_results=10&query=from%3Atestuser",
+			expect: endpointBase + "?end_time=2021-10-24T23%3A59%3A59Z&query=from%3Atestuser",
 		},
 		{
 			name: "with start_time",
@@ -115,7 +115,7 @@ func Test_SearchTweetsRecent_ResolveEndpoint(t *testing.T) {
 				Query:     "from:testuser",
 				StartTime: &startTime,
 			},
-			expect: endpointBase + "?max_results=10&query=from%3Atestuser&start_time=2021-10-24T00%3A00%3A00Z",
+			expect: endpointBase + "?query=from%3Atestuser&start_time=2021-10-24T00%3A00%3A00Z",
 		},
 		{
 			name: "with since_id",
@@ -123,7 +123,7 @@ func Test_SearchTweetsRecent_ResolveEndpoint(t *testing.T) {
 				Query:   "from:testuser",
 				SinceID: "sid",
 			},
-			expect: endpointBase + "?max_results=10&query=from%3Atestuser&since_id=sid",
+			expect: endpointBase + "?query=from%3Atestuser&since_id=sid",
 		},
 		{
 			name: "with until_id",
@@ -131,7 +131,7 @@ func Test_SearchTweetsRecent_ResolveEndpoint(t *testing.T) {
 				Query:   "from:testuser",
 				UntilID: "uid",
 			},
-			expect: endpointBase + "?max_results=10&query=from%3Atestuser&until_id=uid",
+			expect: endpointBase + "?query=from%3Atestuser&until_id=uid",
 		},
 		{
 			name: "all query parameters",
@@ -143,6 +143,7 @@ func Test_SearchTweetsRecent_ResolveEndpoint(t *testing.T) {
 				PollFields:  fields.PollFieldList{"pof"},
 				UserFields:  fields.UserFieldList{"uf"},
 				TweetFields: fields.TweetFieldList{"tf"},
+				MaxResults:  10,
 			},
 			expect: endpointBase + "?expansions=ex&max_results=10&media.fields=mf&place.fields=plf&poll.fields=pof&query=from%3Atestuser&tweet.fields=tf&user.fields=uf",
 		},
@@ -231,7 +232,7 @@ func Test_SearchTweetsAll_ResolveEndpoint(t *testing.T) {
 			params: &types.SearchTweetsAllParams{
 				Query: "from:testuser",
 			},
-			expect: endpointBase + "?max_results=10&query=from%3Atestuser",
+			expect: endpointBase + "?query=from%3Atestuser",
 		},
 		{
 			name: "with expansions",
@@ -239,7 +240,7 @@ func Test_SearchTweetsAll_ResolveEndpoint(t *testing.T) {
 				Query:      "from:testuser",
 				Expansions: fields.ExpansionList{"ex1", "ex2"},
 			},
-			expect: endpointBase + "?expansions=ex1%2Cex2&max_results=10&query=from%3Atestuser",
+			expect: endpointBase + "?expansions=ex1%2Cex2&query=from%3Atestuser",
 		},
 		{
 			name: "with media.fields",
@@ -247,7 +248,7 @@ func Test_SearchTweetsAll_ResolveEndpoint(t *testing.T) {
 				Query:       "from:testuser",
 				MediaFields: fields.MediaFieldList{"tf1", "tf2"},
 			},
-			expect: endpointBase + "?max_results=10&media.fields=tf1%2Ctf2&query=from%3Atestuser",
+			expect: endpointBase + "?media.fields=tf1%2Ctf2&query=from%3Atestuser",
 		},
 		{
 			name: "with place.fields",
@@ -255,7 +256,7 @@ func Test_SearchTweetsAll_ResolveEndpoint(t *testing.T) {
 				Query:       "from:testuser",
 				PlaceFields: fields.PlaceFieldList{"tf1", "tf2"},
 			},
-			expect: endpointBase + "?max_results=10&place.fields=tf1%2Ctf2&query=from%3Atestuser",
+			expect: endpointBase + "?place.fields=tf1%2Ctf2&query=from%3Atestuser",
 		},
 		{
 			name: "with poll.fields",
@@ -263,7 +264,7 @@ func Test_SearchTweetsAll_ResolveEndpoint(t *testing.T) {
 				Query:      "from:testuser",
 				PollFields: fields.PollFieldList{"tf1", "tf2"},
 			},
-			expect: endpointBase + "?max_results=10&poll.fields=tf1%2Ctf2&query=from%3Atestuser",
+			expect: endpointBase + "?poll.fields=tf1%2Ctf2&query=from%3Atestuser",
 		},
 		{
 			name: "with tweets.fields",
@@ -271,7 +272,7 @@ func Test_SearchTweetsAll_ResolveEndpoint(t *testing.T) {
 				Query:       "from:testuser",
 				TweetFields: fields.TweetFieldList{"tf1", "tf2"},
 			},
-			expect: endpointBase + "?max_results=10&query=from%3Atestuser&tweet.fields=tf1%2Ctf2",
+			expect: endpointBase + "?query=from%3Atestuser&tweet.fields=tf1%2Ctf2",
 		},
 		{
 			name: "with users.fields",
@@ -279,7 +280,7 @@ func Test_SearchTweetsAll_ResolveEndpoint(t *testing.T) {
 				Query:      "from:testuser",
 				UserFields: fields.UserFieldList{"uf1", "uf2"},
 			},
-			expect: endpointBase + "?max_results=10&query=from%3Atestuser&user.fields=uf1%2Cuf2",
+			expect: endpointBase + "?query=from%3Atestuser&user.fields=uf1%2Cuf2",
 		},
 		{
 			name: "with end_time",
@@ -287,7 +288,7 @@ func Test_SearchTweetsAll_ResolveEndpoint(t *testing.T) {
 				Query:   "from:testuser",
 				EndTime: &endTime,
 			},
-			expect: endpointBase + "?end_time=2021-10-24T23%3A59%3A59Z&max_results=10&query=from%3Atestuser",
+			expect: endpointBase + "?end_time=2021-10-24T23%3A59%3A59Z&query=from%3Atestuser",
 		},
 		{
 			name: "with start_time",
@@ -295,7 +296,7 @@ func Test_SearchTweetsAll_ResolveEndpoint(t *testing.T) {
 				Query:     "from:testuser",
 				StartTime: &startTime,
 			},
-			expect: endpointBase + "?max_results=10&query=from%3Atestuser&start_time=2021-10-24T00%3A00%3A00Z",
+			expect: endpointBase + "?query=from%3Atestuser&start_time=2021-10-24T00%3A00%3A00Z",
 		},
 		{
 			name: "with since_id",
@@ -303,7 +304,7 @@ func Test_SearchTweetsAll_ResolveEndpoint(t *testing.T) {
 				Query:   "from:testuser",
 				SinceID: "sid",
 			},
-			expect: endpointBase + "?max_results=10&query=from%3Atestuser&since_id=sid",
+			expect: endpointBase + "?query=from%3Atestuser&since_id=sid",
 		},
 		{
 			name: "with until_id",
@@ -311,7 +312,7 @@ func Test_SearchTweetsAll_ResolveEndpoint(t *testing.T) {
 				Query:   "from:testuser",
 				UntilID: "uid",
 			},
-			expect: endpointBase + "?max_results=10&query=from%3Atestuser&until_id=uid",
+			expect: endpointBase + "?query=from%3Atestuser&until_id=uid",
 		},
 		{
 			name: "all query parameters",
@@ -323,6 +324,7 @@ func Test_SearchTweetsAll_ResolveEndpoint(t *testing.T) {
 				PollFields:  fields.PollFieldList{"pof"},
 				UserFields:  fields.UserFieldList{"uf"},
 				TweetFields: fields.TweetFieldList{"tf"},
+				MaxResults:  10,
 			},
 			expect: endpointBase + "?expansions=ex&max_results=10&media.fields=mf&place.fields=plf&poll.fields=pof&query=from%3Atestuser&tweet.fields=tf&user.fields=uf",
 		},
