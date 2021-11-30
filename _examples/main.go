@@ -13,18 +13,9 @@ const (
 )
 
 func main() {
-	oauth1Client, err := newOAuth1Client()
-	if err != nil {
-		panic(err)
-	}
+	// postSampleTweet()
 
-	tweetText := "This is a sample tweet."
-	tweetID, err := SimpleTweet(oauth1Client, tweetText)
-	if err != nil {
-		panic(err)
-	}
-
-	fmt.Println("Posted tweet ID is ", tweetID)
+	// recentActivity()
 }
 
 func newOAuth1Client() (*gotwi.GotwiClient, error) {
@@ -43,4 +34,28 @@ func newOAuth2Client() (*gotwi.GotwiClient, error) {
 	}
 
 	return gotwi.NewGotwiClient(in2)
+}
+
+func postSampleTweet() {
+	oauth1Client, err := newOAuth1Client()
+	if err != nil {
+		panic(err)
+	}
+
+	tweetText := "This is a sample tweet."
+	tweetID, err := SimpleTweet(oauth1Client, tweetText)
+	if err != nil {
+		panic(err)
+	}
+
+	fmt.Println("Posted tweet ID is ", tweetID)
+}
+
+func recentActivity() {
+	oauth1Client, err := newOAuth1Client()
+	if err != nil {
+		panic(err)
+	}
+
+	onlyFollowsRecentActivity(oauth1Client, "your-account-id")
 }
