@@ -47,7 +47,7 @@ var SearchTweetsRecentQueryParams = map[string]struct{}{
 }
 
 func (m SearchTweetsMaxResults) Valid() bool {
-	return m > 10 && m <= 100
+	return m >= 10 && m <= 100
 }
 
 func (m SearchTweetsMaxResults) String() string {
@@ -88,29 +88,7 @@ func (p *SearchTweetsRecentParams) ParameterMap() map[string]string {
 
 	m["query"] = p.Query
 
-	if p.Expansions != nil && len(p.Expansions) > 0 {
-		m["expansions"] = util.QueryValue(p.Expansions.Values())
-	}
-
-	if p.MediaFields != nil && len(p.MediaFields) > 0 {
-		m["media.fields"] = util.QueryValue(p.MediaFields.Values())
-	}
-
-	if p.PlaceFields != nil && len(p.PlaceFields) > 0 {
-		m["place.fields"] = util.QueryValue(p.PlaceFields.Values())
-	}
-
-	if p.PollFields != nil && len(p.PollFields) > 0 {
-		m["poll.fields"] = util.QueryValue(p.PollFields.Values())
-	}
-
-	if p.TweetFields != nil && len(p.TweetFields) > 0 {
-		m["tweet.fields"] = util.QueryValue(p.TweetFields.Values())
-	}
-
-	if p.UserFields != nil && len(p.UserFields) > 0 {
-		m["user.fields"] = util.QueryValue(p.UserFields.Values())
-	}
+	m = fields.SetFieldsParams(m, p.Expansions, p.MediaFields, p.PlaceFields, p.PollFields, p.TweetFields, p.UserFields)
 
 	if p.StartTime != nil {
 		m["start_time"] = p.StartTime.Format(time.RFC3339)
@@ -130,8 +108,6 @@ func (p *SearchTweetsRecentParams) ParameterMap() map[string]string {
 
 	if p.MaxResults.Valid() {
 		m["max_results"] = p.MaxResults.String()
-	} else {
-		m["max_results"] = "10"
 	}
 
 	if p.NextToken != "" {
@@ -230,8 +206,6 @@ func (p *SearchTweetsAllParams) ParameterMap() map[string]string {
 
 	if p.MaxResults.Valid() {
 		m["max_results"] = p.MaxResults.String()
-	} else {
-		m["max_results"] = "10"
 	}
 
 	if p.NextToken != "" {
