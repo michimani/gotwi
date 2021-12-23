@@ -18,5 +18,7 @@ jobs:
       run: go install
 
     - name: Test code
-      run: go test github.com/michimani/gotwi/... -shuffle=on
+      run: go test -race -coverprofile="coverage.txt" -covermode=atomic github.com/michimani/gotwi/... -shuffle=on
 
+    - name: Upload code coverage to Codecov
+      run: bash <(curl -s https://codecov.io/bash)
