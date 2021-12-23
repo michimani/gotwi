@@ -2,6 +2,11 @@ CHANGELOG
 ===
 This is a version of CHANGELOG less than v1.0.
 
+v0.9.6 (2021-12-24)
+===
+
+### Documentation
+* add code coverage tool
 
 v0.9.5 (2021-12-01)
 ===
