@@ -3,6 +3,7 @@ gotwi
 
 [![Go Reference](https://pkg.go.dev/badge/github.com/michimani/gotwi.svg)](https://pkg.go.dev/github.com/michimani/gotwi)
 [![Twitter API v2](https://img.shields.io/endpoint?url=https%3A%2F%2Ftwbadges.glitch.me%2Fbadges%2Fv2)](https://developer.twitter.com/en/docs/twitter-api)
+[![codecov](https://codecov.io/gh/michimani/gotwi/branch/main/graph/badge.svg?token=NA873TE6RV)](https://codecov.io/gh/michimani/gotwi)
 
 This is a library for using the Twitter API v2 in the Go language. (It is still under development).
 
