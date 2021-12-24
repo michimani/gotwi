@@ -58,7 +58,7 @@ func CreateOAuthSignature(in *CreateOAuthSignatureInput) (*CreateOAuthSignatureO
 	out.OAuthTimestamp = ts
 	endpointBase := endpointBase(in.RawEndpoint)
 
-	parameterString := createParameterString(in.ParameterMap, nonce, ts, in)
+	parameterString := createParameterString(nonce, ts, in)
 	sigBase := createSignatureBase(in.HTTPMethod, endpointBase, parameterString)
 	sig, err := calculateSignature(sigBase, in.SigningKey)
 	if err != nil {
@@ -128,9 +128,9 @@ func (e Endpoint) Detail() (*EndpointInfo, error) {
 	return &d, nil
 }
 
-func createParameterString(paramsMap map[string]string, nonce, ts string, in *CreateOAuthSignatureInput) string {
+func createParameterString(nonce, ts string, in *CreateOAuthSignatureInput) string {
 	qv := url.Values{}
-	for k, v := range paramsMap {
+	for k, v := range in.ParameterMap {
 		qv.Add(k, v)
 	}
 
