@@ -2,6 +2,15 @@ CHANGELOG
 ===
 This is a version of CHANGELOG less than v1.0.
 
+v0.9.7 (2021-12-24)
+===
+
+### Fixes
+* remove some unnecessary processing
+
+### Documentation
+* add some tests
+
 v0.9.6 (2021-12-24)
 ===
 
