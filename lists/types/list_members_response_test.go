@@ -81,3 +81,66 @@ func Test_ListMembersGet_HasPartialError(t *testing.T) {
 		})
 	}
 }
+
+func Test_ListMembersPostResponse_HasPartialError(t *testing.T) {
+	cases := []struct {
+		name   string
+		res    *types.ListMembersPostResponse
+		expect bool
+	}{
+		{
+			name:   "initial struct",
+			res:    &types.ListMembersPostResponse{},
+			expect: false,
+		},
+		{
+			name: "has data",
+			res: &types.ListMembersPostResponse{
+				Data: struct {
+					IsMember bool "json:\"is_member\""
+				}{
+					IsMember: false,
+				},
+			},
+			expect: false,
+		},
+	}
+
+	for _, c := range cases {
+		t.Run(c.name, func(tt *testing.T) {
+			hpe := c.res.HasPartialError()
+			assert.Equal(tt, c.expect, hpe)
+		})
+	}
+}
+
+func Test_ListMembersDeleteResponse_HasPartialError(t *testing.T) {
+	cases := []struct {
+		name   string
+		res    *types.ListMembersDeleteResponse
+		expect bool
+	}{
+		{
+			name:   "initial struct",
+			res:    &types.ListMembersDeleteResponse{},
+			expect: false,
+		},
+		{
+			name: "has data",
+			res: &types.ListMembersDeleteResponse{
+				Data: struct {
+					IsMember bool "json:\"is_member\""
+				}{
+					IsMember: false,
+				}},
+			expect: false,
+		},
+	}
+
+	for _, c := range cases {
+		t.Run(c.name, func(tt *testing.T) {
+			hpe := c.res.HasPartialError()
+			assert.Equal(tt, c.expect, hpe)
+		})
+	}
+}
