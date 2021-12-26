@@ -81,3 +81,69 @@ func Test_FollowsFollowers_HasPartialError(t *testing.T) {
 		})
 	}
 }
+
+func Test_FollowsFollowingPostResponse_HasPartialError(t *testing.T) {
+	cases := []struct {
+		name   string
+		res    *types.FollowsFollowingPostResponse
+		expect bool
+	}{
+		{
+			name:   "initial struct",
+			res:    &types.FollowsFollowingPostResponse{},
+			expect: false,
+		},
+		{
+			name: "has data",
+			res: &types.FollowsFollowingPostResponse{
+				Data: struct {
+					Following     bool "json:\"following\""
+					PendingFollow bool "json:\"pending_follow\""
+				}{
+					Following:     true,
+					PendingFollow: false,
+				},
+			},
+			expect: false,
+		},
+	}
+
+	for _, c := range cases {
+		t.Run(c.name, func(tt *testing.T) {
+			hpe := c.res.HasPartialError()
+			assert.Equal(tt, c.expect, hpe)
+		})
+	}
+}
+
+func Test_FollowsFollowingDeleteResponse_HasPartialError(t *testing.T) {
+	cases := []struct {
+		name   string
+		res    *types.FollowsFollowingDeleteResponse
+		expect bool
+	}{
+		{
+			name:   "initial struct",
+			res:    &types.FollowsFollowingDeleteResponse{},
+			expect: false,
+		},
+		{
+			name: "has data",
+			res: &types.FollowsFollowingDeleteResponse{
+				Data: struct {
+					Following bool "json:\"following\""
+				}{
+					Following: false,
+				},
+			},
+			expect: false,
+		},
+	}
+
+	for _, c := range cases {
+		t.Run(c.name, func(tt *testing.T) {
+			hpe := c.res.HasPartialError()
+			assert.Equal(tt, c.expect, hpe)
+		})
+	}
+}
