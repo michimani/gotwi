@@ -131,6 +131,33 @@ func Test_PinnedListsGet_Body(t *testing.T) {
 	}
 }
 
+func Test_PinnedListsPostParams_SetAccessToken(t *testing.T) {
+	cases := []struct {
+		name   string
+		token  string
+		expect string
+	}{
+		{
+			name:   "normal",
+			token:  "test-token",
+			expect: "test-token",
+		},
+		{
+			name:   "empty",
+			token:  "",
+			expect: "",
+		},
+	}
+
+	for _, c := range cases {
+		t.Run(c.name, func(tt *testing.T) {
+			p := &types.PinnedListsPostParams{}
+			p.SetAccessToken(c.token)
+			assert.Equal(tt, c.expect, p.AccessToken())
+		})
+	}
+}
+
 func Test_PinnedListsPostParams_ResolveEndpoint(t *testing.T) {
 	const endpointBase = "test/endpoint/"
 	cases := []struct {
@@ -186,6 +213,59 @@ func Test_PinnedListsPostParams_Body(t *testing.T) {
 			r, err := c.params.Body()
 			assert.NoError(tt, err)
 			assert.Equal(tt, c.expect, r)
+		})
+	}
+}
+
+func Test_PinnedListsPostParams_ParameterMap(t *testing.T) {
+	cases := []struct {
+		name   string
+		params *types.PinnedListsPostParams
+		expect map[string]string
+	}{
+		{
+			name:   "normal: some parameters",
+			params: &types.PinnedListsPostParams{ID: "id"},
+			expect: map[string]string{},
+		},
+		{
+			name:   "normal: has no parameter",
+			params: &types.PinnedListsPostParams{},
+			expect: map[string]string{},
+		},
+	}
+
+	for _, c := range cases {
+		t.Run(c.name, func(tt *testing.T) {
+			m := c.params.ParameterMap()
+			assert.Equal(tt, c.expect, m)
+		})
+	}
+}
+
+func Test_PinnedListsDeleteParams_SetAccessToken(t *testing.T) {
+	cases := []struct {
+		name   string
+		token  string
+		expect string
+	}{
+		{
+			name:   "normal",
+			token:  "test-token",
+			expect: "test-token",
+		},
+		{
+			name:   "empty",
+			token:  "",
+			expect: "",
+		},
+	}
+
+	for _, c := range cases {
+		t.Run(c.name, func(tt *testing.T) {
+			p := &types.PinnedListsDeleteParams{}
+			p.SetAccessToken(c.token)
+			assert.Equal(tt, c.expect, p.AccessToken())
 		})
 	}
 }
@@ -247,6 +327,32 @@ func Test_PinnedListsDeleteParams_Body(t *testing.T) {
 			r, err := c.params.Body()
 			assert.NoError(tt, err)
 			assert.Equal(tt, c.expect, r)
+		})
+	}
+}
+
+func Test_PinnedListsDeleteParams_ParameterMap(t *testing.T) {
+	cases := []struct {
+		name   string
+		params *types.PinnedListsDeleteParams
+		expect map[string]string
+	}{
+		{
+			name:   "normal: some parameters",
+			params: &types.PinnedListsDeleteParams{ID: "id"},
+			expect: map[string]string{},
+		},
+		{
+			name:   "normal: has no parameter",
+			params: &types.PinnedListsDeleteParams{},
+			expect: map[string]string{},
+		},
+	}
+
+	for _, c := range cases {
+		t.Run(c.name, func(tt *testing.T) {
+			m := c.params.ParameterMap()
+			assert.Equal(tt, c.expect, m)
 		})
 	}
 }

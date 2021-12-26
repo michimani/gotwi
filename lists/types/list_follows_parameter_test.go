@@ -291,6 +291,33 @@ func Test_ListFollowsFollowedLists_Body(t *testing.T) {
 	}
 }
 
+func Test_ListFollowsPostParams_SetAccessToken(t *testing.T) {
+	cases := []struct {
+		name   string
+		token  string
+		expect string
+	}{
+		{
+			name:   "normal",
+			token:  "test-token",
+			expect: "test-token",
+		},
+		{
+			name:   "empty",
+			token:  "",
+			expect: "",
+		},
+	}
+
+	for _, c := range cases {
+		t.Run(c.name, func(tt *testing.T) {
+			p := &types.ListFollowsPostParams{}
+			p.SetAccessToken(c.token)
+			assert.Equal(tt, c.expect, p.AccessToken())
+		})
+	}
+}
+
 func Test_ListFollowsPostParams_ResolveEndpoint(t *testing.T) {
 	const endpointBase = "test/endpoint/"
 	cases := []struct {
@@ -346,6 +373,59 @@ func Test_ListFollowsPostParams_Body(t *testing.T) {
 			r, err := c.params.Body()
 			assert.NoError(tt, err)
 			assert.Equal(tt, c.expect, r)
+		})
+	}
+}
+
+func Test_ListFollowsPostParams_ParameterMap(t *testing.T) {
+	cases := []struct {
+		name   string
+		params *types.ListFollowsPostParams
+		expect map[string]string
+	}{
+		{
+			name:   "normal: only required parameter",
+			params: &types.ListFollowsPostParams{ID: "id", ListID: gotwi.String("lid")},
+			expect: map[string]string{},
+		},
+		{
+			name:   "normal: has no required parameter",
+			params: &types.ListFollowsPostParams{},
+			expect: map[string]string{},
+		},
+	}
+
+	for _, c := range cases {
+		t.Run(c.name, func(tt *testing.T) {
+			m := c.params.ParameterMap()
+			assert.Equal(tt, c.expect, m)
+		})
+	}
+}
+
+func Test_ListFollowsDeleteParams_SetAccessToken(t *testing.T) {
+	cases := []struct {
+		name   string
+		token  string
+		expect string
+	}{
+		{
+			name:   "normal",
+			token:  "test-token",
+			expect: "test-token",
+		},
+		{
+			name:   "empty",
+			token:  "",
+			expect: "",
+		},
+	}
+
+	for _, c := range cases {
+		t.Run(c.name, func(tt *testing.T) {
+			p := &types.ListFollowsDeleteParams{}
+			p.SetAccessToken(c.token)
+			assert.Equal(tt, c.expect, p.AccessToken())
 		})
 	}
 }
@@ -407,6 +487,32 @@ func Test_ListFollowsDeleteParams_Body(t *testing.T) {
 			r, err := c.params.Body()
 			assert.NoError(tt, err)
 			assert.Equal(tt, c.expect, r)
+		})
+	}
+}
+
+func Test_ListFollowsDeleteParams_ParameterMap(t *testing.T) {
+	cases := []struct {
+		name   string
+		params *types.ListFollowsDeleteParams
+		expect map[string]string
+	}{
+		{
+			name:   "normal: only required parameter",
+			params: &types.ListFollowsDeleteParams{ID: "id", ListID: "lid"},
+			expect: map[string]string{},
+		},
+		{
+			name:   "normal: has no required parameter",
+			params: &types.ListFollowsDeleteParams{},
+			expect: map[string]string{},
+		},
+	}
+
+	for _, c := range cases {
+		t.Run(c.name, func(tt *testing.T) {
+			m := c.params.ParameterMap()
+			assert.Equal(tt, c.expect, m)
 		})
 	}
 }
