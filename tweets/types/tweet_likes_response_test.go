@@ -3,6 +3,7 @@ package types_test
 import (
 	"testing"
 
+	"github.com/michimani/gotwi"
 	"github.com/michimani/gotwi/resources"
 	"github.com/michimani/gotwi/tweets/types"
 	"github.com/stretchr/testify/assert"
@@ -70,6 +71,70 @@ func Test_TweetLikesLikedTweets_HasPartialError(t *testing.T) {
 			name: "partical error is nil",
 			res: &types.TweetLikesLikedTweetsResponse{
 				Errors: []resources.PartialError{}},
+			expect: false,
+		},
+	}
+
+	for _, c := range cases {
+		t.Run(c.name, func(tt *testing.T) {
+			hpe := c.res.HasPartialError()
+			assert.Equal(tt, c.expect, hpe)
+		})
+	}
+}
+
+func Test_TweetLikesPostResponse_HasPartialError(t *testing.T) {
+	cases := []struct {
+		name   string
+		res    *types.TweetLikesPostResponse
+		expect bool
+	}{
+		{
+			name:   "initial struct",
+			res:    &types.TweetLikesPostResponse{},
+			expect: false,
+		},
+		{
+			name: "has data",
+			res: &types.TweetLikesPostResponse{
+				Data: struct {
+					Liked bool "json:\"liked\""
+				}{
+					Liked: *gotwi.Bool(true),
+				},
+			},
+			expect: false,
+		},
+	}
+
+	for _, c := range cases {
+		t.Run(c.name, func(tt *testing.T) {
+			hpe := c.res.HasPartialError()
+			assert.Equal(tt, c.expect, hpe)
+		})
+	}
+}
+
+func Test_TweetLikesDeleteResponse_HasPartialError(t *testing.T) {
+	cases := []struct {
+		name   string
+		res    *types.TweetLikesDeleteResponse
+		expect bool
+	}{
+		{
+			name:   "initial struct",
+			res:    &types.TweetLikesDeleteResponse{},
+			expect: false,
+		},
+		{
+			name: "has data",
+			res: &types.TweetLikesDeleteResponse{
+				Data: struct {
+					Liked bool "json:\"liked\""
+				}{
+					Liked: *gotwi.Bool(true),
+				},
+			},
 			expect: false,
 		},
 	}
