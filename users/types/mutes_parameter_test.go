@@ -218,6 +218,33 @@ func Test_MutesMutingGetParams_Body(t *testing.T) {
 	}
 }
 
+func Test_MutesMutingPostParams_SetAccessToken(t *testing.T) {
+	cases := []struct {
+		name   string
+		token  string
+		expect string
+	}{
+		{
+			name:   "normal",
+			token:  "test-token",
+			expect: "test-token",
+		},
+		{
+			name:   "normal: empty",
+			token:  "",
+			expect: "",
+		},
+	}
+
+	for _, c := range cases {
+		t.Run(c.name, func(tt *testing.T) {
+			p := &types.MutesMutingPostParams{}
+			p.SetAccessToken(c.token)
+			assert.Equal(tt, c.expect, p.AccessToken())
+		})
+	}
+}
+
 func Test_MutesMutingPostParams_ResolveEndpoint(t *testing.T) {
 	const endpointRoot = "test/endpoint/"
 	const endpointBase = "test/endpoint/:id"
@@ -274,6 +301,59 @@ func Test_MutesMutingPostParams_Body(t *testing.T) {
 			r, err := c.params.Body()
 			assert.NoError(tt, err)
 			assert.Equal(tt, c.expect, r)
+		})
+	}
+}
+
+func Test_MutesMutingPostParams_ParameterMap(t *testing.T) {
+	cases := []struct {
+		name   string
+		params *types.MutesMutingPostParams
+		expect map[string]string
+	}{
+		{
+			name:   "normal: has both of path and json parameters",
+			params: &types.MutesMutingPostParams{ID: "id", TargetUserID: gotwi.String("tid")},
+			expect: map[string]string{},
+		},
+		{
+			name:   "normal: has no parameter",
+			params: &types.MutesMutingPostParams{},
+			expect: map[string]string{},
+		},
+	}
+
+	for _, c := range cases {
+		t.Run(c.name, func(tt *testing.T) {
+			m := c.params.ParameterMap()
+			assert.Equal(tt, c.expect, m)
+		})
+	}
+}
+
+func Test_MutesMutingDeleteParams_SetAccessToken(t *testing.T) {
+	cases := []struct {
+		name   string
+		token  string
+		expect string
+	}{
+		{
+			name:   "normal",
+			token:  "test-token",
+			expect: "test-token",
+		},
+		{
+			name:   "normal: empty",
+			token:  "",
+			expect: "",
+		},
+	}
+
+	for _, c := range cases {
+		t.Run(c.name, func(tt *testing.T) {
+			p := &types.MutesMutingDeleteParams{}
+			p.SetAccessToken(c.token)
+			assert.Equal(tt, c.expect, p.AccessToken())
 		})
 	}
 }
@@ -344,6 +424,32 @@ func Test_MutesMutingDeleteParams_Body(t *testing.T) {
 			r, err := c.params.Body()
 			assert.NoError(tt, err)
 			assert.Equal(tt, c.expect, r)
+		})
+	}
+}
+
+func Test_MutesMutingDeleteParams_ParameterMap(t *testing.T) {
+	cases := []struct {
+		name   string
+		params *types.MutesMutingDeleteParams
+		expect map[string]string
+	}{
+		{
+			name:   "normal: has parameters",
+			params: &types.MutesMutingDeleteParams{SourceUserID: "id", TargetUserID: "tid"},
+			expect: map[string]string{},
+		},
+		{
+			name:   "normal: has no parameter",
+			params: &types.MutesMutingDeleteParams{},
+			expect: map[string]string{},
+		},
+	}
+
+	for _, c := range cases {
+		t.Run(c.name, func(tt *testing.T) {
+			m := c.params.ParameterMap()
+			assert.Equal(tt, c.expect, m)
 		})
 	}
 }

@@ -11,6 +11,37 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+func Test_TweetLikesMaxResults_String(t *testing.T) {
+	cases := []struct {
+		name   string
+		m      types.TweetLikesMaxResults
+		expect string
+	}{
+		{
+			name:   "normal",
+			m:      types.TweetLikesMaxResults(1),
+			expect: "1",
+		},
+		{
+			name:   "normal: zero",
+			m:      types.TweetLikesMaxResults(0),
+			expect: "0",
+		},
+		{
+			name:   "normal: negative",
+			m:      types.TweetLikesMaxResults(-1),
+			expect: "-1",
+		},
+	}
+
+	for _, c := range cases {
+		t.Run(c.name, func(tt *testing.T) {
+			s := c.m.String()
+			assert.Equal(tt, c.expect, s)
+		})
+	}
+}
+
 func Test_TweetLikesLikingUsersParams_SetAccessToken(t *testing.T) {
 	cases := []struct {
 		name   string
@@ -246,15 +277,17 @@ func Test_TweetLikesLikedTweetsParams_ResolveEndpoint(t *testing.T) {
 		{
 			name: "all query parameters",
 			params: &types.TweetLikesLikedTweetsParams{
-				ID:          "test-id",
-				Expansions:  fields.ExpansionList{"ex"},
-				MediaFields: fields.MediaFieldList{"mf"},
-				PlaceFields: fields.PlaceFieldList{"plf"},
-				PollFields:  fields.PollFieldList{"pof"},
-				UserFields:  fields.UserFieldList{"uf"},
-				TweetFields: fields.TweetFieldList{"tf"},
+				ID:              "test-id",
+				Expansions:      fields.ExpansionList{"ex"},
+				MediaFields:     fields.MediaFieldList{"mf"},
+				PlaceFields:     fields.PlaceFieldList{"plf"},
+				PollFields:      fields.PollFieldList{"pof"},
+				UserFields:      fields.UserFieldList{"uf"},
+				TweetFields:     fields.TweetFieldList{"tf"},
+				MaxResults:      types.TweetLikesMaxResults(10),
+				PaginationToken: "ptoken",
 			},
-			expect: endpointRoot + "test-id" + "?expansions=ex&media.fields=mf&place.fields=plf&poll.fields=pof&tweet.fields=tf&user.fields=uf",
+			expect: endpointRoot + "test-id" + "?expansions=ex&max_results=10&media.fields=mf&pagination_token=ptoken&place.fields=plf&poll.fields=pof&tweet.fields=tf&user.fields=uf",
 		},
 		{
 			name: "has no required parameter",
@@ -295,6 +328,33 @@ func Test_TweetLikesLikedTweetsParams_Body(t *testing.T) {
 			r, err := c.params.Body()
 			assert.NoError(tt, err)
 			assert.Nil(tt, r)
+		})
+	}
+}
+
+func Test_TweetLikesPostParams_SetAccessToken(t *testing.T) {
+	cases := []struct {
+		name   string
+		token  string
+		expect string
+	}{
+		{
+			name:   "normal",
+			token:  "test-token",
+			expect: "test-token",
+		},
+		{
+			name:   "empty",
+			token:  "",
+			expect: "",
+		},
+	}
+
+	for _, c := range cases {
+		t.Run(c.name, func(tt *testing.T) {
+			p := &types.TweetLikesPostParams{}
+			p.SetAccessToken(c.token)
+			assert.Equal(tt, c.expect, p.AccessToken())
 		})
 	}
 }
@@ -355,6 +415,61 @@ func Test_TweetLikesPostParams_Body(t *testing.T) {
 			r, err := c.params.Body()
 			assert.NoError(tt, err)
 			assert.Equal(tt, c.expect, r)
+		})
+	}
+}
+
+func Test_TweetLikesPostParams_ParameterMap(t *testing.T) {
+	cases := []struct {
+		name   string
+		params *types.TweetLikesPostParams
+		expect map[string]string
+	}{
+		{
+			name:   "normal: only required parameter",
+			params: &types.TweetLikesPostParams{ID: "test-id"},
+			expect: map[string]string{},
+		},
+		{
+			name: "normal: has no required parameter",
+			params: &types.TweetLikesPostParams{
+				TweetID: gotwi.String("tid"),
+			},
+			expect: map[string]string{},
+		},
+	}
+
+	for _, c := range cases {
+		t.Run(c.name, func(tt *testing.T) {
+			m := c.params.ParameterMap()
+			assert.Equal(tt, c.expect, m)
+		})
+	}
+}
+
+func Test_TweetLikesDeleteParams_SetAccessToken(t *testing.T) {
+	cases := []struct {
+		name   string
+		token  string
+		expect string
+	}{
+		{
+			name:   "normal",
+			token:  "test-token",
+			expect: "test-token",
+		},
+		{
+			name:   "empty",
+			token:  "",
+			expect: "",
+		},
+	}
+
+	for _, c := range cases {
+		t.Run(c.name, func(tt *testing.T) {
+			p := &types.TweetLikesDeleteParams{}
+			p.SetAccessToken(c.token)
+			assert.Equal(tt, c.expect, p.AccessToken())
 		})
 	}
 }
@@ -425,6 +540,34 @@ func Test_TweetLikesDeleteParams_Body(t *testing.T) {
 			r, err := c.params.Body()
 			assert.NoError(tt, err)
 			assert.Equal(tt, c.expect, r)
+		})
+	}
+}
+
+func Test_TweetLikesDeleteParams_ParameterMap(t *testing.T) {
+	cases := []struct {
+		name   string
+		params *types.TweetLikesDeleteParams
+		expect map[string]string
+	}{
+		{
+			name:   "normal: only required parameter",
+			params: &types.TweetLikesDeleteParams{ID: "test-id"},
+			expect: map[string]string{},
+		},
+		{
+			name: "normal: has no required parameter",
+			params: &types.TweetLikesDeleteParams{
+				TweetID: "tid",
+			},
+			expect: map[string]string{},
+		},
+	}
+
+	for _, c := range cases {
+		t.Run(c.name, func(tt *testing.T) {
+			m := c.params.ParameterMap()
+			assert.Equal(tt, c.expect, m)
 		})
 	}
 }

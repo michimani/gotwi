@@ -44,3 +44,67 @@ func Test_MutesMutingGet_HasPartialError(t *testing.T) {
 		})
 	}
 }
+
+func Test_MutesMutingPostResponse_HasPartialError(t *testing.T) {
+	cases := []struct {
+		name   string
+		res    *types.MutesMutingPostResponse
+		expect bool
+	}{
+		{
+			name:   "initial struct",
+			res:    &types.MutesMutingPostResponse{},
+			expect: false,
+		},
+		{
+			name: "has data",
+			res: &types.MutesMutingPostResponse{
+				Data: struct {
+					Muting bool "json:\"muting\""
+				}{
+					Muting: false,
+				},
+			},
+			expect: false,
+		},
+	}
+
+	for _, c := range cases {
+		t.Run(c.name, func(tt *testing.T) {
+			hpe := c.res.HasPartialError()
+			assert.Equal(tt, c.expect, hpe)
+		})
+	}
+}
+
+func Test_MutesMutingDeleteResponse_HasPartialError(t *testing.T) {
+	cases := []struct {
+		name   string
+		res    *types.MutesMutingDeleteResponse
+		expect bool
+	}{
+		{
+			name:   "initial struct",
+			res:    &types.MutesMutingDeleteResponse{},
+			expect: false,
+		},
+		{
+			name: "has data",
+			res: &types.MutesMutingDeleteResponse{
+				Data: struct {
+					Muting bool "json:\"muting\""
+				}{
+					Muting: false,
+				},
+			},
+			expect: false,
+		},
+	}
+
+	for _, c := range cases {
+		t.Run(c.name, func(tt *testing.T) {
+			hpe := c.res.HasPartialError()
+			assert.Equal(tt, c.expect, hpe)
+		})
+	}
+}

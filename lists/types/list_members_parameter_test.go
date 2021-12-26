@@ -291,6 +291,33 @@ func Test_ListMembersGet_Body(t *testing.T) {
 	}
 }
 
+func Test_ListMembersPostParams_SetAccessToken(t *testing.T) {
+	cases := []struct {
+		name   string
+		token  string
+		expect string
+	}{
+		{
+			name:   "normal",
+			token:  "test-token",
+			expect: "test-token",
+		},
+		{
+			name:   "empty",
+			token:  "",
+			expect: "",
+		},
+	}
+
+	for _, c := range cases {
+		t.Run(c.name, func(tt *testing.T) {
+			p := &types.ListMembersPostParams{}
+			p.SetAccessToken(c.token)
+			assert.Equal(tt, c.expect, p.AccessToken())
+		})
+	}
+}
+
 func Test_ListMembersPostParams_ResolveEndpoint(t *testing.T) {
 	const endpointBase = "test/endpoint/"
 	cases := []struct {
@@ -346,6 +373,59 @@ func Test_ListMembersPostParams_Body(t *testing.T) {
 			r, err := c.params.Body()
 			assert.NoError(tt, err)
 			assert.Equal(tt, c.expect, r)
+		})
+	}
+}
+
+func Test_ListMembersPostParams_ParameterMap(t *testing.T) {
+	cases := []struct {
+		name   string
+		params *types.ListMembersPostParams
+		expect map[string]string
+	}{
+		{
+			name:   "normal: only required parameter",
+			params: &types.ListMembersPostParams{ID: "id", UserID: gotwi.String("uid")},
+			expect: map[string]string{},
+		},
+		{
+			name:   "normal: has no required parameter",
+			params: &types.ListMembersPostParams{},
+			expect: map[string]string{},
+		},
+	}
+
+	for _, c := range cases {
+		t.Run(c.name, func(tt *testing.T) {
+			m := c.params.ParameterMap()
+			assert.Equal(tt, c.expect, m)
+		})
+	}
+}
+
+func Test_ListMembersDeleteParams_SetAccessToken(t *testing.T) {
+	cases := []struct {
+		name   string
+		token  string
+		expect string
+	}{
+		{
+			name:   "normal",
+			token:  "test-token",
+			expect: "test-token",
+		},
+		{
+			name:   "empty",
+			token:  "",
+			expect: "",
+		},
+	}
+
+	for _, c := range cases {
+		t.Run(c.name, func(tt *testing.T) {
+			p := &types.ListMembersDeleteParams{}
+			p.SetAccessToken(c.token)
+			assert.Equal(tt, c.expect, p.AccessToken())
 		})
 	}
 }
@@ -407,6 +487,32 @@ func Test_ListMembersDeleteParams_Body(t *testing.T) {
 			r, err := c.params.Body()
 			assert.NoError(tt, err)
 			assert.Equal(tt, c.expect, r)
+		})
+	}
+}
+
+func Test_ListMembersDeleteParams_ParameterMap(t *testing.T) {
+	cases := []struct {
+		name   string
+		params *types.ListMembersDeleteParams
+		expect map[string]string
+	}{
+		{
+			name:   "normal: only required parameter",
+			params: &types.ListMembersDeleteParams{ID: "id", UserID: "uid"},
+			expect: map[string]string{},
+		},
+		{
+			name:   "normal: has no required parameter",
+			params: &types.ListMembersDeleteParams{},
+			expect: map[string]string{},
+		},
+	}
+
+	for _, c := range cases {
+		t.Run(c.name, func(tt *testing.T) {
+			m := c.params.ParameterMap()
+			assert.Equal(tt, c.expect, m)
 		})
 	}
 }

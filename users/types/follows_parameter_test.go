@@ -353,6 +353,33 @@ func Test_FollowsFollowersParams_Body(t *testing.T) {
 	}
 }
 
+func Test_FollowsFollowingPostParams_SetAccessToken(t *testing.T) {
+	cases := []struct {
+		name   string
+		token  string
+		expect string
+	}{
+		{
+			name:   "normal",
+			token:  "test-token",
+			expect: "test-token",
+		},
+		{
+			name:   "normal: empty",
+			token:  "",
+			expect: "",
+		},
+	}
+
+	for _, c := range cases {
+		t.Run(c.name, func(tt *testing.T) {
+			p := &types.FollowsFollowingPostParams{}
+			p.SetAccessToken(c.token)
+			assert.Equal(tt, c.expect, p.AccessToken())
+		})
+	}
+}
+
 func Test_FollowsFollowingPostParams_ResolveEndpoint(t *testing.T) {
 	const endpointRoot = "test/endpoint/"
 	const endpointBase = "test/endpoint/:id"
@@ -409,6 +436,59 @@ func Test_FollowsFollowingPostParams_Body(t *testing.T) {
 			r, err := c.params.Body()
 			assert.NoError(tt, err)
 			assert.Equal(tt, c.expect, r)
+		})
+	}
+}
+
+func Test_FollowsFollowingPostParams_ParameterMap(t *testing.T) {
+	cases := []struct {
+		name   string
+		params *types.FollowsFollowingPostParams
+		expect map[string]string
+	}{
+		{
+			name:   "normal: has both of path and json parameters",
+			params: &types.FollowsFollowingPostParams{ID: "id", TargetUserID: gotwi.String("tid")},
+			expect: map[string]string{},
+		},
+		{
+			name:   "normal: has no parameter",
+			params: &types.FollowsFollowingPostParams{},
+			expect: map[string]string{},
+		},
+	}
+
+	for _, c := range cases {
+		t.Run(c.name, func(tt *testing.T) {
+			m := c.params.ParameterMap()
+			assert.Equal(tt, c.expect, m)
+		})
+	}
+}
+
+func Test_FollowsFollowingDeleteParams_SetAccessToken(t *testing.T) {
+	cases := []struct {
+		name   string
+		token  string
+		expect string
+	}{
+		{
+			name:   "normal",
+			token:  "test-token",
+			expect: "test-token",
+		},
+		{
+			name:   "normal: empty",
+			token:  "",
+			expect: "",
+		},
+	}
+
+	for _, c := range cases {
+		t.Run(c.name, func(tt *testing.T) {
+			p := &types.FollowsFollowingDeleteParams{}
+			p.SetAccessToken(c.token)
+			assert.Equal(tt, c.expect, p.AccessToken())
 		})
 	}
 }
@@ -479,6 +559,32 @@ func Test_FollowsFollowingDeleteParams_Body(t *testing.T) {
 			r, err := c.params.Body()
 			assert.NoError(tt, err)
 			assert.Equal(tt, c.expect, r)
+		})
+	}
+}
+
+func Test_FollowsFollowingDeleteParams_ParameterMap(t *testing.T) {
+	cases := []struct {
+		name   string
+		params *types.FollowsFollowingDeleteParams
+		expect map[string]string
+	}{
+		{
+			name:   "normal: has parameters",
+			params: &types.FollowsFollowingDeleteParams{SourceUserID: "id", TargetUserID: "tid"},
+			expect: map[string]string{},
+		},
+		{
+			name:   "normal: has no parameter",
+			params: &types.FollowsFollowingDeleteParams{},
+			expect: map[string]string{},
+		},
+	}
+
+	for _, c := range cases {
+		t.Run(c.name, func(tt *testing.T) {
+			m := c.params.ParameterMap()
+			assert.Equal(tt, c.expect, m)
 		})
 	}
 }
