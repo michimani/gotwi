@@ -6,9 +6,11 @@ import (
 	"io"
 	"net/http"
 	"net/url"
+	"strings"
 	"testing"
 
 	"github.com/michimani/gotwi"
+	"github.com/michimani/gotwi/internal/util"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -281,6 +283,179 @@ func Test_newRequest(t *testing.T) {
 			assert.Equal(tt, c.expect.Method, r.Method)
 			assert.Equal(tt, c.expect.URL, r.URL)
 			assert.Equal(tt, c.expect.Header, r.Header)
+		})
+	}
+}
+
+type RoundTripFunc func(req *http.Request) *http.Response
+
+func (f RoundTripFunc) RoundTrip(req *http.Request) (*http.Response, error) {
+	return f(req), nil
+}
+
+func newMockClient(fn RoundTripFunc) *http.Client {
+	return &http.Client{
+		Transport: RoundTripFunc(fn),
+	}
+}
+
+type mockInput struct {
+	ResponseStatusCode int
+	ResponseHeader     map[string][]string
+	ResponseBody       io.ReadCloser
+}
+
+func newMockHTTPClient(in *mockInput) *http.Client {
+	return newMockClient(func(req *http.Request) *http.Response {
+		return &http.Response{
+			Status:     "mock response status",
+			StatusCode: in.ResponseStatusCode,
+			Body:       in.ResponseBody,
+			Header:     in.ResponseHeader,
+		}
+	})
+}
+
+type mockAPIParameter struct{}
+
+func (mp mockAPIParameter) SetAccessToken(token string)                {}
+func (mp mockAPIParameter) AccessToken() string                        { return "" }
+func (mp mockAPIParameter) ResolveEndpoint(endpointBase string) string { return "" }
+func (mp mockAPIParameter) Body() (io.Reader, error)                   { return nil, nil }
+func (mp mockAPIParameter) ParameterMap() map[string]string            { return map[string]string{} }
+
+type mockAPIResponse struct{}
+
+func (mr mockAPIResponse) HasPartialError() bool { return false }
+
+func Test_CallAPI(t *testing.T) {
+
+	cases := []struct {
+		name            string
+		mockInput       *mockInput
+		clientInput     *gotwi.NewGotwiClientInput
+		endpoint        string
+		method          string
+		envAPIKey       string
+		envAPIKeySecret string
+		params          util.Parameters
+		response        util.Response
+		wantErr         bool
+	}{
+		{
+			name: "ok: OAuth 1.0",
+			mockInput: &mockInput{
+				ResponseStatusCode: http.StatusOK,
+				ResponseBody:       io.NopCloser(strings.NewReader(`{"message": "ok"}`)),
+			},
+			clientInput: &gotwi.NewGotwiClientInput{
+				AuthenticationMethod: gotwi.AuthenMethodOAuth1UserContext,
+				OAuthToken:           "token",
+				OAuthTokenSecret:     "secret",
+			},
+			endpoint:        "test-endpoint",
+			method:          http.MethodGet,
+			envAPIKey:       "api-key",
+			envAPIKeySecret: "api-key-secret",
+			params:          &mockAPIParameter{},
+			response:        &mockAPIResponse{},
+			wantErr:         false,
+		},
+		{
+			name: "error: parameter is nil",
+			mockInput: &mockInput{
+				ResponseStatusCode: http.StatusOK,
+				ResponseBody:       io.NopCloser(strings.NewReader(`{"message": "ok"}`)),
+			},
+			clientInput: &gotwi.NewGotwiClientInput{
+				AuthenticationMethod: gotwi.AuthenMethodOAuth1UserContext,
+				OAuthToken:           "token",
+				OAuthTokenSecret:     "secret",
+			},
+			endpoint:        "test-endpoint",
+			method:          http.MethodGet,
+			envAPIKey:       "api-key",
+			envAPIKeySecret: "api-key-secret",
+			params:          nil,
+			response:        &mockAPIResponse{},
+			wantErr:         true,
+		},
+		{
+			name: "error: cient is not ready",
+			mockInput: &mockInput{
+				ResponseStatusCode: http.StatusOK,
+				ResponseBody:       io.NopCloser(strings.NewReader(`{"message": "ok"}`)),
+			},
+			clientInput: &gotwi.NewGotwiClientInput{
+				AuthenticationMethod: gotwi.AuthenMethodOAuth1UserContext,
+				OAuthToken:           "token",
+				OAuthTokenSecret:     "secret",
+			},
+			endpoint:        "test-endpoint",
+			envAPIKey:       "api-key",
+			envAPIKeySecret: "api-key-secret",
+			method:          http.MethodGet,
+			params:          &mockAPIParameter{},
+			response:        &mockAPIResponse{},
+			wantErr:         false,
+		},
+		{
+			name: "error: not 200 response",
+			mockInput: &mockInput{
+				ResponseStatusCode: http.StatusInternalServerError,
+				ResponseBody:       io.NopCloser(strings.NewReader(`{}`)),
+			},
+			clientInput: &gotwi.NewGotwiClientInput{
+				AuthenticationMethod: gotwi.AuthenMethodOAuth1UserContext,
+				OAuthToken:           "token",
+				OAuthTokenSecret:     "secret",
+			},
+			endpoint:        "test-endpoint",
+			method:          http.MethodGet,
+			envAPIKey:       "api-key",
+			envAPIKeySecret: "api-key-secret",
+			params:          &mockAPIParameter{},
+			response:        &mockAPIResponse{},
+			wantErr:         true,
+		},
+		{
+			name: "error: failed to decode json",
+			mockInput: &mockInput{
+				ResponseStatusCode: http.StatusOK,
+				ResponseBody:       io.NopCloser(strings.NewReader(`///`)),
+			},
+			clientInput: &gotwi.NewGotwiClientInput{
+				AuthenticationMethod: gotwi.AuthenMethodOAuth1UserContext,
+				OAuthToken:           "token",
+				OAuthTokenSecret:     "secret",
+			},
+			endpoint:        "test-endpoint",
+			method:          http.MethodGet,
+			envAPIKey:       "api-key",
+			envAPIKeySecret: "api-key-secret",
+			params:          &mockAPIParameter{},
+			response:        &mockAPIResponse{},
+			wantErr:         true,
+		},
+	}
+
+	for _, c := range cases {
+		t.Run(c.name, func(tt *testing.T) {
+			tt.Setenv("GOTWI_API_KEY", c.envAPIKey)
+			tt.Setenv("GOTWI_API_KEY_SECRET", c.envAPIKeySecret)
+
+			mockClient := newMockHTTPClient(c.mockInput)
+			in := c.clientInput
+			in.HTTPClient = mockClient
+			client, _ := gotwi.NewGotwiClient(in)
+
+			err := client.CallAPI(context.Background(), c.endpoint, c.method, c.params, c.response)
+			if c.wantErr {
+				assert.Error(tt, err)
+				return
+			}
+
+			assert.Nil(tt, err)
 		})
 	}
 }
