@@ -39,6 +39,10 @@ type NewGotwiClientInput struct {
 	OAuthTokenSecret     string
 }
 
+type IGotwiClient interface {
+	Exec(req *http.Request, i util.Response) (*resources.Non2XXError, error)
+}
+
 type GotwiClient struct {
 	Client               *http.Client
 	AuthenticationMethod AuthenticationMethod
