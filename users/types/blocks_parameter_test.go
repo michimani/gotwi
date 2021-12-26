@@ -218,6 +218,33 @@ func Test_BlocksBlockingGetParams_Body(t *testing.T) {
 	}
 }
 
+func Test_BlocksBlockingPostParams_SetAccessToken(t *testing.T) {
+	cases := []struct {
+		name   string
+		token  string
+		expect string
+	}{
+		{
+			name:   "normal",
+			token:  "test-token",
+			expect: "test-token",
+		},
+		{
+			name:   "normal: empty",
+			token:  "",
+			expect: "",
+		},
+	}
+
+	for _, c := range cases {
+		t.Run(c.name, func(tt *testing.T) {
+			p := &types.BlocksBlockingPostParams{}
+			p.SetAccessToken(c.token)
+			assert.Equal(tt, c.expect, p.AccessToken())
+		})
+	}
+}
+
 func Test_BlocksBlockingPostParams_ResolveEndpoint(t *testing.T) {
 	const endpointRoot = "test/endpoint/"
 	const endpointBase = "test/endpoint/:id"
@@ -274,6 +301,62 @@ func Test_BlocksBlockingPostParams_Body(t *testing.T) {
 			r, err := c.params.Body()
 			assert.NoError(tt, err)
 			assert.Equal(tt, c.expect, r)
+		})
+	}
+}
+
+func Test_BlocksBlockingPostParams_ParameterMap(t *testing.T) {
+	cases := []struct {
+		name   string
+		params *types.BlocksBlockingPostParams
+		expect map[string]string
+	}{
+		{
+			name:   "normal: only required parameter",
+			params: &types.BlocksBlockingPostParams{ID: "test-id"},
+			expect: map[string]string{},
+		},
+		{
+			name: "normal: has no required parameter",
+			params: &types.BlocksBlockingPostParams{
+				ID:           "tid",
+				TargetUserID: gotwi.String("tid"),
+			},
+			expect: map[string]string{},
+		},
+	}
+
+	for _, c := range cases {
+		t.Run(c.name, func(tt *testing.T) {
+			m := c.params.ParameterMap()
+			assert.Equal(tt, c.expect, m)
+		})
+	}
+}
+
+func Test_BlocksBlockingDeleteParams_SetAccessToken(t *testing.T) {
+	cases := []struct {
+		name   string
+		token  string
+		expect string
+	}{
+		{
+			name:   "normal",
+			token:  "test-token",
+			expect: "test-token",
+		},
+		{
+			name:   "normal: empty",
+			token:  "",
+			expect: "",
+		},
+	}
+
+	for _, c := range cases {
+		t.Run(c.name, func(tt *testing.T) {
+			p := &types.BlocksBlockingDeleteParams{}
+			p.SetAccessToken(c.token)
+			assert.Equal(tt, c.expect, p.AccessToken())
 		})
 	}
 }
@@ -344,6 +427,32 @@ func Test_BlocksBlockingDeleteParams_Body(t *testing.T) {
 			r, err := c.params.Body()
 			assert.NoError(tt, err)
 			assert.Equal(tt, c.expect, r)
+		})
+	}
+}
+
+func Test_BlocksBlockingDeleteParams_ParameterMap(t *testing.T) {
+	cases := []struct {
+		name   string
+		params *types.BlocksBlockingDeleteParams
+		expect map[string]string
+	}{
+		{
+			name:   "normal: only required parameter",
+			params: &types.BlocksBlockingDeleteParams{SourceUserID: "sid", TargetUserID: "tid"},
+			expect: map[string]string{},
+		},
+		{
+			name:   "normal: has no required parameter",
+			params: &types.BlocksBlockingDeleteParams{},
+			expect: map[string]string{},
+		},
+	}
+
+	for _, c := range cases {
+		t.Run(c.name, func(tt *testing.T) {
+			m := c.params.ParameterMap()
+			assert.Equal(tt, c.expect, m)
 		})
 	}
 }
