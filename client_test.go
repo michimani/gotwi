@@ -8,9 +8,11 @@ import (
 	"net/url"
 	"strings"
 	"testing"
+	"time"
 
 	"github.com/michimani/gotwi"
 	"github.com/michimani/gotwi/internal/util"
+	"github.com/michimani/gotwi/resources"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -456,6 +458,162 @@ func Test_CallAPI(t *testing.T) {
 			}
 
 			assert.Nil(tt, err)
+		})
+	}
+}
+
+func Test_resolveNon2XXResponse(t *testing.T) {
+	resetTime := time.Unix(int64(100000000), 0)
+
+	cases := []struct {
+		name             string
+		res              *http.Response
+		hasRateLimitInfo bool
+		wantErr          bool
+		expect           resources.Non2XXError
+	}{
+		{
+			name: "normal: no rate limit error",
+			res: &http.Response{
+				Status:     "Internal Server Error",
+				StatusCode: http.StatusInternalServerError,
+				Header: map[string][]string{
+					"Content-Type": {"application/json;charset=UTF-8"},
+				},
+				Body: io.NopCloser(strings.NewReader(`{"message": "error"}`)),
+			},
+			wantErr: false,
+			expect: resources.Non2XXError{
+				Status:        gotwi.String("Internal Server Error"),
+				StatusCode:    gotwi.Int(http.StatusInternalServerError),
+				Errors:        nil,
+				Title:         nil,
+				Detail:        nil,
+				Type:          nil,
+				RateLimitInfo: nil,
+			},
+		},
+		{
+			name: "normal: content-type is text/plain",
+			res: &http.Response{
+				Status:     "Internal Server Error",
+				StatusCode: http.StatusInternalServerError,
+				Header: map[string][]string{
+					"Content-Type": {"text/plain"},
+				},
+				Body: io.NopCloser(strings.NewReader("text error message")),
+			},
+			wantErr: false,
+			expect: resources.Non2XXError{
+				Status:     gotwi.String("Internal Server Error"),
+				StatusCode: gotwi.Int(http.StatusInternalServerError),
+				Errors: []resources.ErrorInformation{
+					{Message: gotwi.String("text error message")},
+				},
+				Title:         nil,
+				Detail:        nil,
+				Type:          nil,
+				RateLimitInfo: nil,
+			},
+		},
+		{
+			name: "normal: content-type is empty",
+			res: &http.Response{
+				Status:     "Internal Server Error",
+				StatusCode: http.StatusInternalServerError,
+				Header:     map[string][]string{},
+			},
+			wantErr: false,
+			expect: resources.Non2XXError{
+				Status:     gotwi.String("Internal Server Error"),
+				StatusCode: gotwi.Int(http.StatusInternalServerError),
+				Errors: []resources.ErrorInformation{
+					{Message: gotwi.String("Content-Type is undefined.")},
+				},
+				Title:         nil,
+				Detail:        nil,
+				Type:          nil,
+				RateLimitInfo: nil,
+			},
+		},
+		{
+			name: "normal: rate limit error",
+			res: &http.Response{
+				Status:     "Too Many Requests",
+				StatusCode: http.StatusTooManyRequests,
+				Header: map[string][]string{
+					"Content-Type":           {"application/json;charset=UTF-8"},
+					"X-Rate-Limit-Limit":     {"1"},
+					"X-Rate-Limit-Remaining": {"2"},
+					"X-Rate-Limit-Reset":     {"100000000"},
+				},
+				Body: io.NopCloser(strings.NewReader(`{"message": "error"}`)),
+			},
+			hasRateLimitInfo: true,
+			wantErr:          false,
+			expect: resources.Non2XXError{
+				Status:     gotwi.String("Too Many Requests"),
+				StatusCode: gotwi.Int(http.StatusTooManyRequests),
+				Errors:     nil,
+				Title:      nil,
+				Detail:     nil,
+				Type:       nil,
+				RateLimitInfo: &util.RateLimitInformation{
+					Limit:     1,
+					Remaining: 2,
+					ResetAt:   &resetTime,
+				},
+			},
+		},
+		{
+			name: "error: failed to decode json",
+			res: &http.Response{
+				Status:     "Internal Server Error",
+				StatusCode: http.StatusInternalServerError,
+				Header: map[string][]string{
+					"Content-Type": {"application/json;charset=UTF-8"},
+				},
+				Body: io.NopCloser(strings.NewReader(`///`)),
+			},
+			wantErr: true,
+		},
+		{
+			name: "error: on getting rate limit information",
+			res: &http.Response{
+				Status:     "Too Many Requests",
+				StatusCode: http.StatusTooManyRequests,
+				Header: map[string][]string{
+					"Content-Type":           {"application/json;charset=UTF-8"},
+					"X-Rate-Limit-Limit":     {"1"},
+					"X-Rate-Limit-Remaining": {"xxxx"},
+					"X-Rate-Limit-Reset":     {"100000000"},
+				},
+				Body: io.NopCloser(strings.NewReader(`{"message": "error"}`)),
+			},
+			wantErr: true,
+		},
+	}
+
+	for _, c := range cases {
+		t.Run(c.name, func(tt *testing.T) {
+			e, err := gotwi.ExportResolveNon2XXResponse(c.res)
+			if c.wantErr {
+				assert.Error(tt, err)
+				assert.Nil(tt, e)
+				return
+			}
+
+			assert.NoError(tt, err)
+
+			assert.Equal(tt, c.expect.Errors, e.Errors)
+			assert.Equal(tt, c.expect.Title, e.Title)
+			assert.Equal(tt, c.expect.Detail, e.Detail)
+			assert.Equal(tt, c.expect.Type, e.Type)
+			assert.Equal(tt, c.expect.Status, e.Status)
+			assert.Equal(tt, c.expect.StatusCode, e.StatusCode)
+			if c.hasRateLimitInfo {
+				assert.NotNil(tt, e.RateLimitInfo)
+			}
 		})
 	}
 }
