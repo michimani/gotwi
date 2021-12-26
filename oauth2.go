@@ -18,7 +18,7 @@ type OAuth2TokenResponse struct {
 
 func (o OAuth2TokenResponse) HasPartialError() bool { return false }
 
-func GenerateBearerToken(c *GotwiClient, apiKey, apiKeySecret string) (string, error) {
+func GenerateBearerToken(c IGotwiClient, apiKey, apiKeySecret string) (string, error) {
 	uv := url.Values{}
 	uv.Add("grant_type", "client_credentials")
 	body := strings.NewReader(uv.Encode())
