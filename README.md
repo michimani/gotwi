@@ -52,6 +52,7 @@ Progress of supporting APIs:
     - [x] `GET /2/users/:id`
     - [x] `GET /2/users/by`
     - [x] `GET /2/users/by/username`
+    - [x] `GET /2/users/by/me`
   - Follows
     - [x] `GET /2/users/:id/following`
     - [x] `GET /2/users/:id/followers`

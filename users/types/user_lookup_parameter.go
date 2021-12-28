@@ -231,3 +231,49 @@ func (p *UserLookupByUsernameParams) ParameterMap() map[string]string {
 
 	return m
 }
+
+type UserLookupMeParams struct {
+	accessToken string
+
+	// Query parameters
+	Expansions  fields.ExpansionList
+	TweetFields fields.TweetFieldList
+	UserFields  fields.UserFieldList
+}
+
+var UserLookupMeQueryParams = map[string]struct{}{
+	"expansions":   {},
+	"tweet.fields": {},
+	"user.fields":  {},
+}
+
+func (p *UserLookupMeParams) SetAccessToken(token string) {
+	p.accessToken = token
+}
+
+func (p *UserLookupMeParams) AccessToken() string {
+	return p.accessToken
+}
+
+func (p *UserLookupMeParams) ResolveEndpoint(endpointBase string) string {
+	endpoint := endpointBase
+
+	pm := p.ParameterMap()
+	qs := util.QueryString(pm, UserLookupMeQueryParams)
+
+	if qs == "" {
+		return endpoint
+	}
+
+	return endpoint + "?" + qs
+}
+
+func (p *UserLookupMeParams) Body() (io.Reader, error) {
+	return nil, nil
+}
+
+func (p *UserLookupMeParams) ParameterMap() map[string]string {
+	m := map[string]string{}
+	m = fields.SetFieldsParams(m, p.Expansions, p.TweetFields, p.UserFields)
+	return m
+}

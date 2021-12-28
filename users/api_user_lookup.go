@@ -12,6 +12,7 @@ const (
 	UserLookupIDEndpoint         = "https://api.twitter.com/2/users/:id"
 	UserLookupByEndpoint         = "https://api.twitter.com/2/users/by"
 	UserLookupByUsernameEndpoint = "https://api.twitter.com/2/users/by/username/:username"
+	UserLookupMeEndpoint         = "https://api.twitter.com/2/users/me"
 )
 
 // Returns a variety of information about one or more users specified by the requested IDs.
@@ -52,6 +53,17 @@ func UserLookupBy(ctx context.Context, c *gotwi.GotwiClient, p *types.UserLookup
 func UserLookupByUsername(ctx context.Context, c *gotwi.GotwiClient, p *types.UserLookupByUsernameParams) (*types.UserLookupByUsernameResponse, error) {
 	res := &types.UserLookupByUsernameResponse{}
 	if err := c.CallAPI(ctx, UserLookupByUsernameEndpoint, "GET", p, res); err != nil {
+		return nil, err
+	}
+
+	return res, nil
+}
+
+// Returns a variety of information about one or more users specified by the requested IDs.
+// https://developer.twitter.com/en/docs/twitter-api/users/lookup/api-reference/get-users
+func UserLookupMe(ctx context.Context, c *gotwi.GotwiClient, p *types.UserLookupMeParams) (*types.UserLookupMeResponse, error) {
+	res := &types.UserLookupMeResponse{}
+	if err := c.CallAPI(ctx, UserLookupMeEndpoint, "GET", p, res); err != nil {
 		return nil, err
 	}
 
