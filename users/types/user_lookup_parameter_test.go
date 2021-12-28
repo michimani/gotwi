@@ -475,3 +475,106 @@ func Test_UserLookupByUsernameParams_Body(t *testing.T) {
 		})
 	}
 }
+
+func Test_UserLookupMeParams_SetAccessToken(t *testing.T) {
+	cases := []struct {
+		name   string
+		token  string
+		expect string
+	}{
+		{
+			name:   "normal",
+			token:  "test-token",
+			expect: "test-token",
+		},
+		{
+			name:   "normal: empty",
+			token:  "",
+			expect: "",
+		},
+	}
+
+	for _, c := range cases {
+		t.Run(c.name, func(tt *testing.T) {
+			p := &types.UserLookupMeParams{}
+			p.SetAccessToken(c.token)
+			assert.Equal(tt, c.expect, p.AccessToken())
+		})
+	}
+}
+
+func Test_UserLookupMeParams_ResolveEndpoint(t *testing.T) {
+	const endpointBase = "test/endpoint"
+	cases := []struct {
+		name   string
+		params *types.UserLookupMeParams
+		expect string
+	}{
+		{
+			name:   "normal: has no parameter",
+			params: &types.UserLookupMeParams{},
+			expect: endpointBase,
+		},
+		{
+			name: "normal: with expansions",
+			params: &types.UserLookupMeParams{
+				Expansions: fields.ExpansionList{"ex1", "ex2"},
+			},
+			expect: endpointBase + "?expansions=ex1%2Cex2",
+		},
+		{
+			name: "normal: with tweets.fields",
+			params: &types.UserLookupMeParams{
+				TweetFields: fields.TweetFieldList{"tf1", "tf2"},
+			},
+			expect: endpointBase + "?tweet.fields=tf1%2Ctf2",
+		},
+		{
+			name: "normal: with users.fields",
+			params: &types.UserLookupMeParams{
+				UserFields: fields.UserFieldList{"uf1", "uf2"},
+			},
+			expect: endpointBase + "?user.fields=uf1%2Cuf2",
+		},
+		{
+			name: "normal: all query parameters",
+			params: &types.UserLookupMeParams{
+				Expansions:  fields.ExpansionList{"ex"},
+				UserFields:  fields.UserFieldList{"uf"},
+				TweetFields: fields.TweetFieldList{"tf"},
+			},
+			expect: endpointBase + "?expansions=ex&tweet.fields=tf&user.fields=uf",
+		},
+	}
+
+	for _, c := range cases {
+		t.Run(c.name, func(tt *testing.T) {
+			ep := c.params.ResolveEndpoint(endpointBase)
+			assert.Equal(tt, c.expect, ep)
+		})
+	}
+}
+
+func Test_UserLookupMeParams_Body(t *testing.T) {
+	cases := []struct {
+		name   string
+		params *types.UserLookupMeParams
+	}{
+		{
+			name:   "empty params",
+			params: &types.UserLookupMeParams{},
+		},
+		{
+			name:   "some params",
+			params: &types.UserLookupMeParams{Expansions: fields.ExpansionList{"ex"}},
+		},
+	}
+
+	for _, c := range cases {
+		t.Run(c.name, func(tt *testing.T) {
+			r, err := c.params.Body()
+			assert.NoError(tt, err)
+			assert.Nil(tt, r)
+		})
+	}
+}
