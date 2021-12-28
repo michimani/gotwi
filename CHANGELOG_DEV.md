@@ -2,6 +2,15 @@ CHANGELOG
 ===
 This is a version of CHANGELOG less than v1.0.
 
+v0.9.8 (2021-12-28)
+===
+
+### New Supported APIs
+* `GET /2/users/me`
+
+### Documentation
+* add some tests
+
 v0.9.7 (2021-12-24)
 ===
 
