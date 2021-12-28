@@ -496,7 +496,7 @@ func Test_UserLookupMeParams_SetAccessToken(t *testing.T) {
 
 	for _, c := range cases {
 		t.Run(c.name, func(tt *testing.T) {
-			p := &types.UserLookupParams{}
+			p := &types.UserLookupMeParams{}
 			p.SetAccessToken(c.token)
 			assert.Equal(tt, c.expect, p.AccessToken())
 		})
