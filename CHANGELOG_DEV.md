@@ -2,6 +2,22 @@ CHANGELOG
 ===
 This is a version of CHANGELOG less than v1.0.
 
+## [Unreleased]
+
+### Support APIs
+* `GET /2/spaces/:id/buyers`
+* `GET /2/spaces/:id/tweets`
+
+v0.9.9 (2022-01-14)
+===
+
+### Documentation
+* add some tests
+
+### Fixes
+* use `io.ReadAll` instead of `ioutil.ReadAll` 
+* comment for API (`users.UserLookupMe`)
+
 v0.9.8 (2021-12-28)
 ===
 
