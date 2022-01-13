@@ -20,20 +20,20 @@ Progress of supporting APIs:
   - Manage Tweet
     - [x] `POST /2/tweets`
     - [x] `DELETE /2/tweets/:id`
+  - Timelines
+    - [x] `GET /2/users/:id/tweets`
+    - [x] `GET /2/users/:id/mentions` 
   - Search Tweets
     - [x] `GET /2/tweets/search/recent`
     - [x] `GET /2/tweets/search/all`
   - Tweet counts
     - [x] `GET /2/tweets/counts/recent`
     - [x] `GET /2/tweets/counts/all`
-  - Timelines
-    - [x] `GET /2/users/:id/tweets`
-    - [x] `GET /2/users/:id/mentions` 
   - Filtered stream
     - [ ] `POST /2/tweets/search/stream/rules`
     - [x] `GET /2/tweets/search/stream/rules`
     - [ ] `GET /2/tweets/search/stream`
-  - Sampled stream
+  - Volume streams
     - [ ] `GET /2/tweets/sample/stream`
   - Retweets
     - [x] `GET /2/users/:id/retweeted_by`
@@ -86,7 +86,7 @@ Progress of supporting APIs:
     - [x] `GET /2/users/:id/followed_lists`
     - [x] `POST /2/users/:id/followed_lists`
     - [x] `DELETE /2/users/:id/followed_lists/:list_id`
-  - Manage pinned Lists
+  - Pinned Lists
     - [x] `GET /2/users/:id/pinned_lists`
     - [x] `POST /2/users/:id/pinned_lists`
     - [x] `DELETE /2/users/:id/pinned_lists/:list_id`
@@ -95,6 +95,8 @@ Progress of supporting APIs:
     - [x] `GET /2/spaces/:id`
     - [x] `GET /2/spaces`
     - [x] `GET /2/spaces/by/creator_ids`
+    - [ ] `GET /2/spaces/:id/buyers`
+    - [ ] `GET /2/spaces/:id/tweets`
   - Search Spaces
     - [x] `GET /2/spaces/search`
 - **Compliance**
