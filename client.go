@@ -4,7 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"net/url"
 	"os"
@@ -284,7 +284,7 @@ func resolveNon2XXResponse(res *http.Response) (*resources.Non2XXError, error) {
 	}
 
 	if !strings.Contains(cts[0], "application/json") {
-		bytes, err := ioutil.ReadAll(res.Body)
+		bytes, err := io.ReadAll(res.Body)
 		if err != nil {
 			return nil, err
 		}
