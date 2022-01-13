@@ -144,8 +144,9 @@ func Test_SearchTweetsRecent_ResolveEndpoint(t *testing.T) {
 				UserFields:  fields.UserFieldList{"uf"},
 				TweetFields: fields.TweetFieldList{"tf"},
 				MaxResults:  10,
+				NextToken:   "token",
 			},
-			expect: endpointBase + "?expansions=ex&max_results=10&media.fields=mf&place.fields=plf&poll.fields=pof&query=from%3Atestuser&tweet.fields=tf&user.fields=uf",
+			expect: endpointBase + "?expansions=ex&max_results=10&media.fields=mf&next_token=token&place.fields=plf&poll.fields=pof&query=from%3Atestuser&tweet.fields=tf&user.fields=uf",
 		},
 		{
 			name: "has no required parameter",
@@ -325,8 +326,9 @@ func Test_SearchTweetsAll_ResolveEndpoint(t *testing.T) {
 				UserFields:  fields.UserFieldList{"uf"},
 				TweetFields: fields.TweetFieldList{"tf"},
 				MaxResults:  10,
+				NextToken:   "token",
 			},
-			expect: endpointBase + "?expansions=ex&max_results=10&media.fields=mf&place.fields=plf&poll.fields=pof&query=from%3Atestuser&tweet.fields=tf&user.fields=uf",
+			expect: endpointBase + "?expansions=ex&max_results=10&media.fields=mf&next_token=token&place.fields=plf&poll.fields=pof&query=from%3Atestuser&tweet.fields=tf&user.fields=uf",
 		},
 		{
 			name: "has no required parameter",
