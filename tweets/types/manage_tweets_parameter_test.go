@@ -10,6 +10,33 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+func Test_ManageTweetsPostParams_SetAccessToken(t *testing.T) {
+	cases := []struct {
+		name   string
+		token  string
+		expect string
+	}{
+		{
+			name:   "normal",
+			token:  "test-token",
+			expect: "test-token",
+		},
+		{
+			name:   "normal: empty",
+			token:  "",
+			expect: "",
+		},
+	}
+
+	for _, c := range cases {
+		t.Run(c.name, func(tt *testing.T) {
+			p := &types.ManageTweetsPostParams{}
+			p.SetAccessToken(c.token)
+			assert.Equal(tt, c.expect, p.AccessToken())
+		})
+	}
+}
+
 func Test_ManageTweetsPostParams_ResolveEndpoint(t *testing.T) {
 	const endpointBase = "test/endpoint/"
 	cases := []struct {
@@ -70,6 +97,59 @@ func Test_ManageTweetsPostParams_Body(t *testing.T) {
 	}
 }
 
+func Test_ManageTweetsPostParams_ParameterMap(t *testing.T) {
+	cases := []struct {
+		name   string
+		params *types.ManageTweetsPostParams
+		expect map[string]string
+	}{
+		{
+			name:   "normal: has both of path and json parameters",
+			params: &types.ManageTweetsPostParams{Text: gotwi.String("test")},
+			expect: map[string]string{},
+		},
+		{
+			name:   "normal: has no parameter",
+			params: &types.ManageTweetsPostParams{},
+			expect: map[string]string{},
+		},
+	}
+
+	for _, c := range cases {
+		t.Run(c.name, func(tt *testing.T) {
+			m := c.params.ParameterMap()
+			assert.Equal(tt, c.expect, m)
+		})
+	}
+}
+
+func Test_ManageTweetsDeleteParams_SetAccessToken(t *testing.T) {
+	cases := []struct {
+		name   string
+		token  string
+		expect string
+	}{
+		{
+			name:   "normal",
+			token:  "test-token",
+			expect: "test-token",
+		},
+		{
+			name:   "normal: empty",
+			token:  "",
+			expect: "",
+		},
+	}
+
+	for _, c := range cases {
+		t.Run(c.name, func(tt *testing.T) {
+			p := &types.ManageTweetsDeleteParams{}
+			p.SetAccessToken(c.token)
+			assert.Equal(tt, c.expect, p.AccessToken())
+		})
+	}
+}
+
 func Test_ManageTweetsDeleteParams_ResolveEndpoint(t *testing.T) {
 	const endpointRoot = "test/endpoint/"
 	const endpointBase = "test/endpoint/:id"
@@ -123,6 +203,32 @@ func Test_ManageTweetsDeleteParams_Body(t *testing.T) {
 			r, err := c.params.Body()
 			assert.NoError(tt, err)
 			assert.Equal(tt, c.expect, r)
+		})
+	}
+}
+
+func Test_ManageTweetsDeleteParams_ParameterMap(t *testing.T) {
+	cases := []struct {
+		name   string
+		params *types.ManageTweetsDeleteParams
+		expect map[string]string
+	}{
+		{
+			name:   "normal: has both of path and json parameters",
+			params: &types.ManageTweetsDeleteParams{ID: "id"},
+			expect: map[string]string{},
+		},
+		{
+			name:   "normal: has no parameter",
+			params: &types.ManageTweetsDeleteParams{},
+			expect: map[string]string{},
+		},
+	}
+
+	for _, c := range cases {
+		t.Run(c.name, func(tt *testing.T) {
+			m := c.params.ParameterMap()
+			assert.Equal(tt, c.expect, m)
 		})
 	}
 }

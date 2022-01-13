@@ -383,14 +383,14 @@ func Test_CallAPI(t *testing.T) {
 			wantErr:         true,
 		},
 		{
-			name: "error: cient is not ready",
+			name: "error: client is not ready",
 			mockInput: &mockInput{
 				ResponseStatusCode: http.StatusOK,
 				ResponseBody:       io.NopCloser(strings.NewReader(`{"message": "ok"}`)),
 			},
 			clientInput: &gotwi.NewGotwiClientInput{
 				AuthenticationMethod: gotwi.AuthenMethodOAuth1UserContext,
-				OAuthToken:           "token",
+				OAuthToken:           "",
 				OAuthTokenSecret:     "secret",
 			},
 			endpoint:        "test-endpoint",
@@ -399,7 +399,7 @@ func Test_CallAPI(t *testing.T) {
 			method:          http.MethodGet,
 			params:          &mockAPIParameter{},
 			response:        &mockAPIResponse{},
-			wantErr:         false,
+			wantErr:         true,
 		},
 		{
 			name: "error: not 200 response",

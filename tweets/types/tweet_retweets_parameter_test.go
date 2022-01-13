@@ -155,6 +155,33 @@ func Test_TweetRetweetsRetweetedByParams_Body(t *testing.T) {
 	}
 }
 
+func Test_TweetRetweetsPostParams_SetAccessToken(t *testing.T) {
+	cases := []struct {
+		name   string
+		token  string
+		expect string
+	}{
+		{
+			name:   "normal",
+			token:  "test-token",
+			expect: "test-token",
+		},
+		{
+			name:   "normal: empty",
+			token:  "",
+			expect: "",
+		},
+	}
+
+	for _, c := range cases {
+		t.Run(c.name, func(tt *testing.T) {
+			p := &types.TweetRetweetsPostParams{}
+			p.SetAccessToken(c.token)
+			assert.Equal(tt, c.expect, p.AccessToken())
+		})
+	}
+}
+
 func Test_TweetRetweetsPostParams_ResolveEndpoint(t *testing.T) {
 	const endpointRoot = "test/endpoint/"
 	const endpointBase = "test/endpoint/:id"
@@ -211,6 +238,59 @@ func Test_TweetRetweetsPostParams_Body(t *testing.T) {
 			r, err := c.params.Body()
 			assert.NoError(tt, err)
 			assert.Equal(tt, c.expect, r)
+		})
+	}
+}
+
+func Test_TweetRetweetsPostParams_ParameterMap(t *testing.T) {
+	cases := []struct {
+		name   string
+		params *types.TweetRetweetsPostParams
+		expect map[string]string
+	}{
+		{
+			name:   "normal: has both of path and json parameters",
+			params: &types.TweetRetweetsPostParams{ID: "id"},
+			expect: map[string]string{},
+		},
+		{
+			name:   "normal: has no parameter",
+			params: &types.TweetRetweetsPostParams{},
+			expect: map[string]string{},
+		},
+	}
+
+	for _, c := range cases {
+		t.Run(c.name, func(tt *testing.T) {
+			m := c.params.ParameterMap()
+			assert.Equal(tt, c.expect, m)
+		})
+	}
+}
+
+func Test_TweetRetweetsDeleteParams_SetAccessToken(t *testing.T) {
+	cases := []struct {
+		name   string
+		token  string
+		expect string
+	}{
+		{
+			name:   "normal",
+			token:  "test-token",
+			expect: "test-token",
+		},
+		{
+			name:   "normal: empty",
+			token:  "",
+			expect: "",
+		},
+	}
+
+	for _, c := range cases {
+		t.Run(c.name, func(tt *testing.T) {
+			p := &types.TweetRetweetsDeleteParams{}
+			p.SetAccessToken(c.token)
+			assert.Equal(tt, c.expect, p.AccessToken())
 		})
 	}
 }
@@ -281,6 +361,32 @@ func Test_TweetRetweetsDeleteParams_Body(t *testing.T) {
 			r, err := c.params.Body()
 			assert.NoError(tt, err)
 			assert.Equal(tt, c.expect, r)
+		})
+	}
+}
+
+func Test_TweetRetweetsDeleteParams_ParameterMap(t *testing.T) {
+	cases := []struct {
+		name   string
+		params *types.TweetRetweetsDeleteParams
+		expect map[string]string
+	}{
+		{
+			name:   "normal: has both of path and json parameters",
+			params: &types.TweetRetweetsDeleteParams{ID: "id"},
+			expect: map[string]string{},
+		},
+		{
+			name:   "normal: has no parameter",
+			params: &types.TweetRetweetsDeleteParams{},
+			expect: map[string]string{},
+		},
+	}
+
+	for _, c := range cases {
+		t.Run(c.name, func(tt *testing.T) {
+			m := c.params.ParameterMap()
+			assert.Equal(tt, c.expect, m)
 		})
 	}
 }
