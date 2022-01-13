@@ -59,8 +59,8 @@ func UserLookupByUsername(ctx context.Context, c *gotwi.GotwiClient, p *types.Us
 	return res, nil
 }
 
-// Returns a variety of information about one or more users specified by the requested IDs.
-// https://developer.twitter.com/en/docs/twitter-api/users/lookup/api-reference/get-users
+// Returns information about an authorized user.
+// https://developer.twitter.com/en/docs/twitter-api/users/lookup/api-reference/get-users-me
 func UserLookupMe(ctx context.Context, c *gotwi.GotwiClient, p *types.UserLookupMeParams) (*types.UserLookupMeResponse, error) {
 	res := &types.UserLookupMeResponse{}
 	if err := c.CallAPI(ctx, UserLookupMeEndpoint, "GET", p, res); err != nil {
