@@ -1,10 +1,18 @@
 CHANGELOG 
 ===
-This is a version of CHANGELOG less than v1.0.
+This is a version of CHANGELOG less than v1.0.0
 
 ## [Unreleased]
 
 ### Support APIs
+* `GET /2/compliance/jobs/:id`
+* `GET /2/compliance/jobs`
+* `POST /2/compliance/jobs`
+
+v0.9.10 (2022-01-14)
+===
+
+### New Supported APIs
 * `GET /2/spaces/:id/buyers`
 * `GET /2/spaces/:id/tweets`
 
