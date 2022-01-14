@@ -29,6 +29,10 @@ type SpacesLookupByCreatorsIDsMeta struct {
 	ResultCount *int `json:"result_count"`
 }
 
+type SpacesLookupTweetsMeta struct {
+	ResultCount *int `json:"result_count"`
+}
+
 type FilterdStreamRulesGetMeta struct {
 	Sent *time.Time `json:"sent"`
 }
