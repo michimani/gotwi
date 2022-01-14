@@ -510,3 +510,148 @@ func Test_SpacesLookupBuyersParams_Body(t *testing.T) {
 		})
 	}
 }
+
+func Test_SpacesLookupTweetsParams_SetAccessToken(t *testing.T) {
+	cases := []struct {
+		name   string
+		token  string
+		expect string
+	}{
+		{
+			name:   "normal",
+			token:  "test-token",
+			expect: "test-token",
+		},
+		{
+			name:   "empty",
+			token:  "",
+			expect: "",
+		},
+	}
+
+	for _, c := range cases {
+		t.Run(c.name, func(tt *testing.T) {
+			p := &types.SpacesLookupTweetsParams{}
+			p.SetAccessToken(c.token)
+			assert.Equal(tt, c.expect, p.AccessToken())
+		})
+	}
+}
+
+func Test_SpacesLookupTweetsParams_ResolveEndpoint(t *testing.T) {
+	const endpointRoot = "test/endpoint/"
+	const endpointBase = "test/endpoint/:id"
+
+	cases := []struct {
+		name   string
+		params *types.SpacesLookupTweetsParams
+		expect string
+	}{
+		{
+			name:   "only required parameter",
+			params: &types.SpacesLookupTweetsParams{ID: "sid"},
+			expect: endpointRoot + "sid",
+		},
+		{
+			name: "with expansions",
+			params: &types.SpacesLookupTweetsParams{
+				ID:         "sid",
+				Expansions: fields.ExpansionList{"ex1", "ex2"},
+			},
+			expect: endpointRoot + "sid" + "?expansions=ex1%2Cex2",
+		},
+		{
+			name: "with media.fields",
+			params: &types.SpacesLookupTweetsParams{
+				ID:          "sid",
+				MediaFields: fields.MediaFieldList{"tf1", "tf2"},
+			},
+			expect: endpointRoot + "sid" + "?media.fields=tf1%2Ctf2",
+		},
+		{
+			name: "with place.fields",
+			params: &types.SpacesLookupTweetsParams{
+				ID:          "sid",
+				PlaceFields: fields.PlaceFieldList{"tf1", "tf2"},
+			},
+			expect: endpointRoot + "sid" + "?place.fields=tf1%2Ctf2",
+		},
+		{
+			name: "with poll.fields",
+			params: &types.SpacesLookupTweetsParams{
+				ID:         "sid",
+				PollFields: fields.PollFieldList{"tf1", "tf2"},
+			},
+			expect: endpointRoot + "sid" + "?poll.fields=tf1%2Ctf2",
+		},
+		{
+			name: "with tweets.fields",
+			params: &types.SpacesLookupTweetsParams{
+				ID:          "sid",
+				TweetFields: fields.TweetFieldList{"tf1", "tf2"},
+			},
+			expect: endpointRoot + "sid" + "?tweet.fields=tf1%2Ctf2",
+		},
+		{
+			name: "with users.fields",
+			params: &types.SpacesLookupTweetsParams{
+				ID:         "sid",
+				UserFields: fields.UserFieldList{"uf1", "uf2"},
+			},
+			expect: endpointRoot + "sid" + "?user.fields=uf1%2Cuf2",
+		},
+		{
+			name: "all query parameters",
+			params: &types.SpacesLookupTweetsParams{
+				ID:          "sid",
+				Expansions:  fields.ExpansionList{"ex"},
+				MediaFields: fields.MediaFieldList{"mf"},
+				PlaceFields: fields.PlaceFieldList{"plf"},
+				PollFields:  fields.PollFieldList{"pof"},
+				UserFields:  fields.UserFieldList{"uf"},
+				TweetFields: fields.TweetFieldList{"tf"},
+			},
+			expect: endpointRoot + "sid" + "?expansions=ex&media.fields=mf&place.fields=plf&poll.fields=pof&tweet.fields=tf&user.fields=uf",
+		},
+		{
+			name: "has no required parameter",
+			params: &types.SpacesLookupTweetsParams{
+				Expansions:  fields.ExpansionList{"ex"},
+				UserFields:  fields.UserFieldList{"uf"},
+				TweetFields: fields.TweetFieldList{"tf"},
+			},
+			expect: "",
+		},
+	}
+
+	for _, c := range cases {
+		t.Run(c.name, func(tt *testing.T) {
+			ep := c.params.ResolveEndpoint(endpointBase)
+			assert.Equal(tt, c.expect, ep)
+		})
+	}
+}
+
+func Test_SpacesLookupTweetsParams_Body(t *testing.T) {
+	cases := []struct {
+		name   string
+		params *types.SpacesLookupTweetsParams
+	}{
+		{
+			name:   "empty params",
+			params: &types.SpacesLookupTweetsParams{},
+		},
+		{
+			name:   "some params",
+			params: &types.SpacesLookupTweetsParams{ID: "id"},
+		},
+	}
+
+	for _, c := range cases {
+		t.Run(c.name, func(tt *testing.T) {
+			r, err := c.params.Body()
+			assert.NoError(tt, err)
+			assert.Nil(tt, r)
+		})
+	}
+}

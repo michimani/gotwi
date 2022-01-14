@@ -96,7 +96,7 @@ Progress of supporting APIs:
     - [x] `GET /2/spaces`
     - [x] `GET /2/spaces/by/creator_ids`
     - [x] `GET /2/spaces/:id/buyers`
-    - [ ] `GET /2/spaces/:id/tweets`
+    - [x] `GET /2/spaces/:id/tweets`
   - Search Spaces
     - [x] `GET /2/spaces/search`
 - **Compliance**

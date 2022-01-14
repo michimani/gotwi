@@ -12,6 +12,7 @@ const (
 	SpacesLookupEndpoint             = "https://api.twitter.com/2/spaces"
 	SpacesLookupByCreatorIDsEndpoint = "https://api.twitter.com/2/spaces/by/creator_ids"
 	SpacesLookupBuyersEndpoint       = "https://api.twitter.com/2/spaces/:id/buyers"
+	SpacesLookupTweetsEndpoint       = "https://api.twitter.com/2/spaces/:id/tweets"
 )
 
 // Returns a variety of information about a single Space specified by the requested ID.
@@ -54,6 +55,17 @@ func SpacesLookupByCreatorIDs(ctx context.Context, c *gotwi.GotwiClient, p *type
 func SpacesLookupBuyers(ctx context.Context, c *gotwi.GotwiClient, p *types.SpacesLookupBuyersParams) (*types.SpacesLookupBuyersResponse, error) {
 	res := &types.SpacesLookupBuyersResponse{}
 	if err := c.CallAPI(ctx, SpacesLookupBuyersEndpoint, "GET", p, res); err != nil {
+		return nil, err
+	}
+
+	return res, nil
+}
+
+// Returns Tweets shared in the requested Spaces.
+// https://developer.twitter.com/en/docs/twitter-api/spaces/lookup/api-reference/get-spaces-id-tweets
+func SpacesLookupTweets(ctx context.Context, c *gotwi.GotwiClient, p *types.SpacesLookupTweetsParams) (*types.SpacesLookupTweetsResponse, error) {
+	res := &types.SpacesLookupTweetsResponse{}
+	if err := c.CallAPI(ctx, SpacesLookupTweetsEndpoint, "GET", p, res); err != nil {
 		return nil, err
 	}
 
