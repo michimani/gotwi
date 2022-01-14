@@ -172,3 +172,63 @@ func (p *SpacesLookupByCreatorIDsParams) ParameterMap() map[string]string {
 	m = fields.SetFieldsParams(m, p.Expansions, p.SpaceFields, p.UserFields)
 	return m
 }
+
+type SpacesLookupBuyersParams struct {
+	accessToken string
+
+	// Path parameter
+	ID string
+
+	// Query parameters
+	Expansions  fields.ExpansionList
+	MediaFields fields.MediaFieldList
+	PlaceFields fields.PlaceFieldList
+	PollFields  fields.PollFieldList
+	TweetFields fields.TweetFieldList
+	UserFields  fields.UserFieldList
+}
+
+var SpacesLookupBuyersQueryParams = map[string]struct{}{
+	"expansions":   {},
+	"media.fields": {},
+	"place.fields": {},
+	"poll.fields":  {},
+	"tweet.fields": {},
+	"user.fields":  {},
+}
+
+func (p *SpacesLookupBuyersParams) SetAccessToken(token string) {
+	p.accessToken = token
+}
+
+func (p *SpacesLookupBuyersParams) AccessToken() string {
+	return p.accessToken
+}
+
+func (p *SpacesLookupBuyersParams) ResolveEndpoint(endpointBase string) string {
+	if p.ID == "" {
+		return ""
+	}
+
+	encoded := url.QueryEscape(p.ID)
+	endpoint := strings.Replace(endpointBase, ":id", encoded, 1)
+
+	pm := p.ParameterMap()
+	qs := util.QueryString(pm, SpacesLookupBuyersQueryParams)
+
+	if qs == "" {
+		return endpoint
+	}
+
+	return endpoint + "?" + qs
+}
+
+func (p *SpacesLookupBuyersParams) Body() (io.Reader, error) {
+	return nil, nil
+}
+
+func (p *SpacesLookupBuyersParams) ParameterMap() map[string]string {
+	m := map[string]string{}
+	m = fields.SetFieldsParams(m, p.Expansions, p.MediaFields, p.PlaceFields, p.PollFields, p.TweetFields, p.UserFields)
+	return m
+}

@@ -91,11 +91,11 @@ Progress of supporting APIs:
     - [x] `POST /2/users/:id/pinned_lists`
     - [x] `DELETE /2/users/:id/pinned_lists/:list_id`
 - **Spaces**
-  - Lookup Spaces
+  - Spaces Lookup
     - [x] `GET /2/spaces/:id`
     - [x] `GET /2/spaces`
     - [x] `GET /2/spaces/by/creator_ids`
-    - [ ] `GET /2/spaces/:id/buyers`
+    - [x] `GET /2/spaces/:id/buyers`
     - [ ] `GET /2/spaces/:id/tweets`
   - Search Spaces
     - [x] `GET /2/spaces/search`
