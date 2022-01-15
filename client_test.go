@@ -40,6 +40,7 @@ func Test_NewGotwiClient(t *testing.T) {
 		name            string
 		envAPIKey       string
 		envAPIKeySecret string
+		mockInput       *mockInput
 		in              *gotwi.NewGotwiClientInput
 		wantErr         bool
 		expect          *gotwi.GotwiClient
@@ -61,6 +62,38 @@ func Test_NewGotwiClient(t *testing.T) {
 				OAuthConsumerKey:     "api-key",
 				SigningKey:           "api-key-secret&oauth-token-secret",
 			},
+		},
+		{
+			name:            "normal: OAuth2.0",
+			envAPIKey:       "api-key",
+			envAPIKeySecret: "api-key-secret",
+			mockInput: &mockInput{
+				ResponseStatusCode: http.StatusOK,
+				ResponseBody:       io.NopCloser(strings.NewReader(`{"token_type":"token_type","access_token":"access_token"}`)),
+			},
+			in: &gotwi.NewGotwiClientInput{
+				AuthenticationMethod: gotwi.AuthenMethodOAuth2BearerToken,
+			},
+			wantErr: false,
+			expect: &gotwi.GotwiClient{
+				AuthenticationMethod: gotwi.AuthenMethodOAuth2BearerToken,
+				AccessToken:          "access_token",
+				OAuthConsumerKey:     "api-key",
+			},
+		},
+		{
+			name:            "error: OAuth2.0",
+			envAPIKey:       "api-key",
+			envAPIKeySecret: "api-key-secret",
+			mockInput: &mockInput{
+				ResponseStatusCode: http.StatusInternalServerError,
+				ResponseBody:       io.NopCloser(strings.NewReader(``)),
+			},
+			in: &gotwi.NewGotwiClientInput{
+				AuthenticationMethod: gotwi.AuthenMethodOAuth2BearerToken,
+			},
+			wantErr: true,
+			expect:  nil,
 		},
 		{
 			name:            "error: input is nil",
@@ -136,6 +169,11 @@ func Test_NewGotwiClient(t *testing.T) {
 		t.Run(c.name, func(tt *testing.T) {
 			tt.Setenv("GOTWI_API_KEY", c.envAPIKey)
 			tt.Setenv("GOTWI_API_KEY_SECRET", c.envAPIKeySecret)
+
+			mockClient := newMockHTTPClient(c.mockInput)
+			if mockClient != nil {
+				c.in.HTTPClient = mockClient
+			}
 
 			gc, err := gotwi.NewGotwiClient(c.in)
 			if c.wantErr {
@@ -289,49 +327,7 @@ func Test_newRequest(t *testing.T) {
 	}
 }
 
-type RoundTripFunc func(req *http.Request) *http.Response
-
-func (f RoundTripFunc) RoundTrip(req *http.Request) (*http.Response, error) {
-	return f(req), nil
-}
-
-func newMockClient(fn RoundTripFunc) *http.Client {
-	return &http.Client{
-		Transport: RoundTripFunc(fn),
-	}
-}
-
-type mockInput struct {
-	ResponseStatusCode int
-	ResponseHeader     map[string][]string
-	ResponseBody       io.ReadCloser
-}
-
-func newMockHTTPClient(in *mockInput) *http.Client {
-	return newMockClient(func(req *http.Request) *http.Response {
-		return &http.Response{
-			Status:     "mock response status",
-			StatusCode: in.ResponseStatusCode,
-			Body:       in.ResponseBody,
-			Header:     in.ResponseHeader,
-		}
-	})
-}
-
-type mockAPIParameter struct{}
-
-func (mp mockAPIParameter) SetAccessToken(token string)                {}
-func (mp mockAPIParameter) AccessToken() string                        { return "" }
-func (mp mockAPIParameter) ResolveEndpoint(endpointBase string) string { return "" }
-func (mp mockAPIParameter) Body() (io.Reader, error)                   { return nil, nil }
-func (mp mockAPIParameter) ParameterMap() map[string]string            { return map[string]string{} }
-
-type mockAPIResponse struct{}
-
-func (mr mockAPIResponse) HasPartialError() bool { return false }
-
 func Test_CallAPI(t *testing.T) {
-
 	cases := []struct {
 		name            string
 		mockInput       *mockInput
@@ -439,6 +435,25 @@ func Test_CallAPI(t *testing.T) {
 			response:        &mockAPIResponse{},
 			wantErr:         true,
 		},
+		{
+			name: "error: invalid method",
+			mockInput: &mockInput{
+				ResponseStatusCode: http.StatusOK,
+				ResponseBody:       io.NopCloser(strings.NewReader(`{}`)),
+			},
+			clientInput: &gotwi.NewGotwiClientInput{
+				AuthenticationMethod: gotwi.AuthenMethodOAuth1UserContext,
+				OAuthToken:           "token",
+				OAuthTokenSecret:     "secret",
+			},
+			endpoint:        "test-endpoint",
+			method:          "invalid method",
+			envAPIKey:       "api-key",
+			envAPIKeySecret: "api-key-secret",
+			params:          &mockAPIParameter{},
+			response:        &mockAPIResponse{},
+			wantErr:         true,
+		},
 	}
 
 	for _, c := range cases {
@@ -458,6 +473,89 @@ func Test_CallAPI(t *testing.T) {
 			}
 
 			assert.Nil(tt, err)
+		})
+	}
+}
+
+func Test_Exec(t *testing.T) {
+	nonErrReq, _ := http.NewRequestWithContext(context.TODO(), "GET", "https://example.com", nil)
+	errReq := &http.Request{Method: "invalid method"}
+
+	cases := []struct {
+		name          string
+		mockInput     *mockInput
+		req           *http.Request
+		wantErr       bool
+		wantNot200Err bool
+	}{
+		{
+			name: "ok",
+			mockInput: &mockInput{
+				ResponseStatusCode: http.StatusOK,
+				ResponseBody:       io.NopCloser(strings.NewReader(`{}`)),
+			},
+			req:           nonErrReq,
+			wantErr:       false,
+			wantNot200Err: false,
+		},
+		{
+			name: "error: not 200 error",
+			mockInput: &mockInput{
+				ResponseStatusCode: http.StatusInternalServerError,
+				ResponseBody:       io.NopCloser(strings.NewReader(`{}`)),
+			},
+			req:           nonErrReq,
+			wantErr:       false,
+			wantNot200Err: true,
+		},
+		{
+			name: "error: cannot resolve 200 error",
+			mockInput: &mockInput{
+				ResponseStatusCode: http.StatusInternalServerError,
+				ResponseHeader: map[string][]string{
+					"Content-Type": {"application/json;charset=UTF-8"},
+				},
+				ResponseBody: io.NopCloser(strings.NewReader(`///`)),
+			},
+			req:           nonErrReq,
+			wantErr:       true,
+			wantNot200Err: false,
+		},
+		{
+			name: "error: http.Client.Do error",
+			mockInput: &mockInput{
+				ResponseStatusCode: http.StatusInternalServerError,
+				ResponseBody:       io.NopCloser(strings.NewReader(`{}`)),
+			},
+			req:           errReq,
+			wantErr:       true,
+			wantNot200Err: false,
+		},
+	}
+
+	for _, c := range cases {
+		t.Run(c.name, func(tt *testing.T) {
+			mockClient := newMockHTTPClient(c.mockInput)
+			client := gotwi.GotwiClient{
+				Client: mockClient,
+			}
+
+			not200err, err := client.Exec(c.req, &mockAPIResponse{})
+
+			if c.wantErr {
+				assert.Nil(tt, not200err)
+				assert.Error(tt, err)
+				return
+			}
+
+			if c.wantNot200Err {
+				assert.Nil(tt, err)
+				assert.NotNil(tt, not200err)
+				return
+			}
+
+			assert.Nil(tt, err)
+			assert.Nil(tt, not200err)
 		})
 	}
 }

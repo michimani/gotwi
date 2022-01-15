@@ -114,8 +114,6 @@ func (c *GotwiClient) authorize(oauthToken, oauthTokenSecret string) error {
 		}
 
 		c.AccessToken = accessToken
-	default:
-		// noop
 	}
 
 	return nil
@@ -139,8 +137,6 @@ func (c *GotwiClient) IsReady() bool {
 		if c.AccessToken == "" {
 			return false
 		}
-	default:
-		// noop
 	}
 
 	return true
@@ -216,8 +212,6 @@ func (c *GotwiClient) prepare(ctx context.Context, endpointBase, method string, 
 		}
 	case AuthenMethodOAuth2BearerToken:
 		req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", p.AccessToken()))
-	default:
-		// noop
 	}
 
 	return req, nil
