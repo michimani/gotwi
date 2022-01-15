@@ -328,7 +328,6 @@ func Test_newRequest(t *testing.T) {
 }
 
 func Test_CallAPI(t *testing.T) {
-
 	cases := []struct {
 		name            string
 		mockInput       *mockInput
@@ -455,6 +454,89 @@ func Test_CallAPI(t *testing.T) {
 			}
 
 			assert.Nil(tt, err)
+		})
+	}
+}
+
+func Test_Exec(t *testing.T) {
+	nonErrReq, _ := http.NewRequestWithContext(context.TODO(), "GET", "https://example.com", nil)
+	errReq := &http.Request{Method: "invalid method"}
+
+	cases := []struct {
+		name          string
+		mockInput     *mockInput
+		req           *http.Request
+		wantErr       bool
+		wantNot200Err bool
+	}{
+		{
+			name: "ok",
+			mockInput: &mockInput{
+				ResponseStatusCode: http.StatusOK,
+				ResponseBody:       io.NopCloser(strings.NewReader(`{}`)),
+			},
+			req:           nonErrReq,
+			wantErr:       false,
+			wantNot200Err: false,
+		},
+		{
+			name: "error: not 200 error",
+			mockInput: &mockInput{
+				ResponseStatusCode: http.StatusInternalServerError,
+				ResponseBody:       io.NopCloser(strings.NewReader(`{}`)),
+			},
+			req:           nonErrReq,
+			wantErr:       false,
+			wantNot200Err: true,
+		},
+		{
+			name: "error: cannot resolve 200 error",
+			mockInput: &mockInput{
+				ResponseStatusCode: http.StatusInternalServerError,
+				ResponseHeader: map[string][]string{
+					"Content-Type": {"application/json;charset=UTF-8"},
+				},
+				ResponseBody: io.NopCloser(strings.NewReader(`///`)),
+			},
+			req:           nonErrReq,
+			wantErr:       true,
+			wantNot200Err: false,
+		},
+		{
+			name: "error: http.Client.Do error",
+			mockInput: &mockInput{
+				ResponseStatusCode: http.StatusInternalServerError,
+				ResponseBody:       io.NopCloser(strings.NewReader(`{}`)),
+			},
+			req:           errReq,
+			wantErr:       true,
+			wantNot200Err: false,
+		},
+	}
+
+	for _, c := range cases {
+		t.Run(c.name, func(tt *testing.T) {
+			mockClient := newMockHTTPClient(c.mockInput)
+			client := gotwi.GotwiClient{
+				Client: mockClient,
+			}
+
+			not200err, err := client.Exec(c.req, &mockAPIResponse{})
+
+			if c.wantErr {
+				assert.Nil(tt, not200err)
+				assert.Error(tt, err)
+				return
+			}
+
+			if c.wantNot200Err {
+				assert.Nil(tt, err)
+				assert.NotNil(tt, not200err)
+				return
+			}
+
+			assert.Nil(tt, err)
+			assert.Nil(tt, not200err)
 		})
 	}
 }
