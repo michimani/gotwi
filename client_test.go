@@ -40,6 +40,7 @@ func Test_NewGotwiClient(t *testing.T) {
 		name            string
 		envAPIKey       string
 		envAPIKeySecret string
+		mockInput       *mockInput
 		in              *gotwi.NewGotwiClientInput
 		wantErr         bool
 		expect          *gotwi.GotwiClient
@@ -61,6 +62,38 @@ func Test_NewGotwiClient(t *testing.T) {
 				OAuthConsumerKey:     "api-key",
 				SigningKey:           "api-key-secret&oauth-token-secret",
 			},
+		},
+		{
+			name:            "normal: OAuth2.0",
+			envAPIKey:       "api-key",
+			envAPIKeySecret: "api-key-secret",
+			mockInput: &mockInput{
+				ResponseStatusCode: http.StatusOK,
+				ResponseBody:       io.NopCloser(strings.NewReader(`{"token_type":"token_type","access_token":"access_token"}`)),
+			},
+			in: &gotwi.NewGotwiClientInput{
+				AuthenticationMethod: gotwi.AuthenMethodOAuth2BearerToken,
+			},
+			wantErr: false,
+			expect: &gotwi.GotwiClient{
+				AuthenticationMethod: gotwi.AuthenMethodOAuth2BearerToken,
+				AccessToken:          "access_token",
+				OAuthConsumerKey:     "api-key",
+			},
+		},
+		{
+			name:            "error: OAuth2.0",
+			envAPIKey:       "api-key",
+			envAPIKeySecret: "api-key-secret",
+			mockInput: &mockInput{
+				ResponseStatusCode: http.StatusInternalServerError,
+				ResponseBody:       io.NopCloser(strings.NewReader(``)),
+			},
+			in: &gotwi.NewGotwiClientInput{
+				AuthenticationMethod: gotwi.AuthenMethodOAuth2BearerToken,
+			},
+			wantErr: true,
+			expect:  nil,
 		},
 		{
 			name:            "error: input is nil",
@@ -136,6 +169,11 @@ func Test_NewGotwiClient(t *testing.T) {
 		t.Run(c.name, func(tt *testing.T) {
 			tt.Setenv("GOTWI_API_KEY", c.envAPIKey)
 			tt.Setenv("GOTWI_API_KEY_SECRET", c.envAPIKeySecret)
+
+			mockClient := newMockHTTPClient(c.mockInput)
+			if mockClient != nil {
+				c.in.HTTPClient = mockClient
+			}
 
 			gc, err := gotwi.NewGotwiClient(c.in)
 			if c.wantErr {
@@ -288,47 +326,6 @@ func Test_newRequest(t *testing.T) {
 		})
 	}
 }
-
-type RoundTripFunc func(req *http.Request) *http.Response
-
-func (f RoundTripFunc) RoundTrip(req *http.Request) (*http.Response, error) {
-	return f(req), nil
-}
-
-func newMockClient(fn RoundTripFunc) *http.Client {
-	return &http.Client{
-		Transport: RoundTripFunc(fn),
-	}
-}
-
-type mockInput struct {
-	ResponseStatusCode int
-	ResponseHeader     map[string][]string
-	ResponseBody       io.ReadCloser
-}
-
-func newMockHTTPClient(in *mockInput) *http.Client {
-	return newMockClient(func(req *http.Request) *http.Response {
-		return &http.Response{
-			Status:     "mock response status",
-			StatusCode: in.ResponseStatusCode,
-			Body:       in.ResponseBody,
-			Header:     in.ResponseHeader,
-		}
-	})
-}
-
-type mockAPIParameter struct{}
-
-func (mp mockAPIParameter) SetAccessToken(token string)                {}
-func (mp mockAPIParameter) AccessToken() string                        { return "" }
-func (mp mockAPIParameter) ResolveEndpoint(endpointBase string) string { return "" }
-func (mp mockAPIParameter) Body() (io.Reader, error)                   { return nil, nil }
-func (mp mockAPIParameter) ParameterMap() map[string]string            { return map[string]string{} }
-
-type mockAPIResponse struct{}
-
-func (mr mockAPIResponse) HasPartialError() bool { return false }
 
 func Test_CallAPI(t *testing.T) {
 

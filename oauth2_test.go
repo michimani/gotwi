@@ -1,15 +1,9 @@
 package gotwi_test
 
 import (
-	"encoding/json"
-	"fmt"
-	"net/http"
-	"strings"
 	"testing"
 
 	"github.com/michimani/gotwi"
-	"github.com/michimani/gotwi/internal/util"
-	"github.com/michimani/gotwi/resources"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -39,38 +33,6 @@ func Test_HasPartialError(t *testing.T) {
 			b := c.o2r.HasPartialError()
 			assert.Equal(tt, c.expect, b)
 		})
-	}
-}
-
-type MockGotwiClientForOAuth2 struct {
-	MockExec func(req *http.Request, i util.Response) (*resources.Non2XXError, error)
-}
-
-func (m MockGotwiClientForOAuth2) Exec(req *http.Request, i util.Response) (*resources.Non2XXError, error) {
-	return m.MockExec(req, i)
-}
-
-func newMockGotwiClientForOAuth2(returnedToken string, execHasError, hasNot200Error bool) *MockGotwiClientForOAuth2 {
-	fn := func(req *http.Request, i util.Response) (*resources.Non2XXError, error) {
-		if execHasError {
-			return nil, fmt.Errorf("has error")
-		}
-
-		if hasNot200Error {
-			return &resources.Non2XXError{}, nil
-		}
-
-		resBody := strings.NewReader(`{"token_type":"token_type","access_token":"` + returnedToken + `"}`)
-
-		if err := json.NewDecoder(resBody).Decode(i); err != nil {
-			return nil, err
-		}
-
-		return nil, nil
-	}
-
-	return &MockGotwiClientForOAuth2{
-		MockExec: fn,
 	}
 }
 
