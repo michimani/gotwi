@@ -435,6 +435,25 @@ func Test_CallAPI(t *testing.T) {
 			response:        &mockAPIResponse{},
 			wantErr:         true,
 		},
+		{
+			name: "error: invalid method",
+			mockInput: &mockInput{
+				ResponseStatusCode: http.StatusOK,
+				ResponseBody:       io.NopCloser(strings.NewReader(`{}`)),
+			},
+			clientInput: &gotwi.NewGotwiClientInput{
+				AuthenticationMethod: gotwi.AuthenMethodOAuth1UserContext,
+				OAuthToken:           "token",
+				OAuthTokenSecret:     "secret",
+			},
+			endpoint:        "test-endpoint",
+			method:          "invalid method",
+			envAPIKey:       "api-key",
+			envAPIKeySecret: "api-key-secret",
+			params:          &mockAPIParameter{},
+			response:        &mockAPIResponse{},
+			wantErr:         true,
+		},
 	}
 
 	for _, c := range cases {
