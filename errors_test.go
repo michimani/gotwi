@@ -24,6 +24,10 @@ func Test_wrapErr(t *testing.T) {
 			err:  errors.New("error test"),
 		},
 		{
+			name: "normal: wrapped",
+			err:  gotwi.ExportWrapErr(errors.New("error test")),
+		},
+		{
 			name:    "nil",
 			err:     nil,
 			wantNil: true,
@@ -43,6 +47,10 @@ func Test_wrapErr(t *testing.T) {
 			assert.NotNil(ge)
 			assert.Equal("error test", ge.Error())
 			assert.False(ge.OnAPI)
+
+			un := ge.Unwrap()
+			_, ok := un.(*gotwi.GotwiError)
+			assert.False(ok)
 		})
 	}
 }
@@ -272,11 +280,38 @@ func Test_GotwiErrorError(t *testing.T) {
 }
 
 func Test_Unwrap(t *testing.T) {
-	ge := &gotwi.GotwiError{}
-	e := ge.Unwrap()
+	cases := []struct {
+		name    string
+		ge      *gotwi.GotwiError
+		wantNil bool
+	}{
+		{
+			name: "normal",
+			ge:   &gotwi.GotwiError{},
+		},
+		{
+			name:    "nil",
+			ge:      nil,
+			wantNil: true,
+		},
+	}
 
-	_, ok := e.(*gotwi.GotwiError)
-	assert.False(t, ok)
+	for _, c := range cases {
+		t.Run(c.name, func(tt *testing.T) {
+			a := assert.New(tt)
+			e := c.ge.Unwrap()
+
+			if c.wantNil {
+				a.Nil(e)
+				return
+			}
+
+			_, ok := e.(*gotwi.GotwiError)
+			a.False(ok)
+		})
+
+	}
+
 }
 
 func Test_GotwiAccessNon2XXErrorFields(t *testing.T) {
