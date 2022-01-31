@@ -5,8 +5,6 @@ import (
 	"net/http"
 	"net/url"
 	"strings"
-
-	"github.com/michimani/gotwi/internal/gotwierrors"
 )
 
 const OAuth2TokenEndpoint = "https://api.twitter.com/oauth2/token"
@@ -38,7 +36,7 @@ func GenerateBearerToken(c IGotwiClient, apiKey, apiKeySecret string) (string, e
 	}
 
 	if not200err != nil {
-		return "", fmt.Errorf(gotwierrors.ErrorNon2XXStatus, not200err.Summary())
+		return "", wrapWithAPIErr(not200err)
 	}
 
 	if o2r.AccessToken == "" {

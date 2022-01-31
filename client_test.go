@@ -582,13 +582,8 @@ func Test_resolveNon2XXResponse(t *testing.T) {
 			},
 			wantErr: false,
 			expect: resources.Non2XXError{
-				Status:        gotwi.String("Internal Server Error"),
-				StatusCode:    gotwi.Int(http.StatusInternalServerError),
-				Errors:        nil,
-				Title:         nil,
-				Detail:        nil,
-				Type:          nil,
-				RateLimitInfo: nil,
+				Status:     "Internal Server Error",
+				StatusCode: http.StatusInternalServerError,
 			},
 		},
 		{
@@ -603,15 +598,11 @@ func Test_resolveNon2XXResponse(t *testing.T) {
 			},
 			wantErr: false,
 			expect: resources.Non2XXError{
-				Status:     gotwi.String("Internal Server Error"),
-				StatusCode: gotwi.Int(http.StatusInternalServerError),
-				Errors: []resources.ErrorInformation{
-					{Message: gotwi.String("text error message")},
+				Status:     "Internal Server Error",
+				StatusCode: http.StatusInternalServerError,
+				APIErrors: []resources.ErrorInformation{
+					{Message: "text error message"},
 				},
-				Title:         nil,
-				Detail:        nil,
-				Type:          nil,
-				RateLimitInfo: nil,
 			},
 		},
 		{
@@ -623,15 +614,11 @@ func Test_resolveNon2XXResponse(t *testing.T) {
 			},
 			wantErr: false,
 			expect: resources.Non2XXError{
-				Status:     gotwi.String("Internal Server Error"),
-				StatusCode: gotwi.Int(http.StatusInternalServerError),
-				Errors: []resources.ErrorInformation{
-					{Message: gotwi.String("Content-Type is undefined.")},
+				Status:     "Internal Server Error",
+				StatusCode: http.StatusInternalServerError,
+				APIErrors: []resources.ErrorInformation{
+					{Message: "Content-Type is undefined."},
 				},
-				Title:         nil,
-				Detail:        nil,
-				Type:          nil,
-				RateLimitInfo: nil,
 			},
 		},
 		{
@@ -650,12 +637,8 @@ func Test_resolveNon2XXResponse(t *testing.T) {
 			hasRateLimitInfo: true,
 			wantErr:          false,
 			expect: resources.Non2XXError{
-				Status:     gotwi.String("Too Many Requests"),
-				StatusCode: gotwi.Int(http.StatusTooManyRequests),
-				Errors:     nil,
-				Title:      nil,
-				Detail:     nil,
-				Type:       nil,
+				Status:     "Too Many Requests",
+				StatusCode: http.StatusTooManyRequests,
 				RateLimitInfo: &util.RateLimitInformation{
 					Limit:     1,
 					Remaining: 2,
@@ -703,7 +686,7 @@ func Test_resolveNon2XXResponse(t *testing.T) {
 
 			assert.NoError(tt, err)
 
-			assert.Equal(tt, c.expect.Errors, e.Errors)
+			assert.Equal(tt, c.expect.APIErrors, e.APIErrors)
 			assert.Equal(tt, c.expect.Title, e.Title)
 			assert.Equal(tt, c.expect.Detail, e.Detail)
 			assert.Equal(tt, c.expect.Type, e.Type)
