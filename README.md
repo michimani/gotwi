@@ -254,6 +254,44 @@ You will get the output like following.
 [1462813519607263236] This is a test tweet with poll.
 ```
 
+## Error handling
+
+Each function that calls the Twitter API (e.g. `TweetRetweetsRetweetedBy()`) may return an error for some reason.
+If the error is caused by the Twitter API returning a status other than 2XX, you can check the details by doing the following.
+
+```go
+res, err := tweets.TweetRetweetsRetweetedBy(context.Background(), c, p)
+if err != nil {
+	fmt.Println(err)
+
+	// more error information
+	ge := err.(*gotwi.GotwiError)
+	if ge.OnAPI {
+		fmt.Println(ge.Title)
+		fmt.Println(ge.Detail)
+		fmt.Println(ge.Type)
+		fmt.Println(ge.Status)
+		fmt.Println(ge.StatusCode)
+
+		for _, ae := range ge.APIErrors {
+			fmt.Println(ae.Message)
+			fmt.Println(ae.Label)
+      fmt.Println(ae.Parameters)
+			fmt.Println(ae.Code)
+			fmt.Println(ae.Code.Detail())
+		}
+
+		if ge.RateLimitInfo != nil {
+			fmt.Println(ge.RateLimitInfo.Limit)
+			fmt.Println(ge.RateLimitInfo.Remaining)
+			fmt.Println(ge.RateLimitInfo.ResetAt)
+		}
+	}
+}
+```
+
+
+
 ## More examples
 
 See [_examples](https://github.com/michimani/gotwi/tree/main/_examples) directory.
