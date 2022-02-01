@@ -145,16 +145,16 @@ func (c *GotwiClient) IsReady() bool {
 func (c *GotwiClient) CallAPI(ctx context.Context, endpoint, method string, p util.Parameters, i util.Response) error {
 	req, err := c.prepare(ctx, endpoint, method, p)
 	if err != nil {
-		return err
+		return wrapErr(err)
 	}
 
-	not200err, err := c.Exec(req, i)
+	non200err, err := c.Exec(req, i)
 	if err != nil {
-		return err
+		return wrapErr(err)
 	}
 
-	if not200err != nil {
-		return fmt.Errorf(gotwierrors.ErrorNon2XXStatus, not200err.Summary())
+	if non200err != nil {
+		return wrapWithAPIErr(non200err)
 	}
 
 	return nil
@@ -265,14 +265,14 @@ func newRequest(ctx context.Context, endpoint, method string, p util.Parameters)
 
 func resolveNon2XXResponse(res *http.Response) (*resources.Non2XXError, error) {
 	non200err := &resources.Non2XXError{
-		Status:     String(res.Status),
-		StatusCode: Int(res.StatusCode),
+		Status:     res.Status,
+		StatusCode: res.StatusCode,
 	}
 
 	cts := util.HeaderValues("Content-Type", res.Header)
 	if len(cts) == 0 {
-		non200err.Errors = []resources.ErrorInformation{
-			{Message: String("Content-Type is undefined.")},
+		non200err.APIErrors = []resources.ErrorInformation{
+			{Message: "Content-Type is undefined."},
 		}
 		return non200err, nil
 	}
@@ -282,8 +282,8 @@ func resolveNon2XXResponse(res *http.Response) (*resources.Non2XXError, error) {
 		if err != nil {
 			return nil, err
 		}
-		non200err.Errors = []resources.ErrorInformation{
-			{Message: String(strings.TrimRight(string(bytes), "\n"))},
+		non200err.APIErrors = []resources.ErrorInformation{
+			{Message: strings.TrimRight(string(bytes), "\n")},
 		}
 	} else {
 		if err := json.NewDecoder(res.Body).Decode(non200err); err != nil {
