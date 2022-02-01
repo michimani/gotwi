@@ -276,7 +276,7 @@ if err != nil {
 		for _, ae := range ge.APIErrors {
 			fmt.Println(ae.Message)
 			fmt.Println(ae.Label)
-      fmt.Println(ae.Parameters)
+			fmt.Println(ae.Parameters)
 			fmt.Println(ae.Code)
 			fmt.Println(ae.Code.Detail())
 		}
