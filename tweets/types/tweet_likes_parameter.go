@@ -52,13 +52,12 @@ func (p *TweetLikesLikingUsersParams) ResolveEndpoint(endpointBase string) strin
 	endpoint := strings.Replace(endpointBase, ":id", encoded, 1)
 
 	pm := p.ParameterMap()
-	qs := util.QueryString(pm, TweetLikesLikingUsersQueryParams)
-
-	if qs == "" {
-		return endpoint
+	if len(pm) > 0 {
+		qs := util.QueryString(pm, TweetLikesLikingUsersQueryParams)
+		endpoint += "?" + qs
 	}
 
-	return endpoint + "?" + qs
+	return endpoint
 }
 
 func (p *TweetLikesLikingUsersParams) Body() (io.Reader, error) {
@@ -127,13 +126,12 @@ func (p *TweetLikesLikedTweetsParams) ResolveEndpoint(endpointBase string) strin
 	endpoint := strings.Replace(endpointBase, ":id", encoded, 1)
 
 	pm := p.ParameterMap()
-	qs := util.QueryString(pm, TweetLikesLikedTweetsQueryParams)
-
-	if qs == "" {
-		return endpoint
+	if len(pm) > 0 {
+		qs := util.QueryString(pm, TweetLikesLikedTweetsQueryParams)
+		endpoint += "?" + qs
 	}
 
-	return endpoint + "?" + qs
+	return endpoint
 }
 
 func (p *TweetLikesLikedTweetsParams) Body() (io.Reader, error) {

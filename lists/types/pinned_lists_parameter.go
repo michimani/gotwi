@@ -45,13 +45,12 @@ func (p *PinnedListsGetParams) ResolveEndpoint(endpointBase string) string {
 	endpoint := strings.Replace(endpointBase, ":id", escaped, 1)
 
 	pm := p.ParameterMap()
-	qs := util.QueryString(pm, PinnedListsGetQueryParams)
-
-	if qs == "" {
-		return endpoint
+	if len(pm) > 0 {
+		qs := util.QueryString(pm, PinnedListsGetQueryParams)
+		endpoint += "?" + qs
 	}
 
-	return endpoint + "?" + qs
+	return endpoint
 }
 
 func (p *PinnedListsGetParams) Body() (io.Reader, error) {

@@ -70,13 +70,12 @@ func (p *SearchTweetsRecentParams) ResolveEndpoint(endpointBase string) string {
 	}
 
 	pm := p.ParameterMap()
-	qs := util.QueryString(pm, SearchTweetsRecentQueryParams)
-
-	if qs == "" {
-		return endpoint
+	if len(pm) > 0 {
+		qs := util.QueryString(pm, SearchTweetsRecentQueryParams)
+		endpoint += "?" + qs
 	}
 
-	return endpoint + "?" + qs
+	return endpoint
 }
 
 func (p *SearchTweetsRecentParams) Body() (io.Reader, error) {
@@ -168,13 +167,12 @@ func (p *SearchTweetsAllParams) ResolveEndpoint(endpointBase string) string {
 	}
 
 	pm := p.ParameterMap()
-	qs := util.QueryString(pm, SearchTweetsAllQueryParams)
-
-	if qs == "" {
-		return endpoint
+	if len(pm) > 0 {
+		qs := util.QueryString(pm, SearchTweetsAllQueryParams)
+		endpoint += "?" + qs
 	}
 
-	return endpoint + "?" + qs
+	return endpoint
 }
 
 func (p *SearchTweetsAllParams) Body() (io.Reader, error) {

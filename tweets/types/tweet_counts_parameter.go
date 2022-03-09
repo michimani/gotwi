@@ -60,13 +60,12 @@ func (p *TweetCountsRecentParams) ResolveEndpoint(endpointBase string) string {
 	}
 
 	pm := p.ParameterMap()
-	qs := util.QueryString(pm, TweetCountsRecentQueryParams)
-
-	if qs == "" {
-		return endpoint
+	if len(pm) > 0 {
+		qs := util.QueryString(pm, TweetCountsRecentQueryParams)
+		endpoint += "?" + qs
 	}
 
-	return endpoint + "?" + qs
+	return endpoint
 }
 
 func (p *TweetCountsRecentParams) Body() (io.Reader, error) {
@@ -142,13 +141,12 @@ func (p *TweetCountsAllParams) ResolveEndpoint(endpointBase string) string {
 	}
 
 	pm := p.ParameterMap()
-	qs := util.QueryString(pm, TweetCountsAllQueryParams)
-
-	if qs == "" {
-		return endpoint
+	if len(pm) > 0 {
+		qs := util.QueryString(pm, TweetCountsAllQueryParams)
+		endpoint += "?" + qs
 	}
 
-	return endpoint + "?" + qs
+	return endpoint
 }
 
 func (p *TweetCountsAllParams) Body() (io.Reader, error) {

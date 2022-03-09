@@ -52,13 +52,12 @@ func (p *TweetRetweetsRetweetedByParams) ResolveEndpoint(endpointBase string) st
 	endpoint := strings.Replace(endpointBase, ":id", encoded, 1)
 
 	pm := p.ParameterMap()
-	qs := util.QueryString(pm, TweetRetweetsRetweetedByQueryParams)
-
-	if qs == "" {
-		return endpoint
+	if len(pm) > 0 {
+		qs := util.QueryString(pm, TweetRetweetsRetweetedByQueryParams)
+		endpoint += "?" + qs
 	}
 
-	return endpoint + "?" + qs
+	return endpoint
 }
 
 func (p *TweetRetweetsRetweetedByParams) Body() (io.Reader, error) {

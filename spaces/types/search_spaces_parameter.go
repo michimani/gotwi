@@ -55,13 +55,12 @@ func (p *SearchSpacesParams) ResolveEndpoint(endpointBase string) string {
 	}
 
 	pm := p.ParameterMap()
-	qs := util.QueryString(pm, SearchSpacesQueryParams)
-
-	if qs == "" {
-		return endpoint
+	if len(pm) > 0 {
+		qs := util.QueryString(pm, SearchSpacesQueryParams)
+		endpoint += "?" + qs
 	}
 
-	return endpoint + "?" + qs
+	return endpoint
 }
 
 func (p *SearchSpacesParams) Body() (io.Reader, error) {

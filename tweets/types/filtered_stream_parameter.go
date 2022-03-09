@@ -28,13 +28,12 @@ func (p *FilteredStreamRulesGetParams) AccessToken() string {
 func (p *FilteredStreamRulesGetParams) ResolveEndpoint(endpointBase string) string {
 	endpoint := endpointBase
 	pm := p.ParameterMap()
-	qs := util.QueryString(pm, FilteredStreamRulesGetQueryParams)
-
-	if qs == "" {
-		return endpoint
+	if len(pm) > 0 {
+		qs := util.QueryString(pm, FilteredStreamRulesGetQueryParams)
+		endpoint += "?" + qs
 	}
 
-	return endpoint + "?" + qs
+	return endpoint
 }
 
 func (p *FilteredStreamRulesGetParams) Body() (io.Reader, error) {
