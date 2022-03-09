@@ -42,13 +42,12 @@ func (p *UserLookupParams) ResolveEndpoint(endpointBase string) string {
 	}
 
 	pm := p.ParameterMap()
-	qs := util.QueryString(pm, UserLookupQueryParams)
-
-	if qs == "" {
-		return endpoint
+	if len(pm) > 0 {
+		qs := util.QueryString(pm, UserLookupQueryParams)
+		endpoint += "?" + qs
 	}
 
-	return endpoint + "?" + qs
+	return endpoint
 }
 
 func (p *UserLookupParams) Body() (io.Reader, error) {
@@ -100,13 +99,12 @@ func (p *UserLookupIDParams) ResolveEndpoint(endpointBase string) string {
 	endpoint := strings.Replace(endpointBase, ":id", encoded, 1)
 
 	pm := p.ParameterMap()
-	qs := util.QueryString(pm, UserLookupIDQueryParams)
-
-	if qs == "" {
-		return endpoint
+	if len(pm) > 0 {
+		qs := util.QueryString(pm, UserLookupIDQueryParams)
+		endpoint += "?" + qs
 	}
 
-	return endpoint + "?" + qs
+	return endpoint
 }
 
 func (p *UserLookupIDParams) Body() (io.Reader, error) {
@@ -154,13 +152,12 @@ func (p *UserLookupByParams) ResolveEndpoint(endpointBase string) string {
 	}
 
 	pm := p.ParameterMap()
-	qs := util.QueryString(pm, UserLookupByQueryParams)
-
-	if qs == "" {
-		return endpoint
+	if len(pm) > 0 {
+		qs := util.QueryString(pm, UserLookupByQueryParams)
+		endpoint += "?" + qs
 	}
 
-	return endpoint + "?" + qs
+	return endpoint
 }
 
 func (p *UserLookupByParams) Body() (io.Reader, error) {
@@ -212,13 +209,12 @@ func (p *UserLookupByUsernameParams) ResolveEndpoint(endpointBase string) string
 	endpoint := strings.Replace(endpointBase, ":username", encoded, 1)
 
 	pm := p.ParameterMap()
-	qs := util.QueryString(pm, UserLookupByUsernameQueryParams)
-
-	if qs == "" {
-		return endpoint
+	if len(pm) > 0 {
+		qs := util.QueryString(pm, UserLookupByUsernameQueryParams)
+		endpoint += "?" + qs
 	}
 
-	return endpoint + "?" + qs
+	return endpoint
 }
 
 func (p *UserLookupByUsernameParams) Body() (io.Reader, error) {
@@ -259,13 +255,12 @@ func (p *UserLookupMeParams) ResolveEndpoint(endpointBase string) string {
 	endpoint := endpointBase
 
 	pm := p.ParameterMap()
-	qs := util.QueryString(pm, UserLookupMeQueryParams)
-
-	if qs == "" {
-		return endpoint
+	if len(pm) > 0 {
+		qs := util.QueryString(pm, UserLookupMeQueryParams)
+		endpoint += "?" + qs
 	}
 
-	return endpoint + "?" + qs
+	return endpoint
 }
 
 func (p *UserLookupMeParams) Body() (io.Reader, error) {

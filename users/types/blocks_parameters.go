@@ -60,13 +60,12 @@ func (p *BlocksBlockingGetParams) ResolveEndpoint(endpointBase string) string {
 	endpoint := strings.Replace(endpointBase, ":id", encoded, 1)
 
 	pm := p.ParameterMap()
-	qs := util.QueryString(pm, BlocksBlockingGetQueryParams)
-
-	if qs == "" {
-		return endpoint
+	if len(pm) > 0 {
+		qs := util.QueryString(pm, BlocksBlockingGetQueryParams)
+		endpoint += "?" + qs
 	}
 
-	return endpoint + "?" + qs
+	return endpoint
 }
 
 func (p *BlocksBlockingGetParams) Body() (io.Reader, error) {

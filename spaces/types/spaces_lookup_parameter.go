@@ -44,13 +44,12 @@ func (p *SpacesLookupIDParams) ResolveEndpoint(endpointBase string) string {
 	endpoint := strings.Replace(endpointBase, ":id", encoded, 1)
 
 	pm := p.ParameterMap()
-	qs := util.QueryString(pm, SpacesLookupIDQueryParams)
-
-	if qs == "" {
-		return endpoint
+	if len(pm) > 0 {
+		qs := util.QueryString(pm, SpacesLookupIDQueryParams)
+		endpoint += "?" + qs
 	}
 
-	return endpoint + "?" + qs
+	return endpoint
 }
 
 func (p *SpacesLookupIDParams) Body() (io.Reader, error) {
@@ -98,13 +97,12 @@ func (p *SpacesLookupParams) ResolveEndpoint(endpointBase string) string {
 	endpoint := endpointBase
 
 	pm := p.ParameterMap()
-	qs := util.QueryString(pm, SpacesLookupQueryParams)
-
-	if qs == "" {
-		return endpoint
+	if len(pm) > 0 {
+		qs := util.QueryString(pm, SpacesLookupQueryParams)
+		endpoint += "?" + qs
 	}
 
-	return endpoint + "?" + qs
+	return endpoint
 }
 
 func (p *SpacesLookupParams) Body() (io.Reader, error) {
@@ -153,13 +151,12 @@ func (p *SpacesLookupByCreatorIDsParams) ResolveEndpoint(endpointBase string) st
 	endpoint := endpointBase
 
 	pm := p.ParameterMap()
-	qs := util.QueryString(pm, SpacesLookupByCreatorIDsQueryParams)
-
-	if qs == "" {
-		return endpoint
+	if len(pm) > 0 {
+		qs := util.QueryString(pm, SpacesLookupByCreatorIDsQueryParams)
+		endpoint += "?" + qs
 	}
 
-	return endpoint + "?" + qs
+	return endpoint
 }
 
 func (p *SpacesLookupByCreatorIDsParams) Body() (io.Reader, error) {
@@ -214,13 +211,12 @@ func (p *SpacesLookupBuyersParams) ResolveEndpoint(endpointBase string) string {
 	endpoint := strings.Replace(endpointBase, ":id", encoded, 1)
 
 	pm := p.ParameterMap()
-	qs := util.QueryString(pm, SpacesLookupBuyersQueryParams)
-
-	if qs == "" {
-		return endpoint
+	if len(pm) > 0 {
+		qs := util.QueryString(pm, SpacesLookupBuyersQueryParams)
+		endpoint += "?" + qs
 	}
 
-	return endpoint + "?" + qs
+	return endpoint
 }
 
 func (p *SpacesLookupBuyersParams) Body() (io.Reader, error) {
@@ -274,13 +270,12 @@ func (p *SpacesLookupTweetsParams) ResolveEndpoint(endpointBase string) string {
 	endpoint := strings.Replace(endpointBase, ":id", encoded, 1)
 
 	pm := p.ParameterMap()
-	qs := util.QueryString(pm, SpacesLookupTweetsQueryParams)
-
-	if qs == "" {
-		return endpoint
+	if len(pm) > 0 {
+		qs := util.QueryString(pm, SpacesLookupTweetsQueryParams)
+		endpoint += "?" + qs
 	}
 
-	return endpoint + "?" + qs
+	return endpoint
 }
 
 func (p *SpacesLookupTweetsParams) Body() (io.Reader, error) {

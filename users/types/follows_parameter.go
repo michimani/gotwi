@@ -60,13 +60,12 @@ func (p *FollowsFollowingGetParams) ResolveEndpoint(endpointBase string) string 
 	endpoint := strings.Replace(endpointBase, ":id", escaped, 1)
 
 	pm := p.ParameterMap()
-	qs := util.QueryString(pm, FollowsFollowingGetQueryParams)
-
-	if qs == "" {
-		return endpoint
+	if len(pm) > 0 {
+		qs := util.QueryString(pm, FollowsFollowingGetQueryParams)
+		endpoint += "?" + qs
 	}
 
-	return endpoint + "?" + qs
+	return endpoint
 }
 
 func (p *FollowsFollowingGetParams) Body() (io.Reader, error) {
@@ -138,13 +137,12 @@ func (p *FollowsFollowersParams) ResolveEndpoint(endpointBase string) string {
 	endpoint := strings.Replace(endpointBase, ":id", escaped, 1)
 
 	pm := p.ParameterMap()
-	qs := util.QueryString(pm, FollowsFollowersQueryParams)
-
-	if qs == "" {
-		return endpoint
+	if len(pm) > 0 {
+		qs := util.QueryString(pm, FollowsFollowersQueryParams)
+		endpoint += "?" + qs
 	}
 
-	return endpoint + "?" + qs
+	return endpoint
 }
 
 func (p *FollowsFollowersParams) Body() (io.Reader, error) {

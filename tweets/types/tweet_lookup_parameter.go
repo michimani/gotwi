@@ -48,13 +48,12 @@ func (p *TweetLookupParams) ResolveEndpoint(endpointBase string) string {
 	}
 
 	pm := p.ParameterMap()
-	qs := util.QueryString(pm, TweetLookupQueryParams)
-
-	if qs == "" {
-		return endpoint
+	if len(pm) > 0 {
+		qs := util.QueryString(pm, TweetLookupQueryParams)
+		endpoint += "?" + qs
 	}
 
-	return endpoint + "?" + qs
+	return endpoint
 }
 
 func (p *TweetLookupParams) Body() (io.Reader, error) {
@@ -112,13 +111,12 @@ func (p *TweetLookupIDParams) ResolveEndpoint(endpointBase string) string {
 	endpoint := strings.Replace(endpointBase, ":id", encoded, 1)
 
 	pm := p.ParameterMap()
-	qs := util.QueryString(pm, TweetLookupIDQueryParams)
-
-	if qs == "" {
-		return endpoint
+	if len(pm) > 0 {
+		qs := util.QueryString(pm, TweetLookupIDQueryParams)
+		endpoint += "?" + qs
 	}
 
-	return endpoint + "?" + qs
+	return endpoint
 }
 
 func (p *TweetLookupIDParams) Body() (io.Reader, error) {

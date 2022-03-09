@@ -77,13 +77,12 @@ func (p *TweetTimelinesTweetsParams) ResolveEndpoint(endpointBase string) string
 	endpoint := strings.Replace(endpointBase, ":id", encoded, 1)
 
 	pm := p.ParameterMap()
-	qs := util.QueryString(pm, TweetTimelinesTweetsQueryParams)
-
-	if qs == "" {
-		return endpoint
+	if len(pm) > 0 {
+		qs := util.QueryString(pm, TweetTimelinesTweetsQueryParams)
+		endpoint += "?" + qs
 	}
 
-	return endpoint + "?" + qs
+	return endpoint
 }
 
 func (p *TweetTimelinesTweetsParams) Body() (io.Reader, error) {
@@ -177,13 +176,12 @@ func (p *TweetTimelinesMentionsParams) ResolveEndpoint(endpointBase string) stri
 	endpoint := strings.Replace(endpointBase, ":id", encoded, 1)
 
 	pm := p.ParameterMap()
-	qs := util.QueryString(pm, TweetTimelinesMentionsQueryParams)
-
-	if qs == "" {
-		return endpoint
+	if len(pm) > 0 {
+		qs := util.QueryString(pm, TweetTimelinesMentionsQueryParams)
+		endpoint += "?" + qs
 	}
 
-	return endpoint + "?" + qs
+	return endpoint
 }
 
 func (p *TweetTimelinesMentionsParams) Body() (io.Reader, error) {

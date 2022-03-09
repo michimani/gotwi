@@ -60,13 +60,12 @@ func (p *ListMembersListMembershipsParams) ResolveEndpoint(endpointBase string) 
 	endpoint := strings.Replace(endpointBase, ":id", encoded, 1)
 
 	pm := p.ParameterMap()
-	qs := util.QueryString(pm, ListMembersListMembershipsQueryParams)
-
-	if qs == "" {
-		return endpoint
+	if len(pm) > 0 {
+		qs := util.QueryString(pm, ListMembersListMembershipsQueryParams)
+		endpoint += "?" + qs
 	}
 
-	return endpoint + "?" + qs
+	return endpoint
 }
 
 func (p *ListMembersListMembershipsParams) Body() (io.Reader, error) {
@@ -130,13 +129,12 @@ func (p *ListMembersGetParams) ResolveEndpoint(endpointBase string) string {
 	endpoint := strings.Replace(endpointBase, ":id", encoded, 1)
 
 	pm := p.ParameterMap()
-	qs := util.QueryString(pm, ListLookupOwnedListsQueryParams)
-
-	if qs == "" {
-		return endpoint
+	if len(pm) > 0 {
+		qs := util.QueryString(pm, ListLookupOwnedListsQueryParams)
+		endpoint += "?" + qs
 	}
 
-	return endpoint + "?" + qs
+	return endpoint
 }
 
 func (p *ListMembersGetParams) Body() (io.Reader, error) {

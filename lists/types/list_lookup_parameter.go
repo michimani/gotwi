@@ -45,13 +45,12 @@ func (p *ListLookupIDParams) ResolveEndpoint(endpointBase string) string {
 	endpoint := strings.Replace(endpointBase, ":id", encoded, 1)
 
 	pm := p.ParameterMap()
-	qs := util.QueryString(pm, ListLookupIDQueryParams)
-
-	if qs == "" {
-		return endpoint
+	if len(pm) > 0 {
+		qs := util.QueryString(pm, ListLookupIDQueryParams)
+		endpoint += "?" + qs
 	}
 
-	return endpoint + "?" + qs
+	return endpoint
 }
 
 func (p *ListLookupIDParams) Body() (io.Reader, error) {
@@ -113,13 +112,12 @@ func (p *ListLookupOwnedListsParams) ResolveEndpoint(endpointBase string) string
 	endpoint := strings.Replace(endpointBase, ":id", encoded, 1)
 
 	pm := p.ParameterMap()
-	qs := util.QueryString(pm, ListLookupOwnedListsQueryParams)
-
-	if qs == "" {
-		return endpoint
+	if len(pm) > 0 {
+		qs := util.QueryString(pm, ListLookupOwnedListsQueryParams)
+		endpoint += "?" + qs
 	}
 
-	return endpoint + "?" + qs
+	return endpoint
 }
 
 func (p *ListLookupOwnedListsParams) Body() (io.Reader, error) {
