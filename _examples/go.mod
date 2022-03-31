@@ -1,7 +1,7 @@
 module github.com/michimani/gotwi/examples
 
-go 1.17
+go 1.18
 
-require github.com/michimani/gotwi v0.9.5
+require github.com/michimani/gotwi v0.10.0
 
-// replace github.com/michimani/gotwi v0.9.5 => ../
+// replace github.com/michimani/gotwi v0.10.0 => ../

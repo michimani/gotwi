@@ -46,6 +46,8 @@ Progress of supporting APIs:
     - [x] `DELETE /2/users/:id/likes/:tweet_id`
   - Hide replies
     - [x] `PUT /2/tweets/:id/hidden`
+  - Quote Tweets
+    - [x] `GET /2/tweets/:id/quote_tweets` 
 - **Users**
   - User lookup
     - [x] `GET /2/users`
