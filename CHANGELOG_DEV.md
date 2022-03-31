@@ -9,6 +9,15 @@ This is a version of CHANGELOG less than v1.0.0
 * `GET /2/compliance/jobs`
 * `POST /2/compliance/jobs`
 
+v0.10.1 (2022-03-31)
+===
+
+### New Supported APIs
+* `GET /2/tweets/:id/quote_tweets`
+
+### Fixes
+* bump Go version 1.18
+
 v0.10.0 (2022-02-01)
 ===
 
