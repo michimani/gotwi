@@ -132,3 +132,27 @@ func Test_QuoteTweets_ResolveEndpoint(t *testing.T) {
 		})
 	}
 }
+
+func Test_QuoteTweets_Body(t *testing.T) {
+	cases := []struct {
+		name   string
+		params *types.QuoteTweetsParams
+	}{
+		{
+			name:   "empty params",
+			params: &types.QuoteTweetsParams{},
+		},
+		{
+			name:   "some params",
+			params: &types.QuoteTweetsParams{ID: "tid"},
+		},
+	}
+
+	for _, c := range cases {
+		t.Run(c.name, func(tt *testing.T) {
+			r, err := c.params.Body()
+			assert.NoError(tt, err)
+			assert.Nil(tt, r)
+		})
+	}
+}
