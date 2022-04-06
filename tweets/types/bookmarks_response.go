@@ -17,3 +17,13 @@ type BookmarksResponse struct {
 func (r *BookmarksResponse) HasPartialError() bool {
 	return !(r.Errors == nil || len(r.Errors) == 0)
 }
+
+type BookmarksPostResponse struct {
+	Data struct {
+		Bookmarked bool `json:"bookmarked"`
+	} `json:"data"`
+}
+
+func (r *BookmarksPostResponse) HasPartialError() bool {
+	return false
+}

@@ -1,6 +1,7 @@
 package types
 
 import (
+	"encoding/json"
 	"io"
 	"net/url"
 	"strconv"
@@ -91,4 +92,46 @@ func (p *BookmarksParams) ParameterMap() map[string]string {
 	m = fields.SetFieldsParams(m, p.Expansions, p.MediaFields, p.PlaceFields, p.PollFields, p.TweetFields, p.UserFields)
 
 	return m
+}
+
+type BookmarksPostParams struct {
+	accessToken string
+
+	// Path parameter
+	ID string `json:"-"` // The authenticated user ID
+
+	// JSON body parameter
+	TweetID *string `json:"tweet_id,omitempty"`
+}
+
+func (p *BookmarksPostParams) SetAccessToken(token string) {
+	p.accessToken = token
+}
+
+func (p *BookmarksPostParams) AccessToken() string {
+	return p.accessToken
+}
+
+func (p *BookmarksPostParams) ResolveEndpoint(endpointBase string) string {
+	if p.ID == "" {
+		return ""
+	}
+
+	escaped := url.QueryEscape(p.ID)
+	endpoint := strings.Replace(endpointBase, ":id", escaped, 1)
+
+	return endpoint
+}
+
+func (p *BookmarksPostParams) Body() (io.Reader, error) {
+	json, err := json.Marshal(p)
+	if err != nil {
+		return nil, err
+	}
+
+	return strings.NewReader(string(json)), nil
+}
+
+func (p *BookmarksPostParams) ParameterMap() map[string]string {
+	return map[string]string{}
 }
