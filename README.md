@@ -48,6 +48,10 @@ Progress of supporting APIs:
     - [x] `PUT /2/tweets/:id/hidden`
   - Quote Tweets
     - [x] `GET /2/tweets/:id/quote_tweets` 
+  - Bookmarks
+    - [x] `GET /2/users/:id/bookmarks`
+    - [ ] `POST /2/users/:id/bookmarks`
+    - [ ] `DELETE /2/users/:id/bookmarks/:tweet_id`
 - **Users**
   - User lookup
     - [x] `GET /2/users`
