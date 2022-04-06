@@ -51,7 +51,7 @@ Progress of supporting APIs:
   - Bookmarks
     - [x] `GET /2/users/:id/bookmarks`
     - [x] `POST /2/users/:id/bookmarks`
-    - [ ] `DELETE /2/users/:id/bookmarks/:tweet_id`
+    - [x] `DELETE /2/users/:id/bookmarks/:tweet_id`
 - **Users**
   - User lookup
     - [x] `GET /2/users`
