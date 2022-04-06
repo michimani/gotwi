@@ -50,7 +50,7 @@ Progress of supporting APIs:
     - [x] `GET /2/tweets/:id/quote_tweets` 
   - Bookmarks
     - [x] `GET /2/users/:id/bookmarks`
-    - [ ] `POST /2/users/:id/bookmarks`
+    - [x] `POST /2/users/:id/bookmarks`
     - [ ] `DELETE /2/users/:id/bookmarks/:tweet_id`
 - **Users**
   - User lookup
