@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Twitter Authorization : OAuth 2.0 with PKCE</title>
+    <style>
+      code {
+        background-color: #eceff1;
+        padding: 2px 4px;
+        color: #37474f;
+      }
+      pre.code {
+        background-color: #fff3e0;
+        padding: 10px;
+        font-family: monospace;
+      }
+      pre.code code {
+        background-color: unset;
+        color: unset;
+        padding: 0px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1><a href="/auth/">Twitter Authorization : OAuth 2.0 with PKCE</a></h1>
+    Steps
+    <ol start="0">
+      <li>Create Twitter app</li>
+      <li>The authorization request</li>
+      <li>The redirection to your application site</li>
+      <li>Confirm generated access token</li>
+    </ol>
+
+    <h2 id="step0">Step 0: Create Twitter app</h2>
+
+    Access to
+    <a
+      href="https://developer.twitter.com/en/portal/projects-and-apps"
+      target="_blank"
+      rel="noopener"
+      >Twitter Developers Portal</a
+    >
+    and create a new Twitter app. <br />
+    Then, please input following url to
+    <strong>OAuth redirect URL</strong> form.
+    <button id="url-cmd-btn">copy</button>
+    <pre
+      class="code"
+    ><code id="redirect-url">http://127.0.0.1:8888/auth/step2-3/</code></pre>
+
+    <br />
+
+    <h4>Create <code>appconfig.json</code> file</h4>
+    Please create <code>appconfig.json</code> file with following format, and
+    put it to <code>/auth/</code> directory.<br />
+    Run <code>cp auth/appconfig.json.sample auth/appconfig.json</code> and edit
+    it.
+
+    <pre class="code"><code>{
+  "client_id": "your_client_id",
+  "client_sec": "your_client_secret",
+  "state": "random_string_you_like",
+  "code_verifier": "random_string_you_like"
+}</code></pre>
+
+    <br />
+    <br />
+    next >> <a href="/auth/step1/">step 1: The authorization request</a>
+
+    <script>
+      document.getElementById("url-cmd-btn").addEventListener("click", (e) => {
+        const selection = window.getSelection();
+        const range = document.createRange();
+        range.selectNodeContents(document.getElementById("redirect-url"));
+        selection.removeAllRanges();
+        selection.addRange(range);
+        document.execCommand("copy");
+        selection.removeAllRanges();
+      });
+    </script>
+  </body>
+</html>

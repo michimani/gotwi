@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Twitter Authorization : OAuth 2.0 with PKCE</title>
+    <style>
+      code {
+        background-color: #eceff1;
+        padding: 2px 4px;
+        color: #37474f;
+      }
+      pre.code {
+        background-color: #fff3e0;
+        padding: 10px;
+        font-family: monospace;
+      }
+      pre.code code {
+        background-color: unset;
+        color: unset;
+        padding: 0px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1><a href="/auth/">Twitter Authorization : OAuth 2.0 with PKCE</a></h1>
+
+    <h2 id="step1">step 1: The authorization request</h2>
+
+    Please access to following link to request authorization.
+
+    <div id="authorize-link-area" style="padding: 10px">
+      <a id="authorize-link"></a>
+    </div>
+
+    <script>
+      const authLinkArea = document.getElementById("authorize-link-area");
+      const authLinkElem = document.getElementById("authorize-link");
+      const authJson = "/auth/appconfig.json";
+      const redirectURL = "http://127.0.0.1:8888/auth/step2-3/";
+      const scopes =
+        "tweet.read%20tweet.write%20tweet.moderate.write%20users.read%20follows.read%20follows.write%20offline.access%20space.read%20mute.read%20mute.write%20like.read%20like.write%20list.read%20list.write%20block.read%20block.write%20bookmark.read%20bookmark.write";
+
+      window.onload = () => {
+        fetch(authJson)
+          .then((res) => {
+            if (res.ok) {
+              res.json().then((json) => {
+                const authLink = `https://twitter.com/i/oauth2/authorize?response_type=code&client_id=${json.client_id}&redirect_uri=${redirectURL}&scope=${scopes}&state=${json.state}&code_challenge=${json.code_verifier}&code_challenge_method=plain`;
+                authLinkElem.setAttribute("href", authLink);
+                authLinkElem.innerHTML = authLinkElem;
+              });
+            } else {
+              throw new Error(
+                `Failed to get auth information: ${response.status}`
+              );
+            }
+          })
+          .catch((err) => {
+            authLinkArea.innerText =
+              err + "\n Create <code>auth.json</code> and reload this page.";
+            authLinkArea.style.color = "red";
+          });
+      };
+    </script>
+  </body>
+</html>

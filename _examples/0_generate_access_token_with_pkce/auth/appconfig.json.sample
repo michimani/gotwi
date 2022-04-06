@@ -1,0 +1,6 @@
+{
+  "client_id": "your_client_id",
+  "client_sec": "your_client_secret",
+  "state": "random_string_you_like",
+  "code_verifier": "random_string_you_like"
+}

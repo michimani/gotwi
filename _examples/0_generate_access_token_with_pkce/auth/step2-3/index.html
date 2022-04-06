@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Twitter Authorization : OAuth 2.0 with PKCE</title>
+    <style>
+      code {
+        background-color: #eceff1;
+        padding: 2px 4px;
+        color: #37474f;
+      }
+      pre.code {
+        background-color: #fff3e0;
+        padding: 10px;
+        font-family: monospace;
+      }
+      pre.code code {
+        background-color: unset;
+        color: unset;
+        padding: 0px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1><a href="/auth/">Twitter Authorization : OAuth 2.0 with PKCE</a></h1>
+
+    <h2 id="step2">step2: The redirection to your application site</h2>
+
+    Authorization request result <br />
+
+    <div id="authorize-result-err" style="color: red"></div>
+    <pre class="code"><code id="authorize-result-success"></code></pre>
+
+    <br />
+    <br />
+
+    <div id="exchange-token-cmd-area">
+      <h2 id="step3">step3: The token exchange</h2>
+
+      Run following command to get access token and save it in a file.
+      <button id="copy-cmd-btn">copy</button>
+
+      <pre class="code"><code id="exchange-token-cmd"></code></pre>
+    </div>
+
+    <script>
+      const authResErrArea = document.getElementById("authorize-result-err");
+      const authResSuccessArea = document.getElementById(
+        "authorize-result-success"
+      );
+      const exchangeTokenCmdArea =
+        document.getElementById("exchange-token-cmd");
+      const exchangeTokenCmdWrapper = document.getElementById(
+        "exchange-token-cmd-area"
+      );
+      const authJson = "/auth/appconfig.json";
+
+      window.onload = () => {
+        fetch(authJson)
+          .then((res) => {
+            if (res.ok) {
+              res.json().then((json) => {
+                const query = [
+                  ...new URLSearchParams(location.search).entries(),
+                ].reduce((obj, e) => ({ ...obj, [e[0]]: e[1] }), {});
+                if (
+                  typeof query.code == "undefined" ||
+                  typeof query.state == "undefined"
+                ) {
+                  throw new Error(`Failed to auth: ${response.status}`);
+                }
+
+                if (query.state != json.state) {
+                  throw new Error(
+                    `Failed to get authorize. Invalid value for <code>state</code>.: ${response.status}`
+                  );
+                }
+
+                const basic = btoa(`${json.client_id}:${json.client_sec}`);
+                const redirectURL = "http://127.0.0.1:8888/auth/step2-3/";
+                authResSuccessArea.innerText = JSON.stringify(query, null, 2);
+                const exchangeTokenCmd = `curl -X POST 'https://api.twitter.com/2/oauth2/token' \\
+--header 'Authorization: Basic ${basic}' \\
+--header 'Content-Type: application/x-www-form-urlencoded' \\
+--data-urlencode 'code=${query.code}' \\
+--data-urlencode 'grant_type=authorization_code' \\
+--data-urlencode 'code_verifier=${json.code_verifier}' \\
+--data-urlencode 'client_id=${json.client_id}' \\
+--data-urlencode 'redirect_uri=${redirectURL}' \\
+>| ./token.json`;
+                exchangeTokenCmdArea.innerText = exchangeTokenCmd;
+
+                document
+                  .getElementById("copy-cmd-btn")
+                  .addEventListener("click", (e) => {
+                    const selection = window.getSelection();
+                    const range = document.createRange();
+                    range.selectNodeContents(exchangeTokenCmdArea);
+                    selection.removeAllRanges();
+                    selection.addRange(range);
+                    document.execCommand("copy");
+                    selection.removeAllRanges();
+                  });
+              });
+            } else {
+              throw new Error(`Failed to get authorize: ${response.status}`);
+            }
+          })
+          .catch((err) => {
+            exchangeTokenCmdWrapper.style.display = "none";
+            authResErrArea.innerText =
+              err +
+              '\n Create <code>auth.json</code> and retry auth step from <strong><a href="/auth/step2/">Step2</a></strong>.';
+          });
+      };
+    </script>
+  </body>
+</html>
