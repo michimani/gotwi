@@ -9,6 +9,17 @@ This is a version of CHANGELOG less than v1.0.0
 * `GET /2/compliance/jobs`
 * `POST /2/compliance/jobs`
 
+v0.10.2 (2022-04-06)
+===
+
+### New Supported APIs
+* `GET /2/users/:id/bookmarks`
+* `POST /2/users/:id/bookmarks`
+* `DELETE /2/users/:id/bookmarks/:tweet_id`
+
+### Features
+* Generate GotwiClient with access token
+
 v0.10.1 (2022-03-31)
 ===
 
