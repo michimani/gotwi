@@ -302,3 +302,128 @@ func Test_BookmarksPostParams_ParameterMap(t *testing.T) {
 		})
 	}
 }
+
+func Test_BookmarksDeleteParams_SetAccessToken(t *testing.T) {
+	cases := []struct {
+		name   string
+		token  string
+		expect string
+	}{
+		{
+			name:   "normal",
+			token:  "test-token",
+			expect: "test-token",
+		},
+		{
+			name:   "empty",
+			token:  "",
+			expect: "",
+		},
+	}
+
+	for _, c := range cases {
+		t.Run(c.name, func(tt *testing.T) {
+			p := &types.BookmarksDeleteParams{}
+			p.SetAccessToken(c.token)
+			assert.Equal(tt, c.expect, p.AccessToken())
+		})
+	}
+}
+
+func Test_BookmarksDeleteParams_ResolveEndpoint(t *testing.T) {
+	const endpointRoot = "test/endpoint/"
+	const endpointBase = "test/endpoint/:id/:tweet_id"
+	cases := []struct {
+		name   string
+		params *types.BookmarksDeleteParams
+		expect string
+	}{
+		{
+			name: "normal: only required parameter",
+			params: &types.BookmarksDeleteParams{
+				ID:      "uid",
+				TweetID: "tid",
+			},
+			expect: endpointRoot + "uid" + "/" + "tid",
+		},
+		{
+			name: "normal: has no required parameter",
+			params: &types.BookmarksDeleteParams{
+				ID: "uid",
+			},
+			expect: "",
+		},
+		{
+			name: "normal: has no required parameter",
+			params: &types.BookmarksDeleteParams{
+				TweetID: "tid",
+			},
+			expect: "",
+		},
+	}
+
+	for _, c := range cases {
+		t.Run(c.name, func(tt *testing.T) {
+			ep := c.params.ResolveEndpoint(endpointBase)
+			assert.Equal(tt, c.expect, ep)
+		})
+	}
+}
+
+func Test_BookmarksDeleteParams_Body(t *testing.T) {
+	cases := []struct {
+		name   string
+		params *types.BookmarksDeleteParams
+		expect io.Reader
+	}{
+		{
+			name: "ok: has required parameters",
+			params: &types.BookmarksDeleteParams{
+				ID:      "uid",
+				TweetID: "tid",
+			},
+			expect: nil,
+		},
+		{
+			name:   "ok: has no required parameters",
+			params: &types.BookmarksDeleteParams{},
+			expect: nil,
+		},
+	}
+
+	for _, c := range cases {
+		t.Run(c.name, func(tt *testing.T) {
+			r, err := c.params.Body()
+			assert.NoError(tt, err)
+			assert.Equal(tt, c.expect, r)
+		})
+	}
+}
+
+func Test_BookmarksDeleteParams_ParameterMap(t *testing.T) {
+	cases := []struct {
+		name   string
+		params *types.BookmarksDeleteParams
+		expect map[string]string
+	}{
+		{
+			name:   "normal: only required parameter",
+			params: &types.BookmarksDeleteParams{ID: "test-id"},
+			expect: map[string]string{},
+		},
+		{
+			name: "normal: has no required parameter",
+			params: &types.BookmarksDeleteParams{
+				TweetID: "tid",
+			},
+			expect: map[string]string{},
+		},
+	}
+
+	for _, c := range cases {
+		t.Run(c.name, func(tt *testing.T) {
+			m := c.params.ParameterMap()
+			assert.Equal(tt, c.expect, m)
+		})
+	}
+}

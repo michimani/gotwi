@@ -27,3 +27,13 @@ type BookmarksPostResponse struct {
 func (r *BookmarksPostResponse) HasPartialError() bool {
 	return false
 }
+
+type BookmarksDeleteResponse struct {
+	Data struct {
+		Bookmarked bool `json:"bookmarked"`
+	} `json:"data"`
+}
+
+func (r *BookmarksDeleteResponse) HasPartialError() bool {
+	return false
+}

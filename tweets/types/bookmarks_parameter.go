@@ -135,3 +135,40 @@ func (p *BookmarksPostParams) Body() (io.Reader, error) {
 func (p *BookmarksPostParams) ParameterMap() map[string]string {
 	return map[string]string{}
 }
+
+type BookmarksDeleteParams struct {
+	accessToken string
+
+	// Path parameter
+	ID      string // The authenticated user ID
+	TweetID string
+}
+
+func (p *BookmarksDeleteParams) SetAccessToken(token string) {
+	p.accessToken = token
+}
+
+func (p *BookmarksDeleteParams) AccessToken() string {
+	return p.accessToken
+}
+
+func (p *BookmarksDeleteParams) ResolveEndpoint(endpointBase string) string {
+	if p.ID == "" || p.TweetID == "" {
+		return ""
+	}
+
+	escapedSID := url.QueryEscape(p.ID)
+	endpoint := strings.Replace(endpointBase, ":id", escapedSID, 1)
+	escapedTID := url.QueryEscape(p.TweetID)
+	endpoint = strings.Replace(endpoint, ":tweet_id", escapedTID, 1)
+
+	return endpoint
+}
+
+func (p *BookmarksDeleteParams) Body() (io.Reader, error) {
+	return nil, nil
+}
+
+func (p *BookmarksDeleteParams) ParameterMap() map[string]string {
+	return map[string]string{}
+}

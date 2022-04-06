@@ -77,3 +77,35 @@ func Test_BookmarksPostResponse_HasPartialError(t *testing.T) {
 		})
 	}
 }
+
+func Test_BookmarksDeleteResponse_HasPartialError(t *testing.T) {
+	cases := []struct {
+		name   string
+		res    *types.BookmarksDeleteResponse
+		expect bool
+	}{
+		{
+			name:   "initial struct",
+			res:    &types.BookmarksDeleteResponse{},
+			expect: false,
+		},
+		{
+			name: "has data",
+			res: &types.BookmarksDeleteResponse{
+				Data: struct {
+					Bookmarked bool "json:\"bookmarked\""
+				}{
+					Bookmarked: *gotwi.Bool(true),
+				},
+			},
+			expect: false,
+		},
+	}
+
+	for _, c := range cases {
+		t.Run(c.name, func(tt *testing.T) {
+			hpe := c.res.HasPartialError()
+			assert.Equal(tt, c.expect, hpe)
+		})
+	}
+}

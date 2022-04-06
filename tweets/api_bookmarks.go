@@ -8,8 +8,9 @@ import (
 )
 
 const (
-	BookmarksEndpoint     = "https://api.twitter.com/2/users/:id/bookmarks"
-	BookmarksPostEndpoint = "https://api.twitter.com/2/users/:id/bookmarks"
+	BookmarksEndpoint       = "https://api.twitter.com/2/users/:id/bookmarks"
+	BookmarksPostEndpoint   = "https://api.twitter.com/2/users/:id/bookmarks"
+	BookmarksDeleteEndpoint = "https://api.twitter.com/2/users/:id/bookmarks/:tweet_id"
 )
 
 // Allows you to get information about a authenticated user’s 800 most recent bookmarked Tweets
@@ -29,6 +30,17 @@ func Bookmarks(ctx context.Context, c *gotwi.GotwiClient, p *types.BookmarksPara
 func BookmarksPost(ctx context.Context, c *gotwi.GotwiClient, p *types.BookmarksPostParams) (*types.BookmarksPostResponse, error) {
 	res := &types.BookmarksPostResponse{}
 	if err := c.CallAPI(ctx, BookmarksPostEndpoint, "POST", p, res); err != nil {
+		return nil, err
+	}
+
+	return res, nil
+}
+
+// Allows a user or authenticated user ID to remove a Bookmark of a Tweet.
+// https://developer.twitter.com/en/docs/twitter-api/tweets/bookmarks/api-reference/delete-users-id-bookmarks-tweet_id
+func BookmarksDelete(ctx context.Context, c *gotwi.GotwiClient, p *types.BookmarksDeleteParams) (*types.BookmarksDeleteResponse, error) {
+	res := &types.BookmarksDeleteResponse{}
+	if err := c.CallAPI(ctx, BookmarksDeleteEndpoint, "DELETE", p, res); err != nil {
 		return nil, err
 	}
 
