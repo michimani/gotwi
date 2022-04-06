@@ -193,6 +193,10 @@ func Test_NewGotwiClient(t *testing.T) {
 }
 
 func Test_NewGotwiClientWithAccessToken(t *testing.T) {
+	defaultHTTPClient := &http.Client{
+		Timeout: time.Duration(30) * time.Second,
+	}
+
 	cases := []struct {
 		name    string
 		in      *gotwi.NewGotwiClientWithAccessTokenInput
@@ -208,6 +212,24 @@ func Test_NewGotwiClientWithAccessToken(t *testing.T) {
 			expect: &gotwi.GotwiClient{
 				AuthenticationMethod: gotwi.AuthenMethodOAuth2BearerToken,
 				AccessToken:          "test-token",
+				Client:               defaultHTTPClient,
+			},
+		},
+		{
+			name: "ok: with http client",
+			in: &gotwi.NewGotwiClientWithAccessTokenInput{
+				AccessToken: "test-token",
+				HTTPClient: &http.Client{
+					Timeout: time.Duration(60) * time.Second,
+				},
+			},
+			wantErr: false,
+			expect: &gotwi.GotwiClient{
+				AuthenticationMethod: gotwi.AuthenMethodOAuth2BearerToken,
+				AccessToken:          "test-token",
+				Client: &http.Client{
+					Timeout: time.Duration(60) * time.Second,
+				},
 			},
 		},
 		{
@@ -234,6 +256,7 @@ func Test_NewGotwiClientWithAccessToken(t *testing.T) {
 			}
 
 			assert.NoError(tt, err)
+			assert.Equal(tt, c.expect.Client, gc.Client)
 			assert.Equal(tt, c.expect.AuthenticationMethod, gc.AuthenticationMethod)
 			assert.Equal(tt, c.expect.AccessToken, gc.AccessToken)
 			assert.Equal(tt, c.expect.OAuthToken, gc.OAuthToken)
