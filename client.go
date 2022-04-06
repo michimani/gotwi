@@ -39,6 +39,11 @@ type NewGotwiClientInput struct {
 	OAuthTokenSecret     string
 }
 
+type NewGotwiClientWithAccessTokenInput struct {
+	HTTPClient  *http.Client
+	AccessToken string
+}
+
 type IGotwiClient interface {
 	Exec(req *http.Request, i util.Response) (*resources.Non2XXError, error)
 }
@@ -84,6 +89,28 @@ func NewGotwiClient(in *NewGotwiClientInput) (*GotwiClient, error) {
 
 	if err := c.authorize(in.OAuthToken, in.OAuthTokenSecret); err != nil {
 		return nil, err
+	}
+
+	return &c, nil
+}
+
+func NewGotwiClientWithAccessToken(in *NewGotwiClientWithAccessTokenInput) (*GotwiClient, error) {
+	if in == nil {
+		return nil, fmt.Errorf("NewGotwiClientWithAccessTokenInput is nil.")
+	}
+
+	if in.AccessToken == "" {
+		return nil, fmt.Errorf("AccessToken is empty.")
+	}
+
+	c := GotwiClient{
+		Client:               defaultHTTPClient,
+		AuthenticationMethod: AuthenMethodOAuth2BearerToken,
+		AccessToken:          in.AccessToken,
+	}
+
+	if in.HTTPClient != nil {
+		c.Client = in.HTTPClient
 	}
 
 	return &c, nil

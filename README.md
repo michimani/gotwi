@@ -192,6 +192,21 @@ CreatedAt:  2012-05-16 12:07:04 +0000 UTC
 PinnedTweet:  pinned tweet
 ```
 
+### new client with access token
+
+If you already have a pre-generated access token (e.g. OAuth 2.0 Authorization Code with PKCE), you can use `NewGotwiClientWithAccessToken()` function to generate a Gotwi client.
+
+```go
+in := &gotwi.NewGotwiClientWithAccessTokenInput{
+	AccessToken: "your-access-token",
+}
+
+c, err := gotwi.NewGotwiClientWithAccessToken(in)
+if err != nil {
+	// error handling
+}
+```
+
 ## Request with OAuth 1.0a User Context
 
 With this authentication method, each operation will be performed as the authenticated Twitter account. For example, you can tweet as that account, or retrieve accounts that are blocked by that account.
