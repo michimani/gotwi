@@ -192,6 +192,80 @@ func Test_NewGotwiClient(t *testing.T) {
 	}
 }
 
+func Test_NewGotwiClientWithAccessToken(t *testing.T) {
+	defaultHTTPClient := &http.Client{
+		Timeout: time.Duration(30) * time.Second,
+	}
+
+	cases := []struct {
+		name    string
+		in      *gotwi.NewGotwiClientWithAccessTokenInput
+		wantErr bool
+		expect  *gotwi.GotwiClient
+	}{
+		{
+			name: "ok",
+			in: &gotwi.NewGotwiClientWithAccessTokenInput{
+				AccessToken: "test-token",
+			},
+			wantErr: false,
+			expect: &gotwi.GotwiClient{
+				AuthenticationMethod: gotwi.AuthenMethodOAuth2BearerToken,
+				AccessToken:          "test-token",
+				Client:               defaultHTTPClient,
+			},
+		},
+		{
+			name: "ok: with http client",
+			in: &gotwi.NewGotwiClientWithAccessTokenInput{
+				AccessToken: "test-token",
+				HTTPClient: &http.Client{
+					Timeout: time.Duration(60) * time.Second,
+				},
+			},
+			wantErr: false,
+			expect: &gotwi.GotwiClient{
+				AuthenticationMethod: gotwi.AuthenMethodOAuth2BearerToken,
+				AccessToken:          "test-token",
+				Client: &http.Client{
+					Timeout: time.Duration(60) * time.Second,
+				},
+			},
+		},
+		{
+			name:    "error: access token is empty",
+			in:      &gotwi.NewGotwiClientWithAccessTokenInput{},
+			wantErr: true,
+			expect:  nil,
+		},
+		{
+			name:    "error: access token is empty",
+			in:      nil,
+			wantErr: true,
+			expect:  nil,
+		},
+	}
+
+	for _, c := range cases {
+		t.Run(c.name, func(tt *testing.T) {
+			gc, err := gotwi.NewGotwiClientWithAccessToken(c.in)
+			if c.wantErr {
+				assert.Error(tt, err)
+				assert.Nil(tt, gc)
+				return
+			}
+
+			assert.NoError(tt, err)
+			assert.Equal(tt, c.expect.Client, gc.Client)
+			assert.Equal(tt, c.expect.AuthenticationMethod, gc.AuthenticationMethod)
+			assert.Equal(tt, c.expect.AccessToken, gc.AccessToken)
+			assert.Equal(tt, c.expect.OAuthToken, gc.OAuthToken)
+			assert.Equal(tt, c.expect.OAuthConsumerKey, gc.OAuthConsumerKey)
+			assert.Equal(tt, c.expect.SigningKey, gc.SigningKey)
+		})
+	}
+}
+
 func Test_IsReady(t *testing.T) {
 	cases := []struct {
 		name   string
