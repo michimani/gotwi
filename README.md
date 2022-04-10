@@ -107,7 +107,7 @@ Progress of supporting APIs:
     - [x] `GET /2/spaces/search`
 - **Compliance**
   - Batch compliance
-    - [ ] `GET /2/compliance/jobs/:id`
+    - [x] `GET /2/compliance/jobs/:id`
     - [x] `GET /2/compliance/jobs`
     - [x] `POST /2/compliance/jobs`
 

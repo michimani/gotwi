@@ -9,12 +9,26 @@ import (
 
 const (
 	BatchComplianceJobsEndpoint     = "https://api.twitter.com/2/compliance/jobs"
+	BatchComplianceJobsIDEndpoint   = "https://api.twitter.com/2/compliance/jobs/:id"
 	BatchComplianceJobsPostEndpoint = "https://api.twitter.com/2/compliance/jobs"
 )
 
+// Returns a list of recent compliance jobs.
+// https://developer.twitter.com/en/docs/twitter-api/compliance/batch-compliance/api-reference/get-compliance-jobs
 func BatchComplianceJobs(ctx context.Context, c *gotwi.GotwiClient, p *types.BatchComplianceJobsParams) (*types.BatchComplianceJobsResponse, error) {
 	res := &types.BatchComplianceJobsResponse{}
 	if err := c.CallAPI(ctx, BatchComplianceJobsEndpoint, "GET", p, res); err != nil {
+		return nil, err
+	}
+
+	return res, nil
+}
+
+// Get a single compliance job with the specified ID.
+// https://developer.twitter.com/en/docs/twitter-api/compliance/batch-compliance/api-reference/get-compliance-jobs-id
+func BatchComplianceJobsID(ctx context.Context, c *gotwi.GotwiClient, p *types.BatchComplianceJobsIDParams) (*types.BatchComplianceJobsIDResponse, error) {
+	res := &types.BatchComplianceJobsIDResponse{}
+	if err := c.CallAPI(ctx, BatchComplianceJobsIDEndpoint, "GET", p, res); err != nil {
 		return nil, err
 	}
 

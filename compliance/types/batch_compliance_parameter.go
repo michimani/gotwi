@@ -3,6 +3,7 @@ package types
 import (
 	"encoding/json"
 	"io"
+	"net/url"
 	"strings"
 
 	"github.com/michimani/gotwi/internal/util"
@@ -75,6 +76,40 @@ func (p *BatchComplianceJobsParams) ParameterMap() map[string]string {
 	}
 
 	return m
+}
+
+type BatchComplianceJobsIDParams struct {
+	accessToken string
+
+	// Path parameters
+	ID string
+}
+
+func (p *BatchComplianceJobsIDParams) SetAccessToken(token string) {
+	p.accessToken = token
+}
+
+func (p *BatchComplianceJobsIDParams) AccessToken() string {
+	return p.accessToken
+}
+
+func (p *BatchComplianceJobsIDParams) ResolveEndpoint(endpointBase string) string {
+	if p.ID == "" {
+		return ""
+	}
+
+	escaped := url.QueryEscape(p.ID)
+	endpoint := strings.Replace(endpointBase, ":id", escaped, 1)
+
+	return endpoint
+}
+
+func (p *BatchComplianceJobsIDParams) Body() (io.Reader, error) {
+	return nil, nil
+}
+
+func (p *BatchComplianceJobsIDParams) ParameterMap() map[string]string {
+	return map[string]string{}
 }
 
 type BatchComplianceJobsPostParams struct {
