@@ -109,7 +109,7 @@ Progress of supporting APIs:
   - Batch compliance
     - [ ] `GET /2/compliance/jobs/:id`
     - [ ] `GET /2/compliance/jobs`
-    - [ ] `POST /2/compliance/jobs`
+    - [x] `POST /2/compliance/jobs`
 
 # Sample
 
