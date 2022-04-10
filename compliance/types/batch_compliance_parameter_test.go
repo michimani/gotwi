@@ -181,6 +181,32 @@ func Test_BatchComplianceJobsIDParams_Body(t *testing.T) {
 	}
 }
 
+func Test_BatchComplianceJobsIDParams_ParameterMap(t *testing.T) {
+	cases := []struct {
+		name   string
+		params *types.BatchComplianceJobsIDParams
+		expect map[string]string
+	}{
+		{
+			name:   "normal: only required parameter",
+			params: &types.BatchComplianceJobsIDParams{ID: "id"},
+			expect: map[string]string{},
+		},
+		{
+			name:   "normal: has no required parameter",
+			params: &types.BatchComplianceJobsIDParams{},
+			expect: map[string]string{},
+		},
+	}
+
+	for _, c := range cases {
+		t.Run(c.name, func(tt *testing.T) {
+			m := c.params.ParameterMap()
+			assert.Equal(tt, c.expect, m)
+		})
+	}
+}
+
 func Test_BatchComplianceJobsPostParams_SetAccessToken(t *testing.T) {
 	cases := []struct {
 		name   string
