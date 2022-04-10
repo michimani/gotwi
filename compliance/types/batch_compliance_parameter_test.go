@@ -7,7 +7,6 @@ import (
 
 	"github.com/michimani/gotwi"
 	"github.com/michimani/gotwi/compliance/types"
-	"github.com/michimani/gotwi/resources"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -74,7 +73,7 @@ func Test_BatchComplianceJobsPostParams_Body(t *testing.T) {
 		{
 			name: "ok: type",
 			params: &types.BatchComplianceJobsPostParams{
-				Type: resources.ComplianceTypeTweets,
+				Type: types.ComplianceTypeTweets,
 			},
 			expect: strings.NewReader(`{"type":"tweets"}`),
 		},
@@ -95,7 +94,7 @@ func Test_BatchComplianceJobsPostParams_Body(t *testing.T) {
 		{
 			name: "ok: all",
 			params: &types.BatchComplianceJobsPostParams{
-				Type:      resources.ComplianceTypeTweets,
+				Type:      types.ComplianceTypeTweets,
 				Name:      gotwi.String("test-name"),
 				Resumable: gotwi.Bool(true),
 			},

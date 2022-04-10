@@ -4,17 +4,22 @@ import (
 	"encoding/json"
 	"io"
 	"strings"
+)
 
-	"github.com/michimani/gotwi/resources"
+type ComplianceType string
+
+const (
+	ComplianceTypeTweets ComplianceType = "tweets"
+	ComplianceTypeUsers  ComplianceType = "users"
 )
 
 type BatchComplianceJobsPostParams struct {
 	accessToken string
 
 	// JSON body parameter
-	Type      resources.ComplianceType `json:"type,omitempty"`
-	Name      *string                  `json:"name,omitempty"`
-	Resumable *bool                    `json:"resumable,omitempty"`
+	Type      ComplianceType `json:"type,omitempty"`
+	Name      *string        `json:"name,omitempty"`
+	Resumable *bool          `json:"resumable,omitempty"`
 }
 
 func (p *BatchComplianceJobsPostParams) SetAccessToken(token string) {
