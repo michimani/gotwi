@@ -11,6 +11,15 @@ func (r *BatchComplianceJobsResponse) HasPartialError() bool {
 	return !(r.Errors == nil || len(r.Errors) == 0)
 }
 
+type BatchComplianceJobsIDResponse struct {
+	Data   resources.Compliance     `json:"data"`
+	Errors []resources.PartialError `json:"errors"`
+}
+
+func (r *BatchComplianceJobsIDResponse) HasPartialError() bool {
+	return !(r.Errors == nil || len(r.Errors) == 0)
+}
+
 type BatchComplianceJobsPostResponse struct {
 	Data   resources.Compliance     `json:"data"`
 	Errors []resources.PartialError `json:"errors"`

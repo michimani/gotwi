@@ -100,6 +100,87 @@ func Test_BatchComplianceJobsParams_Body(t *testing.T) {
 	}
 }
 
+func Test_BatchComplianceJobsIDParams_SetAccessToken(t *testing.T) {
+	cases := []struct {
+		name   string
+		token  string
+		expect string
+	}{
+		{
+			name:   "normal",
+			token:  "test-token",
+			expect: "test-token",
+		},
+		{
+			name:   "normal: empty",
+			token:  "",
+			expect: "",
+		},
+	}
+
+	for _, c := range cases {
+		t.Run(c.name, func(tt *testing.T) {
+			p := &types.BatchComplianceJobsIDParams{}
+			p.SetAccessToken(c.token)
+			assert.Equal(tt, c.expect, p.AccessToken())
+		})
+	}
+}
+
+func Test_BatchComplianceJobsIDParams_ResolveEndpoint(t *testing.T) {
+	const endpointRoot = "test/endpoint/"
+	const endpointBase = "test/endpoint/:id"
+	cases := []struct {
+		name   string
+		params *types.BatchComplianceJobsIDParams
+		expect string
+	}{
+		{
+			name: "ok",
+			params: &types.BatchComplianceJobsIDParams{
+				ID: "test-id",
+			},
+			expect: endpointRoot + "test-id",
+		},
+		{
+			name:   "ng: has no required",
+			params: &types.BatchComplianceJobsIDParams{},
+			expect: "",
+		},
+	}
+
+	for _, c := range cases {
+		t.Run(c.name, func(tt *testing.T) {
+			ep := c.params.ResolveEndpoint(endpointBase)
+			assert.Equal(tt, c.expect, ep)
+		})
+	}
+}
+
+func Test_BatchComplianceJobsIDParams_Body(t *testing.T) {
+	cases := []struct {
+		name   string
+		params *types.BatchComplianceJobsIDParams
+	}{
+		{
+			name:   "empty params",
+			params: &types.BatchComplianceJobsIDParams{},
+		},
+		{
+			name:   "nil",
+			params: &types.BatchComplianceJobsIDParams{},
+		},
+	}
+
+	for _, c := range cases {
+		t.Run(c.name, func(tt *testing.T) {
+			r, err := c.params.Body()
+			assert.NoError(tt, err)
+			assert.Nil(tt, r)
+		})
+	}
+}
+
 func Test_BatchComplianceJobsPostParams_SetAccessToken(t *testing.T) {
 	cases := []struct {
 		name   string
