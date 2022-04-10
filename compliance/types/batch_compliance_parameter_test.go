@@ -7,9 +7,98 @@ import (
 
 	"github.com/michimani/gotwi"
 	"github.com/michimani/gotwi/compliance/types"
-	"github.com/michimani/gotwi/resources"
 	"github.com/stretchr/testify/assert"
 )
+
+func Test_BatchComplianceJobsParams_SetAccessToken(t *testing.T) {
+	cases := []struct {
+		name   string
+		token  string
+		expect string
+	}{
+		{
+			name:   "normal",
+			token:  "test-token",
+			expect: "test-token",
+		},
+		{
+			name:   "normal: empty",
+			token:  "",
+			expect: "",
+		},
+	}
+
+	for _, c := range cases {
+		t.Run(c.name, func(tt *testing.T) {
+			p := &types.BatchComplianceJobsParams{}
+			p.SetAccessToken(c.token)
+			assert.Equal(tt, c.expect, p.AccessToken())
+		})
+	}
+}
+
+func Test_BatchComplianceJobsParams_ResolveEndpoint(t *testing.T) {
+	const endpoint = "test/endpoint/"
+	cases := []struct {
+		name   string
+		params *types.BatchComplianceJobsParams
+		expect string
+	}{
+		{
+			name: "ok",
+			params: &types.BatchComplianceJobsParams{
+				Type: types.ComplianceTypeTweets,
+			},
+			expect: endpoint + "?type=tweets",
+		},
+		{
+			name: "ok: with type and status",
+			params: &types.BatchComplianceJobsParams{
+				Type:   types.ComplianceTypeUsers,
+				Status: types.ComplianceStatusFailed,
+			},
+			expect: endpoint + "?status=failed&type=users",
+		},
+		{
+			name: "ng: has no required",
+			params: &types.BatchComplianceJobsParams{
+				Status: types.ComplianceStatusFailed,
+			},
+			expect: "",
+		},
+	}
+
+	for _, c := range cases {
+		t.Run(c.name, func(tt *testing.T) {
+			ep := c.params.ResolveEndpoint(endpoint)
+			assert.Equal(tt, c.expect, ep)
+		})
+	}
+}
+
+func Test_BatchComplianceJobsParams_Body(t *testing.T) {
+	cases := []struct {
+		name   string
+		params *types.BatchComplianceJobsParams
+	}{
+		{
+			name:   "empty params",
+			params: &types.BatchComplianceJobsParams{},
+		},
+		{
+			name:   "nil",
+			params: &types.BatchComplianceJobsParams{},
+		},
+	}
+
+	for _, c := range cases {
+		t.Run(c.name, func(tt *testing.T) {
+			r, err := c.params.Body()
+			assert.NoError(tt, err)
+			assert.Nil(tt, r)
+		})
+	}
+}
 
 func Test_BatchComplianceJobsPostParams_SetAccessToken(t *testing.T) {
 	cases := []struct {
@@ -74,7 +163,7 @@ func Test_BatchComplianceJobsPostParams_Body(t *testing.T) {
 		{
 			name: "ok: type",
 			params: &types.BatchComplianceJobsPostParams{
-				Type: resources.ComplianceTypeTweets,
+				Type: types.ComplianceTypeTweets,
 			},
 			expect: strings.NewReader(`{"type":"tweets"}`),
 		},
@@ -95,7 +184,7 @@ func Test_BatchComplianceJobsPostParams_Body(t *testing.T) {
 		{
 			name: "ok: all",
 			params: &types.BatchComplianceJobsPostParams{
-				Type:      resources.ComplianceTypeTweets,
+				Type:      types.ComplianceTypeTweets,
 				Name:      gotwi.String("test-name"),
 				Resumable: gotwi.Bool(true),
 			},

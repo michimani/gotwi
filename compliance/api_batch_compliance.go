@@ -8,8 +8,18 @@ import (
 )
 
 const (
+	BatchComplianceJobsEndpoint     = "https://api.twitter.com/2/compliance/jobs"
 	BatchComplianceJobsPostEndpoint = "https://api.twitter.com/2/compliance/jobs"
 )
+
+func BatchComplianceJobs(ctx context.Context, c *gotwi.GotwiClient, p *types.BatchComplianceJobsParams) (*types.BatchComplianceJobsResponse, error) {
+	res := &types.BatchComplianceJobsResponse{}
+	if err := c.CallAPI(ctx, BatchComplianceJobsEndpoint, "GET", p, res); err != nil {
+		return nil, err
+	}
+
+	return res, nil
+}
 
 // Creates a new compliance job for Tweet IDs or user IDs.
 // A compliance job will contain an ID and a destination URL.
