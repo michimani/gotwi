@@ -2,7 +2,9 @@ package types
 
 import "github.com/michimani/gotwi/resources"
 
-type UserLookupResponse struct {
+// ListUsersOutput is struct for response of `GET /2/users`.
+// more information: https://developer.twitter.com/en/docs/twitter-api/users/lookup/api-reference/get-users
+type ListUsersOutput struct {
 	Data     []resources.User `json:"data"`
 	Includes struct {
 		Tweets []resources.Tweet `json:"tweets"`
@@ -10,11 +12,13 @@ type UserLookupResponse struct {
 	Errors []resources.PartialError `json:"errors"`
 }
 
-func (r *UserLookupResponse) HasPartialError() bool {
+func (r *ListUsersOutput) HasPartialError() bool {
 	return !(r.Errors == nil || len(r.Errors) == 0)
 }
 
-type UserLookupIDResponse struct {
+// GetUserOutput is struct for response of `GET /2/users/:id`.
+// more information: https://developer.twitter.com/en/docs/twitter-api/users/lookup/api-reference/get-users-id
+type GetUserOutput struct {
 	Data     resources.User `json:"data"`
 	Includes struct {
 		Tweets []resources.Tweet `json:"tweets"`
@@ -22,11 +26,13 @@ type UserLookupIDResponse struct {
 	Errors []resources.PartialError `json:"errors"`
 }
 
-func (r *UserLookupIDResponse) HasPartialError() bool {
+func (r *GetUserOutput) HasPartialError() bool {
 	return !(r.Errors == nil || len(r.Errors) == 0)
 }
 
-type UserLookupByResponse struct {
+// ListUsersByUsernamesOutput is struct for response of `GET /2/users/by`.
+// more information: https://developer.twitter.com/en/docs/twitter-api/users/lookup/api-reference/get-users-by
+type ListUsersByUsernamesOutput struct {
 	Data     []resources.User `json:"data"`
 	Includes struct {
 		Tweets []resources.Tweet `json:"tweets"`
@@ -34,11 +40,13 @@ type UserLookupByResponse struct {
 	Errors []resources.PartialError `json:"errors"`
 }
 
-func (r *UserLookupByResponse) HasPartialError() bool {
+func (r *ListUsersByUsernamesOutput) HasPartialError() bool {
 	return !(r.Errors == nil || len(r.Errors) == 0)
 }
 
-type UserLookupByUsernameResponse struct {
+// GetUserByUsernameOutput is struct for response of `GET /2/users/by/username/:username`.
+// more information: https://developer.twitter.com/en/docs/twitter-api/users/lookup/api-reference/get-users-by-username-username
+type GetUserByUsernameOutput struct {
 	Data     resources.User `json:"data"`
 	Includes struct {
 		Tweets []resources.Tweet `json:"tweets"`
@@ -46,11 +54,13 @@ type UserLookupByUsernameResponse struct {
 	Errors []resources.PartialError `json:"errors"`
 }
 
-func (r *UserLookupByUsernameResponse) HasPartialError() bool {
+func (r *GetUserByUsernameOutput) HasPartialError() bool {
 	return !(r.Errors == nil || len(r.Errors) == 0)
 }
 
-type UserLookupMeResponse struct {
+// GetMeOutput is struct for response of `GET /2/users/me`.
+// more information: https://developer.twitter.com/en/docs/twitter-api/users/lookup/api-reference/get-users-me
+type GetMeOutput struct {
 	Data     resources.User `json:"data"`
 	Includes struct {
 		Tweets []resources.Tweet `json:"tweets"`
@@ -58,6 +68,6 @@ type UserLookupMeResponse struct {
 	Errors []resources.PartialError `json:"errors"`
 }
 
-func (r *UserLookupMeResponse) HasPartialError() bool {
+func (r *GetMeOutput) HasPartialError() bool {
 	return !(r.Errors == nil || len(r.Errors) == 0)
 }
