@@ -3,7 +3,10 @@ CHANGELOG
 This is a version of CHANGELOG less than v1.0.0
 
 ## [Unreleased]
-- `-`
+
+### ⚠ BREAKING CHANGES
+- Change package names, function names, and method names to more descriptive names.
+  - It will be incorporated in the next version `v0.11.0`.
 
 v0.10.3 (2022-04-10)
 ===
