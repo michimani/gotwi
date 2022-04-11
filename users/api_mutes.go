@@ -15,7 +15,7 @@ const (
 
 // Returns a list of users who are muted by the specified user ID.
 // https://developer.twitter.com/en/docs/twitter-api/users/mutes/api-reference/get-users-muting
-func MutesMutingGet(ctx context.Context, c *gotwi.GotwiClient, p *types.MutesMutingGetParams) (*types.MutesMutingGetResponse, error) {
+func MutesMutingGet(ctx context.Context, c *gotwi.Client, p *types.MutesMutingGetParams) (*types.MutesMutingGetResponse, error) {
 	res := &types.MutesMutingGetResponse{}
 	if err := c.CallAPI(ctx, MutesMutingGetEndpoint, "GET", p, res); err != nil {
 		return nil, err
@@ -26,7 +26,7 @@ func MutesMutingGet(ctx context.Context, c *gotwi.GotwiClient, p *types.MutesMut
 
 // Allows an authenticated user ID to mute the target user.
 // https://developer.twitter.com/en/docs/twitter-api/users/mutes/api-reference/post-users-user_id-muting
-func MutesMutingPost(ctx context.Context, c *gotwi.GotwiClient, p *types.MutesMutingPostParams) (*types.MutesMutingPostResponse, error) {
+func MutesMutingPost(ctx context.Context, c *gotwi.Client, p *types.MutesMutingPostParams) (*types.MutesMutingPostResponse, error) {
 	res := &types.MutesMutingPostResponse{}
 	if err := c.CallAPI(ctx, MutesMutingPostEndpoint, "POST", p, res); err != nil {
 		return nil, err
@@ -38,7 +38,7 @@ func MutesMutingPost(ctx context.Context, c *gotwi.GotwiClient, p *types.MutesMu
 // Allows an authenticated user ID to unmute the target user.
 // The request succeeds with no action when the user sends a request to a user they're not muting or have already unmuted.
 // https://developer.twitter.com/en/docs/twitter-api/users/mutes/api-reference/delete-users-user_id-muting
-func MutesMutingDelete(ctx context.Context, c *gotwi.GotwiClient, p *types.MutesMutingDeleteParams) (*types.MutesMutingDeleteResponse, error) {
+func MutesMutingDelete(ctx context.Context, c *gotwi.Client, p *types.MutesMutingDeleteParams) (*types.MutesMutingDeleteResponse, error) {
 	res := &types.MutesMutingDeleteResponse{}
 	if err := c.CallAPI(ctx, MutesMutingDeleteEndpoint, "DELETE", p, res); err != nil {
 		return nil, err

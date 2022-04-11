@@ -18,7 +18,7 @@ const (
 // GET /2/users
 // Returns a variety of information about one or more users specified by the requested IDs.
 // https://developer.twitter.com/en/docs/twitter-api/users/lookup/api-reference/get-users
-func ListUsers(ctx context.Context, c *gotwi.GotwiClient, p *types.ListUsersInput) (*types.ListUsersOutput, error) {
+func ListUsers(ctx context.Context, c *gotwi.Client, p *types.ListUsersInput) (*types.ListUsersOutput, error) {
 	res := &types.ListUsersOutput{}
 	if err := c.CallAPI(ctx, listUsersEndpoint, "GET", p, res); err != nil {
 		return nil, err
@@ -30,7 +30,7 @@ func ListUsers(ctx context.Context, c *gotwi.GotwiClient, p *types.ListUsersInpu
 // GET /2/users/:id
 // Returns a variety of information about a single user specified by the requested ID.
 // https://developer.twitter.com/en/docs/twitter-api/users/lookup/api-reference/get-users-id
-func GetUser(ctx context.Context, c *gotwi.GotwiClient, p *types.GetUserInput) (*types.GetUserOutput, error) {
+func GetUser(ctx context.Context, c *gotwi.Client, p *types.GetUserInput) (*types.GetUserOutput, error) {
 	res := &types.GetUserOutput{}
 	if err := c.CallAPI(ctx, getUserEndpoint, "GET", p, res); err != nil {
 		return nil, err
@@ -42,7 +42,7 @@ func GetUser(ctx context.Context, c *gotwi.GotwiClient, p *types.GetUserInput) (
 // GET /2/users/by
 // Returns a variety of information about one or more users specified by their usernames.
 // https://developer.twitter.com/en/docs/twitter-api/users/lookup/api-reference/get-users-by
-func ListUsersByUsernames(ctx context.Context, c *gotwi.GotwiClient, p *types.ListUsersByUsernamesInput) (*types.ListUsersByUsernamesOutput, error) {
+func ListUsersByUsernames(ctx context.Context, c *gotwi.Client, p *types.ListUsersByUsernamesInput) (*types.ListUsersByUsernamesOutput, error) {
 	res := &types.ListUsersByUsernamesOutput{}
 	if err := c.CallAPI(ctx, listUsersByUsernamesEndpoint, "GET", p, res); err != nil {
 		return nil, err
@@ -54,7 +54,7 @@ func ListUsersByUsernames(ctx context.Context, c *gotwi.GotwiClient, p *types.Li
 // GET /2/users/by/username/:username
 // Returns a variety of information about a single user specified by their usernames.
 // https://developer.twitter.com/en/docs/twitter-api/users/lookup/api-reference/get-users-by-username-username
-func GetUserByUsername(ctx context.Context, c *gotwi.GotwiClient, p *types.GetUserByUsernameInput) (*types.GetUserByUsernameOutput, error) {
+func GetUserByUsername(ctx context.Context, c *gotwi.Client, p *types.GetUserByUsernameInput) (*types.GetUserByUsernameOutput, error) {
 	res := &types.GetUserByUsernameOutput{}
 	if err := c.CallAPI(ctx, getUserByUsernameEndpoint, "GET", p, res); err != nil {
 		return nil, err
@@ -66,7 +66,7 @@ func GetUserByUsername(ctx context.Context, c *gotwi.GotwiClient, p *types.GetUs
 // GET /2/users/me
 // Returns information about an authorized user.
 // https://developer.twitter.com/en/docs/twitter-api/users/lookup/api-reference/get-users-me
-func GetMe(ctx context.Context, c *gotwi.GotwiClient, p *types.GetMeInput) (*types.GetMeOutput, error) {
+func GetMe(ctx context.Context, c *gotwi.Client, p *types.GetMeInput) (*types.GetMeOutput, error) {
 	res := &types.GetMeOutput{}
 	if err := c.CallAPI(ctx, getMeEndpoint, "GET", p, res); err != nil {
 		return nil, err

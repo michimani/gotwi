@@ -15,7 +15,7 @@ const (
 
 // Enables the authenticated user to create a List.
 // https://developer.twitter.com/en/docs/twitter-api/lists/manage-lists/api-reference/post-lists
-func ManageListsPost(ctx context.Context, c *gotwi.GotwiClient, p *types.ManageListsPostParams) (*types.ManageListsPostResponse, error) {
+func ManageListsPost(ctx context.Context, c *gotwi.Client, p *types.ManageListsPostParams) (*types.ManageListsPostResponse, error) {
 	res := &types.ManageListsPostResponse{}
 	if err := c.CallAPI(ctx, ManageListsPostEndpoint, "POST", p, res); err != nil {
 		return nil, err
@@ -26,7 +26,7 @@ func ManageListsPost(ctx context.Context, c *gotwi.GotwiClient, p *types.ManageL
 
 // Enables the authenticated user to update the meta data of a specified List that they own.
 // https://developer.twitter.com/en/docs/twitter-api/lists/manage-lists/api-reference/put-lists-id
-func ManageListsPut(ctx context.Context, c *gotwi.GotwiClient, p *types.ManageListsPutParams) (*types.ManageListsPutResponse, error) {
+func ManageListsPut(ctx context.Context, c *gotwi.Client, p *types.ManageListsPutParams) (*types.ManageListsPutResponse, error) {
 	res := &types.ManageListsPutResponse{}
 	if err := c.CallAPI(ctx, ManageListsPutEndpoint, "PUT", p, res); err != nil {
 		return nil, err
@@ -37,7 +37,7 @@ func ManageListsPut(ctx context.Context, c *gotwi.GotwiClient, p *types.ManageLi
 
 // Enables the authenticated user to delete a List that they own.
 // https://developer.twitter.com/en/docs/twitter-api/lists/manage-lists/api-reference/delete-lists-id
-func ManageListsDelete(ctx context.Context, c *gotwi.GotwiClient, p *types.ManageListsDeleteParams) (*types.ManageListsDeleteResponse, error) {
+func ManageListsDelete(ctx context.Context, c *gotwi.Client, p *types.ManageListsDeleteParams) (*types.ManageListsDeleteResponse, error) {
 	res := &types.ManageListsDeleteResponse{}
 	if err := c.CallAPI(ctx, ManageListsDeleteEndpoint, "DELETE", p, res); err != nil {
 		return nil, err

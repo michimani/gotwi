@@ -24,7 +24,7 @@ func (f twitterUser) displayName() string {
 
 // onlyFollowsRecentActivity will output the accounts that are unilaterally following
 // the specified user ID, along with up to three most recent tweets.
-func onlyFollowsRecentActivity(c *gotwi.GotwiClient, userID string) {
+func onlyFollowsRecentActivity(c *gotwi.Client, userID string) {
 	// list follows
 	followings := map[string]twitterUser{}
 

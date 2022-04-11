@@ -56,15 +56,15 @@ type mockAPIResponse struct{}
 
 func (mr mockAPIResponse) HasPartialError() bool { return false }
 
-type MockGotwiClientForOAuth2 struct {
+type MockClientForOAuth2 struct {
 	MockExec func(req *http.Request, i util.Response) (*resources.Non2XXError, error)
 }
 
-func (m MockGotwiClientForOAuth2) Exec(req *http.Request, i util.Response) (*resources.Non2XXError, error) {
+func (m MockClientForOAuth2) Exec(req *http.Request, i util.Response) (*resources.Non2XXError, error) {
 	return m.MockExec(req, i)
 }
 
-func newMockGotwiClientForOAuth2(returnedToken string, execHasError, hasNot200Error bool) *MockGotwiClientForOAuth2 {
+func newMockClientForOAuth2(returnedToken string, execHasError, hasNot200Error bool) *MockClientForOAuth2 {
 	fn := func(req *http.Request, i util.Response) (*resources.Non2XXError, error) {
 		if execHasError {
 			return nil, fmt.Errorf("has error")
@@ -83,7 +83,7 @@ func newMockGotwiClientForOAuth2(returnedToken string, execHasError, hasNot200Er
 		return nil, nil
 	}
 
-	return &MockGotwiClientForOAuth2{
+	return &MockClientForOAuth2{
 		MockExec: fn,
 	}
 }

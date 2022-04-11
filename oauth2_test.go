@@ -41,31 +41,31 @@ func Test_GenerateBearerToken(t *testing.T) {
 
 	cases := []struct {
 		name    string
-		client  *MockGotwiClientForOAuth2
+		client  *MockClientForOAuth2
 		wantErr bool
 		expect  string
 	}{
 		{
 			name:    "normal",
-			client:  newMockGotwiClientForOAuth2(wantAccessToken, false, false),
+			client:  newMockClientForOAuth2(wantAccessToken, false, false),
 			wantErr: false,
 			expect:  wantAccessToken,
 		},
 		{
 			name:    "error: error",
-			client:  newMockGotwiClientForOAuth2(wantAccessToken, true, false),
+			client:  newMockClientForOAuth2(wantAccessToken, true, false),
 			wantErr: true,
 			expect:  "",
 		},
 		{
 			name:    "error: not 200 error",
-			client:  newMockGotwiClientForOAuth2(wantAccessToken, false, true),
+			client:  newMockClientForOAuth2(wantAccessToken, false, true),
 			wantErr: true,
 			expect:  "",
 		},
 		{
 			name:    "error: token is empty",
-			client:  newMockGotwiClientForOAuth2("", false, false),
+			client:  newMockClientForOAuth2("", false, false),
 			wantErr: true,
 			expect:  "",
 		},

@@ -16,7 +16,7 @@ const (
 
 // Returns a list of users who are followers of the specified List.
 // https://developer.twitter.com/en/docs/twitter-api/lists/list-follows/api-reference/get-lists-id-followers
-func ListFollowsFollowers(ctx context.Context, c *gotwi.GotwiClient, p *types.ListFollowsFollowersParams) (*types.ListFollowsFollowersResponse, error) {
+func ListFollowsFollowers(ctx context.Context, c *gotwi.Client, p *types.ListFollowsFollowersParams) (*types.ListFollowsFollowersResponse, error) {
 	res := &types.ListFollowsFollowersResponse{}
 	if err := c.CallAPI(ctx, ListFollowsFollowersEndpoint, "GET", p, res); err != nil {
 		return nil, err
@@ -27,7 +27,7 @@ func ListFollowsFollowers(ctx context.Context, c *gotwi.GotwiClient, p *types.Li
 
 // Returns all Lists a specified user follows.
 // https://developer.twitter.com/en/docs/twitter-api/lists/list-follows/api-reference/get-users-id-followed_lists
-func ListFollowsFollowedLists(ctx context.Context, c *gotwi.GotwiClient, p *types.ListFollowsFollowedListsParams) (*types.ListFollowsFollowedListsResponse, error) {
+func ListFollowsFollowedLists(ctx context.Context, c *gotwi.Client, p *types.ListFollowsFollowedListsParams) (*types.ListFollowsFollowedListsResponse, error) {
 	res := &types.ListFollowsFollowedListsResponse{}
 	if err := c.CallAPI(ctx, ListFollowsFollowedListsEndpoint, "GET", p, res); err != nil {
 		return nil, err
@@ -38,7 +38,7 @@ func ListFollowsFollowedLists(ctx context.Context, c *gotwi.GotwiClient, p *type
 
 // Enables the authenticated user to follow a List.
 // https://developer.twitter.com/en/docs/twitter-api/lists/manage-lists/api-reference/post-users-id-followed-lists
-func ListFollowsPost(ctx context.Context, c *gotwi.GotwiClient, p *types.ListFollowsPostParams) (*types.ListFollowsPostResponse, error) {
+func ListFollowsPost(ctx context.Context, c *gotwi.Client, p *types.ListFollowsPostParams) (*types.ListFollowsPostResponse, error) {
 	res := &types.ListFollowsPostResponse{}
 	if err := c.CallAPI(ctx, ListFollowsPostEndpoint, "POST", p, res); err != nil {
 		return nil, err
@@ -49,7 +49,7 @@ func ListFollowsPost(ctx context.Context, c *gotwi.GotwiClient, p *types.ListFol
 
 // Enables the authenticated user to unfollow a List.
 // https://developer.twitter.com/en/docs/twitter-api/lists/manage-lists/api-reference/delete-users-id-followed-lists-list_id
-func ListFollowsDelete(ctx context.Context, c *gotwi.GotwiClient, p *types.ListFollowsDeleteParams) (*types.ListFollowsDeleteResponse, error) {
+func ListFollowsDelete(ctx context.Context, c *gotwi.Client, p *types.ListFollowsDeleteParams) (*types.ListFollowsDeleteResponse, error) {
 	res := &types.ListFollowsDeleteResponse{}
 	if err := c.CallAPI(ctx, ListFollowsDeleteEndpoint, "DELETE", p, res); err != nil {
 		return nil, err

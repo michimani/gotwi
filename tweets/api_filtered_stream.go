@@ -11,7 +11,7 @@ const FilteredStreamRulesGetEndpoint = "https://api.twitter.com/2/tweets/search/
 
 // Return a list of rules currently active on the streaming endpoint, either as a list or individually.
 // https://developer.twitter.com/en/docs/twitter-api/tweets/filtered-stream/api-reference/get-tweets-search-stream-rules
-func FilteredStreamRulesGet(ctx context.Context, c *gotwi.GotwiClient, p *types.FilteredStreamRulesGetParams) (*types.FilteredStreamRulesGetResponse, error) {
+func FilteredStreamRulesGet(ctx context.Context, c *gotwi.Client, p *types.FilteredStreamRulesGetParams) (*types.FilteredStreamRulesGetResponse, error) {
 	res := &types.FilteredStreamRulesGetResponse{}
 	if err := c.CallAPI(ctx, FilteredStreamRulesGetEndpoint, "GET", p, res); err != nil {
 		return nil, err

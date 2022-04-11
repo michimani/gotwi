@@ -32,23 +32,23 @@ func (a AuthenticationMethod) Valid() bool {
 	return a == AuthenMethodOAuth1UserContext || a == AuthenMethodOAuth2BearerToken
 }
 
-type NewGotwiClientInput struct {
+type NewClientInput struct {
 	HTTPClient           *http.Client
 	AuthenticationMethod AuthenticationMethod
 	OAuthToken           string
 	OAuthTokenSecret     string
 }
 
-type NewGotwiClientWithAccessTokenInput struct {
+type NewClientWithAccessTokenInput struct {
 	HTTPClient  *http.Client
 	AccessToken string
 }
 
-type IGotwiClient interface {
+type IClient interface {
 	Exec(req *http.Request, i util.Response) (*resources.Non2XXError, error)
 }
 
-type GotwiClient struct {
+type Client struct {
 	Client               *http.Client
 	AuthenticationMethod AuthenticationMethod
 	AccessToken          string
@@ -69,16 +69,16 @@ var defaultHTTPClient = &http.Client{
 	Timeout: time.Duration(30) * time.Second,
 }
 
-func NewGotwiClient(in *NewGotwiClientInput) (*GotwiClient, error) {
+func NewClient(in *NewClientInput) (*Client, error) {
 	if in == nil {
-		return nil, fmt.Errorf("NewGotwiClientInput is nil.")
+		return nil, fmt.Errorf("NewClientInput is nil.")
 	}
 
 	if !in.AuthenticationMethod.Valid() {
 		return nil, fmt.Errorf("AuthenticationMethod is invalid.")
 	}
 
-	c := GotwiClient{
+	c := Client{
 		Client:               defaultHTTPClient,
 		AuthenticationMethod: in.AuthenticationMethod,
 	}
@@ -94,16 +94,16 @@ func NewGotwiClient(in *NewGotwiClientInput) (*GotwiClient, error) {
 	return &c, nil
 }
 
-func NewGotwiClientWithAccessToken(in *NewGotwiClientWithAccessTokenInput) (*GotwiClient, error) {
+func NewClientWithAccessToken(in *NewClientWithAccessTokenInput) (*Client, error) {
 	if in == nil {
-		return nil, fmt.Errorf("NewGotwiClientWithAccessTokenInput is nil.")
+		return nil, fmt.Errorf("NewClientWithAccessTokenInput is nil.")
 	}
 
 	if in.AccessToken == "" {
 		return nil, fmt.Errorf("AccessToken is empty.")
 	}
 
-	c := GotwiClient{
+	c := Client{
 		Client:               defaultHTTPClient,
 		AuthenticationMethod: AuthenMethodOAuth2BearerToken,
 		AccessToken:          in.AccessToken,
@@ -116,7 +116,7 @@ func NewGotwiClientWithAccessToken(in *NewGotwiClientWithAccessTokenInput) (*Got
 	return &c, nil
 }
 
-func (c *GotwiClient) authorize(oauthToken, oauthTokenSecret string) error {
+func (c *Client) authorize(oauthToken, oauthTokenSecret string) error {
 	apiKey := os.Getenv(APIKeyEnvName)
 	apiKeySecret := os.Getenv(APIKeySecretEnvName)
 	if apiKey == "" || apiKeySecret == "" {
@@ -146,7 +146,7 @@ func (c *GotwiClient) authorize(oauthToken, oauthTokenSecret string) error {
 	return nil
 }
 
-func (c *GotwiClient) IsReady() bool {
+func (c *Client) IsReady() bool {
 	if c == nil {
 		return false
 	}
@@ -169,7 +169,7 @@ func (c *GotwiClient) IsReady() bool {
 	return true
 }
 
-func (c *GotwiClient) CallAPI(ctx context.Context, endpoint, method string, p util.Parameters, i util.Response) error {
+func (c *Client) CallAPI(ctx context.Context, endpoint, method string, p util.Parameters, i util.Response) error {
 	req, err := c.prepare(ctx, endpoint, method, p)
 	if err != nil {
 		return wrapErr(err)
@@ -192,7 +192,7 @@ var okCodes map[int]struct{} = map[int]struct{}{
 	http.StatusCreated: {},
 }
 
-func (c *GotwiClient) Exec(req *http.Request, i util.Response) (*resources.Non2XXError, error) {
+func (c *Client) Exec(req *http.Request, i util.Response) (*resources.Non2XXError, error) {
 	res, err := c.Client.Do(req)
 	if err != nil {
 		return nil, err
@@ -214,7 +214,7 @@ func (c *GotwiClient) Exec(req *http.Request, i util.Response) (*resources.Non2X
 	return nil, nil
 }
 
-func (c *GotwiClient) prepare(ctx context.Context, endpointBase, method string, p util.Parameters) (*http.Request, error) {
+func (c *Client) prepare(ctx context.Context, endpointBase, method string, p util.Parameters) (*http.Request, error) {
 	if p == nil {
 		return nil, fmt.Errorf(gotwierrors.ErrorParametersNil, endpointBase)
 	}
@@ -247,7 +247,7 @@ func (c *GotwiClient) prepare(ctx context.Context, endpointBase, method string, 
 const oauth1header = `OAuth oauth_consumer_key="%s",oauth_nonce="%s",oauth_signature="%s",oauth_signature_method="%s",oauth_timestamp="%s",oauth_token="%s",oauth_version="%s"`
 
 // setOAuth1Header returns http.Request with the header information required for OAuth1.0a authentication.
-func (c *GotwiClient) setOAuth1Header(r *http.Request, paramsMap map[string]string) (*http.Request, error) {
+func (c *Client) setOAuth1Header(r *http.Request, paramsMap map[string]string) (*http.Request, error) {
 	in := &CreateOAuthSignatureInput{
 		HTTPMethod:       r.Method,
 		RawEndpoint:      r.URL.String(),
