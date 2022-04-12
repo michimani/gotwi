@@ -4,7 +4,7 @@ import (
 	"testing"
 
 	"github.com/michimani/gotwi/fields"
-	"github.com/michimani/gotwi/spaces/types"
+	"github.com/michimani/gotwi/space/searchspace/types"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -28,7 +28,7 @@ func Test_SearchSpaces_SetAccessToken(t *testing.T) {
 
 	for _, c := range cases {
 		t.Run(c.name, func(tt *testing.T) {
-			p := &types.SearchSpacesParams{}
+			p := &types.ListInput{}
 			p.SetAccessToken(c.token)
 			assert.Equal(tt, c.expect, p.AccessToken())
 		})
@@ -40,19 +40,19 @@ func Test_SearchSpaces_ResolveEndpoint(t *testing.T) {
 
 	cases := []struct {
 		name   string
-		params *types.SearchSpacesParams
+		params *types.ListInput
 		expect string
 	}{
 		{
 			name: "only required parameter",
-			params: &types.SearchSpacesParams{
+			params: &types.ListInput{
 				Query: "hello",
 			},
 			expect: endpointBase + "?query=hello",
 		},
 		{
 			name: "with expansions",
-			params: &types.SearchSpacesParams{
+			params: &types.ListInput{
 				Query:      "hello",
 				Expansions: fields.ExpansionList{"ex1", "ex2"},
 			},
@@ -60,7 +60,7 @@ func Test_SearchSpaces_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "with max_result",
-			params: &types.SearchSpacesParams{
+			params: &types.ListInput{
 				Query:      "hello",
 				MaxResults: 10,
 			},
@@ -68,7 +68,7 @@ func Test_SearchSpaces_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "with space.fields",
-			params: &types.SearchSpacesParams{
+			params: &types.ListInput{
 				Query:       "hello",
 				SpaceFields: fields.SpaceFieldList{"sf1", "sf2"},
 			},
@@ -76,7 +76,7 @@ func Test_SearchSpaces_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "with users.fields",
-			params: &types.SearchSpacesParams{
+			params: &types.ListInput{
 				Query:      "hello",
 				UserFields: fields.UserFieldList{"uf1", "uf2"},
 			},
@@ -84,7 +84,7 @@ func Test_SearchSpaces_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "all query parameters",
-			params: &types.SearchSpacesParams{
+			params: &types.ListInput{
 				Expansions:  fields.ExpansionList{"ex"},
 				MaxResults:  10,
 				Query:       "hello",
@@ -96,7 +96,7 @@ func Test_SearchSpaces_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "has no required parameter",
-			params: &types.SearchSpacesParams{
+			params: &types.ListInput{
 				Expansions:  fields.ExpansionList{"ex"},
 				UserFields:  fields.UserFieldList{"uf"},
 				SpaceFields: fields.SpaceFieldList{"sf"},
@@ -116,15 +116,15 @@ func Test_SearchSpaces_ResolveEndpoint(t *testing.T) {
 func Test_SearchSpaces_Body(t *testing.T) {
 	cases := []struct {
 		name   string
-		params *types.SearchSpacesParams
+		params *types.ListInput
 	}{
 		{
 			name:   "empty params",
-			params: &types.SearchSpacesParams{},
+			params: &types.ListInput{},
 		},
 		{
 			name:   "some params",
-			params: &types.SearchSpacesParams{Query: "hello"},
+			params: &types.ListInput{Query: "hello"},
 		},
 	}
 

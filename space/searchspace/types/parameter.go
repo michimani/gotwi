@@ -10,7 +10,7 @@ import (
 
 type SearchSpacesMaxResults int
 
-type SearchSpacesParams struct {
+type ListInput struct {
 	accessToken string
 
 	// Path parameters
@@ -22,7 +22,7 @@ type SearchSpacesParams struct {
 	State       fields.State
 }
 
-var SearchSpacesQueryParams = map[string]struct{}{
+var listQueryParameters = map[string]struct{}{
 	"query":        {},
 	"expansions":   {},
 	"space.fields": {},
@@ -39,15 +39,15 @@ func (m SearchSpacesMaxResults) String() string {
 	return strconv.Itoa(int(m))
 }
 
-func (p *SearchSpacesParams) SetAccessToken(token string) {
+func (p *ListInput) SetAccessToken(token string) {
 	p.accessToken = token
 }
 
-func (p *SearchSpacesParams) AccessToken() string {
+func (p *ListInput) AccessToken() string {
 	return p.accessToken
 }
 
-func (p *SearchSpacesParams) ResolveEndpoint(endpointBase string) string {
+func (p *ListInput) ResolveEndpoint(endpointBase string) string {
 	endpoint := endpointBase
 
 	if p.Query == "" {
@@ -56,18 +56,18 @@ func (p *SearchSpacesParams) ResolveEndpoint(endpointBase string) string {
 
 	pm := p.ParameterMap()
 	if len(pm) > 0 {
-		qs := util.QueryString(pm, SearchSpacesQueryParams)
+		qs := util.QueryString(pm, listQueryParameters)
 		endpoint += "?" + qs
 	}
 
 	return endpoint
 }
 
-func (p *SearchSpacesParams) Body() (io.Reader, error) {
+func (p *ListInput) Body() (io.Reader, error) {
 	return nil, nil
 }
 
-func (p *SearchSpacesParams) ParameterMap() map[string]string {
+func (p *ListInput) ParameterMap() map[string]string {
 	m := map[string]string{}
 
 	m["query"] = p.Query

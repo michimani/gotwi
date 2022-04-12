@@ -4,7 +4,7 @@ import (
 	"testing"
 
 	"github.com/michimani/gotwi/fields"
-	"github.com/michimani/gotwi/spaces/types"
+	"github.com/michimani/gotwi/space/spacelookup/types"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -28,7 +28,7 @@ func Test_SpacesLookupID_SetAccessToken(t *testing.T) {
 
 	for _, c := range cases {
 		t.Run(c.name, func(tt *testing.T) {
-			p := &types.SpacesLookupIDParams{}
+			p := &types.GetInput{}
 			p.SetAccessToken(c.token)
 			assert.Equal(tt, c.expect, p.AccessToken())
 		})
@@ -41,19 +41,19 @@ func Test_SpacesLookupID_ResolveEndpoint(t *testing.T) {
 
 	cases := []struct {
 		name   string
-		params *types.SpacesLookupIDParams
+		params *types.GetInput
 		expect string
 	}{
 		{
 			name: "only required parameter",
-			params: &types.SpacesLookupIDParams{
+			params: &types.GetInput{
 				ID: "sid",
 			},
 			expect: endpointRoot + "sid",
 		},
 		{
 			name: "with expansions",
-			params: &types.SpacesLookupIDParams{
+			params: &types.GetInput{
 				ID:         "sid",
 				Expansions: fields.ExpansionList{"ex1", "ex2"},
 			},
@@ -61,7 +61,7 @@ func Test_SpacesLookupID_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "with space.fields",
-			params: &types.SpacesLookupIDParams{
+			params: &types.GetInput{
 				ID:          "sid",
 				SpaceFields: fields.SpaceFieldList{"sf1", "sf2"},
 			},
@@ -69,7 +69,7 @@ func Test_SpacesLookupID_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "with users.fields",
-			params: &types.SpacesLookupIDParams{
+			params: &types.GetInput{
 				ID:         "sid",
 				UserFields: fields.UserFieldList{"uf1", "uf2"},
 			},
@@ -77,7 +77,7 @@ func Test_SpacesLookupID_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "all query parameters",
-			params: &types.SpacesLookupIDParams{
+			params: &types.GetInput{
 				Expansions:  fields.ExpansionList{"ex"},
 				ID:          "sid",
 				SpaceFields: fields.SpaceFieldList{"sf"},
@@ -87,7 +87,7 @@ func Test_SpacesLookupID_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "has no required parameter",
-			params: &types.SpacesLookupIDParams{
+			params: &types.GetInput{
 				Expansions:  fields.ExpansionList{"ex"},
 				UserFields:  fields.UserFieldList{"uf"},
 				SpaceFields: fields.SpaceFieldList{"sf"},
@@ -107,15 +107,15 @@ func Test_SpacesLookupID_ResolveEndpoint(t *testing.T) {
 func Test_SpacesLookupID_Body(t *testing.T) {
 	cases := []struct {
 		name   string
-		params *types.SpacesLookupIDParams
+		params *types.GetInput
 	}{
 		{
 			name:   "empty params",
-			params: &types.SpacesLookupIDParams{},
+			params: &types.GetInput{},
 		},
 		{
 			name:   "some params",
-			params: &types.SpacesLookupIDParams{ID: "sid"},
+			params: &types.GetInput{ID: "sid"},
 		},
 	}
 
@@ -148,7 +148,7 @@ func Test_SpacesLookup_SetAccessToken(t *testing.T) {
 
 	for _, c := range cases {
 		t.Run(c.name, func(tt *testing.T) {
-			p := &types.SpacesLookupParams{}
+			p := &types.ListInput{}
 			p.SetAccessToken(c.token)
 			assert.Equal(tt, c.expect, p.AccessToken())
 		})
@@ -160,19 +160,19 @@ func Test_SpacesLookup_ResolveEndpoint(t *testing.T) {
 
 	cases := []struct {
 		name   string
-		params *types.SpacesLookupParams
+		params *types.ListInput
 		expect string
 	}{
 		{
 			name: "only required parameter",
-			params: &types.SpacesLookupParams{
+			params: &types.ListInput{
 				IDs: []string{"sid1", "sid2"},
 			},
 			expect: endpointBase + "?ids=sid1%2Csid2",
 		},
 		{
 			name: "with expansions",
-			params: &types.SpacesLookupParams{
+			params: &types.ListInput{
 				IDs:        []string{"sid1", "sid2"},
 				Expansions: fields.ExpansionList{"ex1", "ex2"},
 			},
@@ -180,7 +180,7 @@ func Test_SpacesLookup_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "with space.fields",
-			params: &types.SpacesLookupParams{
+			params: &types.ListInput{
 				IDs:         []string{"sid1", "sid2"},
 				SpaceFields: fields.SpaceFieldList{"sf1", "sf2"},
 			},
@@ -188,7 +188,7 @@ func Test_SpacesLookup_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "with users.fields",
-			params: &types.SpacesLookupParams{
+			params: &types.ListInput{
 				IDs:        []string{"sid1", "sid2"},
 				UserFields: fields.UserFieldList{"uf1", "uf2"},
 			},
@@ -196,7 +196,7 @@ func Test_SpacesLookup_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "all query parameters",
-			params: &types.SpacesLookupParams{
+			params: &types.ListInput{
 				Expansions:  fields.ExpansionList{"ex"},
 				IDs:         []string{"sid1", "sid2"},
 				SpaceFields: fields.SpaceFieldList{"sf"},
@@ -206,7 +206,7 @@ func Test_SpacesLookup_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "has no required parameter",
-			params: &types.SpacesLookupParams{
+			params: &types.ListInput{
 				Expansions:  fields.ExpansionList{"ex"},
 				UserFields:  fields.UserFieldList{"uf"},
 				SpaceFields: fields.SpaceFieldList{"sf"},
@@ -226,15 +226,15 @@ func Test_SpacesLookup_ResolveEndpoint(t *testing.T) {
 func Test_SpacesLookup_Body(t *testing.T) {
 	cases := []struct {
 		name   string
-		params *types.SpacesLookupParams
+		params *types.ListInput
 	}{
 		{
 			name:   "empty params",
-			params: &types.SpacesLookupParams{},
+			params: &types.ListInput{},
 		},
 		{
 			name:   "some params",
-			params: &types.SpacesLookupParams{IDs: []string{"sid"}},
+			params: &types.ListInput{IDs: []string{"sid"}},
 		},
 	}
 
@@ -267,7 +267,7 @@ func Test_SpacesLookupByCreatorIDs_SetAccessToken(t *testing.T) {
 
 	for _, c := range cases {
 		t.Run(c.name, func(tt *testing.T) {
-			p := &types.SpacesLookupByCreatorIDsParams{}
+			p := &types.ListByCreatorIDsInput{}
 			p.SetAccessToken(c.token)
 			assert.Equal(tt, c.expect, p.AccessToken())
 		})
@@ -279,19 +279,19 @@ func Test_SpacesLookupByCreatorIDs_ResolveEndpoint(t *testing.T) {
 
 	cases := []struct {
 		name   string
-		params *types.SpacesLookupByCreatorIDsParams
+		params *types.ListByCreatorIDsInput
 		expect string
 	}{
 		{
 			name: "only required parameter",
-			params: &types.SpacesLookupByCreatorIDsParams{
+			params: &types.ListByCreatorIDsInput{
 				UserIDs: []string{"uid1", "uid2"},
 			},
 			expect: endpointBase + "?user_ids=uid1%2Cuid2",
 		},
 		{
 			name: "with expansions",
-			params: &types.SpacesLookupByCreatorIDsParams{
+			params: &types.ListByCreatorIDsInput{
 				UserIDs:    []string{"uid1", "uid2"},
 				Expansions: fields.ExpansionList{"ex1", "ex2"},
 			},
@@ -299,7 +299,7 @@ func Test_SpacesLookupByCreatorIDs_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "with space.fields",
-			params: &types.SpacesLookupByCreatorIDsParams{
+			params: &types.ListByCreatorIDsInput{
 				UserIDs:     []string{"uid1", "uid2"},
 				SpaceFields: fields.SpaceFieldList{"sf1", "sf2"},
 			},
@@ -307,7 +307,7 @@ func Test_SpacesLookupByCreatorIDs_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "with users.fields",
-			params: &types.SpacesLookupByCreatorIDsParams{
+			params: &types.ListByCreatorIDsInput{
 				UserIDs:    []string{"uid1", "uid2"},
 				UserFields: fields.UserFieldList{"uf1", "uf2"},
 			},
@@ -315,7 +315,7 @@ func Test_SpacesLookupByCreatorIDs_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "all query parameters",
-			params: &types.SpacesLookupByCreatorIDsParams{
+			params: &types.ListByCreatorIDsInput{
 				Expansions:  fields.ExpansionList{"ex"},
 				UserIDs:     []string{"uid1", "uid2"},
 				SpaceFields: fields.SpaceFieldList{"sf"},
@@ -325,7 +325,7 @@ func Test_SpacesLookupByCreatorIDs_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "has no required parameter",
-			params: &types.SpacesLookupByCreatorIDsParams{
+			params: &types.ListByCreatorIDsInput{
 				Expansions:  fields.ExpansionList{"ex"},
 				UserFields:  fields.UserFieldList{"uf"},
 				SpaceFields: fields.SpaceFieldList{"sf"},
@@ -345,15 +345,15 @@ func Test_SpacesLookupByCreatorIDs_ResolveEndpoint(t *testing.T) {
 func Test_SpacesLookupByCreatorIDs_Body(t *testing.T) {
 	cases := []struct {
 		name   string
-		params *types.SpacesLookupByCreatorIDsParams
+		params *types.ListByCreatorIDsInput
 	}{
 		{
 			name:   "empty params",
-			params: &types.SpacesLookupByCreatorIDsParams{},
+			params: &types.ListByCreatorIDsInput{},
 		},
 		{
 			name:   "some params",
-			params: &types.SpacesLookupByCreatorIDsParams{UserIDs: []string{"uid"}},
+			params: &types.ListByCreatorIDsInput{UserIDs: []string{"uid"}},
 		},
 	}
 
@@ -366,7 +366,7 @@ func Test_SpacesLookupByCreatorIDs_Body(t *testing.T) {
 	}
 }
 
-func Test_SpacesLookupBuyersParams_SetAccessToken(t *testing.T) {
+func Test_ListBuyersInput_SetAccessToken(t *testing.T) {
 	cases := []struct {
 		name   string
 		token  string
@@ -386,30 +386,30 @@ func Test_SpacesLookupBuyersParams_SetAccessToken(t *testing.T) {
 
 	for _, c := range cases {
 		t.Run(c.name, func(tt *testing.T) {
-			p := &types.SpacesLookupBuyersParams{}
+			p := &types.ListBuyersInput{}
 			p.SetAccessToken(c.token)
 			assert.Equal(tt, c.expect, p.AccessToken())
 		})
 	}
 }
 
-func Test_SpacesLookupBuyersParams_ResolveEndpoint(t *testing.T) {
+func Test_ListBuyersInput_ResolveEndpoint(t *testing.T) {
 	const endpointRoot = "test/endpoint/"
 	const endpointBase = "test/endpoint/:id"
 
 	cases := []struct {
 		name   string
-		params *types.SpacesLookupBuyersParams
+		params *types.ListBuyersInput
 		expect string
 	}{
 		{
 			name:   "only required parameter",
-			params: &types.SpacesLookupBuyersParams{ID: "sid"},
+			params: &types.ListBuyersInput{ID: "sid"},
 			expect: endpointRoot + "sid",
 		},
 		{
 			name: "with expansions",
-			params: &types.SpacesLookupBuyersParams{
+			params: &types.ListBuyersInput{
 				ID:         "sid",
 				Expansions: fields.ExpansionList{"ex1", "ex2"},
 			},
@@ -417,7 +417,7 @@ func Test_SpacesLookupBuyersParams_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "with media.fields",
-			params: &types.SpacesLookupBuyersParams{
+			params: &types.ListBuyersInput{
 				ID:          "sid",
 				MediaFields: fields.MediaFieldList{"tf1", "tf2"},
 			},
@@ -425,7 +425,7 @@ func Test_SpacesLookupBuyersParams_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "with place.fields",
-			params: &types.SpacesLookupBuyersParams{
+			params: &types.ListBuyersInput{
 				ID:          "sid",
 				PlaceFields: fields.PlaceFieldList{"tf1", "tf2"},
 			},
@@ -433,7 +433,7 @@ func Test_SpacesLookupBuyersParams_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "with poll.fields",
-			params: &types.SpacesLookupBuyersParams{
+			params: &types.ListBuyersInput{
 				ID:         "sid",
 				PollFields: fields.PollFieldList{"tf1", "tf2"},
 			},
@@ -441,7 +441,7 @@ func Test_SpacesLookupBuyersParams_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "with tweets.fields",
-			params: &types.SpacesLookupBuyersParams{
+			params: &types.ListBuyersInput{
 				ID:          "sid",
 				TweetFields: fields.TweetFieldList{"tf1", "tf2"},
 			},
@@ -449,7 +449,7 @@ func Test_SpacesLookupBuyersParams_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "with users.fields",
-			params: &types.SpacesLookupBuyersParams{
+			params: &types.ListBuyersInput{
 				ID:         "sid",
 				UserFields: fields.UserFieldList{"uf1", "uf2"},
 			},
@@ -457,7 +457,7 @@ func Test_SpacesLookupBuyersParams_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "all query parameters",
-			params: &types.SpacesLookupBuyersParams{
+			params: &types.ListBuyersInput{
 				ID:          "sid",
 				Expansions:  fields.ExpansionList{"ex"},
 				MediaFields: fields.MediaFieldList{"mf"},
@@ -470,7 +470,7 @@ func Test_SpacesLookupBuyersParams_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "has no required parameter",
-			params: &types.SpacesLookupBuyersParams{
+			params: &types.ListBuyersInput{
 				Expansions:  fields.ExpansionList{"ex"},
 				UserFields:  fields.UserFieldList{"uf"},
 				TweetFields: fields.TweetFieldList{"tf"},
@@ -487,18 +487,18 @@ func Test_SpacesLookupBuyersParams_ResolveEndpoint(t *testing.T) {
 	}
 }
 
-func Test_SpacesLookupBuyersParams_Body(t *testing.T) {
+func Test_ListBuyersInput_Body(t *testing.T) {
 	cases := []struct {
 		name   string
-		params *types.SpacesLookupBuyersParams
+		params *types.ListBuyersInput
 	}{
 		{
 			name:   "empty params",
-			params: &types.SpacesLookupBuyersParams{},
+			params: &types.ListBuyersInput{},
 		},
 		{
 			name:   "some params",
-			params: &types.SpacesLookupBuyersParams{ID: "id"},
+			params: &types.ListBuyersInput{ID: "id"},
 		},
 	}
 
@@ -511,7 +511,7 @@ func Test_SpacesLookupBuyersParams_Body(t *testing.T) {
 	}
 }
 
-func Test_SpacesLookupTweetsParams_SetAccessToken(t *testing.T) {
+func Test_ListTweetsInput_SetAccessToken(t *testing.T) {
 	cases := []struct {
 		name   string
 		token  string
@@ -531,30 +531,30 @@ func Test_SpacesLookupTweetsParams_SetAccessToken(t *testing.T) {
 
 	for _, c := range cases {
 		t.Run(c.name, func(tt *testing.T) {
-			p := &types.SpacesLookupTweetsParams{}
+			p := &types.ListTweetsInput{}
 			p.SetAccessToken(c.token)
 			assert.Equal(tt, c.expect, p.AccessToken())
 		})
 	}
 }
 
-func Test_SpacesLookupTweetsParams_ResolveEndpoint(t *testing.T) {
+func Test_ListTweetsInput_ResolveEndpoint(t *testing.T) {
 	const endpointRoot = "test/endpoint/"
 	const endpointBase = "test/endpoint/:id"
 
 	cases := []struct {
 		name   string
-		params *types.SpacesLookupTweetsParams
+		params *types.ListTweetsInput
 		expect string
 	}{
 		{
 			name:   "only required parameter",
-			params: &types.SpacesLookupTweetsParams{ID: "sid"},
+			params: &types.ListTweetsInput{ID: "sid"},
 			expect: endpointRoot + "sid",
 		},
 		{
 			name: "with expansions",
-			params: &types.SpacesLookupTweetsParams{
+			params: &types.ListTweetsInput{
 				ID:         "sid",
 				Expansions: fields.ExpansionList{"ex1", "ex2"},
 			},
@@ -562,7 +562,7 @@ func Test_SpacesLookupTweetsParams_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "with media.fields",
-			params: &types.SpacesLookupTweetsParams{
+			params: &types.ListTweetsInput{
 				ID:          "sid",
 				MediaFields: fields.MediaFieldList{"tf1", "tf2"},
 			},
@@ -570,7 +570,7 @@ func Test_SpacesLookupTweetsParams_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "with place.fields",
-			params: &types.SpacesLookupTweetsParams{
+			params: &types.ListTweetsInput{
 				ID:          "sid",
 				PlaceFields: fields.PlaceFieldList{"tf1", "tf2"},
 			},
@@ -578,7 +578,7 @@ func Test_SpacesLookupTweetsParams_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "with poll.fields",
-			params: &types.SpacesLookupTweetsParams{
+			params: &types.ListTweetsInput{
 				ID:         "sid",
 				PollFields: fields.PollFieldList{"tf1", "tf2"},
 			},
@@ -586,7 +586,7 @@ func Test_SpacesLookupTweetsParams_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "with tweets.fields",
-			params: &types.SpacesLookupTweetsParams{
+			params: &types.ListTweetsInput{
 				ID:          "sid",
 				TweetFields: fields.TweetFieldList{"tf1", "tf2"},
 			},
@@ -594,7 +594,7 @@ func Test_SpacesLookupTweetsParams_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "with users.fields",
-			params: &types.SpacesLookupTweetsParams{
+			params: &types.ListTweetsInput{
 				ID:         "sid",
 				UserFields: fields.UserFieldList{"uf1", "uf2"},
 			},
@@ -602,7 +602,7 @@ func Test_SpacesLookupTweetsParams_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "all query parameters",
-			params: &types.SpacesLookupTweetsParams{
+			params: &types.ListTweetsInput{
 				ID:          "sid",
 				Expansions:  fields.ExpansionList{"ex"},
 				MediaFields: fields.MediaFieldList{"mf"},
@@ -615,7 +615,7 @@ func Test_SpacesLookupTweetsParams_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "has no required parameter",
-			params: &types.SpacesLookupTweetsParams{
+			params: &types.ListTweetsInput{
 				Expansions:  fields.ExpansionList{"ex"},
 				UserFields:  fields.UserFieldList{"uf"},
 				TweetFields: fields.TweetFieldList{"tf"},
@@ -632,18 +632,18 @@ func Test_SpacesLookupTweetsParams_ResolveEndpoint(t *testing.T) {
 	}
 }
 
-func Test_SpacesLookupTweetsParams_Body(t *testing.T) {
+func Test_ListTweetsInput_Body(t *testing.T) {
 	cases := []struct {
 		name   string
-		params *types.SpacesLookupTweetsParams
+		params *types.ListTweetsInput
 	}{
 		{
 			name:   "empty params",
-			params: &types.SpacesLookupTweetsParams{},
+			params: &types.ListTweetsInput{},
 		},
 		{
 			name:   "some params",
-			params: &types.SpacesLookupTweetsParams{ID: "id"},
+			params: &types.ListTweetsInput{ID: "id"},
 		},
 	}
 

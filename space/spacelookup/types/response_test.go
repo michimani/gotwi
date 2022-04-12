@@ -4,7 +4,7 @@ import (
 	"testing"
 
 	"github.com/michimani/gotwi/resources"
-	"github.com/michimani/gotwi/spaces/types"
+	"github.com/michimani/gotwi/space/spacelookup/types"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -12,12 +12,12 @@ func Test_SpacesLookupID_HasPartialError(t *testing.T) {
 	var errorTitle string = "test partical error"
 	cases := []struct {
 		name   string
-		res    *types.SpacesLookupIDResponse
+		res    *types.GetOutput
 		expect bool
 	}{
 		{
 			name: "has partical error",
-			res: &types.SpacesLookupIDResponse{
+			res: &types.GetOutput{
 				Errors: []resources.PartialError{
 					{Title: &errorTitle},
 				}},
@@ -25,13 +25,13 @@ func Test_SpacesLookupID_HasPartialError(t *testing.T) {
 		},
 		{
 			name: "has no partical error",
-			res: &types.SpacesLookupIDResponse{
+			res: &types.GetOutput{
 				Errors: []resources.PartialError{}},
 			expect: false,
 		},
 		{
 			name: "partical error is nil",
-			res: &types.SpacesLookupIDResponse{
+			res: &types.GetOutput{
 				Errors: []resources.PartialError{}},
 			expect: false,
 		},
@@ -49,12 +49,12 @@ func Test_SpacesLookup_HasPartialError(t *testing.T) {
 	var errorTitle string = "test partical error"
 	cases := []struct {
 		name   string
-		res    *types.SpacesLookupResponse
+		res    *types.ListOutput
 		expect bool
 	}{
 		{
 			name: "has partical error",
-			res: &types.SpacesLookupResponse{
+			res: &types.ListOutput{
 				Errors: []resources.PartialError{
 					{Title: &errorTitle},
 				}},
@@ -62,13 +62,13 @@ func Test_SpacesLookup_HasPartialError(t *testing.T) {
 		},
 		{
 			name: "has no partical error",
-			res: &types.SpacesLookupResponse{
+			res: &types.ListOutput{
 				Errors: []resources.PartialError{}},
 			expect: false,
 		},
 		{
 			name: "partical error is nil",
-			res: &types.SpacesLookupResponse{
+			res: &types.ListOutput{
 				Errors: []resources.PartialError{}},
 			expect: false,
 		},
@@ -86,12 +86,12 @@ func Test_SpacesLookupByCreatorIDs_HasPartialError(t *testing.T) {
 	var errorTitle string = "test partical error"
 	cases := []struct {
 		name   string
-		res    *types.SpacesLookupByCreatorIDsResponse
+		res    *types.ListByCreatorIDsOutput
 		expect bool
 	}{
 		{
 			name: "has partical error",
-			res: &types.SpacesLookupByCreatorIDsResponse{
+			res: &types.ListByCreatorIDsOutput{
 				Errors: []resources.PartialError{
 					{Title: &errorTitle},
 				}},
@@ -99,13 +99,13 @@ func Test_SpacesLookupByCreatorIDs_HasPartialError(t *testing.T) {
 		},
 		{
 			name: "has no partical error",
-			res: &types.SpacesLookupByCreatorIDsResponse{
+			res: &types.ListByCreatorIDsOutput{
 				Errors: []resources.PartialError{}},
 			expect: false,
 		},
 		{
 			name: "partical error is nil",
-			res: &types.SpacesLookupByCreatorIDsResponse{
+			res: &types.ListByCreatorIDsOutput{
 				Errors: []resources.PartialError{}},
 			expect: false,
 		},
@@ -123,12 +123,12 @@ func Test_SpacesLookupBuyers_HasPartialError(t *testing.T) {
 	var errorTitle string = "test partical error"
 	cases := []struct {
 		name   string
-		res    *types.SpacesLookupBuyersResponse
+		res    *types.ListBuyersOutput
 		expect bool
 	}{
 		{
 			name: "has partical error",
-			res: &types.SpacesLookupBuyersResponse{
+			res: &types.ListBuyersOutput{
 				Errors: []resources.PartialError{
 					{Title: &errorTitle},
 				}},
@@ -136,13 +136,13 @@ func Test_SpacesLookupBuyers_HasPartialError(t *testing.T) {
 		},
 		{
 			name: "has no partical error",
-			res: &types.SpacesLookupBuyersResponse{
+			res: &types.ListBuyersOutput{
 				Errors: []resources.PartialError{}},
 			expect: false,
 		},
 		{
 			name: "partical error is nil",
-			res: &types.SpacesLookupBuyersResponse{
+			res: &types.ListBuyersOutput{
 				Errors: []resources.PartialError{}},
 			expect: false,
 		},
@@ -160,12 +160,12 @@ func Test_SpacesLookupTweets_HasPartialError(t *testing.T) {
 	var errorTitle string = "test partical error"
 	cases := []struct {
 		name   string
-		res    *types.SpacesLookupTweetsResponse
+		res    *types.ListTweetsOutput
 		expect bool
 	}{
 		{
 			name: "has partical error",
-			res: &types.SpacesLookupTweetsResponse{
+			res: &types.ListTweetsOutput{
 				Errors: []resources.PartialError{
 					{Title: &errorTitle},
 				}},
@@ -173,13 +173,13 @@ func Test_SpacesLookupTweets_HasPartialError(t *testing.T) {
 		},
 		{
 			name: "has no partical error",
-			res: &types.SpacesLookupTweetsResponse{
+			res: &types.ListTweetsOutput{
 				Errors: []resources.PartialError{}},
 			expect: false,
 		},
 		{
 			name: "partical error is nil",
-			res: &types.SpacesLookupTweetsResponse{
+			res: &types.ListTweetsOutput{
 				Errors: []resources.PartialError{}},
 			expect: false,
 		},

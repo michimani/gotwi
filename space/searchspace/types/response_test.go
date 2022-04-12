@@ -4,7 +4,7 @@ import (
 	"testing"
 
 	"github.com/michimani/gotwi/resources"
-	"github.com/michimani/gotwi/spaces/types"
+	"github.com/michimani/gotwi/space/searchspace/types"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -12,12 +12,12 @@ func Test_SearchSpaces_HasPartialError(t *testing.T) {
 	var errorTitle string = "test partical error"
 	cases := []struct {
 		name   string
-		res    *types.SearchSpacesResponse
+		res    *types.ListOutput
 		expect bool
 	}{
 		{
 			name: "has partical error",
-			res: &types.SearchSpacesResponse{
+			res: &types.ListOutput{
 				Errors: []resources.PartialError{
 					{Title: &errorTitle},
 				}},
@@ -25,13 +25,13 @@ func Test_SearchSpaces_HasPartialError(t *testing.T) {
 		},
 		{
 			name: "has no partical error",
-			res: &types.SearchSpacesResponse{
+			res: &types.ListOutput{
 				Errors: []resources.PartialError{}},
 			expect: false,
 		},
 		{
 			name: "partical error is nil",
-			res: &types.SearchSpacesResponse{
+			res: &types.ListOutput{
 				Errors: []resources.PartialError{}},
 			expect: false,
 		},

@@ -2,7 +2,7 @@ package types
 
 import "github.com/michimani/gotwi/resources"
 
-type SpacesLookupIDResponse struct {
+type GetOutput struct {
 	Data     resources.Space `json:"data"`
 	Includes struct {
 		Users []resources.User `json:"users"`
@@ -10,11 +10,11 @@ type SpacesLookupIDResponse struct {
 	Errors []resources.PartialError `json:"errors"`
 }
 
-func (r *SpacesLookupIDResponse) HasPartialError() bool {
+func (r *GetOutput) HasPartialError() bool {
 	return !(r.Errors == nil || len(r.Errors) == 0)
 }
 
-type SpacesLookupResponse struct {
+type ListOutput struct {
 	Data     []resources.Space `json:"data"`
 	Includes struct {
 		Users []resources.User `json:"users"`
@@ -22,11 +22,11 @@ type SpacesLookupResponse struct {
 	Errors []resources.PartialError `json:"errors"`
 }
 
-func (r *SpacesLookupResponse) HasPartialError() bool {
+func (r *ListOutput) HasPartialError() bool {
 	return !(r.Errors == nil || len(r.Errors) == 0)
 }
 
-type SpacesLookupByCreatorIDsResponse struct {
+type ListByCreatorIDsOutput struct {
 	Data     []resources.Space `json:"data"`
 	Includes struct {
 		Users []resources.User `json:"users"`
@@ -35,11 +35,11 @@ type SpacesLookupByCreatorIDsResponse struct {
 	Errors []resources.PartialError                `json:"errors"`
 }
 
-func (r *SpacesLookupByCreatorIDsResponse) HasPartialError() bool {
+func (r *ListByCreatorIDsOutput) HasPartialError() bool {
 	return !(r.Errors == nil || len(r.Errors) == 0)
 }
 
-type SpacesLookupBuyersResponse struct {
+type ListBuyersOutput struct {
 	Data     []resources.User `json:"data"`
 	Includes struct {
 		Tweets []resources.Tweet `json:"tweets"`
@@ -47,11 +47,11 @@ type SpacesLookupBuyersResponse struct {
 	Errors []resources.PartialError `json:"errors"`
 }
 
-func (r *SpacesLookupBuyersResponse) HasPartialError() bool {
+func (r *ListBuyersOutput) HasPartialError() bool {
 	return !(r.Errors == nil || len(r.Errors) == 0)
 }
 
-type SpacesLookupTweetsResponse struct {
+type ListTweetsOutput struct {
 	Data     []resources.Tweet `json:"data"`
 	Includes struct {
 		Users []resources.User `json:"users"`
@@ -60,6 +60,6 @@ type SpacesLookupTweetsResponse struct {
 	Errors []resources.PartialError         `json:"errors"`
 }
 
-func (r *SpacesLookupTweetsResponse) HasPartialError() bool {
+func (r *ListTweetsOutput) HasPartialError() bool {
 	return !(r.Errors == nil || len(r.Errors) == 0)
 }
