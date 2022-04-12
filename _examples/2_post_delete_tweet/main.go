@@ -51,12 +51,12 @@ func main() {
 	}
 }
 
-func newOAuth1Client() (*gotwi.GotwiClient, error) {
-	in := &gotwi.NewGotwiClientInput{
+func newOAuth1Client() (*gotwi.Client, error) {
+	in := &gotwi.NewClientInput{
 		AuthenticationMethod: gotwi.AuthenMethodOAuth1UserContext,
 		OAuthToken:           os.Getenv(OAuthTokenEnvKeyName),
 		OAuthTokenSecret:     os.Getenv(OAuthTokenSecretEnvKeyName),
 	}
 
-	return gotwi.NewGotwiClient(in)
+	return gotwi.NewClient(in)
 }

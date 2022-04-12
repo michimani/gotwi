@@ -4,17 +4,17 @@ import (
 	"context"
 
 	"github.com/michimani/gotwi"
-	"github.com/michimani/gotwi/tweets"
-	"github.com/michimani/gotwi/tweets/types"
+	"github.com/michimani/gotwi/tweet/managetweet"
+	"github.com/michimani/gotwi/tweet/managetweet/types"
 )
 
 // SimpleTweet posts a tweet with only text, and return posted tweet ID.
-func SimpleTweet(c *gotwi.GotwiClient, text string) (string, error) {
-	p := &types.ManageTweetsPostParams{
+func SimpleTweet(c *gotwi.Client, text string) (string, error) {
+	p := &types.CreateInput{
 		Text: gotwi.String(text),
 	}
 
-	res, err := tweets.ManageTweetsPost(context.Background(), c, p)
+	res, err := managetweet.Create(context.Background(), c, p)
 	if err != nil {
 		return "", err
 	}
@@ -23,12 +23,12 @@ func SimpleTweet(c *gotwi.GotwiClient, text string) (string, error) {
 }
 
 // DeleteTweet deletes a tweet specified by tweet ID.
-func DeleteTweet(c *gotwi.GotwiClient, id string) (bool, error) {
-	p := &types.ManageTweetsDeleteParams{
+func DeleteTweet(c *gotwi.Client, id string) (bool, error) {
+	p := &types.DeleteInput{
 		ID: id,
 	}
 
-	res, err := tweets.ManageTweetsDelete(context.Background(), c, p)
+	res, err := managetweet.Delete(context.Background(), c, p)
 	if err != nil {
 		return false, err
 	}
