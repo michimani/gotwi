@@ -11,13 +11,13 @@ import (
 	"github.com/michimani/gotwi/internal/util"
 )
 
-type BookmarksMaxResults int
+type ListMaxResults int
 
-func (m BookmarksMaxResults) Valid() bool {
+func (m ListMaxResults) Valid() bool {
 	return m >= 10 && m <= 100
 }
 
-func (m BookmarksMaxResults) String() string {
+func (m ListMaxResults) String() string {
 	return strconv.Itoa(int(m))
 }
 
@@ -28,7 +28,7 @@ type ListInput struct {
 	ID string // Tweet ID
 
 	// Query parameters
-	MaxResults      BookmarksMaxResults
+	MaxResults      ListMaxResults
 	PaginationToken string
 	Expansions      fields.ExpansionList
 	MediaFields     fields.MediaFieldList

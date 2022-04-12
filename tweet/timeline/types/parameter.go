@@ -11,13 +11,13 @@ import (
 	"github.com/michimani/gotwi/internal/util"
 )
 
-type TweetTimelinesMaxResults int
+type ListMaxResults int
 
-func (m TweetTimelinesMaxResults) Valid() bool {
+func (m ListMaxResults) Valid() bool {
 	return m >= 5 && m <= 100
 }
 
-func (m TweetTimelinesMaxResults) String() string {
+func (m ListMaxResults) String() string {
 	return strconv.Itoa(int(m))
 }
 
@@ -40,7 +40,7 @@ type ListTweetsInput struct {
 	TweetFields     fields.TweetFieldList
 	UserFields      fields.UserFieldList
 	PaginationToken string
-	MaxResults      TweetTimelinesMaxResults
+	MaxResults      ListMaxResults
 }
 
 var listTweetsQueryParameters = map[string]struct{}{
@@ -139,7 +139,7 @@ type ListMentionsInput struct {
 	TweetFields     fields.TweetFieldList
 	UserFields      fields.UserFieldList
 	PaginationToken string
-	MaxResults      TweetTimelinesMaxResults
+	MaxResults      ListMaxResults
 }
 
 var listMentionsQueryParameters = map[string]struct{}{

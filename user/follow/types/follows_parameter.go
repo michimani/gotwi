@@ -11,13 +11,13 @@ import (
 	"github.com/michimani/gotwi/internal/util"
 )
 
-type FollowsMaxResults int
+type ListMaxResults int
 
-func (m FollowsMaxResults) Valid() bool {
+func (m ListMaxResults) Valid() bool {
 	return m > 0 && m <= 1000
 }
 
-func (m FollowsMaxResults) String() string {
+func (m ListMaxResults) String() string {
 	return strconv.Itoa(int(m))
 }
 
@@ -28,7 +28,7 @@ type ListFollowingsInput struct {
 	ID string
 
 	// Query parameters
-	MaxResults      FollowsMaxResults
+	MaxResults      ListMaxResults
 	PaginationToken string
 	Expansions      fields.ExpansionList
 	TweetFields     fields.TweetFieldList
@@ -105,7 +105,7 @@ type ListFollowersInput struct {
 	ID string
 
 	// Query parameters
-	MaxResults      FollowsMaxResults
+	MaxResults      ListMaxResults
 	PaginationToken string
 	Expansions      fields.ExpansionList
 	TweetFields     fields.TweetFieldList

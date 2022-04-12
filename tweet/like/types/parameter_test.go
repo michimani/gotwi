@@ -10,25 +10,25 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func Test_TweetLikesMaxResults_String(t *testing.T) {
+func Test_ListMaxResults_String(t *testing.T) {
 	cases := []struct {
 		name   string
-		m      types.TweetLikesMaxResults
+		m      types.ListMaxResults
 		expect string
 	}{
 		{
 			name:   "normal",
-			m:      types.TweetLikesMaxResults(1),
+			m:      types.ListMaxResults(1),
 			expect: "1",
 		},
 		{
 			name:   "normal: zero",
-			m:      types.TweetLikesMaxResults(0),
+			m:      types.ListMaxResults(0),
 			expect: "0",
 		},
 		{
 			name:   "normal: negative",
-			m:      types.TweetLikesMaxResults(-1),
+			m:      types.ListMaxResults(-1),
 			expect: "-1",
 		},
 	}
@@ -283,7 +283,7 @@ func Test_ListInput_ResolveEndpoint(t *testing.T) {
 				PollFields:      fields.PollFieldList{"pof"},
 				UserFields:      fields.UserFieldList{"uf"},
 				TweetFields:     fields.TweetFieldList{"tf"},
-				MaxResults:      types.TweetLikesMaxResults(10),
+				MaxResults:      types.ListMaxResults(10),
 				PaginationToken: "ptoken",
 			},
 			expect: endpointRoot + "test-id" + "?expansions=ex&max_results=10&media.fields=mf&pagination_token=ptoken&place.fields=plf&poll.fields=pof&tweet.fields=tf&user.fields=uf",

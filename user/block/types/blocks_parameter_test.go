@@ -10,35 +10,35 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func Test_BlocksMaxResults_Valid(t *testing.T) {
+func Test_ListMaxResults_Valid(t *testing.T) {
 	cases := []struct {
 		name   string
-		max    types.BlocksMaxResults
+		max    types.ListMaxResults
 		expect bool
 	}{
 		{
 			name:   "ok: 1",
-			max:    types.BlocksMaxResults(1),
+			max:    types.ListMaxResults(1),
 			expect: true,
 		},
 		{
 			name:   "ok: 1000",
-			max:    types.BlocksMaxResults(1000),
+			max:    types.ListMaxResults(1000),
 			expect: true,
 		},
 		{
 			name:   "ng: 0",
-			max:    types.BlocksMaxResults(0),
+			max:    types.ListMaxResults(0),
 			expect: false,
 		},
 		{
 			name:   "ng: 1001",
-			max:    types.BlocksMaxResults(1001),
+			max:    types.ListMaxResults(1001),
 			expect: false,
 		},
 		{
 			name:   "ng: -1",
-			max:    types.BlocksMaxResults(-1),
+			max:    types.ListMaxResults(-1),
 			expect: false,
 		},
 	}
@@ -51,25 +51,25 @@ func Test_BlocksMaxResults_Valid(t *testing.T) {
 	}
 }
 
-func Test_BlocksMaxResults_String(t *testing.T) {
+func Test_ListMaxResults_String(t *testing.T) {
 	cases := []struct {
 		name   string
-		max    types.BlocksMaxResults
+		max    types.ListMaxResults
 		expect string
 	}{
 		{
 			name:   "ok: 1",
-			max:    types.BlocksMaxResults(1),
+			max:    types.ListMaxResults(1),
 			expect: "1",
 		},
 		{
 			name:   "ok: 0",
-			max:    types.BlocksMaxResults(0),
+			max:    types.ListMaxResults(0),
 			expect: "0",
 		},
 		{
 			name:   "ok: -1",
-			max:    types.BlocksMaxResults(-1),
+			max:    types.ListMaxResults(-1),
 			expect: "-1",
 		},
 	}

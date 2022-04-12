@@ -11,7 +11,7 @@ import (
 	"github.com/michimani/gotwi/internal/util"
 )
 
-type BlocksMaxResults int
+type ListMaxResults int
 
 type ListInput struct {
 	accessToken string
@@ -20,7 +20,7 @@ type ListInput struct {
 	ID string
 
 	// Query parameters
-	MaxResults      BlocksMaxResults
+	MaxResults      ListMaxResults
 	PaginationToken string
 	Expansions      fields.ExpansionList
 	TweetFields     fields.TweetFieldList
@@ -35,11 +35,11 @@ var listQueryParameters = map[string]struct{}{
 	"user.fields":      {},
 }
 
-func (m BlocksMaxResults) Valid() bool {
+func (m ListMaxResults) Valid() bool {
 	return m > 0 && m <= 1000
 }
 
-func (m BlocksMaxResults) String() string {
+func (m ListMaxResults) String() string {
 	return strconv.Itoa(int(m))
 }
 

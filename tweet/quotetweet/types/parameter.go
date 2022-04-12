@@ -10,13 +10,13 @@ import (
 	"github.com/michimani/gotwi/internal/util"
 )
 
-type QuoteTweetsMaxResults int
+type ListMaxResults int
 
-func (m QuoteTweetsMaxResults) Valid() bool {
+func (m ListMaxResults) Valid() bool {
 	return m > 1 && m <= 100
 }
 
-func (m QuoteTweetsMaxResults) String() string {
+func (m ListMaxResults) String() string {
 	return strconv.Itoa(int(m))
 }
 
@@ -27,7 +27,7 @@ type ListInput struct {
 	ID string // Tweet ID
 
 	// Query parameters
-	MaxResults      QuoteTweetsMaxResults
+	MaxResults      ListMaxResults
 	PaginationToken string
 	Expansions      fields.ExpansionList
 	MediaFields     fields.MediaFieldList

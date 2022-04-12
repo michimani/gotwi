@@ -8,7 +8,7 @@ import (
 	"github.com/michimani/gotwi/internal/util"
 )
 
-type SearchSpacesMaxResults int
+type ListMaxResults int
 
 type ListInput struct {
 	accessToken string
@@ -16,7 +16,7 @@ type ListInput struct {
 	// Path parameters
 	Query       string
 	Expansions  fields.ExpansionList
-	MaxResults  SearchSpacesMaxResults
+	MaxResults  ListMaxResults
 	SpaceFields fields.SpaceFieldList
 	UserFields  fields.UserFieldList
 	State       fields.State
@@ -31,11 +31,11 @@ var listQueryParameters = map[string]struct{}{
 	"state":        {},
 }
 
-func (m SearchSpacesMaxResults) Valid() bool {
+func (m ListMaxResults) Valid() bool {
 	return m > 0 && m <= 100
 }
 
-func (m SearchSpacesMaxResults) String() string {
+func (m ListMaxResults) String() string {
 	return strconv.Itoa(int(m))
 }
 

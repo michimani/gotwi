@@ -71,13 +71,13 @@ func (p *ListUsersInput) ParameterMap() map[string]string {
 	return m
 }
 
-type TweetLikesMaxResults int
+type ListMaxResults int
 
-func (m TweetLikesMaxResults) Valid() bool {
+func (m ListMaxResults) Valid() bool {
 	return m >= 10 && m <= 100
 }
 
-func (m TweetLikesMaxResults) String() string {
+func (m ListMaxResults) String() string {
 	return strconv.Itoa(int(m))
 }
 
@@ -88,7 +88,7 @@ type ListInput struct {
 	ID string // required: User ID of the user to request liked Tweets for
 
 	// Query parameters
-	MaxResults      TweetLikesMaxResults
+	MaxResults      ListMaxResults
 	PaginationToken string
 	Expansions      fields.ExpansionList
 	MediaFields     fields.MediaFieldList

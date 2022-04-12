@@ -10,35 +10,35 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func Test_MutesMaxResults_Valid(t *testing.T) {
+func Test_ListMaxResults_Valid(t *testing.T) {
 	cases := []struct {
 		name   string
-		max    types.MutesMaxResults
+		max    types.ListMaxResults
 		expect bool
 	}{
 		{
 			name:   "ok: 1",
-			max:    types.MutesMaxResults(1),
+			max:    types.ListMaxResults(1),
 			expect: true,
 		},
 		{
 			name:   "ok: 1000",
-			max:    types.MutesMaxResults(1000),
+			max:    types.ListMaxResults(1000),
 			expect: true,
 		},
 		{
 			name:   "ng: 0",
-			max:    types.MutesMaxResults(0),
+			max:    types.ListMaxResults(0),
 			expect: false,
 		},
 		{
 			name:   "ng: 1001",
-			max:    types.MutesMaxResults(1001),
+			max:    types.ListMaxResults(1001),
 			expect: false,
 		},
 		{
 			name:   "ng: -1",
-			max:    types.MutesMaxResults(-1),
+			max:    types.ListMaxResults(-1),
 			expect: false,
 		},
 	}
@@ -51,25 +51,25 @@ func Test_MutesMaxResults_Valid(t *testing.T) {
 	}
 }
 
-func Test_MutesMaxResults_String(t *testing.T) {
+func Test_ListMaxResults_String(t *testing.T) {
 	cases := []struct {
 		name   string
-		max    types.MutesMaxResults
+		max    types.ListMaxResults
 		expect string
 	}{
 		{
 			name:   "ok: 1",
-			max:    types.MutesMaxResults(1),
+			max:    types.ListMaxResults(1),
 			expect: "1",
 		},
 		{
 			name:   "ok: 0",
-			max:    types.MutesMaxResults(0),
+			max:    types.ListMaxResults(0),
 			expect: "0",
 		},
 		{
 			name:   "ok: -1",
-			max:    types.MutesMaxResults(-1),
+			max:    types.ListMaxResults(-1),
 			expect: "-1",
 		},
 	}

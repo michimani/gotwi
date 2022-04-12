@@ -11,7 +11,7 @@ import (
 	"github.com/michimani/gotwi/internal/util"
 )
 
-type MutesMaxResults int
+type ListMaxResults int
 
 // ListsInput is struct for requesting `GET /2/users/:id/muting`.
 // more information: https://developer.twitter.com/en/docs/twitter-api/users/mutes/api-reference/get-users-muting
@@ -22,7 +22,7 @@ type ListsInput struct {
 	ID string // required: The authenticated user ID
 
 	// Query parameters
-	MaxResults      MutesMaxResults
+	MaxResults      ListMaxResults
 	PaginationToken string
 	Expansions      fields.ExpansionList
 	TweetFields     fields.TweetFieldList
@@ -37,11 +37,11 @@ var listsQueryParameters = map[string]struct{}{
 	"user.fields":      {},
 }
 
-func (m MutesMaxResults) Valid() bool {
+func (m ListMaxResults) Valid() bool {
 	return m > 0 && m <= 1000
 }
 
-func (m MutesMaxResults) String() string {
+func (m ListMaxResults) String() string {
 	return strconv.Itoa(int(m))
 }
 

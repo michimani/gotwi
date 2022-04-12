@@ -11,13 +11,13 @@ import (
 	"github.com/michimani/gotwi/internal/util"
 )
 
-type ListMembersListMembershipsMaxResults int
+type ListMembershipsMaxResults int
 
-func (m ListMembersListMembershipsMaxResults) Valid() bool {
+func (m ListMembershipsMaxResults) Valid() bool {
 	return m > 1 && m <= 100
 }
 
-func (m ListMembersListMembershipsMaxResults) String() string {
+func (m ListMembershipsMaxResults) String() string {
 	return strconv.Itoa(int(m))
 }
 
@@ -28,7 +28,7 @@ type ListMembershipsInput struct {
 	ID string // User ID
 
 	// Query parameters
-	MaxResults      ListMembersListMembershipsMaxResults
+	MaxResults      ListMembershipsMaxResults
 	PaginationToken string
 	Expansions      fields.ExpansionList
 	ListFields      fields.ListFieldList

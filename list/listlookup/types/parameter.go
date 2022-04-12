@@ -63,13 +63,13 @@ func (p *GetInput) ParameterMap() map[string]string {
 	return m
 }
 
-type ListLookupOwnedListsMaxResults int
+type ListOwnedMaxResults int
 
-func (m ListLookupOwnedListsMaxResults) Valid() bool {
+func (m ListOwnedMaxResults) Valid() bool {
 	return m > 1 && m <= 100
 }
 
-func (m ListLookupOwnedListsMaxResults) String() string {
+func (m ListOwnedMaxResults) String() string {
 	return strconv.Itoa(int(m))
 }
 
@@ -83,7 +83,7 @@ type ListOwnedInput struct {
 	Expansions      fields.ExpansionList
 	ListFields      fields.ListFieldList
 	UserFields      fields.UserFieldList
-	MaxResults      ListLookupOwnedListsMaxResults
+	MaxResults      ListOwnedMaxResults
 	PaginationToken string
 }
 
