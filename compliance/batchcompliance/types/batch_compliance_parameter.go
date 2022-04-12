@@ -25,7 +25,7 @@ const (
 	ComplianceStatusComplete   ComplianceStatus = "complete"
 )
 
-type BatchComplianceJobsParams struct {
+type ListJobsInput struct {
 	accessToken string
 
 	// Query Parameters
@@ -33,20 +33,20 @@ type BatchComplianceJobsParams struct {
 	Status ComplianceStatus
 }
 
-var BatchComplianceJobsQueryParams = map[string]struct{}{
+var listJobsQueryParameters = map[string]struct{}{
 	"type":   {},
 	"status": {},
 }
 
-func (p *BatchComplianceJobsParams) SetAccessToken(token string) {
+func (p *ListJobsInput) SetAccessToken(token string) {
 	p.accessToken = token
 }
 
-func (p *BatchComplianceJobsParams) AccessToken() string {
+func (p *ListJobsInput) AccessToken() string {
 	return p.accessToken
 }
 
-func (p *BatchComplianceJobsParams) ResolveEndpoint(endpointBase string) string {
+func (p *ListJobsInput) ResolveEndpoint(endpointBase string) string {
 	endpoint := endpointBase
 
 	if p.Type == "" {
@@ -55,18 +55,18 @@ func (p *BatchComplianceJobsParams) ResolveEndpoint(endpointBase string) string 
 
 	pm := p.ParameterMap()
 	if len(pm) > 0 {
-		qs := util.QueryString(pm, BatchComplianceJobsQueryParams)
+		qs := util.QueryString(pm, listJobsQueryParameters)
 		endpoint += "?" + qs
 	}
 
 	return endpoint
 }
 
-func (p *BatchComplianceJobsParams) Body() (io.Reader, error) {
+func (p *ListJobsInput) Body() (io.Reader, error) {
 	return nil, nil
 }
 
-func (p *BatchComplianceJobsParams) ParameterMap() map[string]string {
+func (p *ListJobsInput) ParameterMap() map[string]string {
 	m := map[string]string{}
 
 	m["type"] = string(p.Type)
@@ -78,22 +78,22 @@ func (p *BatchComplianceJobsParams) ParameterMap() map[string]string {
 	return m
 }
 
-type BatchComplianceJobsIDParams struct {
+type GetJobInput struct {
 	accessToken string
 
 	// Path parameters
 	ID string
 }
 
-func (p *BatchComplianceJobsIDParams) SetAccessToken(token string) {
+func (p *GetJobInput) SetAccessToken(token string) {
 	p.accessToken = token
 }
 
-func (p *BatchComplianceJobsIDParams) AccessToken() string {
+func (p *GetJobInput) AccessToken() string {
 	return p.accessToken
 }
 
-func (p *BatchComplianceJobsIDParams) ResolveEndpoint(endpointBase string) string {
+func (p *GetJobInput) ResolveEndpoint(endpointBase string) string {
 	if p.ID == "" {
 		return ""
 	}
@@ -104,36 +104,36 @@ func (p *BatchComplianceJobsIDParams) ResolveEndpoint(endpointBase string) strin
 	return endpoint
 }
 
-func (p *BatchComplianceJobsIDParams) Body() (io.Reader, error) {
+func (p *GetJobInput) Body() (io.Reader, error) {
 	return nil, nil
 }
 
-func (p *BatchComplianceJobsIDParams) ParameterMap() map[string]string {
+func (p *GetJobInput) ParameterMap() map[string]string {
 	return map[string]string{}
 }
 
-type BatchComplianceJobsPostParams struct {
+type CreateJobInput struct {
 	accessToken string
 
 	// JSON body parameter
-	Type      ComplianceType `json:"type,omitempty"`
+	Type      ComplianceType `json:"type,omitempty"` // required
 	Name      *string        `json:"name,omitempty"`
 	Resumable *bool          `json:"resumable,omitempty"`
 }
 
-func (p *BatchComplianceJobsPostParams) SetAccessToken(token string) {
+func (p *CreateJobInput) SetAccessToken(token string) {
 	p.accessToken = token
 }
 
-func (p *BatchComplianceJobsPostParams) AccessToken() string {
+func (p *CreateJobInput) AccessToken() string {
 	return p.accessToken
 }
 
-func (p *BatchComplianceJobsPostParams) ResolveEndpoint(endpointBase string) string {
+func (p *CreateJobInput) ResolveEndpoint(endpointBase string) string {
 	return endpointBase
 }
 
-func (p *BatchComplianceJobsPostParams) Body() (io.Reader, error) {
+func (p *CreateJobInput) Body() (io.Reader, error) {
 	json, err := json.Marshal(p)
 	if err != nil {
 		return nil, err
@@ -142,6 +142,6 @@ func (p *BatchComplianceJobsPostParams) Body() (io.Reader, error) {
 	return strings.NewReader(string(json)), nil
 }
 
-func (p *BatchComplianceJobsPostParams) ParameterMap() map[string]string {
+func (p *CreateJobInput) ParameterMap() map[string]string {
 	return map[string]string{}
 }

@@ -2,29 +2,29 @@ package types
 
 import "github.com/michimani/gotwi/resources"
 
-type BatchComplianceJobsResponse struct {
+type ListJobsOutput struct {
 	Data   []resources.Compliance   `json:"data"`
 	Errors []resources.PartialError `json:"errors"`
 }
 
-func (r *BatchComplianceJobsResponse) HasPartialError() bool {
+func (r *ListJobsOutput) HasPartialError() bool {
 	return !(r.Errors == nil || len(r.Errors) == 0)
 }
 
-type BatchComplianceJobsIDResponse struct {
+type GetJobOutput struct {
 	Data   resources.Compliance     `json:"data"`
 	Errors []resources.PartialError `json:"errors"`
 }
 
-func (r *BatchComplianceJobsIDResponse) HasPartialError() bool {
+func (r *GetJobOutput) HasPartialError() bool {
 	return !(r.Errors == nil || len(r.Errors) == 0)
 }
 
-type BatchComplianceJobsPostResponse struct {
+type CreateJobOutput struct {
 	Data   resources.Compliance     `json:"data"`
 	Errors []resources.PartialError `json:"errors"`
 }
 
-func (r *BatchComplianceJobsPostResponse) HasPartialError() bool {
+func (r *CreateJobOutput) HasPartialError() bool {
 	return !(r.Errors == nil || len(r.Errors) == 0)
 }
