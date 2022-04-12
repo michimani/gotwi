@@ -4,8 +4,8 @@ import (
 	"context"
 
 	"github.com/michimani/gotwi"
-	"github.com/michimani/gotwi/tweets"
-	"github.com/michimani/gotwi/tweets/types"
+	"github.com/michimani/gotwi/tweet/managetweet"
+	"github.com/michimani/gotwi/tweet/managetweet/types"
 )
 
 // SimpleTweet posts a tweet with only text, and return posted tweet ID.
@@ -14,7 +14,7 @@ func SimpleTweet(c *gotwi.Client, text string) (string, error) {
 		Text: gotwi.String(text),
 	}
 
-	res, err := tweets.ManageTweetsPost(context.Background(), c, p)
+	res, err := managetweet.Create(context.Background(), c, p)
 	if err != nil {
 		return "", err
 	}
@@ -28,7 +28,7 @@ func DeleteTweet(c *gotwi.Client, id string) (bool, error) {
 		ID: id,
 	}
 
-	res, err := tweets.ManageTweetsDelete(context.Background(), c, p)
+	res, err := managetweet.Delete(context.Background(), c, p)
 	if err != nil {
 		return false, err
 	}

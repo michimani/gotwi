@@ -6,10 +6,10 @@ import (
 
 	"github.com/michimani/gotwi"
 	"github.com/michimani/gotwi/fields"
-	"github.com/michimani/gotwi/tweets"
-	tweetsTypes "github.com/michimani/gotwi/tweets/types"
-	"github.com/michimani/gotwi/users"
-	"github.com/michimani/gotwi/users/types"
+	"github.com/michimani/gotwi/tweet/searchtweet"
+	sttypes "github.com/michimani/gotwi/tweet/searchtweet/types"
+	"github.com/michimani/gotwi/user/follow"
+	ftypes "github.com/michimani/gotwi/user/follow/types"
 )
 
 type twitterUser struct {
@@ -30,7 +30,7 @@ func onlyFollowsRecentActivity(c *gotwi.Client, userID string) {
 
 	paginationToken := "init"
 	for paginationToken != "" {
-		p := &types.ListFollowingsInput{
+		p := &ftypes.ListFollowingsInput{
 			ID:         userID,
 			MaxResults: 1000,
 		}
@@ -39,7 +39,7 @@ func onlyFollowsRecentActivity(c *gotwi.Client, userID string) {
 			p.PaginationToken = paginationToken
 		}
 
-		res, err := users.FollowsFollowingGet(context.Background(), c, p)
+		res, err := follow.ListFollowings(context.Background(), c, p)
 		if err != nil {
 			panic(err)
 		}
@@ -64,7 +64,7 @@ func onlyFollowsRecentActivity(c *gotwi.Client, userID string) {
 
 	paginationToken = "init"
 	for paginationToken != "" {
-		p := &types.ListFollowersInput{
+		p := &ftypes.ListFollowersInput{
 			ID:         userID,
 			MaxResults: 1000,
 		}
@@ -73,7 +73,7 @@ func onlyFollowsRecentActivity(c *gotwi.Client, userID string) {
 			p.PaginationToken = paginationToken
 		}
 
-		res, err := users.FollowsFollowers(context.Background(), c, p)
+		res, err := follow.ListFollowers(context.Background(), c, p)
 		if err != nil {
 			panic(err)
 		}
@@ -105,12 +105,12 @@ func onlyFollowsRecentActivity(c *gotwi.Client, userID string) {
 
 	// get recent tweets
 	for _, onlyFollow := range onlyFollowings {
-		p := &tweetsTypes.ListRecentInput{
+		p := &sttypes.ListRecentInput{
 			MaxResults:  10,
 			Query:       "from:" + onlyFollow.Username + " -is:retweet -is:reply",
 			TweetFields: fields.TweetFieldList{fields.TweetFieldCreatedAt},
 		}
-		res, err := tweets.SearchTweetsRecent(context.Background(), c, p)
+		res, err := searchtweet.ListRecent(context.Background(), c, p)
 		if err != nil {
 			panic(err)
 		}
