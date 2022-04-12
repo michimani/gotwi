@@ -146,7 +146,7 @@ func main() {
 		AuthenticationMethod: gotwi.AuthenMethodOAuth2BearerToken,
 	}
 
-	c, err := gotwi.NewGotwiClient(in)
+	c, err := gotwi.NewClient(in)
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -198,14 +198,14 @@ PinnedTweet:  pinned tweet
 
 ### new client with access token
 
-If you already have a pre-generated access token (e.g. OAuth 2.0 Authorization Code with PKCE), you can use `NewGotwiClientWithAccessToken()` function to generate a Gotwi client.
+If you already have a pre-generated access token (e.g. OAuth 2.0 Authorization Code with PKCE), you can use `NewClientWithAccessToken()` function to generate a Gotwi client.
 
 ```go
 in := &gotwi.NewClientWithAccessTokenInput{
 	AccessToken: "your-access-token",
 }
 
-c, err := gotwi.NewGotwiClientWithAccessToken(in)
+c, err := gotwi.NewClientWithAccessToken(in)
 if err != nil {
 	// error handling
 }
@@ -236,7 +236,7 @@ func main() {
 		OAuthTokenSecret:     "your-twitter-acount-oauth-token-secret",
 	}
 
-	c, err := gotwi.NewGotwiClient(in)
+	c, err := gotwi.NewClient(in)
 	if err != nil {
 		fmt.Println(err)
 		return

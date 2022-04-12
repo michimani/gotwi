@@ -12,12 +12,12 @@ func Test_MutesMutingGet_HasPartialError(t *testing.T) {
 	var errorTitle string = "test partical error"
 	cases := []struct {
 		name   string
-		res    *types.MutesMutingGetResponse
+		res    *types.ListMutedUsersOutput
 		expect bool
 	}{
 		{
 			name: "has partical error",
-			res: &types.MutesMutingGetResponse{
+			res: &types.ListMutedUsersOutput{
 				Errors: []resources.PartialError{
 					{Title: &errorTitle},
 				}},
@@ -25,13 +25,13 @@ func Test_MutesMutingGet_HasPartialError(t *testing.T) {
 		},
 		{
 			name: "has no partical error",
-			res: &types.MutesMutingGetResponse{
+			res: &types.ListMutedUsersOutput{
 				Errors: []resources.PartialError{}},
 			expect: false,
 		},
 		{
 			name: "partical error is nil",
-			res: &types.MutesMutingGetResponse{
+			res: &types.ListMutedUsersOutput{
 				Errors: []resources.PartialError{}},
 			expect: false,
 		},
@@ -45,20 +45,20 @@ func Test_MutesMutingGet_HasPartialError(t *testing.T) {
 	}
 }
 
-func Test_MutesMutingPostResponse_HasPartialError(t *testing.T) {
+func Test_CreateMutedUserOutput_HasPartialError(t *testing.T) {
 	cases := []struct {
 		name   string
-		res    *types.MutesMutingPostResponse
+		res    *types.CreateMutedUserOutput
 		expect bool
 	}{
 		{
 			name:   "initial struct",
-			res:    &types.MutesMutingPostResponse{},
+			res:    &types.CreateMutedUserOutput{},
 			expect: false,
 		},
 		{
 			name: "has data",
-			res: &types.MutesMutingPostResponse{
+			res: &types.CreateMutedUserOutput{
 				Data: struct {
 					Muting bool "json:\"muting\""
 				}{
@@ -77,20 +77,20 @@ func Test_MutesMutingPostResponse_HasPartialError(t *testing.T) {
 	}
 }
 
-func Test_MutesMutingDeleteResponse_HasPartialError(t *testing.T) {
+func Test_DeleteMutedUserOutput_HasPartialError(t *testing.T) {
 	cases := []struct {
 		name   string
-		res    *types.MutesMutingDeleteResponse
+		res    *types.DeleteMutedUserOutput
 		expect bool
 	}{
 		{
 			name:   "initial struct",
-			res:    &types.MutesMutingDeleteResponse{},
+			res:    &types.DeleteMutedUserOutput{},
 			expect: false,
 		},
 		{
 			name: "has data",
-			res: &types.MutesMutingDeleteResponse{
+			res: &types.DeleteMutedUserOutput{
 				Data: struct {
 					Muting bool "json:\"muting\""
 				}{

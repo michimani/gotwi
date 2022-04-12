@@ -13,11 +13,13 @@ import (
 
 type MutesMaxResults int
 
-type MutesMutingGetParams struct {
+// ListMutedUsersInput is struct for requesting `GET /2/users/:id/muting`.
+// more information: https://developer.twitter.com/en/docs/twitter-api/users/mutes/api-reference/get-users-muting
+type ListMutedUsersInput struct {
 	accessToken string
 
 	// Path parameter
-	ID string
+	ID string // required: The authenticated user ID
 
 	// Query parameters
 	MaxResults      MutesMaxResults
@@ -27,7 +29,7 @@ type MutesMutingGetParams struct {
 	UserFields      fields.UserFieldList
 }
 
-var MutesMutingGetQueryParams = map[string]struct{}{
+var listMutedUsersQueryParameters = map[string]struct{}{
 	"max_results":      {},
 	"pagination_token": {},
 	"expansions":       {},
@@ -43,15 +45,15 @@ func (m MutesMaxResults) String() string {
 	return strconv.Itoa(int(m))
 }
 
-func (p *MutesMutingGetParams) SetAccessToken(token string) {
+func (p *ListMutedUsersInput) SetAccessToken(token string) {
 	p.accessToken = token
 }
 
-func (p *MutesMutingGetParams) AccessToken() string {
+func (p *ListMutedUsersInput) AccessToken() string {
 	return p.accessToken
 }
 
-func (p *MutesMutingGetParams) ResolveEndpoint(endpointBase string) string {
+func (p *ListMutedUsersInput) ResolveEndpoint(endpointBase string) string {
 	if p.ID == "" {
 		return ""
 	}
@@ -61,18 +63,18 @@ func (p *MutesMutingGetParams) ResolveEndpoint(endpointBase string) string {
 
 	pm := p.ParameterMap()
 	if len(pm) > 0 {
-		qs := util.QueryString(pm, MutesMutingGetQueryParams)
+		qs := util.QueryString(pm, listMutedUsersQueryParameters)
 		endpoint += "?" + qs
 	}
 
 	return endpoint
 }
 
-func (p *MutesMutingGetParams) Body() (io.Reader, error) {
+func (p *ListMutedUsersInput) Body() (io.Reader, error) {
 	return nil, nil
 }
 
-func (p *MutesMutingGetParams) ParameterMap() map[string]string {
+func (p *ListMutedUsersInput) ParameterMap() map[string]string {
 	m := map[string]string{}
 
 	if p.MaxResults.Valid() {
@@ -88,26 +90,28 @@ func (p *MutesMutingGetParams) ParameterMap() map[string]string {
 	return m
 }
 
-type MutesMutingPostParams struct {
+// CreateMutedUserInput is struct for requesting `POST /2/users/:id/muting`.
+// more information: https://developer.twitter.com/en/docs/twitter-api/users/mutes/api-reference/post-users-user_id-muting
+type CreateMutedUserInput struct {
 	accessToken string
 
 	// Path parameter
-	ID string `json:"-"` // The authenticated user ID
+	ID string `json:"-"` // required: The authenticated user ID
 
 	// JSON body parameter
-	TargetUserID *string `json:"target_user_id,omitempty"`
+	TargetUserID string `json:"target_user_id,omitempty"` // required: target user ID to mute
 }
 
-func (p *MutesMutingPostParams) SetAccessToken(token string) {
+func (p *CreateMutedUserInput) SetAccessToken(token string) {
 	p.accessToken = token
 }
 
-func (p *MutesMutingPostParams) AccessToken() string {
+func (p *CreateMutedUserInput) AccessToken() string {
 	return p.accessToken
 }
 
-func (p *MutesMutingPostParams) ResolveEndpoint(endpointBase string) string {
-	if p.ID == "" {
+func (p *CreateMutedUserInput) ResolveEndpoint(endpointBase string) string {
+	if p.ID == "" || p.TargetUserID == "" {
 		return ""
 	}
 
@@ -117,7 +121,7 @@ func (p *MutesMutingPostParams) ResolveEndpoint(endpointBase string) string {
 	return endpoint
 }
 
-func (p *MutesMutingPostParams) Body() (io.Reader, error) {
+func (p *CreateMutedUserInput) Body() (io.Reader, error) {
 	json, err := json.Marshal(p)
 	if err != nil {
 		return nil, err
@@ -126,27 +130,29 @@ func (p *MutesMutingPostParams) Body() (io.Reader, error) {
 	return strings.NewReader(string(json)), nil
 }
 
-func (p *MutesMutingPostParams) ParameterMap() map[string]string {
+func (p *CreateMutedUserInput) ParameterMap() map[string]string {
 	return map[string]string{}
 }
 
-type MutesMutingDeleteParams struct {
+// DeleteMutedUserInput is struct for requesting `DELETE /2/users/:source_user_id/muting/:target_user_id`.
+// more information: https://developer.twitter.com/en/docs/twitter-api/users/mutes/api-reference/delete-users-user_id-muting
+type DeleteMutedUserInput struct {
 	accessToken string
 
 	// Path parameters
-	SourceUserID string // The authenticated user ID
-	TargetUserID string // The user ID for unfollow
+	SourceUserID string // required: The authenticated user ID
+	TargetUserID string // required: The user ID to unmute
 }
 
-func (p *MutesMutingDeleteParams) SetAccessToken(token string) {
+func (p *DeleteMutedUserInput) SetAccessToken(token string) {
 	p.accessToken = token
 }
 
-func (p *MutesMutingDeleteParams) AccessToken() string {
+func (p *DeleteMutedUserInput) AccessToken() string {
 	return p.accessToken
 }
 
-func (p *MutesMutingDeleteParams) ResolveEndpoint(endpointBase string) string {
+func (p *DeleteMutedUserInput) ResolveEndpoint(endpointBase string) string {
 	if p.SourceUserID == "" || p.TargetUserID == "" {
 		return ""
 	}
@@ -159,10 +165,10 @@ func (p *MutesMutingDeleteParams) ResolveEndpoint(endpointBase string) string {
 	return endpoint
 }
 
-func (p *MutesMutingDeleteParams) Body() (io.Reader, error) {
+func (p *DeleteMutedUserInput) Body() (io.Reader, error) {
 	return nil, nil
 }
 
-func (p *MutesMutingDeleteParams) ParameterMap() map[string]string {
+func (p *DeleteMutedUserInput) ParameterMap() map[string]string {
 	return map[string]string{}
 }
