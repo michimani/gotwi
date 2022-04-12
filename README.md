@@ -137,22 +137,20 @@ import (
 
 	"github.com/michimani/gotwi"
 	"github.com/michimani/gotwi/fields"
-	"github.com/michimani/gotwi/users"
-	"github.com/michimani/gotwi/users/types"
+	"github.com/michimani/gotwi/user/userlookup"
+	"github.com/michimani/gotwi/user/userlookup/types"
 )
 
 func main() {
-	in := &gotwi.NewGotwiClientInput{
+	c, err := gotwi.NewClient(&gotwi.NewClientInput{
 		AuthenticationMethod: gotwi.AuthenMethodOAuth2BearerToken,
-	}
-
-	c, err := gotwi.NewGotwiClient(in)
+	})
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
 
-	p := &types.UserLookupByUsernameParams{
+	p := &types.GetByUsernameInput{
 		Username: "michimani210",
 		Expansions: fields.ExpansionList{
 			fields.ExpansionPinnedTweetID,
@@ -164,16 +162,17 @@ func main() {
 			fields.TweetFieldCreatedAt,
 		},
 	}
-	res, err := users.UserLookupByUsername(context.Background(), c, p)
+
+	u, err := userlookup.GetByUsername(context.Background(), c, p)
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
 
-	fmt.Println("ID: ", gotwi.StringValue(u.Data.ID))
-	fmt.Println("Name: ", gotwi.StringValue(u.Data.Name))
-	fmt.Println("Username: ", gotwi.StringValue(u.Data.Username))
-	fmt.Println("CreatedAt: ", u.Data.CreatedAt)
+	fmt.Println("ID:          ", gotwi.StringValue(u.Data.ID))
+	fmt.Println("Name:        ", gotwi.StringValue(u.Data.Name))
+	fmt.Println("Username:    ", gotwi.StringValue(u.Data.Username))
+	fmt.Println("CreatedAt:   ", u.Data.CreatedAt)
 	if u.Includes.Tweets != nil {
 		for _, t := range u.Includes.Tweets {
 			fmt.Println("PinnedTweet: ", gotwi.StringValue(t.Text))
@@ -189,23 +188,23 @@ go run main.go
 You will get the output like following.
 
 ```
-ID:  581780917
-Name:  michimani Lv.859
-Username:  michimani210
-CreatedAt:  2012-05-16 12:07:04 +0000 UTC
-PinnedTweet:  pinned tweet
+ID:           581780917
+Name:         michimani Lv.861
+Username:     michimani210
+CreatedAt:    2012-05-16 12:07:04 +0000 UTC
+PinnedTweet:  真偽をハッキリしたい西城秀樹「ブーリアン、ブーリアン」
 ```
 
 ### new client with access token
 
-If you already have a pre-generated access token (e.g. OAuth 2.0 Authorization Code with PKCE), you can use `NewGotwiClientWithAccessToken()` function to generate a Gotwi client.
+If you already have a pre-generated access token (e.g. OAuth 2.0 Authorization Code with PKCE), you can use `NewClientWithAccessToken()` function to generate a Gotwi client.
 
 ```go
-in := &gotwi.NewGotwiClientWithAccessTokenInput{
+in := &gotwi.NewClientWithAccessTokenInput{
 	AccessToken: "your-access-token",
 }
 
-c, err := gotwi.NewGotwiClientWithAccessToken(in)
+c, err := gotwi.NewClientWithAccessToken(in)
 if err != nil {
 	// error handling
 }
@@ -225,26 +224,26 @@ import (
 	"fmt"
 
 	"github.com/michimani/gotwi"
-	"github.com/michimani/gotwi/tweets"
-	"github.com/michimani/gotwi/tweets/types"
+	"github.com/michimani/gotwi/tweet/managetweet"
+	"github.com/michimani/gotwi/tweet/managetweet/types"
 )
 
 func main() {
-	in := &gotwi.NewGotwiClientInput{
+	in := &gotwi.NewClientInput{
 		AuthenticationMethod: gotwi.AuthenMethodOAuth1UserContext,
 		OAuthToken:           "your-twitter-acount-oauth-token",
 		OAuthTokenSecret:     "your-twitter-acount-oauth-token-secret",
 	}
 
-	c, err := gotwi.NewGotwiClient(in)
+	c, err := gotwi.NewClient(in)
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
 
-	p := &types.ManageTweetsPostParams{
+	p := &types.CreateInput{
 		Text: gotwi.String("This is a test tweet with poll."),
-		Poll: &types.ManageTweetsPostParamsPoll{
+		Poll: &types.CreateInputPoll{
 			DurationMinutes: gotwi.Int(5),
 			Options: []string{
 				"Cyan",
@@ -255,7 +254,7 @@ func main() {
 		},
 	}
 
-	res, err := tweets.ManageTweetsPost(context.Background(), c, p)
+	res, err := managetweet.Create(context.Background(), c, p)
 	if err != nil {
 		fmt.Println(err.Error())
 		return
@@ -277,11 +276,11 @@ You will get the output like following.
 
 ## Error handling
 
-Each function that calls the Twitter API (e.g. `TweetRetweetsRetweetedBy()`) may return an error for some reason.
+Each function that calls the Twitter API (e.g. `retweet.ListUsers()`) may return an error for some reason.
 If the error is caused by the Twitter API returning a status other than 2XX, you can check the details by doing the following.
 
 ```go
-res, err := tweets.TweetRetweetsRetweetedBy(context.Background(), c, p)
+res, err := retweet.ListUsers(context.Background(), c, p)
 if err != nil {
 	fmt.Println(err)
 
