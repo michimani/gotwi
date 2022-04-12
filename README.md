@@ -152,7 +152,7 @@ func main() {
 		return
 	}
 
-	p := &types.GetUserByUsernameInput{
+	p := &types.GetByUsernameInput{
 		Username: "michimani210",
 		Expansions: fields.ExpansionList{
 			fields.ExpansionPinnedTweetID,
@@ -164,7 +164,7 @@ func main() {
 			fields.TweetFieldCreatedAt,
 		},
 	}
-	res, err := users.GetUsersByUsername(context.Background(), c, p)
+	res, err := users.GetsByUsername(context.Background(), c, p)
 	if err != nil {
 		fmt.Println(err)
 		return

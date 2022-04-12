@@ -30,7 +30,7 @@ func onlyFollowsRecentActivity(c *gotwi.Client, userID string) {
 
 	paginationToken := "init"
 	for paginationToken != "" {
-		p := &types.FollowsFollowingGetParams{
+		p := &types.ListFollowingsInput{
 			ID:         userID,
 			MaxResults: 1000,
 		}
@@ -64,7 +64,7 @@ func onlyFollowsRecentActivity(c *gotwi.Client, userID string) {
 
 	paginationToken = "init"
 	for paginationToken != "" {
-		p := &types.FollowsFollowersParams{
+		p := &types.ListFollowersInput{
 			ID:         userID,
 			MaxResults: 1000,
 		}

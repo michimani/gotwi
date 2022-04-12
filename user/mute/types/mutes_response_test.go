@@ -4,20 +4,20 @@ import (
 	"testing"
 
 	"github.com/michimani/gotwi/resources"
-	"github.com/michimani/gotwi/users/types"
+	"github.com/michimani/gotwi/user/mute/types"
 	"github.com/stretchr/testify/assert"
 )
 
-func Test_BlocksBlockingGet_HasPartialError(t *testing.T) {
+func Test_MutesMutingGet_HasPartialError(t *testing.T) {
 	var errorTitle string = "test partical error"
 	cases := []struct {
 		name   string
-		res    *types.BlocksBlockingGetResponse
+		res    *types.ListsOutput
 		expect bool
 	}{
 		{
 			name: "has partical error",
-			res: &types.BlocksBlockingGetResponse{
+			res: &types.ListsOutput{
 				Errors: []resources.PartialError{
 					{Title: &errorTitle},
 				}},
@@ -25,13 +25,13 @@ func Test_BlocksBlockingGet_HasPartialError(t *testing.T) {
 		},
 		{
 			name: "has no partical error",
-			res: &types.BlocksBlockingGetResponse{
+			res: &types.ListsOutput{
 				Errors: []resources.PartialError{}},
 			expect: false,
 		},
 		{
 			name: "partical error is nil",
-			res: &types.BlocksBlockingGetResponse{
+			res: &types.ListsOutput{
 				Errors: []resources.PartialError{}},
 			expect: false,
 		},
@@ -45,24 +45,24 @@ func Test_BlocksBlockingGet_HasPartialError(t *testing.T) {
 	}
 }
 
-func Test_BlocksBlockingPostResponse_HasPartialError(t *testing.T) {
+func Test_CreateOutput_HasPartialError(t *testing.T) {
 	cases := []struct {
 		name   string
-		res    *types.BlocksBlockingPostResponse
+		res    *types.CreateOutput
 		expect bool
 	}{
 		{
 			name:   "initial struct",
-			res:    &types.BlocksBlockingPostResponse{},
+			res:    &types.CreateOutput{},
 			expect: false,
 		},
 		{
 			name: "has data",
-			res: &types.BlocksBlockingPostResponse{
+			res: &types.CreateOutput{
 				Data: struct {
-					Blocking bool "json:\"blocking\""
+					Muting bool "json:\"muting\""
 				}{
-					Blocking: false,
+					Muting: false,
 				},
 			},
 			expect: false,
@@ -77,24 +77,24 @@ func Test_BlocksBlockingPostResponse_HasPartialError(t *testing.T) {
 	}
 }
 
-func Test_BlocksBlockingDeleteResponse_HasPartialError(t *testing.T) {
+func Test_DeleteOutput_HasPartialError(t *testing.T) {
 	cases := []struct {
 		name   string
-		res    *types.BlocksBlockingDeleteResponse
+		res    *types.DeleteOutput
 		expect bool
 	}{
 		{
 			name:   "initial struct",
-			res:    &types.BlocksBlockingDeleteResponse{},
+			res:    &types.DeleteOutput{},
 			expect: false,
 		},
 		{
 			name: "has data",
-			res: &types.BlocksBlockingDeleteResponse{
+			res: &types.DeleteOutput{
 				Data: struct {
-					Blocking bool "json:\"blocking\""
+					Muting bool "json:\"muting\""
 				}{
-					Blocking: false,
+					Muting: false,
 				},
 			},
 			expect: false,

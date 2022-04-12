@@ -13,7 +13,7 @@ import (
 
 type BlocksMaxResults int
 
-type BlocksBlockingGetParams struct {
+type ListInput struct {
 	accessToken string
 
 	// Path parameter
@@ -27,7 +27,7 @@ type BlocksBlockingGetParams struct {
 	UserFields      fields.UserFieldList
 }
 
-var BlocksBlockingGetQueryParams = map[string]struct{}{
+var listQueryParameters = map[string]struct{}{
 	"max_results":      {},
 	"pagination_token": {},
 	"expansions":       {},
@@ -43,15 +43,15 @@ func (m BlocksMaxResults) String() string {
 	return strconv.Itoa(int(m))
 }
 
-func (p *BlocksBlockingGetParams) SetAccessToken(token string) {
+func (p *ListInput) SetAccessToken(token string) {
 	p.accessToken = token
 }
 
-func (p *BlocksBlockingGetParams) AccessToken() string {
+func (p *ListInput) AccessToken() string {
 	return p.accessToken
 }
 
-func (p *BlocksBlockingGetParams) ResolveEndpoint(endpointBase string) string {
+func (p *ListInput) ResolveEndpoint(endpointBase string) string {
 	if p.ID == "" {
 		return ""
 	}
@@ -61,18 +61,18 @@ func (p *BlocksBlockingGetParams) ResolveEndpoint(endpointBase string) string {
 
 	pm := p.ParameterMap()
 	if len(pm) > 0 {
-		qs := util.QueryString(pm, BlocksBlockingGetQueryParams)
+		qs := util.QueryString(pm, listQueryParameters)
 		endpoint += "?" + qs
 	}
 
 	return endpoint
 }
 
-func (p *BlocksBlockingGetParams) Body() (io.Reader, error) {
+func (p *ListInput) Body() (io.Reader, error) {
 	return nil, nil
 }
 
-func (p *BlocksBlockingGetParams) ParameterMap() map[string]string {
+func (p *ListInput) ParameterMap() map[string]string {
 	m := map[string]string{}
 
 	if p.MaxResults.Valid() {
@@ -88,25 +88,25 @@ func (p *BlocksBlockingGetParams) ParameterMap() map[string]string {
 	return m
 }
 
-type BlocksBlockingPostParams struct {
+type CreateInput struct {
 	accessToken string
 
 	// Path parameter
 	ID string `json:"-"` // The authenticated user ID
 
 	// JSON body parameter
-	TargetUserID *string `json:"target_user_id,omitempty"`
+	TargetID string `json:"target_user_id,omitempty"` // required
 }
 
-func (p *BlocksBlockingPostParams) SetAccessToken(token string) {
+func (p *CreateInput) SetAccessToken(token string) {
 	p.accessToken = token
 }
 
-func (p *BlocksBlockingPostParams) AccessToken() string {
+func (p *CreateInput) AccessToken() string {
 	return p.accessToken
 }
 
-func (p *BlocksBlockingPostParams) ResolveEndpoint(endpointBase string) string {
+func (p *CreateInput) ResolveEndpoint(endpointBase string) string {
 	if p.ID == "" {
 		return ""
 	}
@@ -117,7 +117,7 @@ func (p *BlocksBlockingPostParams) ResolveEndpoint(endpointBase string) string {
 	return endpoint
 }
 
-func (p *BlocksBlockingPostParams) Body() (io.Reader, error) {
+func (p *CreateInput) Body() (io.Reader, error) {
 	json, err := json.Marshal(p)
 	if err != nil {
 		return nil, err
@@ -126,43 +126,43 @@ func (p *BlocksBlockingPostParams) Body() (io.Reader, error) {
 	return strings.NewReader(string(json)), nil
 }
 
-func (p *BlocksBlockingPostParams) ParameterMap() map[string]string {
+func (p *CreateInput) ParameterMap() map[string]string {
 	return map[string]string{}
 }
 
-type BlocksBlockingDeleteParams struct {
+type DeleteInput struct {
 	accessToken string
 
 	// Path parameters
 	SourceUserID string // The authenticated user ID
-	TargetUserID string // The user ID for unfollow
+	TargetID     string // The user ID for unfollow
 }
 
-func (p *BlocksBlockingDeleteParams) SetAccessToken(token string) {
+func (p *DeleteInput) SetAccessToken(token string) {
 	p.accessToken = token
 }
 
-func (p *BlocksBlockingDeleteParams) AccessToken() string {
+func (p *DeleteInput) AccessToken() string {
 	return p.accessToken
 }
 
-func (p *BlocksBlockingDeleteParams) ResolveEndpoint(endpointBase string) string {
-	if p.SourceUserID == "" || p.TargetUserID == "" {
+func (p *DeleteInput) ResolveEndpoint(endpointBase string) string {
+	if p.SourceUserID == "" || p.TargetID == "" {
 		return ""
 	}
 
 	escapedSID := url.QueryEscape(p.SourceUserID)
 	endpoint := strings.Replace(endpointBase, ":source_user_id", escapedSID, 1)
-	escapedTID := url.QueryEscape(p.TargetUserID)
+	escapedTID := url.QueryEscape(p.TargetID)
 	endpoint = strings.Replace(endpoint, ":target_user_id", escapedTID, 1)
 
 	return endpoint
 }
 
-func (p *BlocksBlockingDeleteParams) Body() (io.Reader, error) {
+func (p *DeleteInput) Body() (io.Reader, error) {
 	return nil, nil
 }
 
-func (p *BlocksBlockingDeleteParams) ParameterMap() map[string]string {
+func (p *DeleteInput) ParameterMap() map[string]string {
 	return map[string]string{}
 }

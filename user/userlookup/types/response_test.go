@@ -4,7 +4,7 @@ import (
 	"testing"
 
 	"github.com/michimani/gotwi/resources"
-	"github.com/michimani/gotwi/users/types"
+	"github.com/michimani/gotwi/user/userlookup/types"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -12,12 +12,12 @@ func Test_UserLookup_HasPartialError(t *testing.T) {
 	var errorTitle string = "test partical error"
 	cases := []struct {
 		name   string
-		res    *types.ListUsersOutput
+		res    *types.ListOutput
 		expect bool
 	}{
 		{
 			name: "has partical error",
-			res: &types.ListUsersOutput{
+			res: &types.ListOutput{
 				Errors: []resources.PartialError{
 					{Title: &errorTitle},
 				}},
@@ -25,13 +25,13 @@ func Test_UserLookup_HasPartialError(t *testing.T) {
 		},
 		{
 			name: "has no partical error",
-			res: &types.ListUsersOutput{
+			res: &types.ListOutput{
 				Errors: []resources.PartialError{}},
 			expect: false,
 		},
 		{
 			name: "partical error is nil",
-			res: &types.ListUsersOutput{
+			res: &types.ListOutput{
 				Errors: []resources.PartialError{}},
 			expect: false,
 		},
@@ -49,12 +49,12 @@ func Test_UserLookupID_HasPartialError(t *testing.T) {
 	var errorTitle string = "test partical error"
 	cases := []struct {
 		name   string
-		res    *types.GetUserOutput
+		res    *types.GetOutput
 		expect bool
 	}{
 		{
 			name: "has partical error",
-			res: &types.GetUserOutput{
+			res: &types.GetOutput{
 				Errors: []resources.PartialError{
 					{Title: &errorTitle},
 				}},
@@ -62,13 +62,13 @@ func Test_UserLookupID_HasPartialError(t *testing.T) {
 		},
 		{
 			name: "has no partical error",
-			res: &types.GetUserOutput{
+			res: &types.GetOutput{
 				Errors: []resources.PartialError{}},
 			expect: false,
 		},
 		{
 			name: "partical error is nil",
-			res: &types.GetUserOutput{
+			res: &types.GetOutput{
 				Errors: []resources.PartialError{}},
 			expect: false,
 		},
@@ -86,12 +86,12 @@ func Test_UserLookupBy_HasPartialError(t *testing.T) {
 	var errorTitle string = "test partical error"
 	cases := []struct {
 		name   string
-		res    *types.ListUsersByUsernamesOutput
+		res    *types.ListByUsernamesOutput
 		expect bool
 	}{
 		{
 			name: "has partical error",
-			res: &types.ListUsersByUsernamesOutput{
+			res: &types.ListByUsernamesOutput{
 				Errors: []resources.PartialError{
 					{Title: &errorTitle},
 				}},
@@ -99,13 +99,13 @@ func Test_UserLookupBy_HasPartialError(t *testing.T) {
 		},
 		{
 			name: "has no partical error",
-			res: &types.ListUsersByUsernamesOutput{
+			res: &types.ListByUsernamesOutput{
 				Errors: []resources.PartialError{}},
 			expect: false,
 		},
 		{
 			name: "partical error is nil",
-			res: &types.ListUsersByUsernamesOutput{
+			res: &types.ListByUsernamesOutput{
 				Errors: []resources.PartialError{}},
 			expect: false,
 		},
@@ -123,12 +123,12 @@ func Test_UserLookupByUsername_HasPartialError(t *testing.T) {
 	var errorTitle string = "test partical error"
 	cases := []struct {
 		name   string
-		res    *types.GetUserByUsernameOutput
+		res    *types.GetByUsernameOutput
 		expect bool
 	}{
 		{
 			name: "has partical error",
-			res: &types.GetUserByUsernameOutput{
+			res: &types.GetByUsernameOutput{
 				Errors: []resources.PartialError{
 					{Title: &errorTitle},
 				}},
@@ -136,13 +136,13 @@ func Test_UserLookupByUsername_HasPartialError(t *testing.T) {
 		},
 		{
 			name: "has no partical error",
-			res: &types.GetUserByUsernameOutput{
+			res: &types.GetByUsernameOutput{
 				Errors: []resources.PartialError{}},
 			expect: false,
 		},
 		{
 			name: "partical error is nil",
-			res: &types.GetUserByUsernameOutput{
+			res: &types.GetByUsernameOutput{
 				Errors: []resources.PartialError{}},
 			expect: false,
 		},

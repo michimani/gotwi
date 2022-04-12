@@ -6,7 +6,7 @@ import (
 	"testing"
 
 	"github.com/michimani/gotwi/fields"
-	"github.com/michimani/gotwi/users/types"
+	"github.com/michimani/gotwi/user/mute/types"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -82,7 +82,7 @@ func Test_MutesMaxResults_String(t *testing.T) {
 	}
 }
 
-func Test_ListMutedUsersInput_SetAccessToken(t *testing.T) {
+func Test_ListsInput_SetAccessToken(t *testing.T) {
 	cases := []struct {
 		name   string
 		token  string
@@ -102,29 +102,29 @@ func Test_ListMutedUsersInput_SetAccessToken(t *testing.T) {
 
 	for _, c := range cases {
 		t.Run(c.name, func(tt *testing.T) {
-			p := &types.ListMutedUsersInput{}
+			p := &types.ListsInput{}
 			p.SetAccessToken(c.token)
 			assert.Equal(tt, c.expect, p.AccessToken())
 		})
 	}
 }
 
-func Test_ListMutedUsersInput_ResolveEndpoint(t *testing.T) {
+func Test_ListsInput_ResolveEndpoint(t *testing.T) {
 	const endpointRoot = "test/endpoint/"
 	const endpointBase = "test/endpoint/:id"
 	cases := []struct {
 		name   string
-		params *types.ListMutedUsersInput
+		params *types.ListsInput
 		expect string
 	}{
 		{
 			name:   "normal: only required parameter",
-			params: &types.ListMutedUsersInput{ID: "test-id"},
+			params: &types.ListsInput{ID: "test-id"},
 			expect: endpointRoot + "test-id",
 		},
 		{
 			name: "normal: with specific max_result",
-			params: &types.ListMutedUsersInput{
+			params: &types.ListsInput{
 				ID:         "test-id",
 				MaxResults: 111,
 			},
@@ -132,7 +132,7 @@ func Test_ListMutedUsersInput_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "normal: with pagination_token",
-			params: &types.ListMutedUsersInput{
+			params: &types.ListsInput{
 				ID:              "test-id",
 				PaginationToken: "p-token",
 			},
@@ -140,7 +140,7 @@ func Test_ListMutedUsersInput_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "normal: with expansions",
-			params: &types.ListMutedUsersInput{
+			params: &types.ListsInput{
 				ID:         "test-id",
 				Expansions: fields.ExpansionList{"ex1", "ex2"},
 			},
@@ -148,7 +148,7 @@ func Test_ListMutedUsersInput_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "normal: with tweets.fields",
-			params: &types.ListMutedUsersInput{
+			params: &types.ListsInput{
 				ID:          "test-id",
 				TweetFields: fields.TweetFieldList{"tf1", "tf2"},
 			},
@@ -156,7 +156,7 @@ func Test_ListMutedUsersInput_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "normal: with users.fields",
-			params: &types.ListMutedUsersInput{
+			params: &types.ListsInput{
 				ID:         "test-id",
 				UserFields: fields.UserFieldList{"uf1", "uf2"},
 			},
@@ -164,7 +164,7 @@ func Test_ListMutedUsersInput_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "normal: all query parameters",
-			params: &types.ListMutedUsersInput{
+			params: &types.ListsInput{
 				ID:              "test-id",
 				MaxResults:      111,
 				PaginationToken: "p-token",
@@ -176,7 +176,7 @@ func Test_ListMutedUsersInput_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "normal: has no required parameter",
-			params: &types.ListMutedUsersInput{
+			params: &types.ListsInput{
 				Expansions:  fields.ExpansionList{"ex"},
 				UserFields:  fields.UserFieldList{"uf"},
 				TweetFields: fields.TweetFieldList{"tf"},
@@ -193,18 +193,18 @@ func Test_ListMutedUsersInput_ResolveEndpoint(t *testing.T) {
 	}
 }
 
-func Test_ListMutedUsersInput_Body(t *testing.T) {
+func Test_ListsInput_Body(t *testing.T) {
 	cases := []struct {
 		name   string
-		params *types.ListMutedUsersInput
+		params *types.ListsInput
 	}{
 		{
 			name:   "empty params",
-			params: &types.ListMutedUsersInput{},
+			params: &types.ListsInput{},
 		},
 		{
 			name:   "some params",
-			params: &types.ListMutedUsersInput{ID: "id"},
+			params: &types.ListsInput{ID: "id"},
 		},
 	}
 
@@ -217,7 +217,7 @@ func Test_ListMutedUsersInput_Body(t *testing.T) {
 	}
 }
 
-func Test_CreateMutedUserInput_SetAccessToken(t *testing.T) {
+func Test_CreateInput_SetAccessToken(t *testing.T) {
 	cases := []struct {
 		name   string
 		token  string
@@ -237,38 +237,38 @@ func Test_CreateMutedUserInput_SetAccessToken(t *testing.T) {
 
 	for _, c := range cases {
 		t.Run(c.name, func(tt *testing.T) {
-			p := &types.CreateMutedUserInput{}
+			p := &types.CreateInput{}
 			p.SetAccessToken(c.token)
 			assert.Equal(tt, c.expect, p.AccessToken())
 		})
 	}
 }
 
-func Test_CreateMutedUserInput_ResolveEndpoint(t *testing.T) {
+func Test_CreateInput_ResolveEndpoint(t *testing.T) {
 	const endpointRoot = "test/endpoint/"
 	const endpointBase = "test/endpoint/:id"
 	cases := []struct {
 		name   string
-		params *types.CreateMutedUserInput
+		params *types.CreateInput
 		expect string
 	}{
 		{
 			name: "ok",
-			params: &types.CreateMutedUserInput{
-				ID: "test-id", TargetUserID: "tid",
+			params: &types.CreateInput{
+				ID: "test-id", TargetID: "tid",
 			},
 			expect: endpointRoot + "test-id",
 		},
 		{
 			name: "ok: has no required parameter (ID)",
-			params: &types.CreateMutedUserInput{
-				TargetUserID: "tid",
+			params: &types.CreateInput{
+				TargetID: "tid",
 			},
 			expect: "",
 		},
 		{
-			name: "ok: has no required parameter (TargetUserID)",
-			params: &types.CreateMutedUserInput{
+			name: "ok: has no required parameter (TargetID)",
+			params: &types.CreateInput{
 				ID: "tid",
 			},
 			expect: "",
@@ -283,23 +283,23 @@ func Test_CreateMutedUserInput_ResolveEndpoint(t *testing.T) {
 	}
 }
 
-func Test_CreateMutedUserInput_Body(t *testing.T) {
+func Test_CreateInput_Body(t *testing.T) {
 	cases := []struct {
 		name   string
-		params *types.CreateMutedUserInput
+		params *types.CreateInput
 		expect io.Reader
 	}{
 		{
 			name: "ok: has both of path and json parameters",
-			params: &types.CreateMutedUserInput{
-				ID:           "test-id",
-				TargetUserID: "tid",
+			params: &types.CreateInput{
+				ID:       "test-id",
+				TargetID: "tid",
 			},
 			expect: strings.NewReader(`{"target_user_id":"tid"}`),
 		},
 		{
 			name:   "ok: has no json parameters",
-			params: &types.CreateMutedUserInput{ID: "id"},
+			params: &types.CreateInput{ID: "id"},
 			expect: strings.NewReader(`{}`),
 		},
 	}
@@ -313,20 +313,20 @@ func Test_CreateMutedUserInput_Body(t *testing.T) {
 	}
 }
 
-func Test_CreateMutedUserInput_ParameterMap(t *testing.T) {
+func Test_CreateInput_ParameterMap(t *testing.T) {
 	cases := []struct {
 		name   string
-		params *types.CreateMutedUserInput
+		params *types.CreateInput
 		expect map[string]string
 	}{
 		{
 			name:   "normal: has both of path and json parameters",
-			params: &types.CreateMutedUserInput{ID: "id", TargetUserID: "tid"},
+			params: &types.CreateInput{ID: "id", TargetID: "tid"},
 			expect: map[string]string{},
 		},
 		{
 			name:   "normal: has no parameter",
-			params: &types.CreateMutedUserInput{},
+			params: &types.CreateInput{},
 			expect: map[string]string{},
 		},
 	}
@@ -339,7 +339,7 @@ func Test_CreateMutedUserInput_ParameterMap(t *testing.T) {
 	}
 }
 
-func Test_DeleteMutedUserInput_SetAccessToken(t *testing.T) {
+func Test_DeleteInput_SetAccessToken(t *testing.T) {
 	cases := []struct {
 		name   string
 		token  string
@@ -359,40 +359,40 @@ func Test_DeleteMutedUserInput_SetAccessToken(t *testing.T) {
 
 	for _, c := range cases {
 		t.Run(c.name, func(tt *testing.T) {
-			p := &types.DeleteMutedUserInput{}
+			p := &types.DeleteInput{}
 			p.SetAccessToken(c.token)
 			assert.Equal(tt, c.expect, p.AccessToken())
 		})
 	}
 }
 
-func Test_DeleteMutedUserInput_ResolveEndpoint(t *testing.T) {
+func Test_DeleteInput_ResolveEndpoint(t *testing.T) {
 	const endpointRoot = "test/endpoint/"
 	const endpointBase = "test/endpoint/:source_user_id/:target_user_id"
 	cases := []struct {
 		name   string
-		params *types.DeleteMutedUserInput
+		params *types.DeleteInput
 		expect string
 	}{
 		{
 			name: "normal: only required parameter",
-			params: &types.DeleteMutedUserInput{
+			params: &types.DeleteInput{
 				SourceUserID: "sid",
-				TargetUserID: "tid",
+				TargetID:     "tid",
 			},
 			expect: endpointRoot + "sid" + "/" + "tid",
 		},
 		{
 			name: "normal: has no required parameter",
-			params: &types.DeleteMutedUserInput{
+			params: &types.DeleteInput{
 				SourceUserID: "sid",
 			},
 			expect: "",
 		},
 		{
 			name: "normal: has no required parameter",
-			params: &types.DeleteMutedUserInput{
-				TargetUserID: "tid",
+			params: &types.DeleteInput{
+				TargetID: "tid",
 			},
 			expect: "",
 		},
@@ -406,23 +406,23 @@ func Test_DeleteMutedUserInput_ResolveEndpoint(t *testing.T) {
 	}
 }
 
-func Test_DeleteMutedUserInput_Body(t *testing.T) {
+func Test_DeleteInput_Body(t *testing.T) {
 	cases := []struct {
 		name   string
-		params *types.DeleteMutedUserInput
+		params *types.DeleteInput
 		expect io.Reader
 	}{
 		{
 			name: "ok: has required parameters",
-			params: &types.DeleteMutedUserInput{
+			params: &types.DeleteInput{
 				SourceUserID: "sid",
-				TargetUserID: "tid",
+				TargetID:     "tid",
 			},
 			expect: nil,
 		},
 		{
 			name:   "ok: has no required parameters",
-			params: &types.DeleteMutedUserInput{},
+			params: &types.DeleteInput{},
 			expect: nil,
 		},
 	}
@@ -436,20 +436,20 @@ func Test_DeleteMutedUserInput_Body(t *testing.T) {
 	}
 }
 
-func Test_DeleteMutedUserInput_ParameterMap(t *testing.T) {
+func Test_DeleteInput_ParameterMap(t *testing.T) {
 	cases := []struct {
 		name   string
-		params *types.DeleteMutedUserInput
+		params *types.DeleteInput
 		expect map[string]string
 	}{
 		{
 			name:   "normal: has parameters",
-			params: &types.DeleteMutedUserInput{SourceUserID: "id", TargetUserID: "tid"},
+			params: &types.DeleteInput{SourceUserID: "id", TargetID: "tid"},
 			expect: map[string]string{},
 		},
 		{
 			name:   "normal: has no parameter",
-			params: &types.DeleteMutedUserInput{},
+			params: &types.DeleteInput{},
 			expect: map[string]string{},
 		},
 	}

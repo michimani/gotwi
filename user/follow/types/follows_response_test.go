@@ -4,7 +4,7 @@ import (
 	"testing"
 
 	"github.com/michimani/gotwi/resources"
-	"github.com/michimani/gotwi/users/types"
+	"github.com/michimani/gotwi/user/follow/types"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -12,12 +12,12 @@ func Test_FollowsFollowingGet_HasPartialError(t *testing.T) {
 	var errorTitle string = "test partical error"
 	cases := []struct {
 		name   string
-		res    *types.FollowsFollowingGetResponse
+		res    *types.ListFollowingsOutput
 		expect bool
 	}{
 		{
 			name: "has partical error",
-			res: &types.FollowsFollowingGetResponse{
+			res: &types.ListFollowingsOutput{
 				Errors: []resources.PartialError{
 					{Title: &errorTitle},
 				}},
@@ -25,13 +25,13 @@ func Test_FollowsFollowingGet_HasPartialError(t *testing.T) {
 		},
 		{
 			name: "has no partical error",
-			res: &types.FollowsFollowingGetResponse{
+			res: &types.ListFollowingsOutput{
 				Errors: []resources.PartialError{}},
 			expect: false,
 		},
 		{
 			name: "partical error is nil",
-			res: &types.FollowsFollowingGetResponse{
+			res: &types.ListFollowingsOutput{
 				Errors: nil},
 			expect: false,
 		},
@@ -49,12 +49,12 @@ func Test_FollowsFollowers_HasPartialError(t *testing.T) {
 	var errorTitle string = "test partical error"
 	cases := []struct {
 		name   string
-		res    *types.FollowsFollowersResponse
+		res    *types.ListFollowersOutput
 		expect bool
 	}{
 		{
 			name: "has partical error",
-			res: &types.FollowsFollowersResponse{
+			res: &types.ListFollowersOutput{
 				Errors: []resources.PartialError{
 					{Title: &errorTitle},
 				}},
@@ -62,13 +62,13 @@ func Test_FollowsFollowers_HasPartialError(t *testing.T) {
 		},
 		{
 			name: "has no partical error",
-			res: &types.FollowsFollowersResponse{
+			res: &types.ListFollowersOutput{
 				Errors: []resources.PartialError{}},
 			expect: false,
 		},
 		{
 			name: "partical error is nil",
-			res: &types.FollowsFollowersResponse{
+			res: &types.ListFollowersOutput{
 				Errors: nil},
 			expect: false,
 		},
@@ -82,20 +82,20 @@ func Test_FollowsFollowers_HasPartialError(t *testing.T) {
 	}
 }
 
-func Test_FollowsFollowingPostResponse_HasPartialError(t *testing.T) {
+func Test_CreateFollowingOutput_HasPartialError(t *testing.T) {
 	cases := []struct {
 		name   string
-		res    *types.FollowsFollowingPostResponse
+		res    *types.CreateFollowingOutput
 		expect bool
 	}{
 		{
 			name:   "initial struct",
-			res:    &types.FollowsFollowingPostResponse{},
+			res:    &types.CreateFollowingOutput{},
 			expect: false,
 		},
 		{
 			name: "has data",
-			res: &types.FollowsFollowingPostResponse{
+			res: &types.CreateFollowingOutput{
 				Data: struct {
 					Following     bool "json:\"following\""
 					PendingFollow bool "json:\"pending_follow\""
@@ -116,20 +116,20 @@ func Test_FollowsFollowingPostResponse_HasPartialError(t *testing.T) {
 	}
 }
 
-func Test_FollowsFollowingDeleteResponse_HasPartialError(t *testing.T) {
+func Test_DeleteFollowingOutput_HasPartialError(t *testing.T) {
 	cases := []struct {
 		name   string
-		res    *types.FollowsFollowingDeleteResponse
+		res    *types.DeleteFollowingOutput
 		expect bool
 	}{
 		{
 			name:   "initial struct",
-			res:    &types.FollowsFollowingDeleteResponse{},
+			res:    &types.DeleteFollowingOutput{},
 			expect: false,
 		},
 		{
 			name: "has data",
-			res: &types.FollowsFollowingDeleteResponse{
+			res: &types.DeleteFollowingOutput{
 				Data: struct {
 					Following bool "json:\"following\""
 				}{

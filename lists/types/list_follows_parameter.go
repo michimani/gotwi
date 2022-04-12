@@ -21,7 +21,7 @@ func (m ListFollowsFollowersMaxResults) String() string {
 	return strconv.Itoa(int(m))
 }
 
-type ListFollowsFollowersParams struct {
+type ListListFollowersInput struct {
 	accessToken string
 
 	// Path parameter
@@ -43,15 +43,15 @@ var ListFollowsFollowersQueryParams = map[string]struct{}{
 	"user.fields":      {},
 }
 
-func (p *ListFollowsFollowersParams) SetAccessToken(token string) {
+func (p *ListListFollowersInput) SetAccessToken(token string) {
 	p.accessToken = token
 }
 
-func (p *ListFollowsFollowersParams) AccessToken() string {
+func (p *ListListFollowersInput) AccessToken() string {
 	return p.accessToken
 }
 
-func (p *ListFollowsFollowersParams) ResolveEndpoint(endpointBase string) string {
+func (p *ListListFollowersInput) ResolveEndpoint(endpointBase string) string {
 	if p.ID == "" {
 		return ""
 	}
@@ -68,11 +68,11 @@ func (p *ListFollowsFollowersParams) ResolveEndpoint(endpointBase string) string
 	return endpoint
 }
 
-func (p *ListFollowsFollowersParams) Body() (io.Reader, error) {
+func (p *ListListFollowersInput) Body() (io.Reader, error) {
 	return nil, nil
 }
 
-func (p *ListFollowsFollowersParams) ParameterMap() map[string]string {
+func (p *ListListFollowersInput) ParameterMap() map[string]string {
 	m := map[string]string{}
 
 	if p.MaxResults.Valid() {

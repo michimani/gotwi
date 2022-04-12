@@ -5,9 +5,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/michimani/gotwi"
 	"github.com/michimani/gotwi/fields"
-	"github.com/michimani/gotwi/users/types"
+	"github.com/michimani/gotwi/user/block/types"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -83,7 +82,7 @@ func Test_BlocksMaxResults_String(t *testing.T) {
 	}
 }
 
-func Test_BlocksBlockingGetParams_SetAccessToken(t *testing.T) {
+func Test_ListInput_SetAccessToken(t *testing.T) {
 	cases := []struct {
 		name   string
 		token  string
@@ -103,29 +102,29 @@ func Test_BlocksBlockingGetParams_SetAccessToken(t *testing.T) {
 
 	for _, c := range cases {
 		t.Run(c.name, func(tt *testing.T) {
-			p := &types.BlocksBlockingGetParams{}
+			p := &types.ListInput{}
 			p.SetAccessToken(c.token)
 			assert.Equal(tt, c.expect, p.AccessToken())
 		})
 	}
 }
 
-func Test_BlocksBlockingGetParams_ResolveEndpoint(t *testing.T) {
+func Test_ListInput_ResolveEndpoint(t *testing.T) {
 	const endpointRoot = "test/endpoint/"
 	const endpointBase = "test/endpoint/:id"
 	cases := []struct {
 		name   string
-		params *types.BlocksBlockingGetParams
+		params *types.ListInput
 		expect string
 	}{
 		{
 			name:   "normal: only required parameter",
-			params: &types.BlocksBlockingGetParams{ID: "test-id"},
+			params: &types.ListInput{ID: "test-id"},
 			expect: endpointRoot + "test-id",
 		},
 		{
 			name: "normal: with specific max_result",
-			params: &types.BlocksBlockingGetParams{
+			params: &types.ListInput{
 				ID:         "test-id",
 				MaxResults: 111,
 			},
@@ -133,7 +132,7 @@ func Test_BlocksBlockingGetParams_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "normal: with pagination_token",
-			params: &types.BlocksBlockingGetParams{
+			params: &types.ListInput{
 				ID:              "test-id",
 				PaginationToken: "p-token",
 			},
@@ -141,7 +140,7 @@ func Test_BlocksBlockingGetParams_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "normal: with expansions",
-			params: &types.BlocksBlockingGetParams{
+			params: &types.ListInput{
 				ID:         "test-id",
 				Expansions: fields.ExpansionList{"ex1", "ex2"},
 			},
@@ -149,7 +148,7 @@ func Test_BlocksBlockingGetParams_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "normal: with tweets.fields",
-			params: &types.BlocksBlockingGetParams{
+			params: &types.ListInput{
 				ID:          "test-id",
 				TweetFields: fields.TweetFieldList{"tf1", "tf2"},
 			},
@@ -157,7 +156,7 @@ func Test_BlocksBlockingGetParams_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "normal: with users.fields",
-			params: &types.BlocksBlockingGetParams{
+			params: &types.ListInput{
 				ID:         "test-id",
 				UserFields: fields.UserFieldList{"uf1", "uf2"},
 			},
@@ -165,7 +164,7 @@ func Test_BlocksBlockingGetParams_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "normal: all query parameters",
-			params: &types.BlocksBlockingGetParams{
+			params: &types.ListInput{
 				ID:              "test-id",
 				MaxResults:      111,
 				PaginationToken: "p-token",
@@ -177,7 +176,7 @@ func Test_BlocksBlockingGetParams_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "normal: has no required parameter",
-			params: &types.BlocksBlockingGetParams{
+			params: &types.ListInput{
 				Expansions:  fields.ExpansionList{"ex"},
 				UserFields:  fields.UserFieldList{"uf"},
 				TweetFields: fields.TweetFieldList{"tf"},
@@ -194,18 +193,18 @@ func Test_BlocksBlockingGetParams_ResolveEndpoint(t *testing.T) {
 	}
 }
 
-func Test_BlocksBlockingGetParams_Body(t *testing.T) {
+func Test_ListInput_Body(t *testing.T) {
 	cases := []struct {
 		name   string
-		params *types.BlocksBlockingGetParams
+		params *types.ListInput
 	}{
 		{
 			name:   "empty params",
-			params: &types.BlocksBlockingGetParams{},
+			params: &types.ListInput{},
 		},
 		{
 			name:   "some params",
-			params: &types.BlocksBlockingGetParams{ID: "id"},
+			params: &types.ListInput{ID: "id"},
 		},
 	}
 
@@ -218,7 +217,7 @@ func Test_BlocksBlockingGetParams_Body(t *testing.T) {
 	}
 }
 
-func Test_BlocksBlockingPostParams_SetAccessToken(t *testing.T) {
+func Test_CreateInput_SetAccessToken(t *testing.T) {
 	cases := []struct {
 		name   string
 		token  string
@@ -238,30 +237,30 @@ func Test_BlocksBlockingPostParams_SetAccessToken(t *testing.T) {
 
 	for _, c := range cases {
 		t.Run(c.name, func(tt *testing.T) {
-			p := &types.BlocksBlockingPostParams{}
+			p := &types.CreateInput{}
 			p.SetAccessToken(c.token)
 			assert.Equal(tt, c.expect, p.AccessToken())
 		})
 	}
 }
 
-func Test_BlocksBlockingPostParams_ResolveEndpoint(t *testing.T) {
+func Test_CreateInput_ResolveEndpoint(t *testing.T) {
 	const endpointRoot = "test/endpoint/"
 	const endpointBase = "test/endpoint/:id"
 	cases := []struct {
 		name   string
-		params *types.BlocksBlockingPostParams
+		params *types.CreateInput
 		expect string
 	}{
 		{
 			name:   "normal: only required parameter",
-			params: &types.BlocksBlockingPostParams{ID: "test-id"},
+			params: &types.CreateInput{ID: "test-id"},
 			expect: endpointRoot + "test-id",
 		},
 		{
 			name: "normal: has no required parameter",
-			params: &types.BlocksBlockingPostParams{
-				TargetUserID: gotwi.String("tid"),
+			params: &types.CreateInput{
+				TargetID: "tid",
 			},
 			expect: "",
 		},
@@ -275,23 +274,23 @@ func Test_BlocksBlockingPostParams_ResolveEndpoint(t *testing.T) {
 	}
 }
 
-func Test_BlocksBlockingPostParams_Body(t *testing.T) {
+func Test_CreateInput_Body(t *testing.T) {
 	cases := []struct {
 		name   string
-		params *types.BlocksBlockingPostParams
+		params *types.CreateInput
 		expect io.Reader
 	}{
 		{
 			name: "ok: has both of path and json parameters",
-			params: &types.BlocksBlockingPostParams{
-				ID:           "test-id",
-				TargetUserID: gotwi.String("tid"),
+			params: &types.CreateInput{
+				ID:       "test-id",
+				TargetID: "tid",
 			},
 			expect: strings.NewReader(`{"target_user_id":"tid"}`),
 		},
 		{
 			name:   "ok: has no json parameters",
-			params: &types.BlocksBlockingPostParams{ID: "id"},
+			params: &types.CreateInput{ID: "id"},
 			expect: strings.NewReader(`{}`),
 		},
 	}
@@ -305,22 +304,22 @@ func Test_BlocksBlockingPostParams_Body(t *testing.T) {
 	}
 }
 
-func Test_BlocksBlockingPostParams_ParameterMap(t *testing.T) {
+func Test_CreateInput_ParameterMap(t *testing.T) {
 	cases := []struct {
 		name   string
-		params *types.BlocksBlockingPostParams
+		params *types.CreateInput
 		expect map[string]string
 	}{
 		{
 			name:   "normal: only required parameter",
-			params: &types.BlocksBlockingPostParams{ID: "test-id"},
+			params: &types.CreateInput{ID: "test-id"},
 			expect: map[string]string{},
 		},
 		{
 			name: "normal: has no required parameter",
-			params: &types.BlocksBlockingPostParams{
-				ID:           "tid",
-				TargetUserID: gotwi.String("tid"),
+			params: &types.CreateInput{
+				ID:       "tid",
+				TargetID: "tid",
 			},
 			expect: map[string]string{},
 		},
@@ -334,7 +333,7 @@ func Test_BlocksBlockingPostParams_ParameterMap(t *testing.T) {
 	}
 }
 
-func Test_BlocksBlockingDeleteParams_SetAccessToken(t *testing.T) {
+func Test_DeleteInput_SetAccessToken(t *testing.T) {
 	cases := []struct {
 		name   string
 		token  string
@@ -354,40 +353,40 @@ func Test_BlocksBlockingDeleteParams_SetAccessToken(t *testing.T) {
 
 	for _, c := range cases {
 		t.Run(c.name, func(tt *testing.T) {
-			p := &types.BlocksBlockingDeleteParams{}
+			p := &types.DeleteInput{}
 			p.SetAccessToken(c.token)
 			assert.Equal(tt, c.expect, p.AccessToken())
 		})
 	}
 }
 
-func Test_BlocksBlockingDeleteParams_ResolveEndpoint(t *testing.T) {
+func Test_DeleteInput_ResolveEndpoint(t *testing.T) {
 	const endpointRoot = "test/endpoint/"
 	const endpointBase = "test/endpoint/:source_user_id/:target_user_id"
 	cases := []struct {
 		name   string
-		params *types.BlocksBlockingDeleteParams
+		params *types.DeleteInput
 		expect string
 	}{
 		{
 			name: "normal: only required parameter",
-			params: &types.BlocksBlockingDeleteParams{
+			params: &types.DeleteInput{
 				SourceUserID: "sid",
-				TargetUserID: "tid",
+				TargetID:     "tid",
 			},
 			expect: endpointRoot + "sid" + "/" + "tid",
 		},
 		{
 			name: "normal: has no required parameter",
-			params: &types.BlocksBlockingDeleteParams{
+			params: &types.DeleteInput{
 				SourceUserID: "sid",
 			},
 			expect: "",
 		},
 		{
 			name: "normal: has no required parameter",
-			params: &types.BlocksBlockingDeleteParams{
-				TargetUserID: "tid",
+			params: &types.DeleteInput{
+				TargetID: "tid",
 			},
 			expect: "",
 		},
@@ -401,23 +400,23 @@ func Test_BlocksBlockingDeleteParams_ResolveEndpoint(t *testing.T) {
 	}
 }
 
-func Test_BlocksBlockingDeleteParams_Body(t *testing.T) {
+func Test_DeleteInput_Body(t *testing.T) {
 	cases := []struct {
 		name   string
-		params *types.BlocksBlockingDeleteParams
+		params *types.DeleteInput
 		expect io.Reader
 	}{
 		{
 			name: "ok: has required parameters",
-			params: &types.BlocksBlockingDeleteParams{
+			params: &types.DeleteInput{
 				SourceUserID: "sid",
-				TargetUserID: "tid",
+				TargetID:     "tid",
 			},
 			expect: nil,
 		},
 		{
 			name:   "ok: has no required parameters",
-			params: &types.BlocksBlockingDeleteParams{},
+			params: &types.DeleteInput{},
 			expect: nil,
 		},
 	}
@@ -431,20 +430,20 @@ func Test_BlocksBlockingDeleteParams_Body(t *testing.T) {
 	}
 }
 
-func Test_BlocksBlockingDeleteParams_ParameterMap(t *testing.T) {
+func Test_DeleteInput_ParameterMap(t *testing.T) {
 	cases := []struct {
 		name   string
-		params *types.BlocksBlockingDeleteParams
+		params *types.DeleteInput
 		expect map[string]string
 	}{
 		{
 			name:   "normal: only required parameter",
-			params: &types.BlocksBlockingDeleteParams{SourceUserID: "sid", TargetUserID: "tid"},
+			params: &types.DeleteInput{SourceUserID: "sid", TargetID: "tid"},
 			expect: map[string]string{},
 		},
 		{
 			name:   "normal: has no required parameter",
-			params: &types.BlocksBlockingDeleteParams{},
+			params: &types.DeleteInput{},
 			expect: map[string]string{},
 		},
 	}

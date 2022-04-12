@@ -2,7 +2,7 @@ package types
 
 import "github.com/michimani/gotwi/resources"
 
-type FollowsFollowingGetResponse struct {
+type ListFollowingsOutput struct {
 	Data     []resources.User         `json:"data"`
 	Meta     resources.PaginationMeta `json:"meta"`
 	Includes struct {
@@ -11,11 +11,11 @@ type FollowsFollowingGetResponse struct {
 	Errors []resources.PartialError `json:"errors"`
 }
 
-func (r *FollowsFollowingGetResponse) HasPartialError() bool {
+func (r *ListFollowingsOutput) HasPartialError() bool {
 	return !(r.Errors == nil || len(r.Errors) == 0)
 }
 
-type FollowsFollowersResponse struct {
+type ListFollowersOutput struct {
 	Data     []resources.User         `json:"data"`
 	Meta     resources.PaginationMeta `json:"meta"`
 	Includes struct {
@@ -24,27 +24,27 @@ type FollowsFollowersResponse struct {
 	Errors []resources.PartialError `json:"errors"`
 }
 
-func (r *FollowsFollowersResponse) HasPartialError() bool {
+func (r *ListFollowersOutput) HasPartialError() bool {
 	return !(r.Errors == nil || len(r.Errors) == 0)
 }
 
-type FollowsFollowingPostResponse struct {
+type CreateFollowingOutput struct {
 	Data struct {
 		Following     bool `json:"following"`
 		PendingFollow bool `json:"pending_follow"`
 	} `json:"data"`
 }
 
-func (r *FollowsFollowingPostResponse) HasPartialError() bool {
+func (r *CreateFollowingOutput) HasPartialError() bool {
 	return false
 }
 
-type FollowsFollowingDeleteResponse struct {
+type DeleteFollowingOutput struct {
 	Data struct {
 		Following bool `json:"following"`
 	} `json:"data"`
 }
 
-func (r *FollowsFollowingDeleteResponse) HasPartialError() bool {
+func (r *DeleteFollowingOutput) HasPartialError() bool {
 	return false
 }

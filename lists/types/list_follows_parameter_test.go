@@ -31,7 +31,7 @@ func Test_ListFollowsFollowers_SetAccessToken(t *testing.T) {
 
 	for _, c := range cases {
 		t.Run(c.name, func(tt *testing.T) {
-			p := &types.ListFollowsFollowersParams{}
+			p := &types.ListListFollowersInput{}
 			p.SetAccessToken(c.token)
 			assert.Equal(tt, c.expect, p.AccessToken())
 		})
@@ -44,19 +44,19 @@ func Test_ListFollowsFollowers_ResolveEndpoint(t *testing.T) {
 
 	cases := []struct {
 		name   string
-		params *types.ListFollowsFollowersParams
+		params *types.ListListFollowersInput
 		expect string
 	}{
 		{
 			name: "only required parameter",
-			params: &types.ListFollowsFollowersParams{
+			params: &types.ListListFollowersInput{
 				ID: "lid",
 			},
 			expect: endpointRoot + "lid",
 		},
 		{
 			name: "with expansions",
-			params: &types.ListFollowsFollowersParams{
+			params: &types.ListListFollowersInput{
 				ID:         "lid",
 				Expansions: fields.ExpansionList{"ex1", "ex2"},
 			},
@@ -64,7 +64,7 @@ func Test_ListFollowsFollowers_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "with tweets.fields",
-			params: &types.ListFollowsFollowersParams{
+			params: &types.ListListFollowersInput{
 				ID:          "lid",
 				TweetFields: fields.TweetFieldList{"tf1", "tf2"},
 			},
@@ -72,7 +72,7 @@ func Test_ListFollowsFollowers_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "with users.fields",
-			params: &types.ListFollowsFollowersParams{
+			params: &types.ListListFollowersInput{
 				ID:         "lid",
 				UserFields: fields.UserFieldList{"uf1", "uf2"},
 			},
@@ -80,7 +80,7 @@ func Test_ListFollowsFollowers_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "with max_results",
-			params: &types.ListFollowsFollowersParams{
+			params: &types.ListListFollowersInput{
 				ID:         "lid",
 				MaxResults: 10,
 			},
@@ -88,7 +88,7 @@ func Test_ListFollowsFollowers_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "with pagination_token",
-			params: &types.ListFollowsFollowersParams{
+			params: &types.ListListFollowersInput{
 				ID:              "lid",
 				PaginationToken: "ptoken",
 			},
@@ -96,7 +96,7 @@ func Test_ListFollowsFollowers_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "all query parameters",
-			params: &types.ListFollowsFollowersParams{
+			params: &types.ListListFollowersInput{
 				Expansions:      fields.ExpansionList{"ex"},
 				ID:              "lid",
 				TweetFields:     fields.TweetFieldList{"tf"},
@@ -108,7 +108,7 @@ func Test_ListFollowsFollowers_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "has no required parameter",
-			params: &types.ListFollowsFollowersParams{
+			params: &types.ListListFollowersInput{
 				Expansions:      fields.ExpansionList{"ex"},
 				UserFields:      fields.UserFieldList{"uf"},
 				TweetFields:     fields.TweetFieldList{"tf"},
@@ -130,15 +130,15 @@ func Test_ListFollowsFollowers_ResolveEndpoint(t *testing.T) {
 func Test_ListFollowsFollowers_Body(t *testing.T) {
 	cases := []struct {
 		name   string
-		params *types.ListFollowsFollowersParams
+		params *types.ListListFollowersInput
 	}{
 		{
 			name:   "empty params",
-			params: &types.ListFollowsFollowersParams{},
+			params: &types.ListListFollowersInput{},
 		},
 		{
 			name:   "some params",
-			params: &types.ListFollowsFollowersParams{ID: "sid"},
+			params: &types.ListListFollowersInput{ID: "sid"},
 		},
 	}
 

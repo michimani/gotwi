@@ -5,9 +5,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/michimani/gotwi"
 	"github.com/michimani/gotwi/fields"
-	"github.com/michimani/gotwi/users/types"
+	"github.com/michimani/gotwi/user/follow/types"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -83,7 +82,7 @@ func Test_FollowsMaxResults_String(t *testing.T) {
 	}
 }
 
-func Test_FollowsFollowingGetParams_SetAccessToken(t *testing.T) {
+func Test_ListFollowingsInput_SetAccessToken(t *testing.T) {
 	cases := []struct {
 		name   string
 		token  string
@@ -103,29 +102,29 @@ func Test_FollowsFollowingGetParams_SetAccessToken(t *testing.T) {
 
 	for _, c := range cases {
 		t.Run(c.name, func(tt *testing.T) {
-			p := &types.FollowsFollowingGetParams{}
+			p := &types.ListFollowingsInput{}
 			p.SetAccessToken(c.token)
 			assert.Equal(tt, c.expect, p.AccessToken())
 		})
 	}
 }
 
-func Test_FollowsFollowingGetParams_ResolveEndpoint(t *testing.T) {
+func Test_ListFollowingsInput_ResolveEndpoint(t *testing.T) {
 	const endpointRoot = "test/endpoint/"
 	const endpointBase = "test/endpoint/:id"
 	cases := []struct {
 		name   string
-		params *types.FollowsFollowingGetParams
+		params *types.ListFollowingsInput
 		expect string
 	}{
 		{
 			name:   "normal: only required parameter",
-			params: &types.FollowsFollowingGetParams{ID: "test-id"},
+			params: &types.ListFollowingsInput{ID: "test-id"},
 			expect: endpointRoot + "test-id",
 		},
 		{
 			name: "normal: with specific max_result",
-			params: &types.FollowsFollowingGetParams{
+			params: &types.ListFollowingsInput{
 				ID:         "test-id",
 				MaxResults: 111,
 			},
@@ -133,7 +132,7 @@ func Test_FollowsFollowingGetParams_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "normal: with pagination_token",
-			params: &types.FollowsFollowingGetParams{
+			params: &types.ListFollowingsInput{
 				ID:              "test-id",
 				PaginationToken: "p-token",
 			},
@@ -141,7 +140,7 @@ func Test_FollowsFollowingGetParams_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "normal: with expansions",
-			params: &types.FollowsFollowingGetParams{
+			params: &types.ListFollowingsInput{
 				ID:         "test-id",
 				Expansions: fields.ExpansionList{"ex1", "ex2"},
 			},
@@ -149,7 +148,7 @@ func Test_FollowsFollowingGetParams_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "normal: with tweets.fields",
-			params: &types.FollowsFollowingGetParams{
+			params: &types.ListFollowingsInput{
 				ID:          "test-id",
 				TweetFields: fields.TweetFieldList{"tf1", "tf2"},
 			},
@@ -157,7 +156,7 @@ func Test_FollowsFollowingGetParams_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "normal: with users.fields",
-			params: &types.FollowsFollowingGetParams{
+			params: &types.ListFollowingsInput{
 				ID:         "test-id",
 				UserFields: fields.UserFieldList{"uf1", "uf2"},
 			},
@@ -165,7 +164,7 @@ func Test_FollowsFollowingGetParams_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "normal: all query parameters",
-			params: &types.FollowsFollowingGetParams{
+			params: &types.ListFollowingsInput{
 				ID:              "test-id",
 				MaxResults:      111,
 				PaginationToken: "p-token",
@@ -177,7 +176,7 @@ func Test_FollowsFollowingGetParams_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "normal: has no required parameter",
-			params: &types.FollowsFollowingGetParams{
+			params: &types.ListFollowingsInput{
 				Expansions:  fields.ExpansionList{"ex"},
 				UserFields:  fields.UserFieldList{"uf"},
 				TweetFields: fields.TweetFieldList{"tf"},
@@ -194,18 +193,18 @@ func Test_FollowsFollowingGetParams_ResolveEndpoint(t *testing.T) {
 	}
 }
 
-func Test_FollowsFollowingGetParams_Body(t *testing.T) {
+func Test_ListFollowingsInput_Body(t *testing.T) {
 	cases := []struct {
 		name   string
-		params *types.FollowsFollowingGetParams
+		params *types.ListFollowingsInput
 	}{
 		{
 			name:   "empty params",
-			params: &types.FollowsFollowingGetParams{},
+			params: &types.ListFollowingsInput{},
 		},
 		{
 			name:   "some params",
-			params: &types.FollowsFollowingGetParams{ID: "id"},
+			params: &types.ListFollowingsInput{ID: "id"},
 		},
 	}
 
@@ -218,7 +217,7 @@ func Test_FollowsFollowingGetParams_Body(t *testing.T) {
 	}
 }
 
-func Test_FollowsFollowersParams_SetAccessToken(t *testing.T) {
+func Test_ListFollowersInput_SetAccessToken(t *testing.T) {
 	cases := []struct {
 		name   string
 		token  string
@@ -238,29 +237,29 @@ func Test_FollowsFollowersParams_SetAccessToken(t *testing.T) {
 
 	for _, c := range cases {
 		t.Run(c.name, func(tt *testing.T) {
-			p := &types.FollowsFollowersParams{}
+			p := &types.ListFollowersInput{}
 			p.SetAccessToken(c.token)
 			assert.Equal(tt, c.expect, p.AccessToken())
 		})
 	}
 }
 
-func Test_FollowsFollowersParams_ResolveEndpoint(t *testing.T) {
+func Test_ListFollowersInput_ResolveEndpoint(t *testing.T) {
 	const endpointRoot = "test/endpoint/"
 	const endpointBase = "test/endpoint/:id"
 	cases := []struct {
 		name   string
-		params *types.FollowsFollowersParams
+		params *types.ListFollowersInput
 		expect string
 	}{
 		{
 			name:   "normal: only required parameter",
-			params: &types.FollowsFollowersParams{ID: "test-id"},
+			params: &types.ListFollowersInput{ID: "test-id"},
 			expect: endpointRoot + "test-id",
 		},
 		{
 			name: "normal: with specific max_result",
-			params: &types.FollowsFollowersParams{
+			params: &types.ListFollowersInput{
 				ID:         "test-id",
 				MaxResults: 111,
 			},
@@ -268,7 +267,7 @@ func Test_FollowsFollowersParams_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "normal: with pagination_token",
-			params: &types.FollowsFollowersParams{
+			params: &types.ListFollowersInput{
 				ID:              "test-id",
 				PaginationToken: "p-token",
 			},
@@ -276,7 +275,7 @@ func Test_FollowsFollowersParams_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "normal: with expansions",
-			params: &types.FollowsFollowersParams{
+			params: &types.ListFollowersInput{
 				ID:         "test-id",
 				Expansions: fields.ExpansionList{"ex1", "ex2"},
 			},
@@ -284,7 +283,7 @@ func Test_FollowsFollowersParams_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "normal: with tweets.fields",
-			params: &types.FollowsFollowersParams{
+			params: &types.ListFollowersInput{
 				ID:          "test-id",
 				TweetFields: fields.TweetFieldList{"tf1", "tf2"},
 			},
@@ -292,7 +291,7 @@ func Test_FollowsFollowersParams_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "normal: with users.fields",
-			params: &types.FollowsFollowersParams{
+			params: &types.ListFollowersInput{
 				ID:         "test-id",
 				UserFields: fields.UserFieldList{"uf1", "uf2"},
 			},
@@ -300,7 +299,7 @@ func Test_FollowsFollowersParams_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "normal: all query parameters",
-			params: &types.FollowsFollowersParams{
+			params: &types.ListFollowersInput{
 				ID:              "test-id",
 				MaxResults:      111,
 				PaginationToken: "p-token",
@@ -312,7 +311,7 @@ func Test_FollowsFollowersParams_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "normal: has no required parameter",
-			params: &types.FollowsFollowersParams{
+			params: &types.ListFollowersInput{
 				Expansions:  fields.ExpansionList{"ex"},
 				UserFields:  fields.UserFieldList{"uf"},
 				TweetFields: fields.TweetFieldList{"tf"},
@@ -329,18 +328,18 @@ func Test_FollowsFollowersParams_ResolveEndpoint(t *testing.T) {
 	}
 }
 
-func Test_FollowsFollowersParams_Body(t *testing.T) {
+func Test_ListFollowersInput_Body(t *testing.T) {
 	cases := []struct {
 		name   string
-		params *types.FollowsFollowersParams
+		params *types.ListFollowersInput
 	}{
 		{
 			name:   "empty params",
-			params: &types.FollowsFollowersParams{},
+			params: &types.ListFollowersInput{},
 		},
 		{
 			name:   "some params",
-			params: &types.FollowsFollowersParams{ID: "id"},
+			params: &types.ListFollowersInput{ID: "id"},
 		},
 	}
 
@@ -353,7 +352,7 @@ func Test_FollowsFollowersParams_Body(t *testing.T) {
 	}
 }
 
-func Test_FollowsFollowingPostParams_SetAccessToken(t *testing.T) {
+func Test_CreateFollowingInput_SetAccessToken(t *testing.T) {
 	cases := []struct {
 		name   string
 		token  string
@@ -373,30 +372,30 @@ func Test_FollowsFollowingPostParams_SetAccessToken(t *testing.T) {
 
 	for _, c := range cases {
 		t.Run(c.name, func(tt *testing.T) {
-			p := &types.FollowsFollowingPostParams{}
+			p := &types.CreateFollowingInput{}
 			p.SetAccessToken(c.token)
 			assert.Equal(tt, c.expect, p.AccessToken())
 		})
 	}
 }
 
-func Test_FollowsFollowingPostParams_ResolveEndpoint(t *testing.T) {
+func Test_CreateFollowingInput_ResolveEndpoint(t *testing.T) {
 	const endpointRoot = "test/endpoint/"
 	const endpointBase = "test/endpoint/:id"
 	cases := []struct {
 		name   string
-		params *types.FollowsFollowingPostParams
+		params *types.CreateFollowingInput
 		expect string
 	}{
 		{
 			name:   "normal: only required parameter",
-			params: &types.FollowsFollowingPostParams{ID: "test-id"},
+			params: &types.CreateFollowingInput{ID: "test-id"},
 			expect: endpointRoot + "test-id",
 		},
 		{
 			name: "normal: has no required parameter",
-			params: &types.FollowsFollowingPostParams{
-				TargetUserID: gotwi.String("tid"),
+			params: &types.CreateFollowingInput{
+				TargetID: "tid",
 			},
 			expect: "",
 		},
@@ -410,23 +409,23 @@ func Test_FollowsFollowingPostParams_ResolveEndpoint(t *testing.T) {
 	}
 }
 
-func Test_FollowsFollowingPostParams_Body(t *testing.T) {
+func Test_CreateFollowingInput_Body(t *testing.T) {
 	cases := []struct {
 		name   string
-		params *types.FollowsFollowingPostParams
+		params *types.CreateFollowingInput
 		expect io.Reader
 	}{
 		{
 			name: "ok: has both of path and json parameters",
-			params: &types.FollowsFollowingPostParams{
-				ID:           "test-id",
-				TargetUserID: gotwi.String("tid"),
+			params: &types.CreateFollowingInput{
+				ID:       "test-id",
+				TargetID: "tid",
 			},
 			expect: strings.NewReader(`{"target_user_id":"tid"}`),
 		},
 		{
 			name:   "ok: has no json parameters",
-			params: &types.FollowsFollowingPostParams{ID: "id"},
+			params: &types.CreateFollowingInput{ID: "id"},
 			expect: strings.NewReader(`{}`),
 		},
 	}
@@ -440,20 +439,20 @@ func Test_FollowsFollowingPostParams_Body(t *testing.T) {
 	}
 }
 
-func Test_FollowsFollowingPostParams_ParameterMap(t *testing.T) {
+func Test_CreateFollowingInput_ParameterMap(t *testing.T) {
 	cases := []struct {
 		name   string
-		params *types.FollowsFollowingPostParams
+		params *types.CreateFollowingInput
 		expect map[string]string
 	}{
 		{
 			name:   "normal: has both of path and json parameters",
-			params: &types.FollowsFollowingPostParams{ID: "id", TargetUserID: gotwi.String("tid")},
+			params: &types.CreateFollowingInput{ID: "id", TargetID: "tid"},
 			expect: map[string]string{},
 		},
 		{
 			name:   "normal: has no parameter",
-			params: &types.FollowsFollowingPostParams{},
+			params: &types.CreateFollowingInput{},
 			expect: map[string]string{},
 		},
 	}
@@ -466,7 +465,7 @@ func Test_FollowsFollowingPostParams_ParameterMap(t *testing.T) {
 	}
 }
 
-func Test_FollowsFollowingDeleteParams_SetAccessToken(t *testing.T) {
+func Test_DeleteFollowingInput_SetAccessToken(t *testing.T) {
 	cases := []struct {
 		name   string
 		token  string
@@ -486,40 +485,40 @@ func Test_FollowsFollowingDeleteParams_SetAccessToken(t *testing.T) {
 
 	for _, c := range cases {
 		t.Run(c.name, func(tt *testing.T) {
-			p := &types.FollowsFollowingDeleteParams{}
+			p := &types.DeleteFollowingInput{}
 			p.SetAccessToken(c.token)
 			assert.Equal(tt, c.expect, p.AccessToken())
 		})
 	}
 }
 
-func Test_FollowsFollowingDeleteParams_ResolveEndpoint(t *testing.T) {
+func Test_DeleteFollowingInput_ResolveEndpoint(t *testing.T) {
 	const endpointRoot = "test/endpoint/"
 	const endpointBase = "test/endpoint/:source_user_id/:target_user_id"
 	cases := []struct {
 		name   string
-		params *types.FollowsFollowingDeleteParams
+		params *types.DeleteFollowingInput
 		expect string
 	}{
 		{
 			name: "normal: only required parameter",
-			params: &types.FollowsFollowingDeleteParams{
+			params: &types.DeleteFollowingInput{
 				SourceUserID: "sid",
-				TargetUserID: "tid",
+				TargetID:     "tid",
 			},
 			expect: endpointRoot + "sid" + "/" + "tid",
 		},
 		{
 			name: "normal: has no required parameter",
-			params: &types.FollowsFollowingDeleteParams{
+			params: &types.DeleteFollowingInput{
 				SourceUserID: "sid",
 			},
 			expect: "",
 		},
 		{
 			name: "normal: has no required parameter",
-			params: &types.FollowsFollowingDeleteParams{
-				TargetUserID: "tid",
+			params: &types.DeleteFollowingInput{
+				TargetID: "tid",
 			},
 			expect: "",
 		},
@@ -533,23 +532,23 @@ func Test_FollowsFollowingDeleteParams_ResolveEndpoint(t *testing.T) {
 	}
 }
 
-func Test_FollowsFollowingDeleteParams_Body(t *testing.T) {
+func Test_DeleteFollowingInput_Body(t *testing.T) {
 	cases := []struct {
 		name   string
-		params *types.FollowsFollowingDeleteParams
+		params *types.DeleteFollowingInput
 		expect io.Reader
 	}{
 		{
 			name: "ok: has required parameters",
-			params: &types.FollowsFollowingDeleteParams{
+			params: &types.DeleteFollowingInput{
 				SourceUserID: "sid",
-				TargetUserID: "tid",
+				TargetID:     "tid",
 			},
 			expect: nil,
 		},
 		{
 			name:   "ok: has no required parameters",
-			params: &types.FollowsFollowingDeleteParams{},
+			params: &types.DeleteFollowingInput{},
 			expect: nil,
 		},
 	}
@@ -563,20 +562,20 @@ func Test_FollowsFollowingDeleteParams_Body(t *testing.T) {
 	}
 }
 
-func Test_FollowsFollowingDeleteParams_ParameterMap(t *testing.T) {
+func Test_DeleteFollowingInput_ParameterMap(t *testing.T) {
 	cases := []struct {
 		name   string
-		params *types.FollowsFollowingDeleteParams
+		params *types.DeleteFollowingInput
 		expect map[string]string
 	}{
 		{
 			name:   "normal: has parameters",
-			params: &types.FollowsFollowingDeleteParams{SourceUserID: "id", TargetUserID: "tid"},
+			params: &types.DeleteFollowingInput{SourceUserID: "id", TargetID: "tid"},
 			expect: map[string]string{},
 		},
 		{
 			name:   "normal: has no parameter",
-			params: &types.FollowsFollowingDeleteParams{},
+			params: &types.DeleteFollowingInput{},
 			expect: map[string]string{},
 		},
 	}

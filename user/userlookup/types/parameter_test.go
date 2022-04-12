@@ -4,11 +4,11 @@ import (
 	"testing"
 
 	"github.com/michimani/gotwi/fields"
-	"github.com/michimani/gotwi/users/types"
+	"github.com/michimani/gotwi/user/userlookup/types"
 	"github.com/stretchr/testify/assert"
 )
 
-func Test_ListUsersInput_SetAccessToken(t *testing.T) {
+func Test_ListInput_SetAccessToken(t *testing.T) {
 	cases := []struct {
 		name   string
 		token  string
@@ -28,28 +28,28 @@ func Test_ListUsersInput_SetAccessToken(t *testing.T) {
 
 	for _, c := range cases {
 		t.Run(c.name, func(tt *testing.T) {
-			p := &types.ListUsersInput{}
+			p := &types.ListInput{}
 			p.SetAccessToken(c.token)
 			assert.Equal(tt, c.expect, p.AccessToken())
 		})
 	}
 }
 
-func Test_ListUsersInput_ResolveEndpoint(t *testing.T) {
+func Test_ListInput_ResolveEndpoint(t *testing.T) {
 	const endpointBase = "test/endpoint"
 	cases := []struct {
 		name   string
-		params *types.ListUsersInput
+		params *types.ListInput
 		expect string
 	}{
 		{
 			name:   "normal: only required parameter",
-			params: &types.ListUsersInput{IDs: []string{"test-id1", "test-id2"}},
+			params: &types.ListInput{IDs: []string{"test-id1", "test-id2"}},
 			expect: endpointBase + "?ids=test-id1%2Ctest-id2",
 		},
 		{
 			name: "normal: with expansions",
-			params: &types.ListUsersInput{
+			params: &types.ListInput{
 				IDs:        []string{"test-id"},
 				Expansions: fields.ExpansionList{"ex1", "ex2"},
 			},
@@ -57,7 +57,7 @@ func Test_ListUsersInput_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "normal: with tweets.fields",
-			params: &types.ListUsersInput{
+			params: &types.ListInput{
 				IDs:         []string{"test-id"},
 				TweetFields: fields.TweetFieldList{"tf1", "tf2"},
 			},
@@ -65,7 +65,7 @@ func Test_ListUsersInput_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "normal: with users.fields",
-			params: &types.ListUsersInput{
+			params: &types.ListInput{
 				IDs:        []string{"test-id"},
 				UserFields: fields.UserFieldList{"uf1", "uf2"},
 			},
@@ -73,7 +73,7 @@ func Test_ListUsersInput_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "normal: all query parameters",
-			params: &types.ListUsersInput{
+			params: &types.ListInput{
 				IDs:         []string{"test-id"},
 				Expansions:  fields.ExpansionList{"ex"},
 				UserFields:  fields.UserFieldList{"uf"},
@@ -83,7 +83,7 @@ func Test_ListUsersInput_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "normal: has no required parameter",
-			params: &types.ListUsersInput{
+			params: &types.ListInput{
 				IDs:         []string{},
 				Expansions:  fields.ExpansionList{"ex"},
 				UserFields:  fields.UserFieldList{"uf"},
@@ -101,18 +101,18 @@ func Test_ListUsersInput_ResolveEndpoint(t *testing.T) {
 	}
 }
 
-func Test_ListUsersInput_Body(t *testing.T) {
+func Test_ListInput_Body(t *testing.T) {
 	cases := []struct {
 		name   string
-		params *types.ListUsersInput
+		params *types.ListInput
 	}{
 		{
 			name:   "empty params",
-			params: &types.ListUsersInput{},
+			params: &types.ListInput{},
 		},
 		{
 			name:   "some params",
-			params: &types.ListUsersInput{IDs: []string{"id"}},
+			params: &types.ListInput{IDs: []string{"id"}},
 		},
 	}
 
@@ -125,7 +125,7 @@ func Test_ListUsersInput_Body(t *testing.T) {
 	}
 }
 
-func Test_GetUserInput_SetAccessToken(t *testing.T) {
+func Test_GetInput_SetAccessToken(t *testing.T) {
 	cases := []struct {
 		name   string
 		token  string
@@ -145,29 +145,29 @@ func Test_GetUserInput_SetAccessToken(t *testing.T) {
 
 	for _, c := range cases {
 		t.Run(c.name, func(tt *testing.T) {
-			p := &types.GetUserInput{}
+			p := &types.GetInput{}
 			p.SetAccessToken(c.token)
 			assert.Equal(tt, c.expect, p.AccessToken())
 		})
 	}
 }
 
-func Test_GetUserInput_ResolveEndpoint(t *testing.T) {
+func Test_GetInput_ResolveEndpoint(t *testing.T) {
 	const endpointRoot = "test/endpoint/"
 	const endpointBase = "test/endpoint/:id"
 	cases := []struct {
 		name   string
-		params *types.GetUserInput
+		params *types.GetInput
 		expect string
 	}{
 		{
 			name:   "normal: only required parameter",
-			params: &types.GetUserInput{ID: "test-id"},
+			params: &types.GetInput{ID: "test-id"},
 			expect: endpointRoot + "test-id",
 		},
 		{
 			name: "normal: with expansions",
-			params: &types.GetUserInput{
+			params: &types.GetInput{
 				ID:         "test-id",
 				Expansions: fields.ExpansionList{"ex1", "ex2"},
 			},
@@ -175,7 +175,7 @@ func Test_GetUserInput_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "normal: with tweets.fields",
-			params: &types.GetUserInput{
+			params: &types.GetInput{
 				ID:          "test-id",
 				TweetFields: fields.TweetFieldList{"tf1", "tf2"},
 			},
@@ -183,7 +183,7 @@ func Test_GetUserInput_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "normal: with users.fields",
-			params: &types.GetUserInput{
+			params: &types.GetInput{
 				ID:         "test-id",
 				UserFields: fields.UserFieldList{"uf1", "uf2"},
 			},
@@ -191,7 +191,7 @@ func Test_GetUserInput_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "normal: all query parameters",
-			params: &types.GetUserInput{
+			params: &types.GetInput{
 				ID:          "test-id",
 				Expansions:  fields.ExpansionList{"ex"},
 				UserFields:  fields.UserFieldList{"uf"},
@@ -201,7 +201,7 @@ func Test_GetUserInput_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "normal: has no required parameter",
-			params: &types.GetUserInput{
+			params: &types.GetInput{
 				Expansions:  fields.ExpansionList{"ex"},
 				UserFields:  fields.UserFieldList{"uf"},
 				TweetFields: fields.TweetFieldList{"tf"},
@@ -218,18 +218,18 @@ func Test_GetUserInput_ResolveEndpoint(t *testing.T) {
 	}
 }
 
-func Test_GetUserInput_Body(t *testing.T) {
+func Test_GetInput_Body(t *testing.T) {
 	cases := []struct {
 		name   string
-		params *types.GetUserInput
+		params *types.GetInput
 	}{
 		{
 			name:   "empty params",
-			params: &types.GetUserInput{},
+			params: &types.GetInput{},
 		},
 		{
 			name:   "some params",
-			params: &types.GetUserInput{ID: "id"},
+			params: &types.GetInput{ID: "id"},
 		},
 	}
 
@@ -242,7 +242,7 @@ func Test_GetUserInput_Body(t *testing.T) {
 	}
 }
 
-func Test_ListUsersByUsernamesInput_SetAccessToken(t *testing.T) {
+func Test_ListByUsernamesInput_SetAccessToken(t *testing.T) {
 	cases := []struct {
 		name   string
 		token  string
@@ -262,28 +262,28 @@ func Test_ListUsersByUsernamesInput_SetAccessToken(t *testing.T) {
 
 	for _, c := range cases {
 		t.Run(c.name, func(tt *testing.T) {
-			p := &types.ListUsersByUsernamesInput{}
+			p := &types.ListByUsernamesInput{}
 			p.SetAccessToken(c.token)
 			assert.Equal(tt, c.expect, p.AccessToken())
 		})
 	}
 }
 
-func Test_ListUsersByUsernamesInput_ResolveEndpoint(t *testing.T) {
+func Test_ListByUsernamesInput_ResolveEndpoint(t *testing.T) {
 	const endpointBase = "test/endpoint"
 	cases := []struct {
 		name   string
-		params *types.ListUsersByUsernamesInput
+		params *types.ListByUsernamesInput
 		expect string
 	}{
 		{
 			name:   "normal: only required parameter",
-			params: &types.ListUsersByUsernamesInput{Usernames: []string{"test-un1", "test-un2"}},
+			params: &types.ListByUsernamesInput{Usernames: []string{"test-un1", "test-un2"}},
 			expect: endpointBase + "?usernames=test-un1%2Ctest-un2",
 		},
 		{
 			name: "normal: with expansions",
-			params: &types.ListUsersByUsernamesInput{
+			params: &types.ListByUsernamesInput{
 				Usernames:  []string{"test-un"},
 				Expansions: fields.ExpansionList{"ex1", "ex2"},
 			},
@@ -291,7 +291,7 @@ func Test_ListUsersByUsernamesInput_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "normal: with tweets.fields",
-			params: &types.ListUsersByUsernamesInput{
+			params: &types.ListByUsernamesInput{
 				Usernames:   []string{"test-un"},
 				TweetFields: fields.TweetFieldList{"tf1", "tf2"},
 			},
@@ -299,7 +299,7 @@ func Test_ListUsersByUsernamesInput_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "normal: with users.fields",
-			params: &types.ListUsersByUsernamesInput{
+			params: &types.ListByUsernamesInput{
 				Usernames:  []string{"test-un"},
 				UserFields: fields.UserFieldList{"uf1", "uf2"},
 			},
@@ -307,7 +307,7 @@ func Test_ListUsersByUsernamesInput_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "normal: all query parameters",
-			params: &types.ListUsersByUsernamesInput{
+			params: &types.ListByUsernamesInput{
 				Usernames:   []string{"test-un"},
 				Expansions:  fields.ExpansionList{"ex"},
 				UserFields:  fields.UserFieldList{"uf"},
@@ -317,7 +317,7 @@ func Test_ListUsersByUsernamesInput_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "normal: has no required parameter",
-			params: &types.ListUsersByUsernamesInput{
+			params: &types.ListByUsernamesInput{
 				Usernames:   []string{},
 				Expansions:  fields.ExpansionList{"ex"},
 				UserFields:  fields.UserFieldList{"uf"},
@@ -335,18 +335,18 @@ func Test_ListUsersByUsernamesInput_ResolveEndpoint(t *testing.T) {
 	}
 }
 
-func Test_ListUsersByUsernamesInput_Body(t *testing.T) {
+func Test_ListByUsernamesInput_Body(t *testing.T) {
 	cases := []struct {
 		name   string
-		params *types.ListUsersByUsernamesInput
+		params *types.ListByUsernamesInput
 	}{
 		{
 			name:   "empty params",
-			params: &types.ListUsersByUsernamesInput{},
+			params: &types.ListByUsernamesInput{},
 		},
 		{
 			name:   "some params",
-			params: &types.ListUsersByUsernamesInput{Usernames: []string{"id"}},
+			params: &types.ListByUsernamesInput{Usernames: []string{"id"}},
 		},
 	}
 
@@ -359,7 +359,7 @@ func Test_ListUsersByUsernamesInput_Body(t *testing.T) {
 	}
 }
 
-func Test_GetUserByUsernameInput_SetAccessToken(t *testing.T) {
+func Test_GetByUsernameInput_SetAccessToken(t *testing.T) {
 	cases := []struct {
 		name   string
 		token  string
@@ -379,29 +379,29 @@ func Test_GetUserByUsernameInput_SetAccessToken(t *testing.T) {
 
 	for _, c := range cases {
 		t.Run(c.name, func(tt *testing.T) {
-			p := &types.GetUserByUsernameInput{}
+			p := &types.GetByUsernameInput{}
 			p.SetAccessToken(c.token)
 			assert.Equal(tt, c.expect, p.AccessToken())
 		})
 	}
 }
 
-func Test_GetUserByUsernameInput_ResolveEndpoint(t *testing.T) {
+func Test_GetByUsernameInput_ResolveEndpoint(t *testing.T) {
 	const endpointRoot = "test/endpoint/"
 	const endpointBase = "test/endpoint/:username"
 	cases := []struct {
 		name   string
-		params *types.GetUserByUsernameInput
+		params *types.GetByUsernameInput
 		expect string
 	}{
 		{
 			name:   "normal: only required parameter",
-			params: &types.GetUserByUsernameInput{Username: "test-un"},
+			params: &types.GetByUsernameInput{Username: "test-un"},
 			expect: endpointRoot + "test-un",
 		},
 		{
 			name: "normal: with expansions",
-			params: &types.GetUserByUsernameInput{
+			params: &types.GetByUsernameInput{
 				Username:   "test-un",
 				Expansions: fields.ExpansionList{"ex1", "ex2"},
 			},
@@ -409,7 +409,7 @@ func Test_GetUserByUsernameInput_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "normal: with tweets.fields",
-			params: &types.GetUserByUsernameInput{
+			params: &types.GetByUsernameInput{
 				Username:    "test-un",
 				TweetFields: fields.TweetFieldList{"tf1", "tf2"},
 			},
@@ -417,7 +417,7 @@ func Test_GetUserByUsernameInput_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "normal: with users.fields",
-			params: &types.GetUserByUsernameInput{
+			params: &types.GetByUsernameInput{
 				Username:   "test-un",
 				UserFields: fields.UserFieldList{"uf1", "uf2"},
 			},
@@ -425,7 +425,7 @@ func Test_GetUserByUsernameInput_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "normal: all query parameters",
-			params: &types.GetUserByUsernameInput{
+			params: &types.GetByUsernameInput{
 				Username:    "test-un",
 				Expansions:  fields.ExpansionList{"ex"},
 				UserFields:  fields.UserFieldList{"uf"},
@@ -435,7 +435,7 @@ func Test_GetUserByUsernameInput_ResolveEndpoint(t *testing.T) {
 		},
 		{
 			name: "normal: has no required parameter",
-			params: &types.GetUserByUsernameInput{
+			params: &types.GetByUsernameInput{
 				Expansions:  fields.ExpansionList{"ex"},
 				UserFields:  fields.UserFieldList{"uf"},
 				TweetFields: fields.TweetFieldList{"tf"},
@@ -452,18 +452,18 @@ func Test_GetUserByUsernameInput_ResolveEndpoint(t *testing.T) {
 	}
 }
 
-func Test_GetUserByUsernameInput_Body(t *testing.T) {
+func Test_GetByUsernameInput_Body(t *testing.T) {
 	cases := []struct {
 		name   string
-		params *types.GetUserByUsernameInput
+		params *types.GetByUsernameInput
 	}{
 		{
 			name:   "empty params",
-			params: &types.GetUserByUsernameInput{},
+			params: &types.GetByUsernameInput{},
 		},
 		{
 			name:   "some params",
-			params: &types.GetUserByUsernameInput{Username: "id"},
+			params: &types.GetByUsernameInput{Username: "id"},
 		},
 	}
 

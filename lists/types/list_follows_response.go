@@ -2,7 +2,7 @@ package types
 
 import "github.com/michimani/gotwi/resources"
 
-type ListFollowsFollowersResponse struct {
+type ListListFollowersOutput struct {
 	Data     []resources.User `json:"data"`
 	Includes struct {
 		Tweets []resources.Tweet `json:"tweets"`
@@ -11,7 +11,7 @@ type ListFollowsFollowersResponse struct {
 	Errors []resources.PartialError           `json:"errors"`
 }
 
-func (r *ListFollowsFollowersResponse) HasPartialError() bool {
+func (r *ListListFollowersOutput) HasPartialError() bool {
 	return !(r.Errors == nil || len(r.Errors) == 0)
 }
 

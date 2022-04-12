@@ -12,12 +12,12 @@ func Test_ListFollowsFollowers_HasPartialError(t *testing.T) {
 	var errorTitle string = "test partical error"
 	cases := []struct {
 		name   string
-		res    *types.ListFollowsFollowersResponse
+		res    *types.ListListFollowersOutput
 		expect bool
 	}{
 		{
 			name: "has partical error",
-			res: &types.ListFollowsFollowersResponse{
+			res: &types.ListListFollowersOutput{
 				Errors: []resources.PartialError{
 					{Title: &errorTitle},
 				}},
@@ -25,13 +25,13 @@ func Test_ListFollowsFollowers_HasPartialError(t *testing.T) {
 		},
 		{
 			name: "has no partical error",
-			res: &types.ListFollowsFollowersResponse{
+			res: &types.ListListFollowersOutput{
 				Errors: []resources.PartialError{}},
 			expect: false,
 		},
 		{
 			name: "partical error is nil",
-			res: &types.ListFollowsFollowersResponse{
+			res: &types.ListListFollowersOutput{
 				Errors: []resources.PartialError{}},
 			expect: false,
 		},

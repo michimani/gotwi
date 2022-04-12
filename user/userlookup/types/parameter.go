@@ -9,9 +9,9 @@ import (
 	"github.com/michimani/gotwi/internal/util"
 )
 
-// ListUsersInput is struct for requesting `GET /2/users`.
+// ListInput is struct for requesting `GET /2/users`.
 // more information: https://developer.twitter.com/en/docs/twitter-api/users/lookup/api-reference/get-users
-type ListUsersInput struct {
+type ListInput struct {
 	accessToken string
 
 	// Query parameters
@@ -21,22 +21,22 @@ type ListUsersInput struct {
 	UserFields  fields.UserFieldList
 }
 
-var listUsersQueryParameters = map[string]struct{}{
+var listQueryParameters = map[string]struct{}{
 	"ids":          {},
 	"expansions":   {},
 	"tweet.fields": {},
 	"user.fields":  {},
 }
 
-func (p *ListUsersInput) SetAccessToken(token string) {
+func (p *ListInput) SetAccessToken(token string) {
 	p.accessToken = token
 }
 
-func (p *ListUsersInput) AccessToken() string {
+func (p *ListInput) AccessToken() string {
 	return p.accessToken
 }
 
-func (p *ListUsersInput) ResolveEndpoint(endpointBase string) string {
+func (p *ListInput) ResolveEndpoint(endpointBase string) string {
 	endpoint := endpointBase
 
 	if p.IDs == nil || len(p.IDs) == 0 {
@@ -45,18 +45,18 @@ func (p *ListUsersInput) ResolveEndpoint(endpointBase string) string {
 
 	pm := p.ParameterMap()
 	if len(pm) > 0 {
-		qs := util.QueryString(pm, listUsersQueryParameters)
+		qs := util.QueryString(pm, listQueryParameters)
 		endpoint += "?" + qs
 	}
 
 	return endpoint
 }
 
-func (p *ListUsersInput) Body() (io.Reader, error) {
+func (p *ListInput) Body() (io.Reader, error) {
 	return nil, nil
 }
 
-func (p *ListUsersInput) ParameterMap() map[string]string {
+func (p *ListInput) ParameterMap() map[string]string {
 	m := map[string]string{}
 
 	m["ids"] = util.QueryValue(p.IDs)
@@ -66,9 +66,9 @@ func (p *ListUsersInput) ParameterMap() map[string]string {
 	return m
 }
 
-// GetUserInput is struct for requesting `GET /2/users/:id`.
+// GetInput is struct for requesting `GET /2/users/:id`.
 // more information: https://developer.twitter.com/en/docs/twitter-api/users/lookup/api-reference/get-users-id
-type GetUserInput struct {
+type GetInput struct {
 	accessToken string
 
 	// Path parameters
@@ -80,21 +80,21 @@ type GetUserInput struct {
 	UserFields  fields.UserFieldList
 }
 
-var getUserQueryParameters = map[string]struct{}{
+var getQueryParameters = map[string]struct{}{
 	"expansions":   {},
 	"tweet.fields": {},
 	"user.fields":  {},
 }
 
-func (p *GetUserInput) SetAccessToken(token string) {
+func (p *GetInput) SetAccessToken(token string) {
 	p.accessToken = token
 }
 
-func (p *GetUserInput) AccessToken() string {
+func (p *GetInput) AccessToken() string {
 	return p.accessToken
 }
 
-func (p *GetUserInput) ResolveEndpoint(endpointBase string) string {
+func (p *GetInput) ResolveEndpoint(endpointBase string) string {
 	if p.ID == "" {
 		return ""
 	}
@@ -104,18 +104,18 @@ func (p *GetUserInput) ResolveEndpoint(endpointBase string) string {
 
 	pm := p.ParameterMap()
 	if len(pm) > 0 {
-		qs := util.QueryString(pm, getUserQueryParameters)
+		qs := util.QueryString(pm, getQueryParameters)
 		endpoint += "?" + qs
 	}
 
 	return endpoint
 }
 
-func (p *GetUserInput) Body() (io.Reader, error) {
+func (p *GetInput) Body() (io.Reader, error) {
 	return nil, nil
 }
 
-func (p *GetUserInput) ParameterMap() map[string]string {
+func (p *GetInput) ParameterMap() map[string]string {
 	m := map[string]string{}
 
 	m = fields.SetFieldsParams(m, p.Expansions, p.TweetFields, p.UserFields)
@@ -123,9 +123,9 @@ func (p *GetUserInput) ParameterMap() map[string]string {
 	return m
 }
 
-// ListUsersByUsernamesInput is struct for requesting `GET /2/users/by`.
+// ListByUsernamesInput is struct for requesting `GET /2/users/by`.
 // more information: https://developer.twitter.com/en/docs/twitter-api/users/lookup/api-reference/get-users-by
-type ListUsersByUsernamesInput struct {
+type ListByUsernamesInput struct {
 	accessToken string
 
 	// Query parameters
@@ -135,22 +135,22 @@ type ListUsersByUsernamesInput struct {
 	UserFields  fields.UserFieldList
 }
 
-var listUsersByUsernamesQueryParameters = map[string]struct{}{
+var listByUsernamesQueryParameters = map[string]struct{}{
 	"usernames":    {},
 	"expansions":   {},
 	"tweet.fields": {},
 	"user.fields":  {},
 }
 
-func (p *ListUsersByUsernamesInput) SetAccessToken(token string) {
+func (p *ListByUsernamesInput) SetAccessToken(token string) {
 	p.accessToken = token
 }
 
-func (p *ListUsersByUsernamesInput) AccessToken() string {
+func (p *ListByUsernamesInput) AccessToken() string {
 	return p.accessToken
 }
 
-func (p *ListUsersByUsernamesInput) ResolveEndpoint(endpointBase string) string {
+func (p *ListByUsernamesInput) ResolveEndpoint(endpointBase string) string {
 	endpoint := endpointBase
 
 	if p.Usernames == nil || len(p.Usernames) == 0 {
@@ -159,18 +159,18 @@ func (p *ListUsersByUsernamesInput) ResolveEndpoint(endpointBase string) string 
 
 	pm := p.ParameterMap()
 	if len(pm) > 0 {
-		qs := util.QueryString(pm, listUsersByUsernamesQueryParameters)
+		qs := util.QueryString(pm, listByUsernamesQueryParameters)
 		endpoint += "?" + qs
 	}
 
 	return endpoint
 }
 
-func (p *ListUsersByUsernamesInput) Body() (io.Reader, error) {
+func (p *ListByUsernamesInput) Body() (io.Reader, error) {
 	return nil, nil
 }
 
-func (p *ListUsersByUsernamesInput) ParameterMap() map[string]string {
+func (p *ListByUsernamesInput) ParameterMap() map[string]string {
 	m := map[string]string{}
 
 	m["usernames"] = util.QueryValue(p.Usernames)
@@ -180,9 +180,9 @@ func (p *ListUsersByUsernamesInput) ParameterMap() map[string]string {
 	return m
 }
 
-// GetUserByUsernameInput is struct for requesting `GET /2/users/by/username/:username`.
+// GetByUsernameInput is struct for requesting `GET /2/users/by/username/:username`.
 // more information: https://developer.twitter.com/en/docs/twitter-api/users/lookup/api-reference/get-users-by-username-username
-type GetUserByUsernameInput struct {
+type GetByUsernameInput struct {
 	accessToken string
 
 	// Path parameters
@@ -194,21 +194,21 @@ type GetUserByUsernameInput struct {
 	UserFields  fields.UserFieldList
 }
 
-var getUserByUsernameQueryParameters = map[string]struct{}{
+var getByUsernameQueryParameters = map[string]struct{}{
 	"expansions":   {},
 	"tweet.fields": {},
 	"user.fields":  {},
 }
 
-func (p *GetUserByUsernameInput) SetAccessToken(token string) {
+func (p *GetByUsernameInput) SetAccessToken(token string) {
 	p.accessToken = token
 }
 
-func (p *GetUserByUsernameInput) AccessToken() string {
+func (p *GetByUsernameInput) AccessToken() string {
 	return p.accessToken
 }
 
-func (p *GetUserByUsernameInput) ResolveEndpoint(endpointBase string) string {
+func (p *GetByUsernameInput) ResolveEndpoint(endpointBase string) string {
 	if p.Username == "" {
 		return ""
 	}
@@ -218,18 +218,18 @@ func (p *GetUserByUsernameInput) ResolveEndpoint(endpointBase string) string {
 
 	pm := p.ParameterMap()
 	if len(pm) > 0 {
-		qs := util.QueryString(pm, getUserByUsernameQueryParameters)
+		qs := util.QueryString(pm, getByUsernameQueryParameters)
 		endpoint += "?" + qs
 	}
 
 	return endpoint
 }
 
-func (p *GetUserByUsernameInput) Body() (io.Reader, error) {
+func (p *GetByUsernameInput) Body() (io.Reader, error) {
 	return nil, nil
 }
 
-func (p *GetUserByUsernameInput) ParameterMap() map[string]string {
+func (p *GetByUsernameInput) ParameterMap() map[string]string {
 	m := map[string]string{}
 	m = fields.SetFieldsParams(m, p.Expansions, p.TweetFields, p.UserFields)
 

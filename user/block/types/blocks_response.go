@@ -2,7 +2,7 @@ package types
 
 import "github.com/michimani/gotwi/resources"
 
-type BlocksBlockingGetResponse struct {
+type ListOutput struct {
 	Data     []resources.User         `json:"data"`
 	Meta     resources.PaginationMeta `json:"meta"`
 	Includes struct {
@@ -11,26 +11,26 @@ type BlocksBlockingGetResponse struct {
 	Errors []resources.PartialError `json:"errors"`
 }
 
-func (r *BlocksBlockingGetResponse) HasPartialError() bool {
+func (r *ListOutput) HasPartialError() bool {
 	return !(r.Errors == nil || len(r.Errors) == 0)
 }
 
-type BlocksBlockingPostResponse struct {
+type CreateOutput struct {
 	Data struct {
 		Blocking bool `json:"blocking"`
 	} `json:"data"`
 }
 
-func (r *BlocksBlockingPostResponse) HasPartialError() bool {
+func (r *CreateOutput) HasPartialError() bool {
 	return false
 }
 
-type BlocksBlockingDeleteResponse struct {
+type DeleteOutput struct {
 	Data struct {
 		Blocking bool `json:"blocking"`
 	} `json:"data"`
 }
 
-func (r *BlocksBlockingDeleteResponse) HasPartialError() bool {
+func (r *DeleteOutput) HasPartialError() bool {
 	return false
 }

@@ -21,7 +21,7 @@ func (m FollowsMaxResults) String() string {
 	return strconv.Itoa(int(m))
 }
 
-type FollowsFollowingGetParams struct {
+type ListFollowingsInput struct {
 	accessToken string
 
 	// Path parameter
@@ -35,7 +35,7 @@ type FollowsFollowingGetParams struct {
 	UserFields      fields.UserFieldList
 }
 
-var FollowsFollowingGetQueryParams = map[string]struct{}{
+var listFollowingsQueryParameters = map[string]struct{}{
 	"max_results":      {},
 	"pagination_token": {},
 	"expansions":       {},
@@ -43,15 +43,15 @@ var FollowsFollowingGetQueryParams = map[string]struct{}{
 	"user.fields":      {},
 }
 
-func (p *FollowsFollowingGetParams) SetAccessToken(token string) {
+func (p *ListFollowingsInput) SetAccessToken(token string) {
 	p.accessToken = token
 }
 
-func (p *FollowsFollowingGetParams) AccessToken() string {
+func (p *ListFollowingsInput) AccessToken() string {
 	return p.accessToken
 }
 
-func (p *FollowsFollowingGetParams) ResolveEndpoint(endpointBase string) string {
+func (p *ListFollowingsInput) ResolveEndpoint(endpointBase string) string {
 	if p.ID == "" {
 		return ""
 	}
@@ -61,18 +61,18 @@ func (p *FollowsFollowingGetParams) ResolveEndpoint(endpointBase string) string 
 
 	pm := p.ParameterMap()
 	if len(pm) > 0 {
-		qs := util.QueryString(pm, FollowsFollowingGetQueryParams)
+		qs := util.QueryString(pm, listFollowingsQueryParameters)
 		endpoint += "?" + qs
 	}
 
 	return endpoint
 }
 
-func (p *FollowsFollowingGetParams) Body() (io.Reader, error) {
+func (p *ListFollowingsInput) Body() (io.Reader, error) {
 	return nil, nil
 }
 
-func (p *FollowsFollowingGetParams) ParameterMap() map[string]string {
+func (p *ListFollowingsInput) ParameterMap() map[string]string {
 	m := map[string]string{}
 
 	if p.MaxResults.Valid() {
@@ -98,7 +98,7 @@ func (p *FollowsFollowingGetParams) ParameterMap() map[string]string {
 	return m
 }
 
-type FollowsFollowersParams struct {
+type ListFollowersInput struct {
 	accessToken string
 
 	// Path parameter
@@ -112,7 +112,7 @@ type FollowsFollowersParams struct {
 	UserFields      fields.UserFieldList
 }
 
-var FollowsFollowersQueryParams = map[string]struct{}{
+var listFollowersQueryParameters = map[string]struct{}{
 	"max_results":      {},
 	"pagination_token": {},
 	"expansions":       {},
@@ -120,15 +120,15 @@ var FollowsFollowersQueryParams = map[string]struct{}{
 	"user.fields":      {},
 }
 
-func (p *FollowsFollowersParams) SetAccessToken(token string) {
+func (p *ListFollowersInput) SetAccessToken(token string) {
 	p.accessToken = token
 }
 
-func (p *FollowsFollowersParams) AccessToken() string {
+func (p *ListFollowersInput) AccessToken() string {
 	return p.accessToken
 }
 
-func (p *FollowsFollowersParams) ResolveEndpoint(endpointBase string) string {
+func (p *ListFollowersInput) ResolveEndpoint(endpointBase string) string {
 	if p.ID == "" {
 		return ""
 	}
@@ -138,18 +138,18 @@ func (p *FollowsFollowersParams) ResolveEndpoint(endpointBase string) string {
 
 	pm := p.ParameterMap()
 	if len(pm) > 0 {
-		qs := util.QueryString(pm, FollowsFollowersQueryParams)
+		qs := util.QueryString(pm, listFollowersQueryParameters)
 		endpoint += "?" + qs
 	}
 
 	return endpoint
 }
 
-func (p *FollowsFollowersParams) Body() (io.Reader, error) {
+func (p *ListFollowersInput) Body() (io.Reader, error) {
 	return nil, nil
 }
 
-func (p *FollowsFollowersParams) ParameterMap() map[string]string {
+func (p *ListFollowersInput) ParameterMap() map[string]string {
 	m := map[string]string{}
 
 	if p.MaxResults.Valid() {
@@ -175,25 +175,25 @@ func (p *FollowsFollowersParams) ParameterMap() map[string]string {
 	return m
 }
 
-type FollowsFollowingPostParams struct {
+type CreateFollowingInput struct {
 	accessToken string
 
 	// Path parameter
 	ID string `json:"-"` // The authenticated user ID
 
 	// JSON body parameter
-	TargetUserID *string `json:"target_user_id,omitempty"`
+	TargetID string `json:"target_user_id,omitempty"` // required
 }
 
-func (p *FollowsFollowingPostParams) SetAccessToken(token string) {
+func (p *CreateFollowingInput) SetAccessToken(token string) {
 	p.accessToken = token
 }
 
-func (p *FollowsFollowingPostParams) AccessToken() string {
+func (p *CreateFollowingInput) AccessToken() string {
 	return p.accessToken
 }
 
-func (p *FollowsFollowingPostParams) ResolveEndpoint(endpointBase string) string {
+func (p *CreateFollowingInput) ResolveEndpoint(endpointBase string) string {
 	if p.ID == "" {
 		return ""
 	}
@@ -204,7 +204,7 @@ func (p *FollowsFollowingPostParams) ResolveEndpoint(endpointBase string) string
 	return endpoint
 }
 
-func (p *FollowsFollowingPostParams) Body() (io.Reader, error) {
+func (p *CreateFollowingInput) Body() (io.Reader, error) {
 	json, err := json.Marshal(p)
 	if err != nil {
 		return nil, err
@@ -213,43 +213,43 @@ func (p *FollowsFollowingPostParams) Body() (io.Reader, error) {
 	return strings.NewReader(string(json)), nil
 }
 
-func (p *FollowsFollowingPostParams) ParameterMap() map[string]string {
+func (p *CreateFollowingInput) ParameterMap() map[string]string {
 	return map[string]string{}
 }
 
-type FollowsFollowingDeleteParams struct {
+type DeleteFollowingInput struct {
 	accessToken string
 
 	// Path parameters
 	SourceUserID string // The authenticated user ID
-	TargetUserID string // The user ID for unfollow
+	TargetID     string // The user ID for unfollow
 }
 
-func (p *FollowsFollowingDeleteParams) SetAccessToken(token string) {
+func (p *DeleteFollowingInput) SetAccessToken(token string) {
 	p.accessToken = token
 }
 
-func (p *FollowsFollowingDeleteParams) AccessToken() string {
+func (p *DeleteFollowingInput) AccessToken() string {
 	return p.accessToken
 }
 
-func (p *FollowsFollowingDeleteParams) ResolveEndpoint(endpointBase string) string {
-	if p.SourceUserID == "" || p.TargetUserID == "" {
+func (p *DeleteFollowingInput) ResolveEndpoint(endpointBase string) string {
+	if p.SourceUserID == "" || p.TargetID == "" {
 		return ""
 	}
 
 	escapedSID := url.QueryEscape(p.SourceUserID)
 	endpoint := strings.Replace(endpointBase, ":source_user_id", escapedSID, 1)
-	escapedTID := url.QueryEscape(p.TargetUserID)
+	escapedTID := url.QueryEscape(p.TargetID)
 	endpoint = strings.Replace(endpoint, ":target_user_id", escapedTID, 1)
 
 	return endpoint
 }
 
-func (p *FollowsFollowingDeleteParams) Body() (io.Reader, error) {
+func (p *DeleteFollowingInput) Body() (io.Reader, error) {
 	return nil, nil
 }
 
-func (p *FollowsFollowingDeleteParams) ParameterMap() map[string]string {
+func (p *DeleteFollowingInput) ParameterMap() map[string]string {
 	return map[string]string{}
 }

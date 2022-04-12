@@ -16,8 +16,8 @@ const (
 
 // Returns a list of users who are followers of the specified List.
 // https://developer.twitter.com/en/docs/twitter-api/lists/list-follows/api-reference/get-lists-id-followers
-func ListFollowsFollowers(ctx context.Context, c *gotwi.Client, p *types.ListFollowsFollowersParams) (*types.ListFollowsFollowersResponse, error) {
-	res := &types.ListFollowsFollowersResponse{}
+func ListFollowsFollowers(ctx context.Context, c *gotwi.Client, p *types.ListListFollowersInput) (*types.ListListFollowersOutput, error) {
+	res := &types.ListListFollowersOutput{}
 	if err := c.CallAPI(ctx, ListFollowsFollowersEndpoint, "GET", p, res); err != nil {
 		return nil, err
 	}
