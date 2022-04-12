@@ -4,10 +4,16 @@ This is a version of CHANGELOG less than v1.0.0
 
 ## [Unreleased]
 
+* TBD
+
+v0.11.0 (2022-04-13)
+===
+
 ### ⚠ BREAKING CHANGES
 
-* Change package names, function names, and method names to more descriptive names.
-  * It will be incorporated in the next version `v0.11.0`.
+**This version is not compatible with v0.10.4 or earlier. The structure of the library has changed significantly in `v0.11.0` and later compared to `v0.10.4` and earlier. If you are using `v0.10.4` or earlier, updating to `v0.11.0` or later may result in your application not working properly.**
+
+* Change package names, function names, and method names to more descriptive names. 
 
 v0.10.4 (2022-04-12)
 ===
