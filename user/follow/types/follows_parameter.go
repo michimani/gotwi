@@ -182,7 +182,7 @@ type CreateFollowingInput struct {
 	ID string `json:"-"` // The authenticated user ID
 
 	// JSON body parameter
-	TargetID string `json:"target_user_id,omitempty"` // required
+	TargetID string `json:"target_user_id"` // required
 }
 
 func (p *CreateFollowingInput) SetAccessToken(token string) {

@@ -426,7 +426,7 @@ func Test_CreateFollowingInput_Body(t *testing.T) {
 		{
 			name:   "ok: has no json parameters",
 			params: &types.CreateFollowingInput{ID: "id"},
-			expect: strings.NewReader(`{}`),
+			expect: strings.NewReader(`{"target_user_id":""}`),
 		},
 	}
 

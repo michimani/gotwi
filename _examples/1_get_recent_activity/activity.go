@@ -105,7 +105,7 @@ func onlyFollowsRecentActivity(c *gotwi.Client, userID string) {
 
 	// get recent tweets
 	for _, onlyFollow := range onlyFollowings {
-		p := &tweetsTypes.SearchTweetsRecentParams{
+		p := &tweetsTypes.ListRecentInput{
 			MaxResults:  10,
 			Query:       "from:" + onlyFollow.Username + " -is:retweet -is:reply",
 			TweetFields: fields.TweetFieldList{fields.TweetFieldCreatedAt},

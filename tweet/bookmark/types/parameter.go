@@ -11,18 +11,29 @@ import (
 	"github.com/michimani/gotwi/internal/util"
 )
 
-type BlocksMaxResults int
+type BookmarksMaxResults int
+
+func (m BookmarksMaxResults) Valid() bool {
+	return m >= 10 && m <= 100
+}
+
+func (m BookmarksMaxResults) String() string {
+	return strconv.Itoa(int(m))
+}
 
 type ListInput struct {
 	accessToken string
 
 	// Path parameter
-	ID string
+	ID string // Tweet ID
 
 	// Query parameters
-	MaxResults      BlocksMaxResults
+	MaxResults      BookmarksMaxResults
 	PaginationToken string
 	Expansions      fields.ExpansionList
+	MediaFields     fields.MediaFieldList
+	PlaceFields     fields.PlaceFieldList
+	PollFields      fields.PollFieldList
 	TweetFields     fields.TweetFieldList
 	UserFields      fields.UserFieldList
 }
@@ -31,16 +42,11 @@ var listQueryParameters = map[string]struct{}{
 	"max_results":      {},
 	"pagination_token": {},
 	"expansions":       {},
+	"media.fields":     {},
+	"place.fields":     {},
+	"poll.fields":      {},
 	"tweet.fields":     {},
 	"user.fields":      {},
-}
-
-func (m BlocksMaxResults) Valid() bool {
-	return m > 0 && m <= 1000
-}
-
-func (m BlocksMaxResults) String() string {
-	return strconv.Itoa(int(m))
 }
 
 func (p *ListInput) SetAccessToken(token string) {
@@ -83,7 +89,7 @@ func (p *ListInput) ParameterMap() map[string]string {
 		m["pagination_token"] = p.PaginationToken
 	}
 
-	m = fields.SetFieldsParams(m, p.Expansions, p.TweetFields, p.UserFields)
+	m = fields.SetFieldsParams(m, p.Expansions, p.MediaFields, p.PlaceFields, p.PollFields, p.TweetFields, p.UserFields)
 
 	return m
 }
@@ -95,7 +101,7 @@ type CreateInput struct {
 	ID string `json:"-"` // The authenticated user ID
 
 	// JSON body parameter
-	TargetID string `json:"target_user_id"` // required
+	TweetID string `json:"tweet_id"` // required
 }
 
 func (p *CreateInput) SetAccessToken(token string) {
@@ -133,9 +139,9 @@ func (p *CreateInput) ParameterMap() map[string]string {
 type DeleteInput struct {
 	accessToken string
 
-	// Path parameters
-	SourceUserID string // The authenticated user ID
-	TargetID     string // The user ID for unfollow
+	// Path parameter
+	ID      string // The authenticated user ID
+	TweetID string
 }
 
 func (p *DeleteInput) SetAccessToken(token string) {
@@ -147,14 +153,14 @@ func (p *DeleteInput) AccessToken() string {
 }
 
 func (p *DeleteInput) ResolveEndpoint(endpointBase string) string {
-	if p.SourceUserID == "" || p.TargetID == "" {
+	if p.ID == "" || p.TweetID == "" {
 		return ""
 	}
 
-	escapedSID := url.QueryEscape(p.SourceUserID)
-	endpoint := strings.Replace(endpointBase, ":source_user_id", escapedSID, 1)
-	escapedTID := url.QueryEscape(p.TargetID)
-	endpoint = strings.Replace(endpoint, ":target_user_id", escapedTID, 1)
+	escapedSID := url.QueryEscape(p.ID)
+	endpoint := strings.Replace(endpointBase, ":id", escapedSID, 1)
+	escapedTID := url.QueryEscape(p.TweetID)
+	endpoint = strings.Replace(endpoint, ":tweet_id", escapedTID, 1)
 
 	return endpoint
 }

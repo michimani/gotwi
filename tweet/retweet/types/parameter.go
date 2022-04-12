@@ -4,54 +4,46 @@ import (
 	"encoding/json"
 	"io"
 	"net/url"
-	"strconv"
 	"strings"
 
 	"github.com/michimani/gotwi/fields"
 	"github.com/michimani/gotwi/internal/util"
 )
 
-type BlocksMaxResults int
-
-type ListInput struct {
+type ListUsersInput struct {
 	accessToken string
 
 	// Path parameter
-	ID string
+	ID string // Tweet ID
 
 	// Query parameters
-	MaxResults      BlocksMaxResults
-	PaginationToken string
-	Expansions      fields.ExpansionList
-	TweetFields     fields.TweetFieldList
-	UserFields      fields.UserFieldList
+	Expansions  fields.ExpansionList
+	MediaFields fields.MediaFieldList
+	PlaceFields fields.PlaceFieldList
+	PollFields  fields.PollFieldList
+	TweetFields fields.TweetFieldList
+	UserFields  fields.UserFieldList
 }
 
-var listQueryParameters = map[string]struct{}{
-	"max_results":      {},
-	"pagination_token": {},
-	"expansions":       {},
-	"tweet.fields":     {},
-	"user.fields":      {},
+var listUsersQueryParameters = map[string]struct{}{
+	"id":           {},
+	"expansions":   {},
+	"media.fields": {},
+	"place.fields": {},
+	"poll.fields":  {},
+	"tweet.fields": {},
+	"user.fields":  {},
 }
 
-func (m BlocksMaxResults) Valid() bool {
-	return m > 0 && m <= 1000
-}
-
-func (m BlocksMaxResults) String() string {
-	return strconv.Itoa(int(m))
-}
-
-func (p *ListInput) SetAccessToken(token string) {
+func (p *ListUsersInput) SetAccessToken(token string) {
 	p.accessToken = token
 }
 
-func (p *ListInput) AccessToken() string {
+func (p *ListUsersInput) AccessToken() string {
 	return p.accessToken
 }
 
-func (p *ListInput) ResolveEndpoint(endpointBase string) string {
+func (p *ListUsersInput) ResolveEndpoint(endpointBase string) string {
 	if p.ID == "" {
 		return ""
 	}
@@ -61,29 +53,20 @@ func (p *ListInput) ResolveEndpoint(endpointBase string) string {
 
 	pm := p.ParameterMap()
 	if len(pm) > 0 {
-		qs := util.QueryString(pm, listQueryParameters)
+		qs := util.QueryString(pm, listUsersQueryParameters)
 		endpoint += "?" + qs
 	}
 
 	return endpoint
 }
 
-func (p *ListInput) Body() (io.Reader, error) {
+func (p *ListUsersInput) Body() (io.Reader, error) {
 	return nil, nil
 }
 
-func (p *ListInput) ParameterMap() map[string]string {
+func (p *ListUsersInput) ParameterMap() map[string]string {
 	m := map[string]string{}
-
-	if p.MaxResults.Valid() {
-		m["max_results"] = p.MaxResults.String()
-	}
-
-	if p.PaginationToken != "" {
-		m["pagination_token"] = p.PaginationToken
-	}
-
-	m = fields.SetFieldsParams(m, p.Expansions, p.TweetFields, p.UserFields)
+	m = fields.SetFieldsParams(m, p.Expansions, p.MediaFields, p.PlaceFields, p.PollFields, p.TweetFields, p.UserFields)
 
 	return m
 }
@@ -95,7 +78,7 @@ type CreateInput struct {
 	ID string `json:"-"` // The authenticated user ID
 
 	// JSON body parameter
-	TargetID string `json:"target_user_id"` // required
+	TweetID string `json:"tweet_id"` // required
 }
 
 func (p *CreateInput) SetAccessToken(token string) {
@@ -133,9 +116,9 @@ func (p *CreateInput) ParameterMap() map[string]string {
 type DeleteInput struct {
 	accessToken string
 
-	// Path parameters
-	SourceUserID string // The authenticated user ID
-	TargetID     string // The user ID for unfollow
+	// Path parameter
+	ID            string // The authenticated user ID
+	SourceTweetID string
 }
 
 func (p *DeleteInput) SetAccessToken(token string) {
@@ -147,14 +130,14 @@ func (p *DeleteInput) AccessToken() string {
 }
 
 func (p *DeleteInput) ResolveEndpoint(endpointBase string) string {
-	if p.SourceUserID == "" || p.TargetID == "" {
+	if p.ID == "" || p.SourceTweetID == "" {
 		return ""
 	}
 
-	escapedSID := url.QueryEscape(p.SourceUserID)
-	endpoint := strings.Replace(endpointBase, ":source_user_id", escapedSID, 1)
-	escapedTID := url.QueryEscape(p.TargetID)
-	endpoint = strings.Replace(endpoint, ":target_user_id", escapedTID, 1)
+	escapedSID := url.QueryEscape(p.ID)
+	endpoint := strings.Replace(endpointBase, ":id", escapedSID, 1)
+	escapedTID := url.QueryEscape(p.SourceTweetID)
+	endpoint = strings.Replace(endpoint, ":source_tweet_id", escapedTID, 1)
 
 	return endpoint
 }

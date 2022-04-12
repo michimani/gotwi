@@ -6,83 +6,11 @@ import (
 	"testing"
 
 	"github.com/michimani/gotwi/fields"
-	"github.com/michimani/gotwi/user/block/types"
+	"github.com/michimani/gotwi/tweet/retweet/types"
 	"github.com/stretchr/testify/assert"
 )
 
-func Test_BlocksMaxResults_Valid(t *testing.T) {
-	cases := []struct {
-		name   string
-		max    types.BlocksMaxResults
-		expect bool
-	}{
-		{
-			name:   "ok: 1",
-			max:    types.BlocksMaxResults(1),
-			expect: true,
-		},
-		{
-			name:   "ok: 1000",
-			max:    types.BlocksMaxResults(1000),
-			expect: true,
-		},
-		{
-			name:   "ng: 0",
-			max:    types.BlocksMaxResults(0),
-			expect: false,
-		},
-		{
-			name:   "ng: 1001",
-			max:    types.BlocksMaxResults(1001),
-			expect: false,
-		},
-		{
-			name:   "ng: -1",
-			max:    types.BlocksMaxResults(-1),
-			expect: false,
-		},
-	}
-
-	for _, c := range cases {
-		t.Run(c.name, func(tt *testing.T) {
-			b := c.max.Valid()
-			assert.Equal(tt, c.expect, b)
-		})
-	}
-}
-
-func Test_BlocksMaxResults_String(t *testing.T) {
-	cases := []struct {
-		name   string
-		max    types.BlocksMaxResults
-		expect string
-	}{
-		{
-			name:   "ok: 1",
-			max:    types.BlocksMaxResults(1),
-			expect: "1",
-		},
-		{
-			name:   "ok: 0",
-			max:    types.BlocksMaxResults(0),
-			expect: "0",
-		},
-		{
-			name:   "ok: -1",
-			max:    types.BlocksMaxResults(-1),
-			expect: "-1",
-		},
-	}
-
-	for _, c := range cases {
-		t.Run(c.name, func(tt *testing.T) {
-			s := c.max.String()
-			assert.Equal(tt, c.expect, s)
-		})
-	}
-}
-
-func Test_ListInput_SetAccessToken(t *testing.T) {
+func Test_ListUsersInput_SetAccessToken(t *testing.T) {
 	cases := []struct {
 		name   string
 		token  string
@@ -94,7 +22,7 @@ func Test_ListInput_SetAccessToken(t *testing.T) {
 			expect: "test-token",
 		},
 		{
-			name:   "normal: empty",
+			name:   "empty",
 			token:  "",
 			expect: "",
 		},
@@ -102,81 +30,90 @@ func Test_ListInput_SetAccessToken(t *testing.T) {
 
 	for _, c := range cases {
 		t.Run(c.name, func(tt *testing.T) {
-			p := &types.ListInput{}
+			p := &types.ListUsersInput{}
 			p.SetAccessToken(c.token)
 			assert.Equal(tt, c.expect, p.AccessToken())
 		})
 	}
 }
 
-func Test_ListInput_ResolveEndpoint(t *testing.T) {
+func Test_ListUsersInput_ResolveEndpoint(t *testing.T) {
 	const endpointRoot = "test/endpoint/"
 	const endpointBase = "test/endpoint/:id"
 	cases := []struct {
 		name   string
-		params *types.ListInput
+		params *types.ListUsersInput
 		expect string
 	}{
 		{
-			name:   "normal: only required parameter",
-			params: &types.ListInput{ID: "test-id"},
+			name:   "only required parameter",
+			params: &types.ListUsersInput{ID: "test-id"},
 			expect: endpointRoot + "test-id",
 		},
 		{
-			name: "normal: with specific max_result",
-			params: &types.ListInput{
-				ID:         "test-id",
-				MaxResults: 111,
-			},
-			expect: endpointRoot + "test-id?max_results=111",
-		},
-		{
-			name: "normal: with pagination_token",
-			params: &types.ListInput{
-				ID:              "test-id",
-				PaginationToken: "p-token",
-			},
-			expect: endpointRoot + "test-id?pagination_token=p-token",
-		},
-		{
-			name: "normal: with expansions",
-			params: &types.ListInput{
+			name: "with expansions",
+			params: &types.ListUsersInput{
 				ID:         "test-id",
 				Expansions: fields.ExpansionList{"ex1", "ex2"},
 			},
-			expect: endpointRoot + "test-id?expansions=ex1%2Cex2",
+			expect: endpointRoot + "test-id" + "?expansions=ex1%2Cex2",
 		},
 		{
-			name: "normal: with tweets.fields",
-			params: &types.ListInput{
+			name: "with media.fields",
+			params: &types.ListUsersInput{
+				ID:          "test-id",
+				MediaFields: fields.MediaFieldList{"tf1", "tf2"},
+			},
+			expect: endpointRoot + "test-id" + "?media.fields=tf1%2Ctf2",
+		},
+		{
+			name: "with place.fields",
+			params: &types.ListUsersInput{
+				ID:          "test-id",
+				PlaceFields: fields.PlaceFieldList{"tf1", "tf2"},
+			},
+			expect: endpointRoot + "test-id" + "?place.fields=tf1%2Ctf2",
+		},
+		{
+			name: "with poll.fields",
+			params: &types.ListUsersInput{
+				ID:         "test-id",
+				PollFields: fields.PollFieldList{"tf1", "tf2"},
+			},
+			expect: endpointRoot + "test-id" + "?poll.fields=tf1%2Ctf2",
+		},
+		{
+			name: "with tweets.fields",
+			params: &types.ListUsersInput{
 				ID:          "test-id",
 				TweetFields: fields.TweetFieldList{"tf1", "tf2"},
 			},
-			expect: endpointRoot + "test-id?tweet.fields=tf1%2Ctf2",
+			expect: endpointRoot + "test-id" + "?tweet.fields=tf1%2Ctf2",
 		},
 		{
-			name: "normal: with users.fields",
-			params: &types.ListInput{
+			name: "with users.fields",
+			params: &types.ListUsersInput{
 				ID:         "test-id",
 				UserFields: fields.UserFieldList{"uf1", "uf2"},
 			},
-			expect: endpointRoot + "test-id?user.fields=uf1%2Cuf2",
+			expect: endpointRoot + "test-id" + "?user.fields=uf1%2Cuf2",
 		},
 		{
-			name: "normal: all query parameters",
-			params: &types.ListInput{
-				ID:              "test-id",
-				MaxResults:      111,
-				PaginationToken: "p-token",
-				Expansions:      fields.ExpansionList{"ex"},
-				UserFields:      fields.UserFieldList{"uf"},
-				TweetFields:     fields.TweetFieldList{"tf"},
+			name: "all query parameters",
+			params: &types.ListUsersInput{
+				ID:          "test-id",
+				Expansions:  fields.ExpansionList{"ex"},
+				MediaFields: fields.MediaFieldList{"mf"},
+				PlaceFields: fields.PlaceFieldList{"plf"},
+				PollFields:  fields.PollFieldList{"pof"},
+				UserFields:  fields.UserFieldList{"uf"},
+				TweetFields: fields.TweetFieldList{"tf"},
 			},
-			expect: endpointRoot + "test-id?expansions=ex&max_results=111&pagination_token=p-token&tweet.fields=tf&user.fields=uf",
+			expect: endpointRoot + "test-id" + "?expansions=ex&media.fields=mf&place.fields=plf&poll.fields=pof&tweet.fields=tf&user.fields=uf",
 		},
 		{
-			name: "normal: has no required parameter",
-			params: &types.ListInput{
+			name: "has no required parameter",
+			params: &types.ListUsersInput{
 				Expansions:  fields.ExpansionList{"ex"},
 				UserFields:  fields.UserFieldList{"uf"},
 				TweetFields: fields.TweetFieldList{"tf"},
@@ -193,18 +130,18 @@ func Test_ListInput_ResolveEndpoint(t *testing.T) {
 	}
 }
 
-func Test_ListInput_Body(t *testing.T) {
+func Test_ListUsersInput_Body(t *testing.T) {
 	cases := []struct {
 		name   string
-		params *types.ListInput
+		params *types.ListUsersInput
 	}{
 		{
 			name:   "empty params",
-			params: &types.ListInput{},
+			params: &types.ListUsersInput{},
 		},
 		{
 			name:   "some params",
-			params: &types.ListInput{ID: "id"},
+			params: &types.ListUsersInput{ID: "id"},
 		},
 	}
 
@@ -260,7 +197,7 @@ func Test_CreateInput_ResolveEndpoint(t *testing.T) {
 		{
 			name: "normal: has no required parameter",
 			params: &types.CreateInput{
-				TargetID: "tid",
+				TweetID: "tid",
 			},
 			expect: "",
 		},
@@ -281,17 +218,17 @@ func Test_CreateInput_Body(t *testing.T) {
 		expect io.Reader
 	}{
 		{
-			name: "ok: has both of path and json parameters",
+			name: "ok: has both ob path and json parameters",
 			params: &types.CreateInput{
-				ID:       "test-id",
-				TargetID: "tid",
+				ID:      "test-id",
+				TweetID: "tid",
 			},
-			expect: strings.NewReader(`{"target_user_id":"tid"}`),
+			expect: strings.NewReader(`{"tweet_id":"tid"}`),
 		},
 		{
 			name:   "ok: has no json parameters",
 			params: &types.CreateInput{ID: "id"},
-			expect: strings.NewReader(`{"target_user_id":""}`),
+			expect: strings.NewReader(`{"tweet_id":""}`),
 		},
 	}
 
@@ -311,16 +248,13 @@ func Test_CreateInput_ParameterMap(t *testing.T) {
 		expect map[string]string
 	}{
 		{
-			name:   "normal: only required parameter",
-			params: &types.CreateInput{ID: "test-id"},
+			name:   "normal: has both of path and json parameters",
+			params: &types.CreateInput{ID: "id"},
 			expect: map[string]string{},
 		},
 		{
-			name: "normal: has no required parameter",
-			params: &types.CreateInput{
-				ID:       "tid",
-				TargetID: "tid",
-			},
+			name:   "normal: has no parameter",
+			params: &types.CreateInput{},
 			expect: map[string]string{},
 		},
 	}
@@ -362,7 +296,7 @@ func Test_DeleteInput_SetAccessToken(t *testing.T) {
 
 func Test_DeleteInput_ResolveEndpoint(t *testing.T) {
 	const endpointRoot = "test/endpoint/"
-	const endpointBase = "test/endpoint/:source_user_id/:target_user_id"
+	const endpointBase = "test/endpoint/:id/:source_tweet_id"
 	cases := []struct {
 		name   string
 		params *types.DeleteInput
@@ -371,22 +305,22 @@ func Test_DeleteInput_ResolveEndpoint(t *testing.T) {
 		{
 			name: "normal: only required parameter",
 			params: &types.DeleteInput{
-				SourceUserID: "sid",
-				TargetID:     "tid",
+				ID:            "uid",
+				SourceTweetID: "sid",
 			},
-			expect: endpointRoot + "sid" + "/" + "tid",
+			expect: endpointRoot + "uid" + "/" + "sid",
 		},
 		{
 			name: "normal: has no required parameter",
 			params: &types.DeleteInput{
-				SourceUserID: "sid",
+				ID: "uid",
 			},
 			expect: "",
 		},
 		{
 			name: "normal: has no required parameter",
 			params: &types.DeleteInput{
-				TargetID: "tid",
+				SourceTweetID: "sid",
 			},
 			expect: "",
 		},
@@ -409,8 +343,8 @@ func Test_DeleteInput_Body(t *testing.T) {
 		{
 			name: "ok: has required parameters",
 			params: &types.DeleteInput{
-				SourceUserID: "sid",
-				TargetID:     "tid",
+				ID:            "uid",
+				SourceTweetID: "sid",
 			},
 			expect: nil,
 		},
@@ -437,12 +371,12 @@ func Test_DeleteInput_ParameterMap(t *testing.T) {
 		expect map[string]string
 	}{
 		{
-			name:   "normal: only required parameter",
-			params: &types.DeleteInput{SourceUserID: "sid", TargetID: "tid"},
+			name:   "normal: has both of path and json parameters",
+			params: &types.DeleteInput{ID: "id"},
 			expect: map[string]string{},
 		},
 		{
-			name:   "normal: has no required parameter",
+			name:   "normal: has no parameter",
 			params: &types.DeleteInput{},
 			expect: map[string]string{},
 		},

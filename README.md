@@ -242,9 +242,9 @@ func main() {
 		return
 	}
 
-	p := &types.ManageTweetsPostParams{
+	p := &types.CreateInput{
 		Text: gotwi.String("This is a test tweet with poll."),
-		Poll: &types.ManageTweetsPostParamsPoll{
+		Poll: &types.CreateInputPoll{
 			DurationMinutes: gotwi.Int(5),
 			Options: []string{
 				"Cyan",

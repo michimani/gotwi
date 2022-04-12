@@ -99,7 +99,7 @@ type CreateInput struct {
 	ID string `json:"-"` // required: The authenticated user ID
 
 	// JSON body parameter
-	TargetID string `json:"target_user_id,omitempty"` // required: target user ID to mute
+	TargetID string `json:"target_user_id"` // required: target user ID to mute
 }
 
 func (p *CreateInput) SetAccessToken(token string) {

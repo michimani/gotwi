@@ -10,7 +10,7 @@ import (
 
 // SimpleTweet posts a tweet with only text, and return posted tweet ID.
 func SimpleTweet(c *gotwi.Client, text string) (string, error) {
-	p := &types.ManageTweetsPostParams{
+	p := &types.CreateInput{
 		Text: gotwi.String(text),
 	}
 
@@ -24,7 +24,7 @@ func SimpleTweet(c *gotwi.Client, text string) (string, error) {
 
 // DeleteTweet deletes a tweet specified by tweet ID.
 func DeleteTweet(c *gotwi.Client, id string) (bool, error) {
-	p := &types.ManageTweetsDeleteParams{
+	p := &types.DeleteInput{
 		ID: id,
 	}
 

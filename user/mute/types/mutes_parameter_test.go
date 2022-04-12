@@ -300,7 +300,7 @@ func Test_CreateInput_Body(t *testing.T) {
 		{
 			name:   "ok: has no json parameters",
 			params: &types.CreateInput{ID: "id"},
-			expect: strings.NewReader(`{}`),
+			expect: strings.NewReader(`{"target_user_id":""}`),
 		},
 	}
 
