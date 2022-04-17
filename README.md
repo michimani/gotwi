@@ -13,9 +13,8 @@ This is a library for using the Twitter API v2 in the Go language. (It is still 
 
 Progress of supporting APIs:
 
-|  |  |  |  |
-| --- | --- | --- | --- |
 | Category | Sub Category | Endpoint | Supported |
+| --- | --- | --- | --- |
 | Tweets | Tweet lookup | `GET /2/tweets` | ✅ |
 |  |  | `GET /2/tweets/:id` | ✅ |
 |  | Manage Tweet | `POST /2/tweets` | ✅ |
