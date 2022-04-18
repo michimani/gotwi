@@ -46,6 +46,10 @@ type NewClientWithAccessTokenInput struct {
 
 type IClient interface {
 	Exec(req *http.Request, i util.Response) (*resources.Non2XXError, error)
+	IsReady() bool
+	accessToken() string
+	authenticationMethod() AuthenticationMethod
+	setOAuth1Header(r *http.Request, paramsMap map[string]string) (*http.Request, error)
 }
 
 type Client struct {
@@ -169,6 +173,14 @@ func (c *Client) IsReady() bool {
 	return true
 }
 
+func (c *Client) accessToken() string {
+	return c.AccessToken
+}
+
+func (c *Client) authenticationMethod() AuthenticationMethod {
+	return c.AuthenticationMethod
+}
+
 func (c *Client) CallAPI(ctx context.Context, endpoint, method string, p util.Parameters, i util.Response) error {
 	req, err := c.prepare(ctx, endpoint, method, p)
 	if err != nil {
@@ -215,6 +227,10 @@ func (c *Client) Exec(req *http.Request, i util.Response) (*resources.Non2XXErro
 }
 
 func (c *Client) prepare(ctx context.Context, endpointBase, method string, p util.Parameters) (*http.Request, error) {
+	return prepare(ctx, endpointBase, method, p, c)
+}
+
+func prepare(ctx context.Context, endpointBase, method string, p util.Parameters, c IClient) (*http.Request, error) {
 	if p == nil {
 		return nil, fmt.Errorf(gotwierrors.ErrorParametersNil, endpointBase)
 	}
@@ -224,13 +240,13 @@ func (c *Client) prepare(ctx context.Context, endpointBase, method string, p uti
 	}
 
 	endpoint := p.ResolveEndpoint(endpointBase)
-	p.SetAccessToken(c.AccessToken)
+	p.SetAccessToken(c.accessToken())
 	req, err := newRequest(ctx, endpoint, method, p)
 	if err != nil {
 		return nil, err
 	}
 
-	switch c.AuthenticationMethod {
+	switch c.authenticationMethod() {
 	case AuthenMethodOAuth1UserContext:
 		pm := p.ParameterMap()
 		req, err = c.setOAuth1Header(req, pm)

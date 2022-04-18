@@ -1,0 +1,53 @@
+package gotwi
+
+import (
+	"bufio"
+	"encoding/json"
+	"errors"
+	"net/http"
+
+	"github.com/michimani/gotwi/internal/util"
+)
+
+type StreamClient[T util.Response] struct {
+	response *http.Response
+	stream   *bufio.Scanner
+}
+
+func newStreamClient[T util.Response](httpRes *http.Response) (*StreamClient[T], error) {
+	if httpRes == nil {
+		return nil, errors.New("HTTP Response is nil.")
+	}
+
+	if httpRes.Close {
+		return nil, errors.New("HTTP Response body has already closed.")
+	}
+
+	s := bufio.NewScanner(httpRes.Body)
+	if s == nil {
+		return nil, errors.New("Scanner is nil.")
+	}
+
+	return &StreamClient[T]{
+		response: httpRes,
+		stream:   s,
+	}, nil
+}
+
+func (s *StreamClient[T]) Receive() bool {
+	return s.stream.Scan()
+}
+
+func (s *StreamClient[T]) Stop() {
+	s.response.Body.Close()
+}
+
+func (s *StreamClient[T]) Read() (T, error) {
+	t := s.stream.Text()
+	out := new(T)
+	if err := json.Unmarshal([]byte(t), out); err != nil {
+		return *out, err
+	}
+
+	return *out, nil
+}
