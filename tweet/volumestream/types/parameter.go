@@ -37,6 +37,10 @@ func (p *SampleStreamInput) AccessToken() string {
 }
 
 func (p *SampleStreamInput) ResolveEndpoint(endpointBase string) string {
+	if p == nil {
+		return ""
+	}
+
 	endpoint := endpointBase
 
 	pm := p.ParameterMap()
