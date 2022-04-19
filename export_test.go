@@ -1,5 +1,11 @@
 package gotwi
 
+type MockResponse struct {
+	Text string `json:"text"`
+}
+
+func (m *MockResponse) HasPartialError() bool { return true }
+
 var (
 	ExportNewRequest            = newRequest
 	ExportResolveNon2XXResponse = resolveNon2XXResponse
@@ -13,4 +19,6 @@ var (
 	ExportWrapErr            = wrapErr
 	ExportWrapWithAPIErr     = wrapWithAPIErr
 	ExportNon2XXErrorSummary = non2XXErrorSummary
+
+	ExportNewStreamClient = newStreamClient[*MockResponse]
 )

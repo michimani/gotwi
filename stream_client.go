@@ -24,9 +24,6 @@ func newStreamClient[T util.Response](httpRes *http.Response) (*StreamClient[T],
 	}
 
 	s := bufio.NewScanner(httpRes.Body)
-	if s == nil {
-		return nil, errors.New("Scanner is nil.")
-	}
 
 	return &StreamClient[T]{
 		response: httpRes,
@@ -35,18 +32,29 @@ func newStreamClient[T util.Response](httpRes *http.Response) (*StreamClient[T],
 }
 
 func (s *StreamClient[T]) Receive() bool {
+	if s == nil {
+		return false
+	}
 	return s.stream.Scan()
 }
 
 func (s *StreamClient[T]) Stop() {
+	if s == nil {
+		return
+	}
 	s.response.Body.Close()
 }
 
 func (s *StreamClient[T]) Read() (T, error) {
+	var n T
+	if s == nil {
+		return n, errors.New("StreamClient is nil.")
+	}
+
 	t := s.stream.Text()
 	out := new(T)
 	if err := json.Unmarshal([]byte(t), out); err != nil {
-		return *out, err
+		return n, err
 	}
 
 	return *out, nil
