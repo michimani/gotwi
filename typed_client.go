@@ -2,7 +2,6 @@ package gotwi
 
 import (
 	"context"
-	"encoding/json"
 	"net/http"
 
 	"github.com/michimani/gotwi/internal/util"
@@ -57,24 +56,7 @@ func (c *TypedClient[T]) IsReady() bool {
 }
 
 func (c *TypedClient[T]) Exec(req *http.Request, i util.Response) (*resources.Non2XXError, error) {
-	res, err := c.Client.Do(req)
-	if err != nil {
-		return nil, err
-	}
-	defer res.Body.Close()
-
-	if _, ok := okCodes[res.StatusCode]; !ok {
-		non200err, err := resolveNon2XXResponse(res)
-		if err != nil {
-			return nil, err
-		}
-		return non200err, nil
-	}
-
-	if err := json.NewDecoder(res.Body).Decode(i); err != nil {
-		return nil, err
-	}
-
+	// only satisfy IClient interface
 	return nil, nil
 }
 

@@ -121,82 +121,26 @@ func Test_TypedClient_IsReady(t *testing.T) {
 }
 
 func Test_TypedClient_Exec(t *testing.T) {
-	nonErrReq, _ := http.NewRequestWithContext(context.TODO(), "GET", "https://example.com", nil)
-	errReq := &http.Request{Method: "invalid method"}
-
 	cases := []struct {
-		name          string
-		mockInput     *mockInput
-		req           *http.Request
-		wantErr       bool
-		wantNot200Err bool
+		name string
+		req  *http.Request
 	}{
 		{
 			name: "ok",
-			mockInput: &mockInput{
-				ResponseStatusCode: http.StatusOK,
-				ResponseBody:       io.NopCloser(strings.NewReader(`{}`)),
-			},
-			req:           nonErrReq,
-			wantErr:       false,
-			wantNot200Err: false,
+			req:  &http.Request{},
 		},
 		{
-			name: "error: not 200 error",
-			mockInput: &mockInput{
-				ResponseStatusCode: http.StatusInternalServerError,
-				ResponseBody:       io.NopCloser(strings.NewReader(`{}`)),
-			},
-			req:           nonErrReq,
-			wantErr:       false,
-			wantNot200Err: true,
-		},
-		{
-			name: "error: cannot resolve 200 error",
-			mockInput: &mockInput{
-				ResponseStatusCode: http.StatusInternalServerError,
-				ResponseHeader: map[string][]string{
-					"Content-Type": {"application/json;charset=UTF-8"},
-				},
-				ResponseBody: io.NopCloser(strings.NewReader(`///`)),
-			},
-			req:           nonErrReq,
-			wantErr:       true,
-			wantNot200Err: false,
-		},
-		{
-			name: "error: http.Client.Do error",
-			mockInput: &mockInput{
-				ResponseStatusCode: http.StatusInternalServerError,
-				ResponseBody:       io.NopCloser(strings.NewReader(`{}`)),
-			},
-			req:           errReq,
-			wantErr:       true,
-			wantNot200Err: false,
+			name: "ok (nil)",
+			req:  nil,
 		},
 	}
 
 	for _, c := range cases {
 		t.Run(c.name, func(tt *testing.T) {
 			asst := assert.New(tt)
-			mockClient := newMockHTTPClient(c.mockInput)
-			tc := gotwi.NewTypedClient[*gotwi.MockResponse](&gotwi.Client{
-				Client: mockClient,
-			})
 
+			tc := gotwi.NewTypedClient[*gotwi.MockResponse](&gotwi.Client{})
 			not200err, err := tc.Exec(c.req, &mockAPIResponse{})
-
-			if c.wantErr {
-				asst.Nil(not200err)
-				asst.Error(err)
-				return
-			}
-
-			if c.wantNot200Err {
-				asst.Nil(err)
-				asst.NotNil(not200err)
-				return
-			}
 
 			asst.Nil(err)
 			asst.Nil(not200err)
@@ -324,6 +268,25 @@ func Test_CallStreamAPI(t *testing.T) {
 			wantErr:         false,
 		},
 		{
+			name: "error: response is nil",
+			mockInput: &mockInput{
+				ResponseStatusCode: http.StatusOK,
+				ResponseBody:       io.NopCloser(strings.NewReader(`{"message": "ok"}`)),
+			},
+			clientInput: &gotwi.NewClientInput{
+				AuthenticationMethod: gotwi.AuthenMethodOAuth1UserContext,
+				OAuthToken:           "token",
+				OAuthTokenSecret:     "secret",
+			},
+			endpoint:        "test-endpoint",
+			method:          http.MethodGet,
+			envAPIKey:       "api-key",
+			envAPIKeySecret: "api-key-secret",
+			params:          &mockAPIParameter{},
+			response:        nil,
+			wantErr:         false,
+		},
+		{
 			name: "error: parameter is nil",
 			mockInput: &mockInput{
 				ResponseStatusCode: http.StatusOK,
@@ -366,6 +329,25 @@ func Test_CallStreamAPI(t *testing.T) {
 			mockInput: &mockInput{
 				ResponseStatusCode: http.StatusInternalServerError,
 				ResponseBody:       io.NopCloser(strings.NewReader(`{}`)),
+			},
+			clientInput: &gotwi.NewClientInput{
+				AuthenticationMethod: gotwi.AuthenMethodOAuth1UserContext,
+				OAuthToken:           "token",
+				OAuthTokenSecret:     "secret",
+			},
+			endpoint:        "test-endpoint",
+			method:          http.MethodGet,
+			envAPIKey:       "api-key",
+			envAPIKeySecret: "api-key-secret",
+			params:          &mockAPIParameter{},
+			response:        &mockAPIResponse{},
+			wantErr:         true,
+		},
+		{
+			name: "error: invalid json",
+			mockInput: &mockInput{
+				ResponseStatusCode: http.StatusInternalServerError,
+				ResponseBody:       io.NopCloser(strings.NewReader(`///`)),
 			},
 			clientInput: &gotwi.NewClientInput{
 				AuthenticationMethod: gotwi.AuthenMethodOAuth1UserContext,
