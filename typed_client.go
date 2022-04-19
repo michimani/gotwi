@@ -19,6 +19,10 @@ type TypedClient[T util.Response] struct {
 }
 
 func NewTypedClient[T util.Response](c *Client) *TypedClient[T] {
+	if c == nil {
+		return nil
+	}
+
 	return &TypedClient[T]{
 		Client:               c.Client,
 		accessToken:          c.AccessToken(),
@@ -93,7 +97,7 @@ func (c *TypedClient[T]) SigningKey() string {
 }
 
 func (c *TypedClient[T]) CallStreamAPI(ctx context.Context, endpoint, method string, p util.Parameters) (*StreamClient[T], error) {
-	req, err := c.prepare(ctx, endpoint, method, p)
+	req, err := prepare(ctx, endpoint, method, p, c)
 	if err != nil {
 		return nil, wrapErr(err)
 	}
@@ -130,8 +134,4 @@ func (c *TypedClient[T]) ExecStream(req *http.Request) (*http.Response, *resourc
 	}
 
 	return res, nil, nil
-}
-
-func (c *TypedClient[T]) prepare(ctx context.Context, endpointBase, method string, p util.Parameters) (*http.Request, error) {
-	return prepare(ctx, endpointBase, method, p, c)
 }

@@ -212,7 +212,7 @@ func (c *Client) SetSigningKey(v string) {
 }
 
 func (c *Client) CallAPI(ctx context.Context, endpoint, method string, p util.Parameters, i util.Response) error {
-	req, err := c.prepare(ctx, endpoint, method, p)
+	req, err := prepare(ctx, endpoint, method, p, c)
 	if err != nil {
 		return wrapErr(err)
 	}
@@ -254,10 +254,6 @@ func (c *Client) Exec(req *http.Request, i util.Response) (*resources.Non2XXErro
 	}
 
 	return nil, nil
-}
-
-func (c *Client) prepare(ctx context.Context, endpointBase, method string, p util.Parameters) (*http.Request, error) {
-	return prepare(ctx, endpointBase, method, p, c)
 }
 
 func prepare(ctx context.Context, endpointBase, method string, p util.Parameters, c IClient) (*http.Request, error) {
