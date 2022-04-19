@@ -37,3 +37,9 @@ go run  ./1_get_recent_activity/. 'your-account-id'
   ```bash
   go run ./2_post_tweet/. 'delete' 'tweet-id'
   ```
+  
+### 3. Sampling tweets
+
+```bash
+go run . 5
+```

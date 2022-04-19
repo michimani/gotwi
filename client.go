@@ -46,15 +46,21 @@ type NewClientWithAccessTokenInput struct {
 
 type IClient interface {
 	Exec(req *http.Request, i util.Response) (*resources.Non2XXError, error)
+	IsReady() bool
+	AccessToken() string
+	AuthenticationMethod() AuthenticationMethod
+	OAuthToken() string
+	OAuthConsumerKey() string
+	SigningKey() string
 }
 
 type Client struct {
 	Client               *http.Client
-	AuthenticationMethod AuthenticationMethod
-	AccessToken          string
-	OAuthToken           string
-	SigningKey           string
-	OAuthConsumerKey     string
+	authenticationMethod AuthenticationMethod
+	accessToken          string
+	oauthToken           string
+	oauthConsumerKey     string
+	signingKey           string
 }
 
 type ClientResponse struct {
@@ -80,7 +86,7 @@ func NewClient(in *NewClientInput) (*Client, error) {
 
 	c := Client{
 		Client:               defaultHTTPClient,
-		AuthenticationMethod: in.AuthenticationMethod,
+		authenticationMethod: in.AuthenticationMethod,
 	}
 
 	if in.HTTPClient != nil {
@@ -105,8 +111,8 @@ func NewClientWithAccessToken(in *NewClientWithAccessTokenInput) (*Client, error
 
 	c := Client{
 		Client:               defaultHTTPClient,
-		AuthenticationMethod: AuthenMethodOAuth2BearerToken,
-		AccessToken:          in.AccessToken,
+		authenticationMethod: AuthenMethodOAuth2BearerToken,
+		accessToken:          in.AccessToken,
 	}
 
 	if in.HTTPClient != nil {
@@ -122,16 +128,16 @@ func (c *Client) authorize(oauthToken, oauthTokenSecret string) error {
 	if apiKey == "" || apiKeySecret == "" {
 		return fmt.Errorf("env '%s' and '%s' is required.", APIKeyEnvName, APIKeySecretEnvName)
 	}
-	c.OAuthConsumerKey = apiKey
+	c.oauthConsumerKey = apiKey
 
-	switch c.AuthenticationMethod {
+	switch c.AuthenticationMethod() {
 	case AuthenMethodOAuth1UserContext:
 		if oauthToken == "" || oauthTokenSecret == "" {
 			return fmt.Errorf("OAuthToken and OAuthTokenSecret is required for using %s.", AuthenMethodOAuth1UserContext)
 		}
 
-		c.OAuthToken = oauthToken
-		c.SigningKey = fmt.Sprintf("%s&%s",
+		c.oauthToken = oauthToken
+		c.signingKey = fmt.Sprintf("%s&%s",
 			url.QueryEscape(apiKeySecret),
 			url.QueryEscape(oauthTokenSecret))
 	case AuthenMethodOAuth2BearerToken:
@@ -140,7 +146,7 @@ func (c *Client) authorize(oauthToken, oauthTokenSecret string) error {
 			return err
 		}
 
-		c.AccessToken = accessToken
+		c.accessToken = accessToken
 	}
 
 	return nil
@@ -151,17 +157,17 @@ func (c *Client) IsReady() bool {
 		return false
 	}
 
-	if !c.AuthenticationMethod.Valid() {
+	if !c.AuthenticationMethod().Valid() {
 		return false
 	}
 
-	switch c.AuthenticationMethod {
+	switch c.AuthenticationMethod() {
 	case AuthenMethodOAuth1UserContext:
-		if c.OAuthToken == "" || c.SigningKey == "" {
+		if c.OAuthToken() == "" || c.SigningKey() == "" {
 			return false
 		}
 	case AuthenMethodOAuth2BearerToken:
-		if c.AccessToken == "" {
+		if c.AccessToken() == "" {
 			return false
 		}
 	}
@@ -169,8 +175,44 @@ func (c *Client) IsReady() bool {
 	return true
 }
 
+func (c *Client) AccessToken() string {
+	return c.accessToken
+}
+
+func (c *Client) AuthenticationMethod() AuthenticationMethod {
+	return c.authenticationMethod
+}
+
+func (c *Client) OAuthToken() string {
+	return c.oauthToken
+}
+func (c *Client) OAuthConsumerKey() string {
+	return c.oauthConsumerKey
+}
+func (c *Client) SigningKey() string {
+	return c.signingKey
+}
+
+func (c *Client) SetAccessToken(v string) {
+	c.accessToken = v
+}
+
+func (c *Client) SetAuthenticationMethod(v AuthenticationMethod) {
+	c.authenticationMethod = v
+}
+
+func (c *Client) SetOAuthToken(v string) {
+	c.oauthToken = v
+}
+func (c *Client) SetOAuthConsumerKey(v string) {
+	c.oauthConsumerKey = v
+}
+func (c *Client) SetSigningKey(v string) {
+	c.signingKey = v
+}
+
 func (c *Client) CallAPI(ctx context.Context, endpoint, method string, p util.Parameters, i util.Response) error {
-	req, err := c.prepare(ctx, endpoint, method, p)
+	req, err := prepare(ctx, endpoint, method, p, c)
 	if err != nil {
 		return wrapErr(err)
 	}
@@ -214,7 +256,7 @@ func (c *Client) Exec(req *http.Request, i util.Response) (*resources.Non2XXErro
 	return nil, nil
 }
 
-func (c *Client) prepare(ctx context.Context, endpointBase, method string, p util.Parameters) (*http.Request, error) {
+func prepare(ctx context.Context, endpointBase, method string, p util.Parameters, c IClient) (*http.Request, error) {
 	if p == nil {
 		return nil, fmt.Errorf(gotwierrors.ErrorParametersNil, endpointBase)
 	}
@@ -224,16 +266,16 @@ func (c *Client) prepare(ctx context.Context, endpointBase, method string, p uti
 	}
 
 	endpoint := p.ResolveEndpoint(endpointBase)
-	p.SetAccessToken(c.AccessToken)
+	p.SetAccessToken(c.AccessToken())
 	req, err := newRequest(ctx, endpoint, method, p)
 	if err != nil {
 		return nil, err
 	}
 
-	switch c.AuthenticationMethod {
+	switch c.AuthenticationMethod() {
 	case AuthenMethodOAuth1UserContext:
 		pm := p.ParameterMap()
-		req, err = c.setOAuth1Header(req, pm)
+		req, err = setOAuth1Header(req, pm, c)
 		if err != nil {
 			return nil, err
 		}
@@ -247,13 +289,13 @@ func (c *Client) prepare(ctx context.Context, endpointBase, method string, p uti
 const oauth1header = `OAuth oauth_consumer_key="%s",oauth_nonce="%s",oauth_signature="%s",oauth_signature_method="%s",oauth_timestamp="%s",oauth_token="%s",oauth_version="%s"`
 
 // setOAuth1Header returns http.Request with the header information required for OAuth1.0a authentication.
-func (c *Client) setOAuth1Header(r *http.Request, paramsMap map[string]string) (*http.Request, error) {
+func setOAuth1Header(r *http.Request, paramsMap map[string]string, c IClient) (*http.Request, error) {
 	in := &CreateOAuthSignatureInput{
 		HTTPMethod:       r.Method,
 		RawEndpoint:      r.URL.String(),
-		OAuthConsumerKey: c.OAuthConsumerKey,
-		OAuthToken:       c.OAuthToken,
-		SigningKey:       c.SigningKey,
+		OAuthConsumerKey: c.OAuthConsumerKey(),
+		OAuthToken:       c.OAuthToken(),
+		SigningKey:       c.SigningKey(),
 		ParameterMap:     paramsMap,
 	}
 
@@ -263,12 +305,12 @@ func (c *Client) setOAuth1Header(r *http.Request, paramsMap map[string]string) (
 	}
 
 	r.Header.Add("Authorization", fmt.Sprintf(oauth1header,
-		url.QueryEscape(c.OAuthConsumerKey),
+		url.QueryEscape(c.OAuthConsumerKey()),
 		url.QueryEscape(out.OAuthNonce),
 		url.QueryEscape(out.OAuthSignature),
 		url.QueryEscape(out.OAuthSignatureMethod),
 		url.QueryEscape(out.OAuthTimestamp),
-		url.QueryEscape(c.OAuthToken),
+		url.QueryEscape(c.OAuthToken()),
 		url.QueryEscape(out.OAuthVersion),
 	))
 
