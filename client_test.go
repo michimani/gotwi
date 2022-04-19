@@ -35,6 +35,15 @@ func (tp testParameter) Body() (io.Reader, error) {
 
 func (tp testParameter) ParameterMap() map[string]string { return nil }
 
+type gotwiClientField struct {
+	AuthenticationMethod gotwi.AuthenticationMethod
+	AccessToken          string
+	OAuthToken           string
+	OAuthConsumerKey     string
+	SigningKey           string
+	Client               *http.Client
+}
+
 func Test_NewClient(t *testing.T) {
 	cases := []struct {
 		name            string
@@ -43,7 +52,7 @@ func Test_NewClient(t *testing.T) {
 		mockInput       *mockInput
 		in              *gotwi.NewClientInput
 		wantErr         bool
-		expect          *gotwi.Client
+		expect          gotwiClientField
 	}{
 		{
 			name:            "normal: OAuth1.0",
@@ -55,7 +64,7 @@ func Test_NewClient(t *testing.T) {
 				OAuthTokenSecret:     "oauth-token-secret",
 			},
 			wantErr: false,
-			expect: &gotwi.Client{
+			expect: gotwiClientField{
 				AuthenticationMethod: gotwi.AuthenMethodOAuth1UserContext,
 				AccessToken:          "",
 				OAuthToken:           "oauth-token",
@@ -75,7 +84,7 @@ func Test_NewClient(t *testing.T) {
 				AuthenticationMethod: gotwi.AuthenMethodOAuth2BearerToken,
 			},
 			wantErr: false,
-			expect: &gotwi.Client{
+			expect: gotwiClientField{
 				AuthenticationMethod: gotwi.AuthenMethodOAuth2BearerToken,
 				AccessToken:          "access_token",
 				OAuthConsumerKey:     "api-key",
@@ -93,7 +102,6 @@ func Test_NewClient(t *testing.T) {
 				AuthenticationMethod: gotwi.AuthenMethodOAuth2BearerToken,
 			},
 			wantErr: true,
-			expect:  nil,
 		},
 		{
 			name:            "error: input is nil",
@@ -101,7 +109,6 @@ func Test_NewClient(t *testing.T) {
 			envAPIKeySecret: "api-key-secret",
 			in:              nil,
 			wantErr:         true,
-			expect:          nil,
 		},
 		{
 			name:            "error: invalid authentication method",
@@ -113,7 +120,6 @@ func Test_NewClient(t *testing.T) {
 				OAuthTokenSecret:     "oauth-token-secret",
 			},
 			wantErr: true,
-			expect:  nil,
 		},
 		{
 			name:            "error: api key is empty",
@@ -125,7 +131,6 @@ func Test_NewClient(t *testing.T) {
 				OAuthTokenSecret:     "oauth-token-secret",
 			},
 			wantErr: true,
-			expect:  nil,
 		},
 		{
 			name:            "error: api key secret is empty",
@@ -137,7 +142,6 @@ func Test_NewClient(t *testing.T) {
 				OAuthTokenSecret:     "oauth-token-secret",
 			},
 			wantErr: true,
-			expect:  nil,
 		},
 		{
 			name:            "error: OAuth1.0: oauth token is empty",
@@ -149,7 +153,6 @@ func Test_NewClient(t *testing.T) {
 				OAuthTokenSecret:     "oauth-token-secret",
 			},
 			wantErr: true,
-			expect:  nil,
 		},
 		{
 			name:            "error: OAuth1.0: oauth token secret is empty",
@@ -161,7 +164,6 @@ func Test_NewClient(t *testing.T) {
 				OAuthTokenSecret:     "",
 			},
 			wantErr: true,
-			expect:  nil,
 		},
 	}
 
@@ -183,11 +185,11 @@ func Test_NewClient(t *testing.T) {
 			}
 
 			assert.NoError(tt, err)
-			assert.Equal(tt, c.expect.AuthenticationMethod, gc.AuthenticationMethod)
-			assert.Equal(tt, c.expect.AccessToken, gc.AccessToken)
-			assert.Equal(tt, c.expect.OAuthToken, gc.OAuthToken)
-			assert.Equal(tt, c.expect.OAuthConsumerKey, gc.OAuthConsumerKey)
-			assert.Equal(tt, c.expect.SigningKey, gc.SigningKey)
+			assert.Equal(tt, c.expect.AuthenticationMethod, gc.AuthenticationMethod())
+			assert.Equal(tt, c.expect.AccessToken, gc.AccessToken())
+			assert.Equal(tt, c.expect.OAuthToken, gc.OAuthToken())
+			assert.Equal(tt, c.expect.OAuthConsumerKey, gc.OAuthConsumerKey())
+			assert.Equal(tt, c.expect.SigningKey, gc.SigningKey())
 		})
 	}
 }
@@ -201,7 +203,7 @@ func Test_NewClientWithAccessToken(t *testing.T) {
 		name    string
 		in      *gotwi.NewClientWithAccessTokenInput
 		wantErr bool
-		expect  *gotwi.Client
+		expect  gotwiClientField
 	}{
 		{
 			name: "ok",
@@ -209,7 +211,7 @@ func Test_NewClientWithAccessToken(t *testing.T) {
 				AccessToken: "test-token",
 			},
 			wantErr: false,
-			expect: &gotwi.Client{
+			expect: gotwiClientField{
 				AuthenticationMethod: gotwi.AuthenMethodOAuth2BearerToken,
 				AccessToken:          "test-token",
 				Client:               defaultHTTPClient,
@@ -224,7 +226,7 @@ func Test_NewClientWithAccessToken(t *testing.T) {
 				},
 			},
 			wantErr: false,
-			expect: &gotwi.Client{
+			expect: gotwiClientField{
 				AuthenticationMethod: gotwi.AuthenMethodOAuth2BearerToken,
 				AccessToken:          "test-token",
 				Client: &http.Client{
@@ -236,13 +238,11 @@ func Test_NewClientWithAccessToken(t *testing.T) {
 			name:    "error: access token is empty",
 			in:      &gotwi.NewClientWithAccessTokenInput{},
 			wantErr: true,
-			expect:  nil,
 		},
 		{
 			name:    "error: access token is empty",
 			in:      nil,
 			wantErr: true,
-			expect:  nil,
 		},
 	}
 
@@ -257,24 +257,26 @@ func Test_NewClientWithAccessToken(t *testing.T) {
 
 			assert.NoError(tt, err)
 			assert.Equal(tt, c.expect.Client, gc.Client)
-			assert.Equal(tt, c.expect.AuthenticationMethod, gc.AuthenticationMethod)
-			assert.Equal(tt, c.expect.AccessToken, gc.AccessToken)
-			assert.Equal(tt, c.expect.OAuthToken, gc.OAuthToken)
-			assert.Equal(tt, c.expect.OAuthConsumerKey, gc.OAuthConsumerKey)
-			assert.Equal(tt, c.expect.SigningKey, gc.SigningKey)
+			assert.Equal(tt, c.expect.AuthenticationMethod, gc.AuthenticationMethod())
+			assert.Equal(tt, c.expect.AccessToken, gc.AccessToken())
+			assert.Equal(tt, c.expect.OAuthToken, gc.OAuthToken())
+			assert.Equal(tt, c.expect.OAuthConsumerKey, gc.OAuthConsumerKey())
+			assert.Equal(tt, c.expect.SigningKey, gc.SigningKey())
 		})
 	}
 }
 
 func Test_IsReady(t *testing.T) {
 	cases := []struct {
-		name   string
-		client *gotwi.Client
-		expect bool
+		name        string
+		client      *gotwi.Client
+		clientField gotwiClientField
+		expect      bool
 	}{
 		{
-			name: "true: OAuth 1.0",
-			client: &gotwi.Client{
+			name:   "true: OAuth 1.0",
+			client: &gotwi.Client{},
+			clientField: gotwiClientField{
 				AuthenticationMethod: gotwi.AuthenMethodOAuth1UserContext,
 				OAuthToken:           "oauth-token",
 				SigningKey:           "signing-key",
@@ -282,8 +284,9 @@ func Test_IsReady(t *testing.T) {
 			expect: true,
 		},
 		{
-			name: "true: OAuth 2.0",
-			client: &gotwi.Client{
+			name:   "true: OAuth 2.0",
+			client: &gotwi.Client{},
+			clientField: gotwiClientField{
 				AuthenticationMethod: gotwi.AuthenMethodOAuth2BearerToken,
 				AccessToken:          "access-token",
 			},
@@ -295,16 +298,18 @@ func Test_IsReady(t *testing.T) {
 			expect: false,
 		},
 		{
-			name: "false: invalid authentication method",
-			client: &gotwi.Client{
+			name:   "false: invalid authentication method",
+			client: &gotwi.Client{},
+			clientField: gotwiClientField{
 				AuthenticationMethod: "invalid method",
 				AccessToken:          "access-token",
 			},
 			expect: false,
 		},
 		{
-			name: "false: OAuth 1.0: oauth token is empty",
-			client: &gotwi.Client{
+			name:   "false: OAuth 1.0: oauth token is empty",
+			client: &gotwi.Client{},
+			clientField: gotwiClientField{
 				AuthenticationMethod: gotwi.AuthenMethodOAuth1UserContext,
 				OAuthToken:           "",
 				SigningKey:           "signing-key",
@@ -312,8 +317,9 @@ func Test_IsReady(t *testing.T) {
 			expect: false,
 		},
 		{
-			name: "false: OAuth 1.0: signing key is empty",
-			client: &gotwi.Client{
+			name:   "false: OAuth 1.0: signing key is empty",
+			client: &gotwi.Client{},
+			clientField: gotwiClientField{
 				AuthenticationMethod: gotwi.AuthenMethodOAuth1UserContext,
 				OAuthToken:           "oauth-token",
 				SigningKey:           "",
@@ -321,8 +327,9 @@ func Test_IsReady(t *testing.T) {
 			expect: false,
 		},
 		{
-			name: "false: OAuth 2.0: access token is empty",
-			client: &gotwi.Client{
+			name:   "false: OAuth 2.0: access token is empty",
+			client: &gotwi.Client{},
+			clientField: gotwiClientField{
 				AuthenticationMethod: gotwi.AuthenMethodOAuth2BearerToken,
 				AccessToken:          "",
 			},
@@ -332,6 +339,14 @@ func Test_IsReady(t *testing.T) {
 
 	for _, c := range cases {
 		t.Run(c.name, func(tt *testing.T) {
+
+			if c.client != nil {
+				c.client.SetAccessToken(c.clientField.AccessToken)
+				c.client.SetAuthenticationMethod(c.clientField.AuthenticationMethod)
+				c.client.SetOAuthToken(c.clientField.OAuthToken)
+				c.client.SetSigningKey(c.clientField.SigningKey)
+			}
+
 			b := c.client.IsReady()
 			assert.Equal(tt, c.expect, b)
 		})

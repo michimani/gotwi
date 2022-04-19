@@ -3,9 +3,7 @@ package gotwi
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"net/http"
-	"net/url"
 
 	"github.com/michimani/gotwi/internal/util"
 	"github.com/michimani/gotwi/resources"
@@ -13,21 +11,21 @@ import (
 
 type TypedClient[T util.Response] struct {
 	Client               *http.Client
-	AuthenticationMethod AuthenticationMethod
-	AccessToken          string
-	OAuthToken           string
-	SigningKey           string
-	OAuthConsumerKey     string
+	accessToken          string
+	authenticationMethod AuthenticationMethod
+	oauthToken           string
+	oauthConsumerKey     string
+	signingKey           string
 }
 
 func NewTypedClient[T util.Response](c *Client) *TypedClient[T] {
 	return &TypedClient[T]{
 		Client:               c.Client,
-		AuthenticationMethod: c.AuthenticationMethod,
-		AccessToken:          c.AccessToken,
-		OAuthToken:           c.OAuthToken,
-		SigningKey:           c.SigningKey,
-		OAuthConsumerKey:     c.OAuthConsumerKey,
+		accessToken:          c.AccessToken(),
+		authenticationMethod: c.AuthenticationMethod(),
+		oauthToken:           c.OAuthToken(),
+		oauthConsumerKey:     c.OAuthConsumerKey(),
+		signingKey:           c.SigningKey(),
 	}
 }
 
@@ -36,17 +34,17 @@ func (c *TypedClient[T]) IsReady() bool {
 		return false
 	}
 
-	if !c.AuthenticationMethod.Valid() {
+	if !c.AuthenticationMethod().Valid() {
 		return false
 	}
 
-	switch c.AuthenticationMethod {
+	switch c.AuthenticationMethod() {
 	case AuthenMethodOAuth1UserContext:
-		if c.OAuthToken == "" || c.SigningKey == "" {
+		if c.OAuthToken() == "" || c.SigningKey() == "" {
 			return false
 		}
 	case AuthenMethodOAuth2BearerToken:
-		if c.AccessToken == "" {
+		if c.AccessToken() == "" {
 			return false
 		}
 	}
@@ -76,41 +74,22 @@ func (c *TypedClient[T]) Exec(req *http.Request, i util.Response) (*resources.No
 	return nil, nil
 }
 
-func (c *TypedClient[T]) accessToken() string {
-	return c.AccessToken
+func (c *TypedClient[T]) AccessToken() string {
+	return c.accessToken
 }
 
-func (c *TypedClient[T]) authenticationMethod() AuthenticationMethod {
-	return c.AuthenticationMethod
+func (c *TypedClient[T]) AuthenticationMethod() AuthenticationMethod {
+	return c.authenticationMethod
 }
 
-// setOAuth1Header returns http.Request with the header information required for OAuth1.0a authentication.
-func (c *TypedClient[T]) setOAuth1Header(r *http.Request, paramsMap map[string]string) (*http.Request, error) {
-	in := &CreateOAuthSignatureInput{
-		HTTPMethod:       r.Method,
-		RawEndpoint:      r.URL.String(),
-		OAuthConsumerKey: c.OAuthConsumerKey,
-		OAuthToken:       c.OAuthToken,
-		SigningKey:       c.SigningKey,
-		ParameterMap:     paramsMap,
-	}
-
-	out, err := CreateOAuthSignature(in)
-	if err != nil {
-		return nil, err
-	}
-
-	r.Header.Add("Authorization", fmt.Sprintf(oauth1header,
-		url.QueryEscape(c.OAuthConsumerKey),
-		url.QueryEscape(out.OAuthNonce),
-		url.QueryEscape(out.OAuthSignature),
-		url.QueryEscape(out.OAuthSignatureMethod),
-		url.QueryEscape(out.OAuthTimestamp),
-		url.QueryEscape(c.OAuthToken),
-		url.QueryEscape(out.OAuthVersion),
-	))
-
-	return r, nil
+func (c *TypedClient[T]) OAuthToken() string {
+	return c.oauthToken
+}
+func (c *TypedClient[T]) OAuthConsumerKey() string {
+	return c.oauthConsumerKey
+}
+func (c *TypedClient[T]) SigningKey() string {
+	return c.signingKey
 }
 
 func (c *TypedClient[T]) CallStreamAPI(ctx context.Context, endpoint, method string, p util.Parameters) (*StreamClient[T], error) {

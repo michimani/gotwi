@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"strings"
 
+	"github.com/michimani/gotwi"
 	"github.com/michimani/gotwi/internal/util"
 	"github.com/michimani/gotwi/resources"
 )
@@ -56,15 +57,65 @@ type mockAPIResponse struct{}
 
 func (mr mockAPIResponse) HasPartialError() bool { return false }
 
-type MockClientForOAuth2 struct {
-	MockExec func(req *http.Request, i util.Response) (*resources.Non2XXError, error)
+type MockGotwiClient struct {
+	Client                   *http.Client
+	MockExec                 func(req *http.Request, i util.Response) (*resources.Non2XXError, error)
+	MockIsReady              func() bool
+	MockAccessToken          func() string
+	MockAuthenticationMethod func() gotwi.AuthenticationMethod
+	MockOAuthToken           func() string
+	MockOAuthConsumerKey     func() string
+	MockSigningKey           func() string
 }
 
-func (m MockClientForOAuth2) Exec(req *http.Request, i util.Response) (*resources.Non2XXError, error) {
+func (m *MockGotwiClient) Exec(req *http.Request, i util.Response) (*resources.Non2XXError, error) {
 	return m.MockExec(req, i)
 }
 
-func newMockClientForOAuth2(returnedToken string, execHasError, hasNot200Error bool) *MockClientForOAuth2 {
+func (m *MockGotwiClient) IsReady() bool {
+	if m == nil {
+		return false
+	}
+
+	if !m.AuthenticationMethod().Valid() {
+		return false
+	}
+
+	switch m.AuthenticationMethod() {
+	case gotwi.AuthenMethodOAuth1UserContext:
+		if m.OAuthToken() == "" || m.SigningKey() == "" {
+			return false
+		}
+	case gotwi.AuthenMethodOAuth2BearerToken:
+		if m.AccessToken() == "" {
+			return false
+		}
+	}
+
+	return true
+}
+
+func (m *MockGotwiClient) AccessToken() string {
+	return m.MockAccessToken()
+}
+
+func (m *MockGotwiClient) AuthenticationMethod() gotwi.AuthenticationMethod {
+	return m.MockAuthenticationMethod()
+}
+
+func (m *MockGotwiClient) OAuthToken() string {
+	return m.MockAccessToken()
+}
+
+func (m *MockGotwiClient) OAuthConsumerKey() string {
+	return m.MockAccessToken()
+}
+
+func (m *MockGotwiClient) SigningKey() string {
+	return m.MockAccessToken()
+}
+
+func newMockGotwiClient(returnedToken string, execHasError, hasNot200Error bool) *MockGotwiClient {
 	fn := func(req *http.Request, i util.Response) (*resources.Non2XXError, error) {
 		if execHasError {
 			return nil, fmt.Errorf("has error")
@@ -83,7 +134,65 @@ func newMockClientForOAuth2(returnedToken string, execHasError, hasNot200Error b
 		return nil, nil
 	}
 
-	return &MockClientForOAuth2{
+	return &MockGotwiClient{
 		MockExec: fn,
 	}
+}
+
+type mockFuncInput struct {
+	MockExec                 func(req *http.Request, i util.Response) (*resources.Non2XXError, error)
+	MockIsReady              func() bool
+	MockAccessToken          func() string
+	MockAuthenticationMethod func() gotwi.AuthenticationMethod
+	MockOAuthToken           func() string
+	MockOAuthConsumerKey     func() string
+	MockSigningKey           func() string
+}
+
+func newMockGotwiClientWithFunc(in mockFuncInput) *MockGotwiClient {
+	m := MockGotwiClient{}
+
+	if in.MockExec != nil {
+		m.MockExec = in.MockExec
+	} else {
+		m.MockExec = func(req *http.Request, i util.Response) (*resources.Non2XXError, error) { return nil, nil }
+	}
+
+	if in.MockIsReady != nil {
+		m.MockIsReady = in.MockIsReady
+	} else {
+		m.MockIsReady = func() bool { return false }
+	}
+
+	if in.MockAccessToken != nil {
+		m.MockAccessToken = in.MockAccessToken
+	} else {
+		m.MockAccessToken = func() string { return "" }
+	}
+
+	if in.MockAuthenticationMethod != nil {
+		m.MockAuthenticationMethod = in.MockAuthenticationMethod
+	} else {
+		m.MockAuthenticationMethod = func() gotwi.AuthenticationMethod { return gotwi.AuthenticationMethod("") }
+	}
+
+	if in.MockOAuthToken != nil {
+		m.MockOAuthToken = in.MockOAuthToken
+	} else {
+		m.MockOAuthToken = func() string { return "" }
+	}
+
+	if in.MockOAuthConsumerKey != nil {
+		m.MockOAuthConsumerKey = in.MockOAuthConsumerKey
+	} else {
+		m.MockOAuthConsumerKey = func() string { return "" }
+	}
+
+	if in.MockSigningKey != nil {
+		m.MockSigningKey = in.MockSigningKey
+	} else {
+		m.MockSigningKey = func() string { return "" }
+	}
+
+	return &m
 }
