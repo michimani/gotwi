@@ -4,7 +4,17 @@ This is a version of CHANGELOG less than v1.0.0
 
 ## [Unreleased]
 
-* TBD
+### Support APIs
+
+* `POST /2/tweets/search/stream/rules`
+* `GET /2/tweets/search/stream`
+
+v0.11.1 (2022-04-19)
+===
+
+### New Supported APIs
+
+* `GET /2/tweets/sample/stream`
 
 v0.11.0 (2022-04-13)
 ===
