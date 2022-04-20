@@ -27,7 +27,7 @@ Progress of supporting APIs:
 |  |  | `GET /2/tweets/counts/all` | ✅ |
 |  | Filtered stream | `POST /2/tweets/search/stream/rules` | - |
 |  |  | `GET /2/tweets/search/stream/rules` | ✅ |
-|  |  | `GET /2/tweets/search/stream` | - |
+|  |  | `GET /2/tweets/search/stream` | ✅ |
 |  | Volume streams | `GET /2/tweets/sample/stream` | ✅ |
 |  | Retweets | `GET /2/users/:id/retweeted_by` | ✅ |
 |  |  | `POST /2/users/:id/retweets` | ✅ |
