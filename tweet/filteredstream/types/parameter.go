@@ -1,8 +1,10 @@
 package types
 
 import (
+	"encoding/json"
 	"io"
 	"strconv"
+	"strings"
 
 	"github.com/michimani/gotwi/fields"
 	"github.com/michimani/gotwi/internal/util"
@@ -49,6 +51,117 @@ func (p *ListRulesInput) ParameterMap() map[string]string {
 		m["ids"] = util.QueryValue(p.IDs)
 	}
 
+	return m
+}
+
+type AddingRules []AddingRule
+
+type AddingRule struct {
+	Value *string `json:"value,omitempty"`
+	Tag   *string `json:"tag,omitempty"`
+}
+
+type DeletingRules struct {
+	IDs []string `json:"ids"`
+}
+
+type CreateRulesInput struct {
+	accessToken string
+
+	// Query parameters
+	DryRun bool `json:"-"` // default false
+
+	// JSON body parameter
+	Add AddingRules `json:"add,omitempty"`
+}
+
+var createOrDeleteRulesQueryParameters = map[string]struct{}{
+	"dry_run": {},
+}
+
+func (p *CreateRulesInput) SetAccessToken(token string) {
+	p.accessToken = token
+}
+
+func (p *CreateRulesInput) AccessToken() string {
+	return p.accessToken
+}
+
+func (p *CreateRulesInput) ResolveEndpoint(endpointBase string) string {
+	if len(p.Add) == 0 {
+		return ""
+	}
+
+	endpoint := endpointBase
+	pm := p.ParameterMap()
+	if len(pm) > 0 {
+		qs := util.QueryString(pm, createOrDeleteRulesQueryParameters)
+		endpoint += "?" + qs
+	}
+
+	return endpoint
+}
+
+func (p *CreateRulesInput) Body() (io.Reader, error) {
+	json, err := json.Marshal(p)
+	if err != nil {
+		return nil, err
+	}
+
+	return strings.NewReader(string(json)), nil
+}
+
+func (p *CreateRulesInput) ParameterMap() map[string]string {
+	m := map[string]string{}
+	m["dry_run"] = strconv.FormatBool(p.DryRun)
+	return m
+}
+
+type DeleteRulesInput struct {
+	accessToken string
+
+	// Query parameters
+	DryRun bool `json:"-"` // default false
+
+	// JSON body parameter
+	Delete *DeletingRules `json:"delete,omitempty"`
+}
+
+func (p *DeleteRulesInput) SetAccessToken(token string) {
+	p.accessToken = token
+}
+
+func (p *DeleteRulesInput) AccessToken() string {
+	return p.accessToken
+}
+
+func (p *DeleteRulesInput) ResolveEndpoint(endpointBase string) string {
+	if p.Delete == nil {
+		return ""
+	}
+
+	endpoint := endpointBase
+	pm := p.ParameterMap()
+	if len(pm) > 0 {
+		qs := util.QueryString(pm, createOrDeleteRulesQueryParameters)
+		endpoint += "?" + qs
+	}
+
+	return endpoint
+}
+
+func (p *DeleteRulesInput) Body() (io.Reader, error) {
+	json, err := json.Marshal(p)
+	if err != nil {
+		return nil, err
+	}
+
+	return strings.NewReader(string(json)), nil
+}
+
+func (p *DeleteRulesInput) ParameterMap() map[string]string {
+	m := map[string]string{}
+	m["dry_run"] = strconv.FormatBool(p.DryRun)
 	return m
 }
 

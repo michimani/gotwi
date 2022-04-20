@@ -33,8 +33,28 @@ type SpacesLookupTweetsMeta struct {
 	ResultCount *int `json:"result_count"`
 }
 
-type FilterdStreamRulesGetMeta struct {
+type ListSearchStreamRulesMeta struct {
 	Sent *time.Time `json:"sent"`
+}
+
+type CreateSearchStreamRulesMeta struct {
+	Sent    *time.Time                         `json:"sent"`
+	Summary CreateSearchStreamRulesMetaSummary `json:"summary"`
+}
+
+type CreateSearchStreamRulesMetaSummary struct {
+	Created    int `json:"created"`
+	NotCreated int `json:"not_created"`
+}
+
+type DeleteSearchStreamRulesMeta struct {
+	Sent    *time.Time                         `json:"sent"`
+	Summary DeleteSearchStreamRulesMetaSummary `json:"summary"`
+}
+
+type DeleteSearchStreamRulesMetaSummary struct {
+	Deleted    int `json:"deleted"`
+	NotDeleted int `json:"not_deleted"`
 }
 
 type ListLookupOwnedListsMeta struct {
