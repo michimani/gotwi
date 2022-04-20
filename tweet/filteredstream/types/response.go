@@ -4,11 +4,31 @@ import "github.com/michimani/gotwi/resources"
 
 type ListRulesOutput struct {
 	Data   []resources.FilterdStreamRule `json:"data"`
-	Meta   resources.FilterdStreamRulesGetMeta
+	Meta   resources.ListSearchStreamRulesMeta
 	Errors []resources.PartialError `json:"errors"`
 }
 
 func (r *ListRulesOutput) HasPartialError() bool {
+	return !(r.Errors == nil || len(r.Errors) == 0)
+}
+
+type CreateRulesOutput struct {
+	Data   []resources.FilterdStreamRule `json:"data"`
+	Meta   resources.CreateSearchStreamRulesMeta
+	Errors []resources.PartialError `json:"errors"`
+}
+
+func (r *CreateRulesOutput) HasPartialError() bool {
+	return !(r.Errors == nil || len(r.Errors) == 0)
+}
+
+type DeleteRulesOutput struct {
+	Data   []resources.FilterdStreamRule `json:"data"`
+	Meta   resources.DeleteSearchStreamRulesMeta
+	Errors []resources.PartialError `json:"errors"`
+}
+
+func (r *DeleteRulesOutput) HasPartialError() bool {
 	return !(r.Errors == nil || len(r.Errors) == 0)
 }
 
