@@ -1,6 +1,7 @@
 package gotwi
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
 	"fmt"
@@ -37,6 +38,7 @@ type NewClientInput struct {
 	AuthenticationMethod AuthenticationMethod
 	OAuthToken           string
 	OAuthTokenSecret     string
+	Debug                bool
 }
 
 type NewClientWithAccessTokenInput struct {
@@ -61,6 +63,7 @@ type Client struct {
 	oauthToken           string
 	oauthConsumerKey     string
 	signingKey           string
+	debug                bool
 }
 
 type ClientResponse struct {
@@ -87,6 +90,7 @@ func NewClient(in *NewClientInput) (*Client, error) {
 	c := Client{
 		Client:               defaultHTTPClient,
 		authenticationMethod: in.AuthenticationMethod,
+		debug:                in.Debug,
 	}
 
 	if in.HTTPClient != nil {
@@ -249,8 +253,20 @@ func (c *Client) Exec(req *http.Request, i util.Response) (*resources.Non2XXErro
 		return non200err, nil
 	}
 
-	if err := json.NewDecoder(res.Body).Decode(i); err != nil {
-		return nil, err
+	var tr io.Reader
+	debugBuf := new(bytes.Buffer)
+	if c.debug {
+		tr = io.TeeReader(res.Body, debugBuf)
+	} else {
+		tr = res.Body
+	}
+
+	jerr := json.NewDecoder(tr).Decode(i)
+	if c.debug {
+		fmt.Printf("------DEBUG------\n[request url]\n%v\n[response header]\n%v\n[response body]\n%s\n------DEBUG END------\n", req.URL, res.Header, debugBuf.String())
+	}
+	if jerr != io.EOF {
+		return nil, jerr
 	}
 
 	return nil, nil
