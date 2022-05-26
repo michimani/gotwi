@@ -20,6 +20,7 @@ type Media struct {
 	Height           *int            `json:"height,omitempty"`
 	NonPublicMetrics map[string]*int `json:"non_public_metrics,omitempty"`
 	OrganicMetrics   map[string]*int `json:"organic_metrics,omitempty"`
+	URL              *string         `json:"url,omitempty"`
 	PreviewImageUrl  *string         `json:"preview_image_url,omitempty"`
 	PromotedMetrics  map[string]*int `json:"promoted_metrics,omitempty"`
 	PublicMetrics    map[string]*int `json:"public_metrics,omitempty"`
