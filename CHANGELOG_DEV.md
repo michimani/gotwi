@@ -6,6 +6,13 @@ This is a version of CHANGELOG less than v1.0.0
 
 - TBD
 
+v0.11.4 (2022-05-27)
+===
+
+### Fixes
+
+* Media struct does not have URL field. ([#252](https://github.com/michimani/gotwi/pull/252/files))
+
 v0.11.3 (2022-05-27)
 ===
 
