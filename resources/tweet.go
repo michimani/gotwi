@@ -5,7 +5,7 @@ import "time"
 type Tweet struct {
 	ID                 *string             `json:"id"`
 	Text               *string             `json:"text"`
-	Attachments        []map[string]string `json:"attachments,omitempty"`
+	Attachments        *TweetAttachments   `json:"attachments,omitempty"`
 	AuthorID           *string             `json:"author_id,omitempty"`
 	ContextAnnotations []ContextAnnotation `json:"context_annotations,omitempty"`
 	ConversationId     *string             `json:"conversation_id,omitempty"`
@@ -23,6 +23,11 @@ type Tweet struct {
 	ReplySettings      *string             `json:"reply_settings,omitempty"`
 	Source             *string             `json:"source,omitempty"`
 	Withheld           *TweetWithheld      `json:"withheld,omitempty"`
+}
+
+type TweetAttachments struct {
+	MediaKeys []string `json:"media_keys,omitempty"`
+	PollIDs   []string `json:"poll_i_ds,omitempty"`
 }
 
 type ContextAnnotation struct {
