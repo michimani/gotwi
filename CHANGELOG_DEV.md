@@ -6,6 +6,17 @@ This is a version of CHANGELOG less than v1.0.0
 
 - TBD
 
+v0.11.3 (2022-05-27)
+===
+
+### Features
+
+* Add debug mode.
+
+### Fixes
+
+* Tweet lookup API response does not include Tweets, Places, Media, and Polls Fields. ([#248](https://github.com/michimani/gotwi/pull/248/files))
+
 v0.11.2 (2022-04-21)
 ===
 
