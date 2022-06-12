@@ -6,6 +6,14 @@ This is a version of CHANGELOG less than v1.0.0
 
 - TBD
 
+
+v0.11.5 (2022-06-12)
+===
+
+### Fixes
+
+* TweetEntities struct has some invalid and not enough fields. ([#256](https://github.com/michimani/gotwi/pull/256/files))
+
 v0.11.4 (2022-05-27)
 ===
 
