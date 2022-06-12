@@ -65,15 +65,22 @@ type TweetEntityTag struct {
 }
 
 type URL struct {
-	Start       *int    `json:"start"`
-	End         *int    `json:"end"`
-	URL         *string `json:"url"`
-	ExpandedURL *string `json:"expanded_url"`
-	DisplayURL  *string `json:"display_url"`
-	Status      *string `json:"status"`
-	Title       *string `json:"title"`
-	Description *string `json:"description"`
-	UnwoundURL  *string `json:"unwound_url"`
+	Start       *int       `json:"start"`
+	End         *int       `json:"end"`
+	URL         *string    `json:"url"`
+	ExpandedURL *string    `json:"expanded_url"`
+	DisplayURL  *string    `json:"display_url"`
+	Images      []URLImage `json:"images"`
+	Status      *int       `json:"status"`
+	Title       *string    `json:"title"`
+	Description *string    `json:"description"`
+	UnwoundURL  *string    `json:"unwound_url"`
+}
+
+type URLImage struct {
+	URL    *string `json:"url"`
+	Width  *int    `json:"width"`
+	Height *int    `json:"height"`
 }
 
 type Geo struct {
