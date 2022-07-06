@@ -45,6 +45,13 @@ func (s *StreamClient[T]) Stop() {
 	s.response.Body.Close()
 }
 
+func myUnmarshal(input []byte, target interface{}) error {
+	if len(input) == 0 {
+		return nil
+	}
+	return json.Unmarshal(input, target)
+}
+
 func (s *StreamClient[T]) Read() (T, error) {
 	var n T
 	if s == nil {
@@ -53,7 +60,7 @@ func (s *StreamClient[T]) Read() (T, error) {
 
 	t := s.stream.Text()
 	out := new(T)
-	if err := json.Unmarshal([]byte(t), out); err != nil {
+	if err := myUnmarshal([]byte(t), out); err != nil {
 		return n, err
 	}
 
