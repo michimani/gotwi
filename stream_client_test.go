@@ -161,7 +161,7 @@ func Test_Read(t *testing.T) {
 			name:    "ok (closed)",
 			st:      st,
 			close:   true,
-			wantErr: true,
+			wantErr: false,
 			expect:  nil,
 		},
 		{
