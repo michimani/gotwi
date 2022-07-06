@@ -45,7 +45,7 @@ func (s *StreamClient[T]) Stop() {
 	s.response.Body.Close()
 }
 
-func myUnmarshal(input []byte, target interface{}) error {
+func safeUnmarshal(input []byte, target interface{}) error {
 	if len(input) == 0 {
 		return nil
 	}
@@ -60,7 +60,7 @@ func (s *StreamClient[T]) Read() (T, error) {
 
 	t := s.stream.Text()
 	out := new(T)
-	if err := myUnmarshal([]byte(t), out); err != nil {
+	if err := safeUnmarshal([]byte(t), out); err != nil {
 		return n, err
 	}
 
