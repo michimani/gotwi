@@ -6,6 +6,12 @@ This is a version of CHANGELOG less than v1.0.0
 
 - TBD
 
+v0.11.6 (2022-07-06)
+===
+
+### Fixes
+
+* `filteredstream.SearchStream` sometimes fails with "unexpected end of JSON input" error. ([#259](https://github.com/michimani/gotwi/issues/259))
 
 v0.11.5 (2022-06-12)
 ===
