@@ -134,6 +134,14 @@ func Test_SearchTweetsRecent_ResolveEndpoint(t *testing.T) {
 			expect: endpointBase + "?query=from%3Atestuser&until_id=uid",
 		},
 		{
+			name: "with sort_order",
+			params: &types.ListRecentInput{
+				Query:     "from:testuser",
+				SortOrder: types.ListSortOrderRecency,
+			},
+			expect: endpointBase + "?query=from%3Atestuser&sort_order=recency",
+		},
+		{
 			name: "all query parameters",
 			params: &types.ListRecentInput{
 				Query:       "from:testuser",
@@ -145,8 +153,9 @@ func Test_SearchTweetsRecent_ResolveEndpoint(t *testing.T) {
 				TweetFields: fields.TweetFieldList{"tf"},
 				MaxResults:  10,
 				NextToken:   "token",
+				SortOrder:   types.ListSortOrderRelevancy,
 			},
-			expect: endpointBase + "?expansions=ex&max_results=10&media.fields=mf&next_token=token&place.fields=plf&poll.fields=pof&query=from%3Atestuser&tweet.fields=tf&user.fields=uf",
+			expect: endpointBase + "?expansions=ex&max_results=10&media.fields=mf&next_token=token&place.fields=plf&poll.fields=pof&query=from%3Atestuser&sort_order=relevancy&tweet.fields=tf&user.fields=uf",
 		},
 		{
 			name: "has no required parameter",
@@ -316,6 +325,14 @@ func Test_SearchTweetsAll_ResolveEndpoint(t *testing.T) {
 			expect: endpointBase + "?query=from%3Atestuser&until_id=uid",
 		},
 		{
+			name: "with sort_order",
+			params: &types.ListAllInput{
+				Query:     "from:testuser",
+				SortOrder: types.ListSortOrderRecency,
+			},
+			expect: endpointBase + "?query=from%3Atestuser&sort_order=recency",
+		},
+		{
 			name: "all query parameters",
 			params: &types.ListAllInput{
 				Query:       "from:testuser",
@@ -327,8 +344,9 @@ func Test_SearchTweetsAll_ResolveEndpoint(t *testing.T) {
 				TweetFields: fields.TweetFieldList{"tf"},
 				MaxResults:  10,
 				NextToken:   "token",
+				SortOrder:   types.ListSortOrderRelevancy,
 			},
-			expect: endpointBase + "?expansions=ex&max_results=10&media.fields=mf&next_token=token&place.fields=plf&poll.fields=pof&query=from%3Atestuser&tweet.fields=tf&user.fields=uf",
+			expect: endpointBase + "?expansions=ex&max_results=10&media.fields=mf&next_token=token&place.fields=plf&poll.fields=pof&query=from%3Atestuser&sort_order=relevancy&tweet.fields=tf&user.fields=uf",
 		},
 		{
 			name: "has no required parameter",

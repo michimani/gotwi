@@ -10,6 +10,12 @@ import (
 )
 
 type ListMaxResults int
+type ListSortOrder string
+
+const (
+	ListSortOrderRecency   = "recency"
+	ListSortOrderRelevancy = "relevancy"
+)
 
 type ListRecentInput struct {
 	accessToken string
@@ -28,6 +34,7 @@ type ListRecentInput struct {
 	UserFields  fields.UserFieldList
 	NextToken   string
 	MaxResults  ListMaxResults
+	SortOrder   ListSortOrder
 }
 
 var listRecentQueryParameters = map[string]struct{}{
@@ -44,6 +51,7 @@ var listRecentQueryParameters = map[string]struct{}{
 	"until_id":     {},
 	"max_results":  {},
 	"next_token":   {},
+	"sort_order":   {},
 }
 
 func (m ListMaxResults) Valid() bool {
@@ -52,6 +60,14 @@ func (m ListMaxResults) Valid() bool {
 
 func (m ListMaxResults) String() string {
 	return strconv.Itoa(int(m))
+}
+
+func (m ListSortOrder) Valid() bool {
+	return m == ListSortOrderRecency || m == ListSortOrderRelevancy
+}
+
+func (m ListSortOrder) String() string {
+	return string(m)
 }
 
 func (p *ListRecentInput) SetAccessToken(token string) {
@@ -113,6 +129,10 @@ func (p *ListRecentInput) ParameterMap() map[string]string {
 		m["next_token"] = p.NextToken
 	}
 
+	if p.SortOrder.Valid() {
+		m["sort_order"] = p.SortOrder.String()
+	}
+
 	return m
 }
 
@@ -133,6 +153,7 @@ type ListAllInput struct {
 	UserFields  fields.UserFieldList
 	NextToken   string
 	MaxResults  ListMaxResults
+	SortOrder   ListSortOrder
 }
 
 var listAllQueryParameters = map[string]struct{}{
@@ -149,6 +170,7 @@ var listAllQueryParameters = map[string]struct{}{
 	"until_id":     {},
 	"max_results":  {},
 	"next_token":   {},
+	"sort_order":   {},
 }
 
 func (p *ListAllInput) SetAccessToken(token string) {
@@ -208,6 +230,10 @@ func (p *ListAllInput) ParameterMap() map[string]string {
 
 	if p.NextToken != "" {
 		m["next_token"] = p.NextToken
+	}
+
+	if p.SortOrder.Valid() {
+		m["sort_order"] = p.SortOrder.String()
 	}
 
 	return m
