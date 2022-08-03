@@ -571,6 +571,7 @@ func Test_Exec(t *testing.T) {
 	cases := []struct {
 		name          string
 		mockInput     *mockInput
+		debugMode     bool
 		req           *http.Request
 		wantErr       bool
 		wantNot200Err bool
@@ -581,6 +582,17 @@ func Test_Exec(t *testing.T) {
 				ResponseStatusCode: http.StatusOK,
 				ResponseBody:       io.NopCloser(strings.NewReader(`{}`)),
 			},
+			req:           nonErrReq,
+			wantErr:       false,
+			wantNot200Err: false,
+		},
+		{
+			name: "ok: debug mode",
+			mockInput: &mockInput{
+				ResponseStatusCode: http.StatusOK,
+				ResponseBody:       io.NopCloser(strings.NewReader(`{}`)),
+			},
+			debugMode:     true,
 			req:           nonErrReq,
 			wantErr:       false,
 			wantNot200Err: false,
@@ -626,6 +638,7 @@ func Test_Exec(t *testing.T) {
 			client := gotwi.Client{
 				Client: mockClient,
 			}
+			client.SetDebugMode(c.debugMode)
 
 			not200err, err := client.Exec(c.req, &mockAPIResponse{})
 
