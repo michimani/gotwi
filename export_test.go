@@ -4,6 +4,10 @@ type MockResponse struct {
 	Text string `json:"text"`
 }
 
+func (c *Client) SetDebugMode(d bool) {
+	c.debug = d
+}
+
 func (m *MockResponse) HasPartialError() bool { return true }
 
 var (
