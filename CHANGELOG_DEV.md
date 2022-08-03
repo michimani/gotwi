@@ -6,6 +6,13 @@ This is a version of CHANGELOG less than v1.0.0
 
 - TBD
 
+v0.11.7 (2022-08-03)
+===
+
+### Features
+
+* Support `sort_order` parameter for Search Tweet API. ([#263](https://github.com/michimani/gotwi/issues/263)) ([193f336](https://github.com/michimani/gotwi/commit/193f3362c664844a3d11cbc53fb56728ec51e96f))
+
 v0.11.6 (2022-07-06)
 ===
 
