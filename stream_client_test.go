@@ -143,6 +143,13 @@ func Test_Read(t *testing.T) {
 		Body: io.NopCloser(strings.NewReader(`{"text": "test"}`)),
 	})
 
+	emptySt, _ := gotwi.ExportNewStreamClient(&http.Response{
+		Header: map[string][]string{
+			"Content-Type": {"application/json;charset=UTF-8"},
+		},
+		Body: io.NopCloser(strings.NewReader("")),
+	})
+
 	cases := []struct {
 		name    string
 		st      *gotwi.StreamClient[*gotwi.MockResponse]
@@ -156,6 +163,11 @@ func Test_Read(t *testing.T) {
 			expect: &gotwi.MockResponse{
 				Text: "test",
 			},
+		},
+		{
+			name:   "ok (empty response)",
+			st:     emptySt,
+			expect: nil,
 		},
 		{
 			name:    "ok (closed)",
