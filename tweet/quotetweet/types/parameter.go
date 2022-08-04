@@ -20,6 +20,17 @@ func (m ListMaxResults) String() string {
 	return strconv.Itoa(int(m))
 }
 
+type ListExclude string
+
+const (
+	ListExcludeRetweets = "retweets"
+	ListExcludeReplies  = "replies"
+)
+
+func (v ListExclude) Valid() bool {
+	return v == ListExcludeRetweets || v == ListExcludeReplies
+}
+
 type ListInput struct {
 	accessToken string
 
@@ -27,6 +38,7 @@ type ListInput struct {
 	ID string // Tweet ID
 
 	// Query parameters
+	Exclude         ListExclude
 	Expansions      fields.ExpansionList
 	MaxResults      ListMaxResults
 	MediaFields     fields.MediaFieldList
@@ -38,6 +50,7 @@ type ListInput struct {
 }
 
 var listQueryParameters = map[string]struct{}{
+	"exclude":          {},
 	"expansions":       {},
 	"max_results":      {},
 	"media.fields":     {},
@@ -79,6 +92,10 @@ func (p *ListInput) Body() (io.Reader, error) {
 
 func (p *ListInput) ParameterMap() map[string]string {
 	m := map[string]string{}
+
+	if p.Exclude.Valid() {
+		m["exclude"] = string(p.Exclude)
+	}
 
 	if p.MaxResults.Valid() {
 		m["max_results"] = p.MaxResults.String()
