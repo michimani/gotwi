@@ -8,8 +8,9 @@ import (
 )
 
 const (
-	listTweetsEndpoint   = "https://api.twitter.com/2/users/:id/tweets"
-	listMentionsEndpoint = "https://api.twitter.com/2/users/:id/mentions"
+	listTweetsEndpoint               = "https://api.twitter.com/2/users/:id/tweets"
+	listMentionsEndpoint             = "https://api.twitter.com/2/users/:id/mentions"
+	listReverseChronologicalEndpoint = "https://api.twitter.com/2/users/:id/timelines/reverse_chronological"
 )
 
 // Returns Tweets composed by a single user, specified by the requested user ID.
@@ -32,6 +33,19 @@ func ListTweets(ctx context.Context, c *gotwi.Client, p *types.ListTweetsInput) 
 func ListMentions(ctx context.Context, c *gotwi.Client, p *types.ListMentionsInput) (*types.ListMentionsOutput, error) {
 	res := &types.ListMentionsOutput{}
 	if err := c.CallAPI(ctx, listMentionsEndpoint, "GET", p, res); err != nil {
+		return nil, err
+	}
+
+	return res, nil
+}
+
+// Allows you to retrieve a collection of the most recent Tweets and Retweets
+// posted by you and users you follow. This endpoint can return every Tweet
+// created on a timeline over the last 7 days as well as the most recent 800 regardless of creation date.
+// https://developer.twitter.com/en/docs/twitter-api/tweets/timelines/api-reference/get-users-id-reverse-chronological
+func ListReverseChronological(ctx context.Context, c *gotwi.Client, p *types.ListReverseChronologicalInput) (*types.ListReverseChronologicalOutput, error) {
+	res := &types.ListReverseChronologicalOutput{}
+	if err := c.CallAPI(ctx, listReverseChronologicalEndpoint, "GET", p, res); err != nil {
 		return nil, err
 	}
 

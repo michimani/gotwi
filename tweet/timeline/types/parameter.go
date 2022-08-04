@@ -218,3 +218,102 @@ func (p *ListMentionsInput) ParameterMap() map[string]string {
 
 	return m
 }
+
+type ListReverseChronologicalInput struct {
+	accessToken string
+
+	// Path parameter
+	ID string
+
+	// Query parameters
+	EndTime         *time.Time
+	Exclude         fields.ExcludeList
+	Expansions      fields.ExpansionList
+	MaxResults      ListMaxResults
+	MediaFields     fields.MediaFieldList
+	PaginationToken string
+	PlaceFields     fields.PlaceFieldList
+	PollFields      fields.PollFieldList
+	SinceID         string
+	StartTime       *time.Time
+	TweetFields     fields.TweetFieldList
+	UntilID         string
+	UserFields      fields.UserFieldList
+}
+
+var listReverseChronologicalQueryParameters = map[string]struct{}{
+	"id":               {},
+	"end_time":         {},
+	"exclude":          {},
+	"expansions":       {},
+	"max_results":      {},
+	"media.fields":     {},
+	"pagination_token": {},
+	"place.fields":     {},
+	"poll.fields":      {},
+	"since_id":         {},
+	"start_time":       {},
+	"tweet.fields":     {},
+	"until_id":         {},
+	"user.fields":      {},
+}
+
+func (p *ListReverseChronologicalInput) SetAccessToken(token string) {
+	p.accessToken = token
+}
+
+func (p *ListReverseChronologicalInput) AccessToken() string {
+	return p.accessToken
+}
+
+func (p *ListReverseChronologicalInput) ResolveEndpoint(endpointBase string) string {
+	if p.ID == "" {
+		return ""
+	}
+
+	encoded := url.QueryEscape(p.ID)
+	endpoint := strings.Replace(endpointBase, ":id", encoded, 1)
+
+	pm := p.ParameterMap()
+	if len(pm) > 0 {
+		qs := util.QueryString(pm, listReverseChronologicalQueryParameters)
+		endpoint += "?" + qs
+	}
+
+	return endpoint
+}
+
+func (p *ListReverseChronologicalInput) Body() (io.Reader, error) {
+	return nil, nil
+}
+
+func (p *ListReverseChronologicalInput) ParameterMap() map[string]string {
+	m := map[string]string{}
+	m = fields.SetFieldsParams(m, p.Exclude, p.Expansions, p.MediaFields, p.PlaceFields, p.PollFields, p.TweetFields, p.UserFields)
+
+	if p.StartTime != nil {
+		m["start_time"] = p.StartTime.Format(time.RFC3339)
+	}
+
+	if p.EndTime != nil {
+		m["end_time"] = p.EndTime.Format(time.RFC3339)
+	}
+
+	if p.SinceID != "" {
+		m["since_id"] = p.SinceID
+	}
+
+	if p.UntilID != "" {
+		m["until_id"] = p.UntilID
+	}
+
+	if p.MaxResults.Valid() {
+		m["max_results"] = p.MaxResults.String()
+	}
+
+	if p.PaginationToken != "" {
+		m["pagination_token"] = p.PaginationToken
+	}
+
+	return m
+}
