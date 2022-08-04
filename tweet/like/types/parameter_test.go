@@ -90,30 +90,6 @@ func Test_ListUsersInput_ResolveEndpoint(t *testing.T) {
 			expect: endpointRoot + "test-id" + "?expansions=ex1%2Cex2",
 		},
 		{
-			name: "with media.fields",
-			params: &types.ListUsersInput{
-				ID:          "test-id",
-				MediaFields: fields.MediaFieldList{"tf1", "tf2"},
-			},
-			expect: endpointRoot + "test-id" + "?media.fields=tf1%2Ctf2",
-		},
-		{
-			name: "with place.fields",
-			params: &types.ListUsersInput{
-				ID:          "test-id",
-				PlaceFields: fields.PlaceFieldList{"tf1", "tf2"},
-			},
-			expect: endpointRoot + "test-id" + "?place.fields=tf1%2Ctf2",
-		},
-		{
-			name: "with poll.fields",
-			params: &types.ListUsersInput{
-				ID:         "test-id",
-				PollFields: fields.PollFieldList{"tf1", "tf2"},
-			},
-			expect: endpointRoot + "test-id" + "?poll.fields=tf1%2Ctf2",
-		},
-		{
 			name: "with tweets.fields",
 			params: &types.ListUsersInput{
 				ID:          "test-id",
@@ -134,13 +110,10 @@ func Test_ListUsersInput_ResolveEndpoint(t *testing.T) {
 			params: &types.ListUsersInput{
 				ID:          "test-id",
 				Expansions:  fields.ExpansionList{"ex"},
-				MediaFields: fields.MediaFieldList{"mf"},
-				PlaceFields: fields.PlaceFieldList{"plf"},
-				PollFields:  fields.PollFieldList{"pof"},
 				UserFields:  fields.UserFieldList{"uf"},
 				TweetFields: fields.TweetFieldList{"tf"},
 			},
-			expect: endpointRoot + "test-id" + "?expansions=ex&media.fields=mf&place.fields=plf&poll.fields=pof&tweet.fields=tf&user.fields=uf",
+			expect: endpointRoot + "test-id" + "?expansions=ex&tweet.fields=tf&user.fields=uf",
 		},
 		{
 			name: "has no required parameter",
