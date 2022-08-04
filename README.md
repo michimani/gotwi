@@ -13,78 +13,79 @@ This is a library for using the Twitter API v2 in the Go language. (It is still 
 
 Progress of supporting APIs:
 
-| Category | Sub Category | Endpoint | Supported |
-| --- | --- | --- | --- |
-| Tweets | Tweet lookup | `GET /2/tweets` | ✅ |
-|  |  | `GET /2/tweets/:id` | ✅ |
-|  | Manage Tweet | `POST /2/tweets` | ✅ |
-|  |  | `DELETE /2/tweets/:id` | ✅ |
-|  | Timelines | `GET /2/users/:id/tweets` | ✅ |
-|  |  | `GET /2/users/:id/mentions` | ✅ |
-|  | Search Tweets | `GET /2/tweets/search/recent` | ✅ |
-|  |  | `GET /2/tweets/search/all` | ✅ |
-|  | Tweet counts | `GET /2/tweets/counts/recent` | ✅ |
-|  |  | `GET /2/tweets/counts/all` | ✅ |
-|  | Filtered stream | `POST /2/tweets/search/stream/rules` | ✅ |
-|  |  | `GET /2/tweets/search/stream/rules` | ✅ |
-|  |  | `GET /2/tweets/search/stream` | ✅ |
-|  | Volume streams | `GET /2/tweets/sample/stream` | ✅ |
-|  | Retweets | `GET /2/users/:id/retweeted_by` | ✅ |
-|  |  | `POST /2/users/:id/retweets` | ✅ |
-|  |  | `DELETE /2/users/:id/retweets/:source_tweet_id` | ✅ |
-|  | Likes | `GET /2/tweets/:id/liking_users` | ✅ |
-|  |  | `GET /2/tweets/:id/liked_tweets` | ✅ |
-|  |  | `POST /2/users/:id/likes` | ✅ |
-|  |  | `DELETE /2/users/:id/likes/:tweet_id` | ✅ |
-|  | Hide replies | `PUT /2/tweets/:id/hidden` | ✅ |
-|  | Quote Tweets | `GET /2/tweets/:id/quote_tweets` | ✅ |
-|  | Bookmarks | `GET /2/users/:id/bookmarks` | ✅ |
-|  |  | `POST /2/users/:id/bookmarks` | ✅ |
-|  |  | `DELETE /2/users/:id/bookmarks/:tweet_id` | ✅ |
-| Users | User lookup | `GET /2/users` | ✅ |
-|  |  | `GET /2/users/:id` | ✅ |
-|  |  | `GET /2/users/by` | ✅ |
-|  |  | `GET /2/users/by/username` | ✅ |
-|  |  | `GET /2/users/by/me` | ✅ |
-|  | Follows | `GET /2/users/:id/following` | ✅ |
-|  |  | `GET /2/users/:id/followers` | ✅ |
-|  |  | `POST /2/users/:id/following` | ✅ |
-|  |  | `DELETE /2/users/:source_user_id/following/:target_user_id` | ✅ |
-|  | Blocks | `GET /2/users/:id/blocking` | ✅ |
-|  |  | `POST /2/users/:id/blocking` | ✅ |
-|  |  | `DELETE /2/users/:source_user_id/blocking/:target_user_id` | ✅ |
-|  | Mutes | `GET /2/users/:id/muting` | ✅ |
-|  |  | `POST /2/users/:id/muting` | ✅ |
-|  |  | `DELETE /2/users/:source_user_id/muting/:target_user_id` | ✅ |
-| Lists | List lookup | `GET /2/lists/:id` | ✅ |
-|  |  | `GET /2/users/:id/owned_lists` | ✅ |
-|  | Manage Lists | `POST /2/lists` | ✅ |
-|  |  | `DELETE /2/lists/:id` | ✅ |
-|  |  | `PUT /2/lists/:id` | ✅ |
-|  | List Tweets lookup | `GET /2/lists/:id/tweets` | ✅ |
-|  | List members | `GET /2/users/:id/list_memberships` | ✅ |
-|  |  | `GET /2/lists/:id/members` | ✅ |
-|  |  | `POST /2/lists/:id/members` | ✅ |
-|  |  | `DELETE /2/lists/:id/members/:user_id` | ✅ |
-|  | List follows | `GET /2/lists/:id/followers` | ✅ |
-|  |  | `GET /2/users/:id/followed_lists` | ✅ |
-|  |  | `POST /2/users/:id/followed_lists` | ✅ |
-|  |  | `DELETE /2/users/:id/followed_lists/:list_id` | ✅ |
-|  | Pinned Lists | `GET /2/users/:id/pinned_lists` | ✅ |
-|  |  | `POST /2/users/:id/pinned_lists` | ✅ |
-|  |  | `DELETE /2/users/:id/pinned_lists/:list_id` | ✅ |
-| Spaces | Spaces Lookup | `GET /2/spaces/:id` | ✅ |
-|  |  | `GET /2/spaces` | ✅ |
-|  |  | `GET /2/spaces/by/creator_ids` | ✅ |
-|  |  | `GET /2/spaces/:id/buyers` | ✅ |
-|  |  | `GET /2/spaces/:id/tweets` | ✅ |
-|  | Search Spaces | `GET /2/spaces/search` | ✅ |
-| Compliance | Batch compliance | `GET /2/compliance/jobs/:id` | ✅ |
-|  |  | `GET /2/compliance/jobs` | ✅ |
-|  |  | `POST /2/compliance/jobs` | ✅ |
+| Category | Sub Category | Endpoint |
+| --- | --- | --- |
+| Tweets | Tweet lookup | `GET /2/tweets` |
+|  |  | `GET /2/tweets/:id` |
+|  | Manage Tweet | `POST /2/tweets` |
+|  |  | `DELETE /2/tweets/:id` |
+|  | Timelines | `GET /2/users/:id/tweets` |
+|  |  | `GET /2/users/:id/mentions` |
+|  |  | `GET /2/users/:id/timelines/reverse_chronological` |
+|  | Search Tweets | `GET /2/tweets/search/recent` |
+|  |  | `GET /2/tweets/search/all` |
+|  | Tweet counts | `GET /2/tweets/counts/recent` |
+|  |  | `GET /2/tweets/counts/all` |
+|  | Filtered stream | `POST /2/tweets/search/stream/rules` |
+|  |  | `GET /2/tweets/search/stream/rules` |
+|  |  | `GET /2/tweets/search/stream` |
+|  | Volume streams | `GET /2/tweets/sample/stream` |
+|  | Retweets | `GET /2/users/:id/retweeted_by` |
+|  |  | `POST /2/users/:id/retweets` |
+|  |  | `DELETE /2/users/:id/retweets/:source_tweet_id` |
+|  | Likes | `GET /2/tweets/:id/liking_users` |
+|  |  | `GET /2/tweets/:id/liked_tweets` |
+|  |  | `POST /2/users/:id/likes` |
+|  |  | `DELETE /2/users/:id/likes/:tweet_id` |
+|  | Hide replies | `PUT /2/tweets/:id/hidden` |
+|  | Quote Tweets | `GET /2/tweets/:id/quote_tweets` |
+|  | Bookmarks | `GET /2/users/:id/bookmarks` |
+|  |  | `POST /2/users/:id/bookmarks` |
+|  |  | `DELETE /2/users/:id/bookmarks/:tweet_id` |
+| Users | User lookup | `GET /2/users` |
+|  |  | `GET /2/users/:id` |
+|  |  | `GET /2/users/by` |
+|  |  | `GET /2/users/by/username` |
+|  |  | `GET /2/users/by/me` |
+|  | Follows | `GET /2/users/:id/following` |
+|  |  | `GET /2/users/:id/followers` |
+|  |  | `POST /2/users/:id/following` |
+|  |  | `DELETE /2/users/:source_user_id/following/:target_user_id` |
+|  | Blocks | `GET /2/users/:id/blocking` |
+|  |  | `POST /2/users/:id/blocking` |
+|  |  | `DELETE /2/users/:source_user_id/blocking/:target_user_id` |
+|  | Mutes | `GET /2/users/:id/muting` |
+|  |  | `POST /2/users/:id/muting` |
+|  |  | `DELETE /2/users/:source_user_id/muting/:target_user_id` |
+| Lists | List lookup | `GET /2/lists/:id` |
+|  |  | `GET /2/users/:id/owned_lists` |
+|  | Manage Lists | `POST /2/lists` |
+|  |  | `DELETE /2/lists/:id` |
+|  |  | `PUT /2/lists/:id` |
+|  | List Tweets lookup | `GET /2/lists/:id/tweets` |
+|  | List members | `GET /2/users/:id/list_memberships` |
+|  |  | `GET /2/lists/:id/members` |
+|  |  | `POST /2/lists/:id/members` |
+|  |  | `DELETE /2/lists/:id/members/:user_id` |
+|  | List follows | `GET /2/lists/:id/followers` |
+|  |  | `GET /2/users/:id/followed_lists` |
+|  |  | `POST /2/users/:id/followed_lists` |
+|  |  | `DELETE /2/users/:id/followed_lists/:list_id` |
+|  | Pinned Lists | `GET /2/users/:id/pinned_lists` |
+|  |  | `POST /2/users/:id/pinned_lists` |
+|  |  | `DELETE /2/users/:id/pinned_lists/:list_id` |
+| Spaces | Spaces Lookup | `GET /2/spaces/:id` |
+|  |  | `GET /2/spaces` |
+|  |  | `GET /2/spaces/by/creator_ids` |
+|  |  | `GET /2/spaces/:id/buyers` |
+|  |  | `GET /2/spaces/:id/tweets` |
+|  | Search Spaces | `GET /2/spaces/search` |
+| Compliance | Batch compliance | `GET /2/compliance/jobs/:id` |
+|  |  | `GET /2/compliance/jobs` |
+|  |  | `POST /2/compliance/jobs` |
 
 
-# Sample
+# How to use
 
 ## Prepare
 
