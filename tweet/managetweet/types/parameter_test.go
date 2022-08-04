@@ -78,8 +78,9 @@ func Test_CreateInput_Body(t *testing.T) {
 					DurationMinutes: gotwi.Int(5),
 					Options:         []string{"op1", "op2"},
 				},
+				QuoteTweetID: gotwi.String("quote_tweet_id"),
 			},
-			expect: strings.NewReader(`{"poll":{"duration_minutes":5,"options":["op1","op2"]},"text":"test text"}`),
+			expect: strings.NewReader(`{"poll":{"duration_minutes":5,"options":["op1","op2"]},"quote_tweet_id":"quote_tweet_id","text":"test text"}`),
 		},
 		{
 			name:   "ok: has no json parameters",

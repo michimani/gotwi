@@ -7,6 +7,8 @@ import (
 	"strings"
 )
 
+// CreateInput is struct for the parameters
+// that used for calling POST /2/tweets API.
 type CreateInput struct {
 	accessToken string
 
@@ -16,6 +18,7 @@ type CreateInput struct {
 	Geo                   *CreateInputGeo   `json:"geo,omitempty"`
 	Media                 *CreateInputMedia `json:"media,omitempty"`
 	Poll                  *CreateInputPoll  `json:"poll,omitempty"`
+	QuoteTweetID          *string           `json:"quote_tweet_id,omitempty"`
 	Reply                 *CreateInputReply `json:"reply,omitempty"`
 	ReplySettings         *string           `json:"reply_settings,omitempty"`
 	Text                  *string           `json:"text,omitempty"`
