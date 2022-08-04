@@ -4,11 +4,22 @@ import (
 	"encoding/json"
 	"io"
 	"net/url"
+	"strconv"
 	"strings"
 
 	"github.com/michimani/gotwi/fields"
 	"github.com/michimani/gotwi/internal/util"
 )
+
+type ListUsersMaxResults int
+
+func (m ListUsersMaxResults) Valid() bool {
+	return m > 0 && m <= 100
+}
+
+func (m ListUsersMaxResults) String() string {
+	return strconv.Itoa(int(m))
+}
 
 type ListUsersInput struct {
 	accessToken string
@@ -17,22 +28,20 @@ type ListUsersInput struct {
 	ID string // Tweet ID
 
 	// Query parameters
-	Expansions  fields.ExpansionList
-	MediaFields fields.MediaFieldList
-	PlaceFields fields.PlaceFieldList
-	PollFields  fields.PollFieldList
-	TweetFields fields.TweetFieldList
-	UserFields  fields.UserFieldList
+	Expansions      fields.ExpansionList
+	MaxResults      ListUsersMaxResults // default 100
+	PaginationToken string
+	TweetFields     fields.TweetFieldList
+	UserFields      fields.UserFieldList
 }
 
 var listUsersQueryParameters = map[string]struct{}{
-	"id":           {},
-	"expansions":   {},
-	"media.fields": {},
-	"place.fields": {},
-	"poll.fields":  {},
-	"tweet.fields": {},
-	"user.fields":  {},
+	"id":               {},
+	"expansions":       {},
+	"max_results":      {},
+	"pagination_token": {},
+	"tweet.fields":     {},
+	"user.fields":      {},
 }
 
 func (p *ListUsersInput) SetAccessToken(token string) {
@@ -66,7 +75,16 @@ func (p *ListUsersInput) Body() (io.Reader, error) {
 
 func (p *ListUsersInput) ParameterMap() map[string]string {
 	m := map[string]string{}
-	m = fields.SetFieldsParams(m, p.Expansions, p.MediaFields, p.PlaceFields, p.PollFields, p.TweetFields, p.UserFields)
+
+	if p.MaxResults.Valid() {
+		m["max_results"] = p.MaxResults.String()
+	}
+
+	if p.PaginationToken != "" {
+		m["pagination_token"] = p.PaginationToken
+	}
+
+	m = fields.SetFieldsParams(m, p.Expansions, p.TweetFields, p.UserFields)
 
 	return m
 }
