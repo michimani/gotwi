@@ -27,10 +27,10 @@ type ListInput struct {
 	ID string // Tweet ID
 
 	// Query parameters
-	MaxResults      ListMaxResults
-	PaginationToken string
 	Expansions      fields.ExpansionList
+	MaxResults      ListMaxResults
 	MediaFields     fields.MediaFieldList
+	PaginationToken string
 	PlaceFields     fields.PlaceFieldList
 	PollFields      fields.PollFieldList
 	TweetFields     fields.TweetFieldList
@@ -38,10 +38,10 @@ type ListInput struct {
 }
 
 var listQueryParameters = map[string]struct{}{
-	"max_results":      {},
-	"pagination_token": {},
 	"expansions":       {},
+	"max_results":      {},
 	"media.fields":     {},
+	"pagination_token": {},
 	"place.fields":     {},
 	"poll.fields":      {},
 	"tweet.fields":     {},
