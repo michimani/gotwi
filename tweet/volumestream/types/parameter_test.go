@@ -48,6 +48,20 @@ func Test_SampleStreamInput_ResolveEndpoint(t *testing.T) {
 			expect: endpoint,
 		},
 		{
+			name: "with backfill_minutes",
+			params: &types.SampleStreamInput{
+				BackfillMinutes: types.SampleStreamBackfillMinutes(2),
+			},
+			expect: endpoint + "?backfill_minutes=2",
+		},
+		{
+			name: "with invalid backfill_minutes",
+			params: &types.SampleStreamInput{
+				BackfillMinutes: types.SampleStreamBackfillMinutes(100),
+			},
+			expect: endpoint,
+		},
+		{
 			name: "with expansions",
 			params: &types.SampleStreamInput{
 				Expansions: fields.ExpansionList{"ex1", "ex2"},
@@ -92,14 +106,15 @@ func Test_SampleStreamInput_ResolveEndpoint(t *testing.T) {
 		{
 			name: "all query parameters",
 			params: &types.SampleStreamInput{
-				Expansions:  fields.ExpansionList{"ex"},
-				MediaFields: fields.MediaFieldList{"mf"},
-				PlaceFields: fields.PlaceFieldList{"plf"},
-				PollFields:  fields.PollFieldList{"pof"},
-				UserFields:  fields.UserFieldList{"uf"},
-				TweetFields: fields.TweetFieldList{"tf"},
+				BackfillMinutes: types.SampleStreamBackfillMinutes(4),
+				Expansions:      fields.ExpansionList{"ex"},
+				MediaFields:     fields.MediaFieldList{"mf"},
+				PlaceFields:     fields.PlaceFieldList{"plf"},
+				PollFields:      fields.PollFieldList{"pof"},
+				UserFields:      fields.UserFieldList{"uf"},
+				TweetFields:     fields.TweetFieldList{"tf"},
 			},
-			expect: endpoint + "?expansions=ex&media.fields=mf&place.fields=plf&poll.fields=pof&tweet.fields=tf&user.fields=uf",
+			expect: endpoint + "?backfill_minutes=4&expansions=ex&media.fields=mf&place.fields=plf&poll.fields=pof&tweet.fields=tf&user.fields=uf",
 		},
 		{
 			name:   "nil",
