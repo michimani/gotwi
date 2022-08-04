@@ -4,7 +4,16 @@ This is a version of CHANGELOG less than v1.0.0
 
 ## [Unreleased]
 
-- TBD
+* Support New API: `GET /2/users/:id/timelines/reverse_chronological`
+
+v0.11.8 (2022-08-04)
+===
+
+### Features
+
+* Support `quote_tweet_id` parameter at `POST /2/tweets`. ([#267](https://github.com/michimani/gotwi/issues/267)) ([b6de378](https://github.com/michimani/gotwi/commit/b6de37861aaa383f08697593d0c1c07a8cf8954f))
+* Support `backfill_minutes` parameter at `GET /2/tweets/sample/stream`. ([#269](https://github.com/michimani/gotwi/issues/269)) ([b77035d](https://github.com/michimani/gotwi/commit/b77035d44d93b63c216e43dc6e7671fe06a140c0))
+* Support `exclude` parameter at `GET /2/tweets/:id/quote_tweets`. ([#271](https://github.com/michimani/gotwi/issues/271)) [6b319d2](https://github.com/michimani/gotwi/commit/6b319d2908d676548eb9e7238a9f485edf365690)
 
 v0.11.7 (2022-08-03)
 ===
