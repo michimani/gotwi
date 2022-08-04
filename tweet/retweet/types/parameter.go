@@ -18,9 +18,6 @@ type ListUsersInput struct {
 
 	// Query parameters
 	Expansions  fields.ExpansionList
-	MediaFields fields.MediaFieldList
-	PlaceFields fields.PlaceFieldList
-	PollFields  fields.PollFieldList
 	TweetFields fields.TweetFieldList
 	UserFields  fields.UserFieldList
 }
@@ -28,9 +25,6 @@ type ListUsersInput struct {
 var listUsersQueryParameters = map[string]struct{}{
 	"id":           {},
 	"expansions":   {},
-	"media.fields": {},
-	"place.fields": {},
-	"poll.fields":  {},
 	"tweet.fields": {},
 	"user.fields":  {},
 }
@@ -66,7 +60,7 @@ func (p *ListUsersInput) Body() (io.Reader, error) {
 
 func (p *ListUsersInput) ParameterMap() map[string]string {
 	m := map[string]string{}
-	m = fields.SetFieldsParams(m, p.Expansions, p.MediaFields, p.PlaceFields, p.PollFields, p.TweetFields, p.UserFields)
+	m = fields.SetFieldsParams(m, p.Expansions, p.TweetFields, p.UserFields)
 
 	return m
 }
