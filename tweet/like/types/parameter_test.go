@@ -90,6 +90,30 @@ func Test_ListUsersInput_ResolveEndpoint(t *testing.T) {
 			expect: endpointRoot + "test-id" + "?expansions=ex1%2Cex2",
 		},
 		{
+			name: "with max_results",
+			params: &types.ListUsersInput{
+				ID:         "test-id",
+				MaxResults: types.ListUsersMaxResults(42),
+			},
+			expect: endpointRoot + "test-id" + "?max_results=42",
+		},
+		{
+			name: "with invalid max_results",
+			params: &types.ListUsersInput{
+				ID:         "test-id",
+				MaxResults: types.ListUsersMaxResults(5000),
+			},
+			expect: endpointRoot + "test-id",
+		},
+		{
+			name: "with pagination_token",
+			params: &types.ListUsersInput{
+				ID:              "test-id",
+				PaginationToken: "p-token",
+			},
+			expect: endpointRoot + "test-id" + "?pagination_token=p-token",
+		},
+		{
 			name: "with tweets.fields",
 			params: &types.ListUsersInput{
 				ID:          "test-id",
@@ -108,12 +132,14 @@ func Test_ListUsersInput_ResolveEndpoint(t *testing.T) {
 		{
 			name: "all query parameters",
 			params: &types.ListUsersInput{
-				ID:          "test-id",
-				Expansions:  fields.ExpansionList{"ex"},
-				UserFields:  fields.UserFieldList{"uf"},
-				TweetFields: fields.TweetFieldList{"tf"},
+				ID:              "test-id",
+				Expansions:      fields.ExpansionList{"ex"},
+				MaxResults:      types.ListUsersMaxResults(20),
+				PaginationToken: "p-token",
+				UserFields:      fields.UserFieldList{"uf"},
+				TweetFields:     fields.TweetFieldList{"tf"},
 			},
-			expect: endpointRoot + "test-id" + "?expansions=ex&tweet.fields=tf&user.fields=uf",
+			expect: endpointRoot + "test-id" + "?expansions=ex&max_results=20&pagination_token=p-token&tweet.fields=tf&user.fields=uf",
 		},
 		{
 			name: "has no required parameter",
