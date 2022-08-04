@@ -4,7 +4,25 @@ This is a version of CHANGELOG less than v1.0.0
 
 ## [Unreleased]
 
-* Support New API: `GET /2/users/:id/timelines/reverse_chronological`
+* TBD
+
+v0.12.0 (2022-08-04)
+===
+
+### New Supported APIs
+
+* Support New API: `GET /2/users/:id/timelines/reverse_chronological` ([#268](https://github.com/michimani/gotwi/issues/268)) ([f8153fa](https://github.com/michimani/gotwi/commit/f8153fa9907edaab0ad54a6f0bd4e0e3d8036cac))
+
+### Features
+
+* Support `max_results` and `pagination_token` parameter at `GET /2/tweets/:id/liking_users`. ([#272](https://github.com/michimani/gotwi/issues/272)) ([308e2b8](https://github.com/michimani/gotwi/commit/308e2b8ba287d98a934b33f56fdaee90fa741b29))
+* Support `max_results` and `pagination_token` parameter at `GET /2/tweets/:id/retweeted_by`. ([#270](https://github.com/michimani/gotwi/issues/270)) ([279e364](https://github.com/michimani/gotwi/commit/279e364b64362d72192dd27385666793b5488e4c))
+
+
+### Fixes
+
+* Fix invalid field type. ([#279](https://github.com/michimani/gotwi/issues/279)) ([f8153fa](https://github.com/michimani/gotwi/commit/f8153fa9907edaab0ad54a6f0bd4e0e3d8036cac))
+* Remove invalid input fields. ([#272](https://github.com/michimani/gotwi/issues/272)) ([308e2b8](https://github.com/michimani/gotwi/commit/308e2b8ba287d98a934b33f56fdaee90fa741b29)) ([#270](https://github.com/michimani/gotwi/issues/270)) ([279e364](https://github.com/michimani/gotwi/commit/279e364b64362d72192dd27385666793b5488e4c))
 
 v0.11.8 (2022-08-04)
 ===
