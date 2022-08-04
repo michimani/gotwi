@@ -20,17 +20,6 @@ func (m ListMaxResults) String() string {
 	return strconv.Itoa(int(m))
 }
 
-type ListExclude string
-
-const (
-	ListExcludeRetweets = "retweets"
-	ListExcludeReplies  = "replies"
-)
-
-func (v ListExclude) Valid() bool {
-	return v == ListExcludeRetweets || v == ListExcludeReplies
-}
-
 type ListInput struct {
 	accessToken string
 
@@ -38,7 +27,7 @@ type ListInput struct {
 	ID string // Tweet ID
 
 	// Query parameters
-	Exclude         ListExclude
+	Exclude         fields.ExcludeList
 	Expansions      fields.ExpansionList
 	MaxResults      ListMaxResults
 	MediaFields     fields.MediaFieldList
@@ -93,10 +82,6 @@ func (p *ListInput) Body() (io.Reader, error) {
 func (p *ListInput) ParameterMap() map[string]string {
 	m := map[string]string{}
 
-	if p.Exclude.Valid() {
-		m["exclude"] = string(p.Exclude)
-	}
-
 	if p.MaxResults.Valid() {
 		m["max_results"] = p.MaxResults.String()
 	}
@@ -105,7 +90,7 @@ func (p *ListInput) ParameterMap() map[string]string {
 		m["pagination_token"] = p.PaginationToken
 	}
 
-	m = fields.SetFieldsParams(m, p.Expansions, p.MediaFields, p.PlaceFields, p.PollFields, p.TweetFields, p.UserFields)
+	m = fields.SetFieldsParams(m, p.Exclude, p.Expansions, p.MediaFields, p.PlaceFields, p.PollFields, p.TweetFields, p.UserFields)
 
 	return m
 }
