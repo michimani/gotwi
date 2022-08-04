@@ -55,17 +55,9 @@ func Test_QuoteTweets_ResolveEndpoint(t *testing.T) {
 			name: "with exclude",
 			params: &types.ListInput{
 				ID:      "tid",
-				Exclude: types.ListExcludeReplies,
+				Exclude: fields.ExcludeList{"e1", "e2"},
 			},
-			expect: endpointRoot + "tid" + "?exclude=replies",
-		},
-		{
-			name: "with invalid exclude",
-			params: &types.ListInput{
-				ID:      "tid",
-				Exclude: types.ListExclude("invalid-exclude"),
-			},
-			expect: endpointRoot + "tid",
+			expect: endpointRoot + "tid" + "?exclude=e1%2Ce2",
 		},
 		{
 			name: "with expansions",
@@ -119,7 +111,7 @@ func Test_QuoteTweets_ResolveEndpoint(t *testing.T) {
 			name: "all query parameters",
 			params: &types.ListInput{
 				ID:              "tid",
-				Exclude:         types.ListExcludeRetweets,
+				Exclude:         fields.ExcludeList{"e"},
 				Expansions:      fields.ExpansionList{"ex"},
 				MediaFields:     fields.MediaFieldList{"mf"},
 				PlaceFields:     fields.PlaceFieldList{"plf"},
@@ -129,7 +121,7 @@ func Test_QuoteTweets_ResolveEndpoint(t *testing.T) {
 				MaxResults:      10,
 				PaginationToken: "token",
 			},
-			expect: endpointRoot + "tid" + "?exclude=retweets&expansions=ex&max_results=10&media.fields=mf&pagination_token=token&place.fields=plf&poll.fields=pof&tweet.fields=tf&user.fields=uf",
+			expect: endpointRoot + "tid" + "?exclude=e&expansions=ex&max_results=10&media.fields=mf&pagination_token=token&place.fields=plf&poll.fields=pof&tweet.fields=tf&user.fields=uf",
 		},
 		{
 			name: "has no required parameter",
