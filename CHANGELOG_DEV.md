@@ -6,6 +6,13 @@ This is a version of CHANGELOG less than v1.0.0
 
 * TBD
 
+v0.12.1 (2022-08-17)
+===
+
+### Fixes
+
+* Fix struct of response for `PUT /2/lists/:id`. ([#284](https://github.com/michimani/gotwi/issues/284)) ([f131485](https://github.com/michimani/gotwi/commit/f131485efb2d671b12d6c424d1611042630aa5ca))
+
 v0.12.0 (2022-08-04)
 ===
 
