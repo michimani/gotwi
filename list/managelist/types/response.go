@@ -12,7 +12,9 @@ func (r *CreateOutput) HasPartialError() bool {
 }
 
 type UpdateOutput struct {
-	Updated bool `json:"updated"`
+	Data struct {
+		Updated bool `json:"updated"`
+	} `json:"data"`
 }
 
 func (r *UpdateOutput) HasPartialError() bool {
