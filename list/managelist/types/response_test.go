@@ -21,7 +21,11 @@ func Test_UpdateOutput_HasPartialError(t *testing.T) {
 		{
 			name: "has data",
 			res: &types.UpdateOutput{
-				Updated: false,
+				Data: struct {
+					Updated bool "json:\"updated\""
+				}{
+					Updated: false,
+				},
 			},
 			expect: false,
 		},
