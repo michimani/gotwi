@@ -18,7 +18,6 @@ type TweetCountAllMeta struct {
 }
 
 type TweetTimelineMeta struct {
-	Count         *int    `json:"count"`
 	ResultCount   *int    `json:"result_count"`
 	NewestID      *string `json:"newest_id"`
 	OldestID      *string `json:"oldest_id"`
