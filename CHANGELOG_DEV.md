@@ -6,6 +6,13 @@ This is a version of CHANGELOG less than v1.0.0
 
 * TBD
 
+v0.12.2 (2022-08-29)
+===
+
+### Fixes
+
+* Fix struct of response for `GET /2/users/:id/tweets`, `GET /2/users/:id/mentions` and `GET /2/users/:id/timelines/reverse_chronological`. ([25c8bf0](https://github.com/michimani/gotwi/commit/25c8bf055dc05c94c499b3d2856109c1567c370b)), ([#288](https://github.com/michimani/gotwi/issues/288)) ([56f1c42](https://github.com/michimani/gotwi/commit/56f1c420a7a2ec1333662941dbf0a5fa0fd12669))
+
 v0.12.1 (2022-08-17)
 ===
 
