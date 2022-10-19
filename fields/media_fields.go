@@ -15,6 +15,7 @@ const (
 	MediaFieldOrganicMetrics   MediaField = "organic_metrics"
 	MediaFieldPromotedMetrics  MediaField = "promoted_metrics"
 	MediaFieldAltText          MediaField = "alt_text"
+	MediaFieldVariants         MediaField = "variants"
 )
 
 func (f MediaField) String() string {
