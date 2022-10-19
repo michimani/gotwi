@@ -6,6 +6,13 @@ This is a version of CHANGELOG less than v1.0.0
 
 * TBD
 
+v0.12.3 (2022-10-20)
+===
+
+### Features
+
+* Support `media.variants` field for response of `GET /2/tweets/search/stream` and so on. ([b453dc2](https://github.com/michimani/gotwi/commit/b453dc2449c3d3f56395831df0356bb9666246b9))
+
 v0.12.2 (2022-08-29)
 ===
 
