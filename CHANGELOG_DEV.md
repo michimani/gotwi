@@ -6,6 +6,13 @@ This is a version of CHANGELOG less than v1.0.0
 
 * TBD
 
+v0.12.4 (2022-10-30)
+===
+
+### Features
+
+* Support all fields in `includes` field for response of `GET /2/tweets/search/recent` and `GET /2/tweets/search/all`. ([bc396a3](https://github.com/michimani/gotwi/commit/bc396a33264407399b4fd56a21f1e1c87d310b74))
+
 v0.12.3 (2022-10-20)
 ===
 
