@@ -6,7 +6,11 @@ type ListRecentOutput struct {
 	Data     []resources.Tweet        `json:"data"`
 	Meta     resources.PaginationMeta `json:"meta"`
 	Includes struct {
-		Users []resources.User `json:"users"`
+		Users  []resources.User  `json:"users,omitempty"`
+		Tweets []resources.Tweet `json:"tweets,omitempty"`
+		Places []resources.Place `json:"places,omitempty"`
+		Media  []resources.Media `json:"media,omitempty"`
+		Polls  []resources.Poll  `json:"polls,omitempty"`
 	} `json:"includes"`
 	Errors []resources.PartialError `json:"errors"`
 }
@@ -19,7 +23,11 @@ type ListAllOutput struct {
 	Data     []resources.Tweet        `json:"data"`
 	Meta     resources.PaginationMeta `json:"meta"`
 	Includes struct {
-		Users []resources.User `json:"users"`
+		Users  []resources.User  `json:"users,omitempty"`
+		Tweets []resources.Tweet `json:"tweets,omitempty"`
+		Places []resources.Place `json:"places,omitempty"`
+		Media  []resources.Media `json:"media,omitempty"`
+		Polls  []resources.Poll  `json:"polls,omitempty"`
 	} `json:"includes"`
 	Errors []resources.PartialError `json:"errors"`
 }
