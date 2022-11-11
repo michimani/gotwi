@@ -33,8 +33,8 @@ func (r *DeleteRulesOutput) HasPartialError() bool {
 }
 
 type SearchStreamMatchedRule struct {
-	Tag string `json:"tag"`
-	Id  string `json:"id"`
+	Tag *string `json:"tag"`
+	Id  *string `json:"id"`
 }
 
 type SearchStreamOutput struct {
