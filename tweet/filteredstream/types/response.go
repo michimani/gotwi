@@ -32,6 +32,11 @@ func (r *DeleteRulesOutput) HasPartialError() bool {
 	return !(r.Errors == nil || len(r.Errors) == 0)
 }
 
+type SearchStreamMatchedRule struct {
+	Tag string `json:"tag"`
+	Id  string `json:"id"`
+}
+
 type SearchStreamOutput struct {
 	Data     resources.Tweet `json:"data"`
 	Includes struct {
@@ -41,7 +46,8 @@ type SearchStreamOutput struct {
 		Media  []resources.Media `json:"media,omitempty"`
 		Polls  []resources.Poll  `json:"polls,omitempty"`
 	} `json:"includes,omitempty"`
-	Errors []resources.PartialError `json:"errors,omitempty"`
+	Matching_Rules []SearchStreamMatchedRule `json:"matching_rules,omitempty"`
+	Errors         []resources.PartialError  `json:"errors,omitempty"`
 }
 
 func (r *SearchStreamOutput) HasPartialError() bool {
