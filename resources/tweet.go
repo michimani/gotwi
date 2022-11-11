@@ -3,26 +3,27 @@ package resources
 import "time"
 
 type Tweet struct {
-	ID                 *string             `json:"id"`
-	Text               *string             `json:"text"`
-	Attachments        *TweetAttachments   `json:"attachments,omitempty"`
-	AuthorID           *string             `json:"author_id,omitempty"`
-	ContextAnnotations []ContextAnnotation `json:"context_annotations,omitempty"`
-	ConversationId     *string             `json:"conversation_id,omitempty"`
-	CreatedAt          *time.Time          `json:"created_at,omitempty"`
-	Entities           *TweetEntities      `json:"entities,omitempty"`
-	Geo                *Geo                `json:"geo,omitempty"`
-	InReplyToUserID    *string             `json:"in_reply_to_user_id,omitempty"`
-	Lang               *string             `json:"lang,omitempty"`
-	NonPublicMetrics   *NonPublicMetrics   `json:"non_public_metrics,omitempty"`
-	OrganicMetrics     *OrganicMetrics     `json:"organic_metrics,omitempty"`
-	PossiblySensitive  *bool               `json:"possibly_sensitive,omitempty"`
-	PromotedMetrics    *PromotedMetrics    `json:"promoted_metrics,omitempty"`
-	PublicMetrics      *TweetPublicMetrics `json:"public_metrics,omitempty"`
-	ReferencedTweets   []ReferencedTweet   `json:"referenced_tweets,omitempty"`
-	ReplySettings      *string             `json:"reply_settings,omitempty"`
-	Source             *string             `json:"source,omitempty"`
-	Withheld           *TweetWithheld      `json:"withheld,omitempty"`
+	ID                     *string             `json:"id"`
+	Text                   *string             `json:"text"`
+	Edit_History_Tweet_Ids []*string           `json:"edit_history_tweet_ids"`
+	Attachments            *TweetAttachments   `json:"attachments,omitempty"`
+	AuthorID               *string             `json:"author_id,omitempty"`
+	ContextAnnotations     []ContextAnnotation `json:"context_annotations,omitempty"`
+	ConversationId         *string             `json:"conversation_id,omitempty"`
+	CreatedAt              *time.Time          `json:"created_at,omitempty"`
+	Entities               *TweetEntities      `json:"entities,omitempty"`
+	Geo                    *Geo                `json:"geo,omitempty"`
+	InReplyToUserID        *string             `json:"in_reply_to_user_id,omitempty"`
+	Lang                   *string             `json:"lang,omitempty"`
+	NonPublicMetrics       *NonPublicMetrics   `json:"non_public_metrics,omitempty"`
+	OrganicMetrics         *OrganicMetrics     `json:"organic_metrics,omitempty"`
+	PossiblySensitive      *bool               `json:"possibly_sensitive,omitempty"`
+	PromotedMetrics        *PromotedMetrics    `json:"promoted_metrics,omitempty"`
+	PublicMetrics          *TweetPublicMetrics `json:"public_metrics,omitempty"`
+	ReferencedTweets       []ReferencedTweet   `json:"referenced_tweets,omitempty"`
+	ReplySettings          *string             `json:"reply_settings,omitempty"`
+	Source                 *string             `json:"source,omitempty"`
+	Withheld               *TweetWithheld      `json:"withheld,omitempty"`
 }
 
 type TweetAttachments struct {
