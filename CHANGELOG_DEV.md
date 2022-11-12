@@ -6,6 +6,19 @@ This is a version of CHANGELOG less than v1.0.0
 
 * TBD
 
+v0.13.0 (2022-11-12)
+===
+
+### ⚠ BREAKING CHANGES
+
+**This version is not compatible with v0.12.5 or earlier.**
+
+**If your application uses the `PartialError.ResourceId` and `Tweet.ConversationId` fields, you will need to modify them when updating to this version. `PartialError.ResourceID` and `Tweet.ConversationID` instead of them, respectively.**
+
+### Fixes
+
+* Fix invalid field names. ([635bd32](https://github.com/michimani/gotwi/commit/635bd326a8162aea88a39324283630a416ecc0cc))
+
 v0.12.5 (2022-11-12)
 ===
 
