@@ -9,7 +9,7 @@ type Tweet struct {
 	Attachments         *TweetAttachments   `json:"attachments,omitempty"`
 	AuthorID            *string             `json:"author_id,omitempty"`
 	ContextAnnotations  []ContextAnnotation `json:"context_annotations,omitempty"`
-	ConversationId      *string             `json:"conversation_id,omitempty"`
+	ConversationID      *string             `json:"conversation_id,omitempty"`
 	CreatedAt           *time.Time          `json:"created_at,omitempty"`
 	Entities            *TweetEntities      `json:"entities,omitempty"`
 	Geo                 *Geo                `json:"geo,omitempty"`
