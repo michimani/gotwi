@@ -6,6 +6,13 @@ This is a version of CHANGELOG less than v1.0.0
 
 * TBD
 
+v0.12.5 (2022-11-12)
+===
+
+### Features
+
+* Support `EditHistoryTweetIDs` fields in `Tweet` struct and support `MatchingRules` for response of `GET /2/tweets/search/stream`. ([bd569c4](https://github.com/michimani/gotwi/commit/bd569c412e9d3e7e6822e798664344e6fd93e917))
+
 v0.12.4 (2022-10-30)
 ===
 
