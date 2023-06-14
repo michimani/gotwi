@@ -9,80 +9,80 @@ jobs:
     name: Test
     runs-on: ubuntu-latest
     steps:
-    - name: Set up Go 1.18
-      uses: actions/setup-go@v3
-      with:
-        go-version: 1.18
+      - name: Set up Go 1.20
+        uses: actions/setup-go@v3
+        with:
+          go-version: "1.20"
 
-    - name: Check out code into the Go module directory
-      uses: actions/checkout@v3
+      - name: Check out code into the Go module directory
+        uses: actions/checkout@v3
 
-    - name: Get dependencies
-      run: go install
+      - name: Get dependencies
+        run: go install
 
-    - name: Test code
-      run: go test github.com/michimani/gotwi/... -shuffle=on
+      - name: Test code
+        run: go test github.com/michimani/gotwi/... -shuffle=on
 
   setup-release:
     name: Setup release
     needs: test
     runs-on: ubuntu-latest
     steps:
-    - name: Create release
-      id: create_release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        tag_name: ${{ github.ref }}
-        release_name: Release ${{ github.ref }}
-        draft: false
-        prerelease: false
+      - name: Create release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          draft: false
+          prerelease: false
 
-    - name: Get url to upload to release from output
-      env:
-        url: ${{ steps.create_release.outputs.upload_url }}
-      run: |
-        mkdir artifact
-        echo $url > artifact/url.txt
-    - name: Upload artifact to share url with other jobs
-      uses: actions/upload-artifact@v1
-      with:
-        name: artifact
-        path: artifact/url.txt
+      - name: Get url to upload to release from output
+        env:
+          url: ${{ steps.create_release.outputs.upload_url }}
+        run: |
+          mkdir artifact
+          echo $url > artifact/url.txt
+      - name: Upload artifact to share url with other jobs
+        uses: actions/upload-artifact@v1
+        with:
+          name: artifact
+          path: artifact/url.txt
 
   release-code:
     name: Release Source Code
     needs: setup-release
     runs-on: ubuntu-latest
     steps:
-    - name: Download artifact to get url to upload to release
-      uses: actions/download-artifact@v2
-      with:
-        name: artifact
+      - name: Download artifact to get url to upload to release
+        uses: actions/download-artifact@v2
+        with:
+          name: artifact
 
-    - name: Get url to upload to release from artifact
-      id: get_url
-      run: |
-        pwd
-        ls -al
-        url=$(cat url.txt)
-        echo "##[set-output name=upload_url;]$url"
-    - name: Check out code into the Go module directory
-      uses: actions/checkout@v3
+      - name: Get url to upload to release from artifact
+        id: get_url
+        run: |
+          pwd
+          ls -al
+          url=$(cat url.txt)
+          echo "##[set-output name=upload_url;]$url"
+      - name: Check out code into the Go module directory
+        uses: actions/checkout@v3
 
-    - name: Pack source code in zip file
-      run: |
-        mkdir dist
-        ls -la
-        cp *.go dist/
-        zip -j -r release dist
-    - name: Upload release asset
-      uses: actions/upload-release-asset@v1.0.2
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        upload_url: ${{ steps.get_url.outputs.upload_url }}
-        asset_path: release.zip
-        asset_name: source.zip
-        asset_content_type: application/zip
+      - name: Pack source code in zip file
+        run: |
+          mkdir dist
+          ls -la
+          cp *.go dist/
+          zip -j -r release dist
+      - name: Upload release asset
+        uses: actions/upload-release-asset@v1.0.2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.get_url.outputs.upload_url }}
+          asset_path: release.zip
+          asset_name: source.zip
+          asset_content_type: application/zip

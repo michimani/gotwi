@@ -4,33 +4,33 @@ on:
     branches:
       - main
     paths:
-      - '**.go'
-      - 'go.mod'
+      - "**.go"
+      - "go.mod"
   pull_request:
     branches:
-      - '**'
+      - "**"
     paths:
-      - '**.go'
-      - 'go.mod'
+      - "**.go"
+      - "go.mod"
 
 jobs:
   test:
     name: Test
     runs-on: ubuntu-latest
     steps:
-    - name: Set up Go 1.18
-      uses: actions/setup-go@v3
-      with:
-        go-version: 1.18
+      - name: Set up Go 1.20
+        uses: actions/setup-go@v3
+        with:
+          go-version: "1.20"
 
-    - name: Check out code into the Go module directory
-      uses: actions/checkout@v3
+      - name: Check out code into the Go module directory
+        uses: actions/checkout@v3
 
-    - name: Get dependencies
-      run: go install
+      - name: Get dependencies
+        run: go install
 
-    - name: Test code
-      run: go test -race -coverprofile="coverage.txt" -covermode=atomic github.com/michimani/gotwi/... -shuffle=on
+      - name: Test code
+        run: go test -race -coverprofile="coverage.txt" -covermode=atomic github.com/michimani/gotwi/... -shuffle=on
 
-    - name: Upload code coverage to Codecov
-      uses: codecov/codecov-action@v2
+      - name: Upload code coverage to Codecov
+        uses: codecov/codecov-action@v2
