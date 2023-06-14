@@ -6,6 +6,12 @@ This is a version of CHANGELOG less than v1.0.0
 
 * TBD
 
+v0.14.0 (2023-06-14)
+===
+
+### Fixes
+* bump Go version 1.20
+
 v0.13.0 (2022-11-12)
 ===
 
