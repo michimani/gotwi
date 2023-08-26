@@ -91,9 +91,145 @@ Progress of supporting APIs:
 
 Set the API key and API key secret to environment variables.
 
+```bash
+export GOTWI_API_KEY='your-api-key'
+export GOTWI_API_KEY_SECRET='your-api-key-secret'
 ```
-export GOTWI_API_KEY=your-api-key
-export GOTWI_API_KEY_SECRET=your-api-key-secret
+
+## Request with OAuth 1.0a User Context
+
+With this authentication method, each operation will be performed as the authenticated Twitter account. For example, you can tweet as that account, or retrieve accounts that are blocked by that account.
+
+### Example: Get your own information.
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+
+	"github.com/michimani/gotwi"
+	"github.com/michimani/gotwi/fields"
+	"github.com/michimani/gotwi/user/userlookup"
+	"github.com/michimani/gotwi/user/userlookup/types"
+)
+
+func main() {
+	in := &gotwi.NewClientInput{
+		AuthenticationMethod: gotwi.AuthenMethodOAuth1UserContext,
+		OAuthToken:           "your-access-token",
+		OAuthTokenSecret:     "your-access-token-secret",
+	}
+
+	c, err := gotwi.NewClient(in)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	p := &types.GetMeInput{
+		Expansions: fields.ExpansionList{
+			fields.ExpansionPinnedTweetID,
+		},
+		UserFields: fields.UserFieldList{
+			fields.UserFieldCreatedAt,
+		},
+		TweetFields: fields.TweetFieldList{
+			fields.TweetFieldCreatedAt,
+		},
+	}
+
+	u, err := userlookup.GetMe(context.Background(), c, p)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	fmt.Println("ID:          ", gotwi.StringValue(u.Data.ID))
+	fmt.Println("Name:        ", gotwi.StringValue(u.Data.Name))
+	fmt.Println("Username:    ", gotwi.StringValue(u.Data.Username))
+	fmt.Println("CreatedAt:   ", u.Data.CreatedAt)
+	if u.Includes.Tweets != nil {
+		for _, t := range u.Includes.Tweets {
+			fmt.Println("PinnedTweet: ", gotwi.StringValue(t.Text))
+		}
+	}
+}
+```
+
+```
+go run main.go
+```
+
+You will get the output like following.
+
+```
+ID:           581780917
+Name:         michimani Lv.873
+Username:     michimani210
+CreatedAt:    2012-05-16 12:07:04 +0000 UTC
+PinnedTweet:  OpenAI API の Function Calling を使って自然言語で AWS リソースを作成してみる
+```
+
+### Example: Tweet with poll.
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+
+	"github.com/michimani/gotwi"
+	"github.com/michimani/gotwi/tweet/managetweet"
+	"github.com/michimani/gotwi/tweet/managetweet/types"
+)
+
+func main() {
+	in := &gotwi.NewClientInput{
+		AuthenticationMethod: gotwi.AuthenMethodOAuth1UserContext,
+		OAuthToken:           "your-access-token",
+		OAuthTokenSecret:     "your-access-token-secret",
+	}
+
+	c, err := gotwi.NewClient(in)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	p := &types.CreateInput{
+		Text: gotwi.String("This is a test tweet with poll."),
+		Poll: &types.CreateInputPoll{
+			DurationMinutes: gotwi.Int(5),
+			Options: []string{
+				"Cyan",
+				"Magenta",
+				"Yellow",
+				"Key plate",
+			},
+		},
+	}
+
+	res, err := managetweet.Create(context.Background(), c, p)
+	if err != nil {
+		fmt.Println(err.Error())
+		return
+	}
+
+	fmt.Printf("[%s] %s\n", gotwi.StringValue(res.Data.ID), gotwi.StringValue(res.Data.Text))
+}
+```
+
+```
+go run main.go
+```
+
+You will get the output like following.
+
+```
+[1462813519607263236] This is a test tweet with poll.
 ```
 
 ## Request with OAuth 2.0 Bearer Token
@@ -101,6 +237,8 @@ export GOTWI_API_KEY_SECRET=your-api-key-secret
 This authentication method allows only read-only access to public information.
 
 ### Example: Get a user by user name.
+
+⚠ This example only works with Twitter API v2 Basic or Pro plan. see details: [Developers Portal](https://developer.twitter.com/en/portal/products)
 
 ```go
 package main
@@ -169,7 +307,7 @@ CreatedAt:    2012-05-16 12:07:04 +0000 UTC
 PinnedTweet:  真偽をハッキリしたい西城秀樹「ブーリアン、ブーリアン」
 ```
 
-### new client with access token
+## Request with OAuth 2.0 Authorization Code with PKCE
 
 If you already have a pre-generated access token (e.g. OAuth 2.0 Authorization Code with PKCE), you can use `NewClientWithAccessToken()` function to generate a Gotwi client.
 
@@ -184,69 +322,9 @@ if err != nil {
 }
 ```
 
-## Request with OAuth 1.0a User Context
+See below for information on which authentication methods are available for which endpoints.
 
-With this authentication method, each operation will be performed as the authenticated Twitter account. For example, you can tweet as that account, or retrieve accounts that are blocked by that account.
-
-### Example: Tweet with poll.
-
-```go
-package main
-
-import (
-	"context"
-	"fmt"
-
-	"github.com/michimani/gotwi"
-	"github.com/michimani/gotwi/tweet/managetweet"
-	"github.com/michimani/gotwi/tweet/managetweet/types"
-)
-
-func main() {
-	in := &gotwi.NewClientInput{
-		AuthenticationMethod: gotwi.AuthenMethodOAuth1UserContext,
-		OAuthToken:           "your-twitter-acount-oauth-token",
-		OAuthTokenSecret:     "your-twitter-acount-oauth-token-secret",
-	}
-
-	c, err := gotwi.NewClient(in)
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-
-	p := &types.CreateInput{
-		Text: gotwi.String("This is a test tweet with poll."),
-		Poll: &types.CreateInputPoll{
-			DurationMinutes: gotwi.Int(5),
-			Options: []string{
-				"Cyan",
-				"Magenta",
-				"Yellow",
-				"Key plate",
-			},
-		},
-	}
-
-	res, err := managetweet.Create(context.Background(), c, p)
-	if err != nil {
-		fmt.Println(err.Error())
-		return
-	}
-
-	fmt.Printf("[%s] %s\n", gotwi.StringValue(res.Data.ID), gotwi.StringValue(res.Data.Text))
-}
-```
-
-```
-go run main.go
-```
-
-You will get the output like following.
-
-```
-[1462813519607263236] This is a test tweet with poll.
-```
+[Twitter API v2 authentication mapping | Docs | Twitter Developer Platform  ](https://developer.twitter.com/en/docs/authentication/guides/v2-authentication-mapping)
 
 ## Error handling
 
