@@ -23,6 +23,7 @@ const (
 	TweetFieldSource             TweetField = "source"
 	TweetFieldText               TweetField = "text"
 	TweetFieldWithheld           TweetField = "withheld"
+	TweetFieldNoteTweet          TweetField = "note_tweet"
 )
 
 func (f TweetField) String() string {
