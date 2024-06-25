@@ -6,6 +6,16 @@ This is a version of CHANGELOG less than v1.0.0
 
 * TBD
 
+v0.15.0 (2024-06-25)
+===
+
+### Features
+
+* * Support `NoteTweet` fields in `Tweet` struct. ([370f3eb](https://github.com/michimani/gotwi/commit/370f3ebda03bac61d4b3fbfdb3bb8dc4d53d2bc8) by [@NHypocrite](https://github.com/NHypocrite))
+
+### Fixes
+* bump Go version 1.22
+
 v0.14.0 (2023-06-14)
 ===
 
