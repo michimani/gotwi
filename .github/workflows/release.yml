@@ -46,7 +46,7 @@ jobs:
           mkdir artifact
           echo $url > artifact/url.txt
       - name: Upload artifact to share url with other jobs
-        uses: actions/upload-artifact@v1
+        uses: actions/upload-artifact@v4
         with:
           name: artifact
           path: artifact/url.txt
