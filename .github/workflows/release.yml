@@ -10,12 +10,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Set up Go 1.22
-        uses: actions/setup-go@v3
+        uses: actions/setup-go@v5
         with:
           go-version: "1.22"
 
       - name: Check out code into the Go module directory
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Get dependencies
         run: go install
@@ -57,7 +57,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Download artifact to get url to upload to release
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: artifact
 
@@ -69,7 +69,7 @@ jobs:
           url=$(cat url.txt)
           echo "##[set-output name=upload_url;]$url"
       - name: Check out code into the Go module directory
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Pack source code in zip file
         run: |
