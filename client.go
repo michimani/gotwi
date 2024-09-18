@@ -38,6 +38,8 @@ type NewClientInput struct {
 	AuthenticationMethod AuthenticationMethod
 	OAuthToken           string
 	OAuthTokenSecret     string
+	ApiKey               string
+	ApiKeySecret         string
 	Debug                bool
 }
 
@@ -63,6 +65,8 @@ type Client struct {
 	oauthToken           string
 	oauthConsumerKey     string
 	signingKey           string
+	apiKeyOverride       string
+	apiKeySecretOverride string
 	debug                bool
 }
 
@@ -90,6 +94,8 @@ func NewClient(in *NewClientInput) (*Client, error) {
 	c := Client{
 		Client:               defaultHTTPClient,
 		authenticationMethod: in.AuthenticationMethod,
+		apiKeyOverride:       in.ApiKey,
+		apiKeySecretOverride: in.ApiKeySecret,
 		debug:                in.Debug,
 	}
 
@@ -127,8 +133,8 @@ func NewClientWithAccessToken(in *NewClientWithAccessTokenInput) (*Client, error
 }
 
 func (c *Client) authorize(oauthToken, oauthTokenSecret string) error {
-	apiKey := os.Getenv(APIKeyEnvName)
-	apiKeySecret := os.Getenv(APIKeySecretEnvName)
+	apiKey := c.ApiKey()
+	apiKeySecret := c.ApiKeySecret()
 	if apiKey == "" || apiKeySecret == "" {
 		return fmt.Errorf("env '%s' and '%s' is required.", APIKeyEnvName, APIKeySecretEnvName)
 	}
@@ -187,6 +193,20 @@ func (c *Client) AuthenticationMethod() AuthenticationMethod {
 	return c.authenticationMethod
 }
 
+func (c *Client) ApiKey() string {
+	if c.apiKeyOverride != "" {
+		return c.apiKeyOverride
+	}
+	return os.Getenv(APIKeyEnvName)
+}
+
+func (c *Client) ApiKeySecret() string {
+	if c.apiKeySecretOverride != "" {
+		return c.apiKeySecretOverride
+	}
+	return os.Getenv(APIKeySecretEnvName)
+}
+
 func (c *Client) OAuthToken() string {
 	return c.oauthToken
 }
@@ -203,6 +223,14 @@ func (c *Client) SetAccessToken(v string) {
 
 func (c *Client) SetAuthenticationMethod(v AuthenticationMethod) {
 	c.authenticationMethod = v
+}
+
+func (c *Client) SetApiKey(v string) {
+	c.apiKeyOverride = v
+}
+
+func (c *Client) SetApiKeySecret(v string) {
+	c.apiKeySecretOverride = v
 }
 
 func (c *Client) SetOAuthToken(v string) {
