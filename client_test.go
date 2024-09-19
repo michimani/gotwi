@@ -38,8 +38,8 @@ func (tp testParameter) ParameterMap() map[string]string { return nil }
 type gotwiClientField struct {
 	AuthenticationMethod gotwi.AuthenticationMethod
 	AccessToken          string
-	ApiKey               string
-	ApiKeySecret         string
+	APIKey               string
+	APIKeySecret         string
 	OAuthToken           string
 	OAuthConsumerKey     string
 	SigningKey           string
@@ -82,8 +82,8 @@ func Test_NewClient(t *testing.T) {
 			expect: gotwiClientField{
 				AuthenticationMethod: gotwi.AuthenMethodOAuth1UserContext,
 				AccessToken:          "",
-				ApiKey:               "api-key",
-				ApiKeySecret:         "api-key-secret",
+				APIKey:               "api-key",
+				APIKeySecret:         "api-key-secret",
 				OAuthToken:           "oauth-token",
 				OAuthConsumerKey:     "api-key",
 				SigningKey:           "api-key-secret&oauth-token-secret",
@@ -102,8 +102,8 @@ func Test_NewClient(t *testing.T) {
 			expect: gotwiClientField{
 				AuthenticationMethod: gotwi.AuthenMethodOAuth1UserContext,
 				AccessToken:          "",
-				ApiKey:               "api-key",
-				ApiKeySecret:         "api-key-secret",
+				APIKey:               "api-key",
+				APIKeySecret:         "api-key-secret",
 				OAuthToken:           "oauth-token",
 				OAuthConsumerKey:     "api-key",
 				SigningKey:           "api-key-secret&oauth-token-secret",
@@ -119,15 +119,15 @@ func Test_NewClient(t *testing.T) {
 			},
 			in: &gotwi.NewClientInput{
 				AuthenticationMethod: gotwi.AuthenMethodOAuth2BearerToken,
-				ApiKey:               "override-api-key",
-				ApiKeySecret:         "override-api-key-secret",
+				APIKey:               "override-api-key",
+				APIKeySecret:         "override-api-key-secret",
 			},
 			wantErr: false,
 			expect: gotwiClientField{
 				AuthenticationMethod: gotwi.AuthenMethodOAuth2BearerToken,
 				AccessToken:          "access_token",
-				ApiKey:               "override-api-key",
-				ApiKeySecret:         "override-api-key-secret",
+				APIKey:               "override-api-key",
+				APIKeySecret:         "override-api-key-secret",
 				OAuthConsumerKey:     "override-api-key",
 			},
 		},
@@ -228,8 +228,8 @@ func Test_NewClient(t *testing.T) {
 			assert.NoError(tt, err)
 			assert.Equal(tt, c.expect.AuthenticationMethod, gc.AuthenticationMethod())
 			assert.Equal(tt, c.expect.AccessToken, gc.AccessToken())
-			assert.Equal(tt, c.expect.ApiKey, gc.ApiKey())
-			assert.Equal(tt, c.expect.ApiKeySecret, gc.ApiKeySecret())
+			assert.Equal(tt, c.expect.APIKey, gc.APIKey())
+			assert.Equal(tt, c.expect.APIKeySecret, gc.APIKeySecret())
 			assert.Equal(tt, c.expect.OAuthToken, gc.OAuthToken())
 			assert.Equal(tt, c.expect.OAuthConsumerKey, gc.OAuthConsumerKey())
 			assert.Equal(tt, c.expect.SigningKey, gc.SigningKey())
