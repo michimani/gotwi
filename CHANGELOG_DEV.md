@@ -6,12 +6,19 @@ This is a version of CHANGELOG less than v1.0.0
 
 * TBD
 
+v0.16.0 (2024-09-19)
+===
+
+### Features
+
+* Ability to set API Key & API Key Secret manually. ([8abb233](https://github.com/michimani/gotwi/commit/8abb23320f5b912392e397d89689809252fd6d36) by [EricFrancis12](https://github.com/EricFrancis12))
+
 v0.15.0 (2024-06-25)
 ===
 
 ### Features
 
-* * Support `NoteTweet` fields in `Tweet` struct. ([370f3eb](https://github.com/michimani/gotwi/commit/370f3ebda03bac61d4b3fbfdb3bb8dc4d53d2bc8) by [@NHypocrite](https://github.com/NHypocrite))
+* Support `NoteTweet` fields in `Tweet` struct. ([370f3eb](https://github.com/michimani/gotwi/commit/370f3ebda03bac61d4b3fbfdb3bb8dc4d53d2bc8) by [@NHypocrite](https://github.com/NHypocrite))
 
 ### Fixes
 * bump Go version 1.22
