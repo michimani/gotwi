@@ -38,6 +38,8 @@ type NewClientInput struct {
 	AuthenticationMethod AuthenticationMethod
 	OAuthToken           string
 	OAuthTokenSecret     string
+	APIKey               string
+	APIKeySecret         string
 	Debug                bool
 }
 
@@ -63,6 +65,8 @@ type Client struct {
 	oauthToken           string
 	oauthConsumerKey     string
 	signingKey           string
+	apiKeyOverride       string
+	apiKeySecretOverride string
 	debug                bool
 }
 
@@ -90,6 +94,8 @@ func NewClient(in *NewClientInput) (*Client, error) {
 	c := Client{
 		Client:               defaultHTTPClient,
 		authenticationMethod: in.AuthenticationMethod,
+		apiKeyOverride:       in.APIKey,
+		apiKeySecretOverride: in.APIKeySecret,
 		debug:                in.Debug,
 	}
 
@@ -127,8 +133,8 @@ func NewClientWithAccessToken(in *NewClientWithAccessTokenInput) (*Client, error
 }
 
 func (c *Client) authorize(oauthToken, oauthTokenSecret string) error {
-	apiKey := os.Getenv(APIKeyEnvName)
-	apiKeySecret := os.Getenv(APIKeySecretEnvName)
+	apiKey := c.APIKey()
+	apiKeySecret := c.APIKeySecret()
 	if apiKey == "" || apiKeySecret == "" {
 		return fmt.Errorf("env '%s' and '%s' is required.", APIKeyEnvName, APIKeySecretEnvName)
 	}
@@ -185,6 +191,20 @@ func (c *Client) AccessToken() string {
 
 func (c *Client) AuthenticationMethod() AuthenticationMethod {
 	return c.authenticationMethod
+}
+
+func (c *Client) APIKey() string {
+	if c.apiKeyOverride != "" {
+		return c.apiKeyOverride
+	}
+	return os.Getenv(APIKeyEnvName)
+}
+
+func (c *Client) APIKeySecret() string {
+	if c.apiKeySecretOverride != "" {
+		return c.apiKeySecretOverride
+	}
+	return os.Getenv(APIKeySecretEnvName)
 }
 
 func (c *Client) OAuthToken() string {
