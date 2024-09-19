@@ -225,14 +225,6 @@ func (c *Client) SetAuthenticationMethod(v AuthenticationMethod) {
 	c.authenticationMethod = v
 }
 
-func (c *Client) SetAPIKey(v string) {
-	c.apiKeyOverride = v
-}
-
-func (c *Client) SetAPIKeySecret(v string) {
-	c.apiKeySecretOverride = v
-}
-
 func (c *Client) SetOAuthToken(v string) {
 	c.oauthToken = v
 }
