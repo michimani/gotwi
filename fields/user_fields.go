@@ -3,20 +3,21 @@ package fields
 type UserField string
 
 const (
-	UserFieldCreatedAt       UserField = "created_at"
-	UserFieldDescription     UserField = "description"
-	UserFieldEntities        UserField = "entities"
-	UserFieldID              UserField = "id"
-	UserFieldLocation        UserField = "location"
-	UserFieldName            UserField = "name"
-	UserFieldPinnedTweetID   UserField = "pinned_tweet_id"
-	UserFieldProfileImageUrl UserField = "profile_image_url"
-	UserFieldProtected       UserField = "protected"
-	UserFieldPublicMetrics   UserField = "public_metrics"
-	UserFieldUrl             UserField = "url"
-	UserFieldUsername        UserField = "username"
-	UserFieldVerified        UserField = "verified"
-	UserFieldWithheld        UserField = "withheld"
+	UserFieldCreatedAt         UserField = "created_at"
+	UserFieldDescription       UserField = "description"
+	UserFieldEntities          UserField = "entities"
+	UserFieldID                UserField = "id"
+	UserFieldLocation          UserField = "location"
+	UserFieldName              UserField = "name"
+	UserFieldPinnedTweetID     UserField = "pinned_tweet_id"
+	UserFieldProfileImageUrl   UserField = "profile_image_url"
+	UserFieldProtected         UserField = "protected"
+	UserFieldPublicMetrics     UserField = "public_metrics"
+	UserFieldUrl               UserField = "url"
+	UserFieldUsername          UserField = "username"
+	UserFieldVerified          UserField = "verified"
+	UserFieldWithheld          UserField = "withheld"
+	UserFieldMostRecentTweetID UserField = "most_recent_tweet_id"
 )
 
 func (f UserField) String() string {

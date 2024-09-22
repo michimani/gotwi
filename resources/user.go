@@ -3,20 +3,21 @@ package resources
 import "time"
 
 type User struct {
-	ID              *string            `json:"id"`
-	Name            *string            `json:"name"`
-	Username        *string            `json:"username"`
-	CreatedAt       *time.Time         `json:"created_at,omitempty"`
-	Description     *string            `json:"description,omitempty"`
-	Entities        *UserEntities      `json:"entities,omitempty"`
-	Location        *string            `json:"location,omitempty"`
-	PinnedTweetID   *string            `json:"pinned_tweet_id,omitempty"`
-	ProfileImageURL *string            `json:"profile_image_url,omitempty"`
-	Protected       *bool              `json:"protected,omitempty"`
-	PublicMetrics   *UserPublicMetrics `json:"public_metrics,omitempty"`
-	URL             *string            `json:"url,omitempty"`
-	Verified        *bool              `json:"verified,omitempty"`
-	Withheld        *UserWithheld      `json:"withheld,omitempty"`
+	ID                *string            `json:"id"`
+	Name              *string            `json:"name"`
+	Username          *string            `json:"username"`
+	CreatedAt         *time.Time         `json:"created_at,omitempty"`
+	Description       *string            `json:"description,omitempty"`
+	Entities          *UserEntities      `json:"entities,omitempty"`
+	Location          *string            `json:"location,omitempty"`
+	PinnedTweetID     *string            `json:"pinned_tweet_id,omitempty"`
+	ProfileImageURL   *string            `json:"profile_image_url,omitempty"`
+	Protected         *bool              `json:"protected,omitempty"`
+	PublicMetrics     *UserPublicMetrics `json:"public_metrics,omitempty"`
+	URL               *string            `json:"url,omitempty"`
+	Verified          *bool              `json:"verified,omitempty"`
+	Withheld          *UserWithheld      `json:"withheld,omitempty"`
+	MostRecentTweetID *string            `json:"most_recent_tweet_id,omitempty"`
 }
 
 type UserEntities struct {
