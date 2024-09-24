@@ -6,12 +6,19 @@ This is a version of CHANGELOG less than v1.0.0
 
 * TBD
 
+v0.16.1 (2024-09-24)
+===
+
+### Features
+
+* Support `MostRecentTweetID` fields in `User` struct. ([cf40a01](https://github.com/michimani/gotwi/commit/cf40a01b7936d472565382de183d6b167fd29ce2) by [@AtakanPehlivanoglu](https://github.com/AtakanPehlivanoglu))
+
 v0.16.0 (2024-09-19)
 ===
 
 ### Features
 
-* Ability to set API Key & API Key Secret manually. ([8abb233](https://github.com/michimani/gotwi/commit/8abb23320f5b912392e397d89689809252fd6d36) by [EricFrancis12](https://github.com/EricFrancis12))
+* Ability to set API Key & API Key Secret manually. ([8abb233](https://github.com/michimani/gotwi/commit/8abb23320f5b912392e397d89689809252fd6d36) by [@EricFrancis12](https://github.com/EricFrancis12))
 
 v0.15.0 (2024-06-25)
 ===
