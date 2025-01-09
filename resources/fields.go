@@ -25,7 +25,7 @@ type Media struct {
 	PromotedMetrics  map[string]*int  `json:"promoted_metrics,omitempty"`
 	PublicMetrics    map[string]*int  `json:"public_metrics,omitempty"`
 	Width            *int             `json:"width,omitempty"`
-	AltText          *int             `json:"alt_text,omitempty"`
+	AltText          *string          `json:"alt_text,omitempty"`
 	Variants         []IncludeVariant `json:"variants,omitempty"`
 }
 
