@@ -6,6 +6,13 @@ This is a version of CHANGELOG less than v1.0.0
 
 * TBD
 
+v0.17.0 (2025-01-13)
+===
+
+### Fixes
+
+* Fix `Media.AltText` field type. ([f2247f7](https://github.com/michimani/gotwi/commit/f2247f7171062869170af110d5caba3b5365fe89) by [@yakud](https://github.com/yakud))
+
 v0.16.1 (2024-09-24)
 ===
 
