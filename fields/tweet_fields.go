@@ -24,6 +24,7 @@ const (
 	TweetFieldText               TweetField = "text"
 	TweetFieldWithheld           TweetField = "withheld"
 	TweetFieldNoteTweet          TweetField = "note_tweet"
+	TweetFieldCommunityID        TweetField = "community_id"
 )
 
 func (f TweetField) String() string {
