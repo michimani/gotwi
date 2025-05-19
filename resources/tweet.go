@@ -45,11 +45,11 @@ type ContextAnnotation struct {
 }
 
 type TweetEntities struct {
-	Annotations []Annotation     `json:"annotations"`
-	CashTags    []TweetEntityTag `json:"cashtags"`
-	HashTags    []TweetEntityTag `json:"hashtags"`
-	Mentions    []TweetEntityTag `json:"mentions"`
-	URLs        []URL            `json:"urls"`
+	Annotations []Annotation         `json:"annotations"`
+	CashTags    []TweetEntityTag     `json:"cashtags"`
+	HashTags    []TweetEntityTag     `json:"hashtags"`
+	Mentions    []TweetEntityMention `json:"mentions"`
+	URLs        []URL                `json:"urls"`
 }
 
 type Annotation struct {
@@ -64,6 +64,13 @@ type TweetEntityTag struct {
 	Start *int    `json:"start"`
 	End   *int    `json:"end"`
 	Tag   *string `json:"tag"`
+}
+
+type TweetEntityMention struct {
+	Start    *int    `json:"start"`
+	End      *int    `json:"end"`
+	Username *string `json:"username"`
+	ID       *string `json:"id,omitempty"`
 }
 
 type URL struct {
@@ -136,10 +143,10 @@ type TweetWithheld struct {
 
 type TweetNoteTweet struct {
 	Entities struct {
-		CashTags []TweetEntityTag `json:"cashtags"`
-		HashTags []TweetEntityTag `json:"hashtags"`
-		Mentions []TweetEntityTag `json:"mentions"`
-		URLs     []URL            `json:"urls"`
+		CashTags []TweetEntityTag     `json:"cashtags"`
+		HashTags []TweetEntityTag     `json:"hashtags"`
+		Mentions []TweetEntityMention `json:"mentions"`
+		URLs     []URL                `json:"urls"`
 	} `json:"entities"`
 	Text *string `json:"text"`
 }
