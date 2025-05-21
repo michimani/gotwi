@@ -6,6 +6,22 @@ This is a version of CHANGELOG less than v1.0.0
 
 * TBD
 
+v0.18.0 (2025-05-22)
+===
+
+### Features
+
+* Support media upload API.
+  * Support POST /2/media/upload/initialize
+  * Support POST /2/media/upload/:mediaID/append
+  * Support POST /2/media/upload/:mediaID/finalize
+* Add `CommunityID` field in `Tweet` struct. ([25c9edc](https://github.com/michimani/gotwi/commit/25c9edcddcfb140a96325ce9dc3e88953fdb56e5)) by [@paladin-devops](https://github.com/paladin-devops)
+
+### Fixes
+
+* Fix tweet entity mention. ([12085cd](https://github.com/michimani/gotwi/commit/12085cd) by [@0xjac](https://github.com/0xjac))
+* Improve handling of X API error message.
+
 v0.17.0 (2025-01-13)
 ===
 
@@ -170,9 +186,7 @@ v0.11.1 (2022-04-19)
 
 ### New Supported APIs
 
-* `GET /2/tweets/sample/stream`
-
-v0.11.0 (2022-04-13)
+* `GET /2/tweets/sample/stream`v0.11.0 (2022-04-13)
 ===
 
 ### ⚠ BREAKING CHANGES
@@ -462,3 +476,4 @@ v0.1.0 (2021-10-08)
 ====
 
 * dev release 🚀
+
