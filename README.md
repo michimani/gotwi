@@ -83,6 +83,9 @@ Progress of supporting APIs:
 | Compliance | Batch compliance | `GET /2/compliance/jobs/:id` |
 |  |  | `GET /2/compliance/jobs` |
 |  |  | `POST /2/compliance/jobs` |
+| Media | Media upload | `POST /2/media/upload/initialize` |
+|  |  | `POST /2/media/upload/:media_id/append` |
+|  |  | `POST /2/media/upload/:media_id/finalize` |
 
 
 # How to use
