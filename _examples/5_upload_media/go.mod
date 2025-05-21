@@ -1,4 +1,4 @@
-module gotwi-example-2
+module gotwi-example-5
 
 go 1.22
 

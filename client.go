@@ -46,6 +46,7 @@ type NewClientInput struct {
 type NewClientWithAccessTokenInput struct {
 	HTTPClient  *http.Client
 	AccessToken string
+	Debug       bool
 }
 
 type IClient interface {
@@ -123,6 +124,7 @@ func NewClientWithAccessToken(in *NewClientWithAccessTokenInput) (*Client, error
 		Client:               defaultHTTPClient,
 		authenticationMethod: AuthenMethodOAuth2BearerToken,
 		accessToken:          in.AccessToken,
+		debug:                in.Debug,
 	}
 
 	if in.HTTPClient != nil {
@@ -259,12 +261,25 @@ var okCodes map[int]struct{} = map[int]struct{}{
 }
 
 func (c *Client) Exec(req *http.Request, i util.Response) (*resources.Non2XXError, error) {
+	var jsonStr string
+	if req.Body != nil {
+		bodyBytes, err := io.ReadAll(req.Body)
+		if err != nil {
+			return nil, err
+		}
+		jsonStr = string(bodyBytes)
+		req.Body = io.NopCloser(bytes.NewBuffer(bodyBytes))
+	}
+
 	res, err := c.Client.Do(req)
 	if err != nil {
 		return nil, err
 	}
 	defer res.Body.Close()
 
+	if c.debug {
+		fmt.Printf("------DEBUG------\n[request url]\n%v\n[request header]\n%v\n\n[request body]\n%s\n------DEBUG END------\n", req.URL, req.Header, jsonStr)
+	}
 	if _, ok := okCodes[res.StatusCode]; !ok {
 		non200err, err := resolveNon2XXResponse(res)
 		if err != nil {
@@ -363,7 +378,13 @@ func newRequest(ctx context.Context, endpoint, method string, p util.Parameters)
 		return nil, err
 	}
 
-	req.Header.Set("Content-Type", "application/json;charset=UTF-8")
+	contentType := "application/json;charset=UTF-8"
+	if ct := ctx.Value("Content-Type"); ct != nil {
+		if ctStr, ok := ct.(string); ok {
+			contentType = ctStr
+		}
+	}
+	req.Header.Set("Content-Type", contentType)
 
 	return req, nil
 }

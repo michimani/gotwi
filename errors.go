@@ -75,12 +75,16 @@ func non2XXErrorSummary(e *resources.Non2XXError) string {
 	if e.Detail != "" {
 		summary = append(summary, fmt.Sprintf("detail=\"%s\"", e.Detail))
 	}
+	if e.Type != "" {
+		summary = append(summary, fmt.Sprintf("type=\"%s\"", e.Type))
+	}
 
 	ercnt := 1
+	fmt.Printf("api errors: %+v\n", e.APIErrors)
 	for _, er := range e.APIErrors {
-		if er.Message != "" && er.Code > 0 {
+		if er.Message != "" {
 			detail := er.Code.Detail()
-			summary = append(summary, fmt.Sprintf("errorCode%d=%d errorText%d=\"%s\" errorDescription%d=\"%s\"", ercnt, er.Code, ercnt, detail.Text, ercnt, detail.Description))
+			summary = append(summary, fmt.Sprintf("message_%d=\"%s\" errorCode_%d=%d errorText_%d=\"%s\" errorDescription_%d=\"%s\"", ercnt, er.Message, ercnt, er.Code, ercnt, detail.Text, ercnt, detail.Description))
 			ercnt++
 		}
 	}

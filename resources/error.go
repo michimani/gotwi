@@ -9,7 +9,7 @@ type Non2XXError struct {
 	Title         string                     `json:"title,omitempty"`
 	Detail        string                     `json:"detail,omitempty"`
 	Type          string                     `json:"type,omitempty"`
-	Status        string                     `json:"-"`
+	Status        string                     `json:"status,omitempty"`
 	StatusCode    int                        `json:"-"`
 	RateLimitInfo *util.RateLimitInformation `json:"-"`
 }
