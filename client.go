@@ -378,7 +378,13 @@ func newRequest(ctx context.Context, endpoint, method string, p util.Parameters)
 		return nil, err
 	}
 
-	req.Header.Set("Content-Type", "application/json;charset=UTF-8")
+	contentType := "application/json;charset=UTF-8"
+	if ct := ctx.Value("Content-Type"); ct != nil {
+		if ctStr, ok := ct.(string); ok {
+			contentType = ctStr
+		}
+	}
+	req.Header.Set("Content-Type", contentType)
 
 	return req, nil
 }

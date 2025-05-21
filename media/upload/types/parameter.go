@@ -1,8 +1,14 @@
 package types
 
 import (
+	"bytes"
+	"crypto/sha256"
+	"encoding/hex"
 	"encoding/json"
+	"errors"
 	"io"
+	"mime/multipart"
+	"strconv"
 	"strings"
 )
 
@@ -83,5 +89,74 @@ func (p *InitializeInput) Body() (io.Reader, error) {
 }
 
 func (p *InitializeInput) ParameterMap() map[string]string {
+	return map[string]string{}
+}
+
+type AppendInput struct {
+	accessToken string
+	boundary    string
+
+	// Path parameter: The media identifier for the media to perform the append operation.
+	MediaID string
+
+	// The file to upload.
+	Media io.Reader
+
+	// An integer value representing the media upload segment.
+	SegmentIndex int
+}
+
+func (p *AppendInput) SetAccessToken(token string) {
+	p.accessToken = token
+}
+
+func (p *AppendInput) AccessToken() string {
+	return p.accessToken
+}
+
+func (p *AppendInput) Boundary() string {
+	return p.boundary
+}
+
+func (p *AppendInput) GenerateBoundary() string {
+	h := sha256.New()
+	h.Write([]byte(p.MediaID + strconv.Itoa(p.SegmentIndex)))
+	boundary := hex.EncodeToString(h.Sum(nil))
+	p.boundary = boundary
+	return boundary
+}
+
+func (p *AppendInput) ResolveEndpoint(endpointBase string) string {
+	endpoint := strings.Replace(endpointBase, ":mediaID", p.MediaID, 1)
+	return endpoint
+}
+
+func (p *AppendInput) Body() (io.Reader, error) {
+	body := &bytes.Buffer{}
+	writer := multipart.NewWriter(body)
+	defer writer.Close()
+
+	if p.boundary == "" {
+		return nil, errors.New("boundary is not set")
+	}
+	writer.SetBoundary(p.boundary)
+
+	part, err := writer.CreateFormFile("media", "media")
+	if err != nil {
+		return nil, err
+	}
+
+	if _, err := io.Copy(part, p.Media); err != nil {
+		return nil, err
+	}
+
+	if err := writer.WriteField("segment_index", strconv.Itoa(p.SegmentIndex)); err != nil {
+		return nil, err
+	}
+
+	return body, nil
+}
+
+func (p *AppendInput) ParameterMap() map[string]string {
 	return map[string]string{}
 }
