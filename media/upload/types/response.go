@@ -22,3 +22,12 @@ type AppendOutput struct {
 func (r *AppendOutput) HasPartialError() bool {
 	return !(r.Errors == nil || len(r.Errors) == 0)
 }
+
+type FinalizeOutput struct {
+	Data   resources.UploadedMedia  `json:"data"`
+	Errors []resources.PartialError `json:"errors"`
+}
+
+func (r *FinalizeOutput) HasPartialError() bool {
+	return !(r.Errors == nil || len(r.Errors) == 0)
+}

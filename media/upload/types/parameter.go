@@ -160,3 +160,31 @@ func (p *AppendInput) Body() (io.Reader, error) {
 func (p *AppendInput) ParameterMap() map[string]string {
 	return map[string]string{}
 }
+
+type FinalizeInput struct {
+	accessToken string
+
+	// Path parameter: The media identifier for the media to perform the finalize operation.
+	MediaID string
+}
+
+func (p *FinalizeInput) SetAccessToken(token string) {
+	p.accessToken = token
+}
+
+func (p *FinalizeInput) AccessToken() string {
+	return p.accessToken
+}
+
+func (p *FinalizeInput) ResolveEndpoint(endpointBase string) string {
+	endpoint := strings.Replace(endpointBase, ":mediaID", p.MediaID, 1)
+	return endpoint
+}
+
+func (p *FinalizeInput) Body() (io.Reader, error) {
+	return nil, nil
+}
+
+func (p *FinalizeInput) ParameterMap() map[string]string {
+	return map[string]string{}
+}
