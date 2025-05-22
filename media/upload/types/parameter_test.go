@@ -1,6 +1,9 @@
 package types_test
 
 import (
+	"bytes"
+	"crypto/sha256"
+	"encoding/hex"
 	"io"
 	"strings"
 	"testing"
@@ -159,6 +162,12 @@ func Test_AppendInput_SetAccessToken(t *testing.T) {
 }
 
 func Test_AppendInput_GenerateBoundary(t *testing.T) {
+	hash := func(s string) string {
+		h := sha256.New()
+		h.Write([]byte(s))
+		return hex.EncodeToString(h.Sum(nil))
+	}
+
 	cases := []struct {
 		name       string
 		mediaID    string
@@ -169,33 +178,36 @@ func Test_AppendInput_GenerateBoundary(t *testing.T) {
 			name:       "normal",
 			mediaID:    "test-media-id",
 			segmentIdx: 1,
-			expect:     "test-media-id1",
+			expect:     hash("test-media-id1"),
 		},
 		{
 			name:       "empty mediaID",
 			mediaID:    "",
 			segmentIdx: 1,
-			expect:     "1",
+			expect:     hash("1"),
 		},
 	}
 
 	for _, c := range cases {
 		t.Run(c.name, func(tt *testing.T) {
+			asst := assert.New(tt)
 			p := &types.AppendInput{
 				MediaID:      c.mediaID,
 				SegmentIndex: c.segmentIdx,
 			}
 			boundary := p.GenerateBoundary()
-			assert.NotEmpty(tt, boundary)
+			asst.Equal(c.expect, boundary)
 		})
 	}
 }
 
 func Test_AppendInput_Body(t *testing.T) {
 	cases := []struct {
-		name   string
-		params *types.AppendInput
-		expect error
+		name     string
+		params   *types.AppendInput
+		boundary string
+		wantErr  bool
+		expect   string
 	}{
 		{
 			name: "error: boundary is not set",
@@ -204,14 +216,63 @@ func Test_AppendInput_Body(t *testing.T) {
 				Media:        strings.NewReader("test-media"),
 				SegmentIndex: 1,
 			},
-			expect: assert.AnError,
+			wantErr: true,
+		},
+		{
+			name: "ok",
+			params: &types.AppendInput{
+				MediaID:      "test-media-id",
+				Media:        strings.NewReader("test-media"),
+				SegmentIndex: 1,
+			},
+			boundary: "test-boundary",
+			wantErr:  false,
+			expect:   "--test-boundary\r\nContent-Disposition: form-data; name=\"media\"; filename=\"media\"\r\nContent-Type: application/octet-stream\r\n\r\ntest-media\r\n--test-boundary\r\nContent-Disposition: form-data; name=\"segment_index\"\r\n\r\n1\r\n--test-boundary--\r\n",
+		},
+	}
+
+	for _, c := range cases {
+		types.Exported_SetBoundary(c.params, c.boundary)
+
+		t.Run(c.name, func(tt *testing.T) {
+			asst := assert.New(tt)
+			b, err := c.params.Body()
+			if c.wantErr {
+				asst.Error(err)
+				return
+			}
+
+			asst.NoError(err)
+			buf := new(bytes.Buffer)
+			buf.ReadFrom(b)
+			asst.Equal(c.expect, buf.String())
+		})
+	}
+}
+
+func Test_AppendInput_Boundary(t *testing.T) {
+	cases := []struct {
+		name     string
+		boundary string
+		expect   string
+	}{
+		{
+			name:     "normal",
+			boundary: "test-boundary",
+			expect:   "test-boundary",
+		},
+		{
+			name:     "empty",
+			boundary: "",
+			expect:   "",
 		},
 	}
 
 	for _, c := range cases {
 		t.Run(c.name, func(tt *testing.T) {
-			_, err := c.params.Body()
-			assert.Error(tt, err)
+			p := &types.AppendInput{}
+			types.Exported_SetBoundary(p, c.boundary)
+			assert.Equal(tt, c.expect, p.Boundary())
 		})
 	}
 }
