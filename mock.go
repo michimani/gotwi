@@ -1,13 +1,13 @@
-package gotwi_test
+package gotwi
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"io"
 	"net/http"
 	"strings"
 
-	"github.com/michimani/gotwi"
 	"github.com/michimani/gotwi/internal/util"
 	"github.com/michimani/gotwi/resources"
 )
@@ -24,13 +24,13 @@ func newMockClient(fn RoundTripFunc) *http.Client {
 	}
 }
 
-type mockInput struct {
+type MockInput struct {
 	ResponseStatusCode int
 	ResponseHeader     map[string][]string
 	ResponseBody       io.ReadCloser
 }
 
-func newMockHTTPClient(in *mockInput) *http.Client {
+func NewMockHTTPClient(in *MockInput) *http.Client {
 	if in == nil {
 		return nil
 	}
@@ -45,27 +45,28 @@ func newMockHTTPClient(in *mockInput) *http.Client {
 	})
 }
 
-type mockAPIParameter struct{}
+type MockAPIParameter struct{}
 
-func (mp mockAPIParameter) SetAccessToken(token string)                {}
-func (mp mockAPIParameter) AccessToken() string                        { return "" }
-func (mp mockAPIParameter) ResolveEndpoint(endpointBase string) string { return "" }
-func (mp mockAPIParameter) Body() (io.Reader, error)                   { return nil, nil }
-func (mp mockAPIParameter) ParameterMap() map[string]string            { return map[string]string{} }
+func (mp MockAPIParameter) SetAccessToken(token string)                {}
+func (mp MockAPIParameter) AccessToken() string                        { return "" }
+func (mp MockAPIParameter) ResolveEndpoint(endpointBase string) string { return "" }
+func (mp MockAPIParameter) Body() (io.Reader, error)                   { return nil, nil }
+func (mp MockAPIParameter) ParameterMap() map[string]string            { return map[string]string{} }
 
-type mockAPIResponse struct{}
+type MockAPIResponse struct{}
 
-func (mr mockAPIResponse) HasPartialError() bool { return false }
+func (mr MockAPIResponse) HasPartialError() bool { return false }
 
 type MockGotwiClient struct {
 	Client                   *http.Client
 	MockExec                 func(req *http.Request, i util.Response) (*resources.Non2XXError, error)
 	MockIsReady              func() bool
 	MockAccessToken          func() string
-	MockAuthenticationMethod func() gotwi.AuthenticationMethod
+	MockAuthenticationMethod func() AuthenticationMethod
 	MockOAuthToken           func() string
 	MockOAuthConsumerKey     func() string
 	MockSigningKey           func() string
+	MockCallAPI              func(ctx context.Context, endpoint, method string, p util.Parameters, i util.Response) error
 }
 
 func (m *MockGotwiClient) Exec(req *http.Request, i util.Response) (*resources.Non2XXError, error) {
@@ -82,11 +83,11 @@ func (m *MockGotwiClient) IsReady() bool {
 	}
 
 	switch m.AuthenticationMethod() {
-	case gotwi.AuthenMethodOAuth1UserContext:
+	case AuthenMethodOAuth1UserContext:
 		if m.OAuthToken() == "" || m.SigningKey() == "" {
 			return false
 		}
-	case gotwi.AuthenMethodOAuth2BearerToken:
+	case AuthenMethodOAuth2BearerToken:
 		if m.AccessToken() == "" {
 			return false
 		}
@@ -99,7 +100,7 @@ func (m *MockGotwiClient) AccessToken() string {
 	return m.MockAccessToken()
 }
 
-func (m *MockGotwiClient) AuthenticationMethod() gotwi.AuthenticationMethod {
+func (m *MockGotwiClient) AuthenticationMethod() AuthenticationMethod {
 	return m.MockAuthenticationMethod()
 }
 
@@ -115,7 +116,11 @@ func (m *MockGotwiClient) SigningKey() string {
 	return m.MockAccessToken()
 }
 
-func newMockGotwiClient(returnedToken string, execHasError, hasNot200Error bool) *MockGotwiClient {
+func (m *MockGotwiClient) CallAPI(ctx context.Context, endpoint, method string, p util.Parameters, i util.Response) error {
+	return m.MockCallAPI(ctx, endpoint, method, p, i)
+}
+
+func NewMockGotwiClient(returnedToken string, execHasError, hasNot200Error bool) *MockGotwiClient {
 	fn := func(req *http.Request, i util.Response) (*resources.Non2XXError, error) {
 		if execHasError {
 			return nil, fmt.Errorf("has error")
@@ -143,10 +148,11 @@ type mockFuncInput struct {
 	MockExec                 func(req *http.Request, i util.Response) (*resources.Non2XXError, error)
 	MockIsReady              func() bool
 	MockAccessToken          func() string
-	MockAuthenticationMethod func() gotwi.AuthenticationMethod
+	MockAuthenticationMethod func() AuthenticationMethod
 	MockOAuthToken           func() string
 	MockOAuthConsumerKey     func() string
 	MockSigningKey           func() string
+	MockCallAPI              func(ctx context.Context, endpoint, method string, p util.Parameters, i util.Response) error
 }
 
 func newMockGotwiClientWithFunc(in mockFuncInput) *MockGotwiClient {
@@ -173,7 +179,7 @@ func newMockGotwiClientWithFunc(in mockFuncInput) *MockGotwiClient {
 	if in.MockAuthenticationMethod != nil {
 		m.MockAuthenticationMethod = in.MockAuthenticationMethod
 	} else {
-		m.MockAuthenticationMethod = func() gotwi.AuthenticationMethod { return gotwi.AuthenticationMethod("") }
+		m.MockAuthenticationMethod = func() AuthenticationMethod { return AuthenticationMethod("") }
 	}
 
 	if in.MockOAuthToken != nil {
@@ -192,6 +198,14 @@ func newMockGotwiClientWithFunc(in mockFuncInput) *MockGotwiClient {
 		m.MockSigningKey = in.MockSigningKey
 	} else {
 		m.MockSigningKey = func() string { return "" }
+	}
+
+	if in.MockCallAPI != nil {
+		m.MockCallAPI = in.MockCallAPI
+	} else {
+		m.MockCallAPI = func(ctx context.Context, endpoint, method string, p util.Parameters, i util.Response) error {
+			return nil
+		}
 	}
 
 	return &m

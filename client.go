@@ -57,6 +57,7 @@ type IClient interface {
 	OAuthToken() string
 	OAuthConsumerKey() string
 	SigningKey() string
+	CallAPI(ctx context.Context, endpoint, method string, p util.Parameters, i util.Response) error
 }
 
 type Client struct {

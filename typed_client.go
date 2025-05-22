@@ -2,6 +2,7 @@ package gotwi
 
 import (
 	"context"
+	"errors"
 	"net/http"
 
 	"github.com/michimani/gotwi/internal/util"
@@ -116,4 +117,10 @@ func (c *TypedClient[T]) ExecStream(req *http.Request) (*http.Response, *resourc
 	}
 
 	return res, nil, nil
+}
+
+// This method exists only to satisfy the IClient interface.
+// It will never be called directly since TypedClient uses its own implementation.
+func (c *TypedClient[T]) CallAPI(ctx context.Context, endpoint, method string, p util.Parameters, i util.Response) error {
+	return errors.New("this method will never be called")
 }

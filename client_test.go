@@ -64,7 +64,7 @@ func Test_NewClient(t *testing.T) {
 		name            string
 		envAPIKey       string
 		envAPIKeySecret string
-		mockInput       *mockInput
+		mockInput       *gotwi.MockInput
 		in              *gotwi.NewClientInput
 		wantErr         bool
 		expect          gotwiClientField
@@ -113,7 +113,7 @@ func Test_NewClient(t *testing.T) {
 			name:            "normal: OAuth2.0 with override api key and override api key secret",
 			envAPIKey:       "api-key",
 			envAPIKeySecret: "api-key-secret",
-			mockInput: &mockInput{
+			mockInput: &gotwi.MockInput{
 				ResponseStatusCode: http.StatusOK,
 				ResponseBody:       io.NopCloser(strings.NewReader(`{"token_type":"token_type","access_token":"access_token"}`)),
 			},
@@ -135,7 +135,7 @@ func Test_NewClient(t *testing.T) {
 			name:            "error: OAuth2.0",
 			envAPIKey:       "api-key",
 			envAPIKeySecret: "api-key-secret",
-			mockInput: &mockInput{
+			mockInput: &gotwi.MockInput{
 				ResponseStatusCode: http.StatusInternalServerError,
 				ResponseBody:       io.NopCloser(strings.NewReader(``)),
 			},
@@ -213,7 +213,7 @@ func Test_NewClient(t *testing.T) {
 			tt.Setenv("GOTWI_API_KEY", c.envAPIKey)
 			tt.Setenv("GOTWI_API_KEY_SECRET", c.envAPIKeySecret)
 
-			mockClient := newMockHTTPClient(c.mockInput)
+			mockClient := gotwi.NewMockHTTPClient(c.mockInput)
 			if mockClient != nil {
 				c.in.HTTPClient = mockClient
 			}
@@ -447,7 +447,7 @@ func Test_newRequest(t *testing.T) {
 func Test_CallAPI(t *testing.T) {
 	cases := []struct {
 		name            string
-		mockInput       *mockInput
+		mockInput       *gotwi.MockInput
 		clientInput     *gotwi.NewClientInput
 		endpoint        string
 		method          string
@@ -459,7 +459,7 @@ func Test_CallAPI(t *testing.T) {
 	}{
 		{
 			name: "ok: OAuth 1.0",
-			mockInput: &mockInput{
+			mockInput: &gotwi.MockInput{
 				ResponseStatusCode: http.StatusOK,
 				ResponseBody:       io.NopCloser(strings.NewReader(`{"message": "ok"}`)),
 			},
@@ -472,13 +472,13 @@ func Test_CallAPI(t *testing.T) {
 			method:          http.MethodGet,
 			envAPIKey:       "api-key",
 			envAPIKeySecret: "api-key-secret",
-			params:          &mockAPIParameter{},
-			response:        &mockAPIResponse{},
+			params:          &gotwi.MockAPIParameter{},
+			response:        &gotwi.MockAPIResponse{},
 			wantErr:         false,
 		},
 		{
 			name: "error: parameter is nil",
-			mockInput: &mockInput{
+			mockInput: &gotwi.MockInput{
 				ResponseStatusCode: http.StatusOK,
 				ResponseBody:       io.NopCloser(strings.NewReader(`{"message": "ok"}`)),
 			},
@@ -492,12 +492,12 @@ func Test_CallAPI(t *testing.T) {
 			envAPIKey:       "api-key",
 			envAPIKeySecret: "api-key-secret",
 			params:          nil,
-			response:        &mockAPIResponse{},
+			response:        &gotwi.MockAPIResponse{},
 			wantErr:         true,
 		},
 		{
 			name: "error: client is not ready",
-			mockInput: &mockInput{
+			mockInput: &gotwi.MockInput{
 				ResponseStatusCode: http.StatusOK,
 				ResponseBody:       io.NopCloser(strings.NewReader(`{"message": "ok"}`)),
 			},
@@ -510,13 +510,13 @@ func Test_CallAPI(t *testing.T) {
 			envAPIKey:       "api-key",
 			envAPIKeySecret: "api-key-secret",
 			method:          http.MethodGet,
-			params:          &mockAPIParameter{},
-			response:        &mockAPIResponse{},
+			params:          &gotwi.MockAPIParameter{},
+			response:        &gotwi.MockAPIResponse{},
 			wantErr:         true,
 		},
 		{
 			name: "error: not 200 response",
-			mockInput: &mockInput{
+			mockInput: &gotwi.MockInput{
 				ResponseStatusCode: http.StatusInternalServerError,
 				ResponseBody:       io.NopCloser(strings.NewReader(`{}`)),
 			},
@@ -529,13 +529,13 @@ func Test_CallAPI(t *testing.T) {
 			method:          http.MethodGet,
 			envAPIKey:       "api-key",
 			envAPIKeySecret: "api-key-secret",
-			params:          &mockAPIParameter{},
-			response:        &mockAPIResponse{},
+			params:          &gotwi.MockAPIParameter{},
+			response:        &gotwi.MockAPIResponse{},
 			wantErr:         true,
 		},
 		{
 			name: "error: failed to decode json",
-			mockInput: &mockInput{
+			mockInput: &gotwi.MockInput{
 				ResponseStatusCode: http.StatusOK,
 				ResponseBody:       io.NopCloser(strings.NewReader(`///`)),
 			},
@@ -548,13 +548,13 @@ func Test_CallAPI(t *testing.T) {
 			method:          http.MethodGet,
 			envAPIKey:       "api-key",
 			envAPIKeySecret: "api-key-secret",
-			params:          &mockAPIParameter{},
-			response:        &mockAPIResponse{},
+			params:          &gotwi.MockAPIParameter{},
+			response:        &gotwi.MockAPIResponse{},
 			wantErr:         true,
 		},
 		{
 			name: "error: invalid method",
-			mockInput: &mockInput{
+			mockInput: &gotwi.MockInput{
 				ResponseStatusCode: http.StatusOK,
 				ResponseBody:       io.NopCloser(strings.NewReader(`{}`)),
 			},
@@ -567,8 +567,8 @@ func Test_CallAPI(t *testing.T) {
 			method:          "invalid method",
 			envAPIKey:       "api-key",
 			envAPIKeySecret: "api-key-secret",
-			params:          &mockAPIParameter{},
-			response:        &mockAPIResponse{},
+			params:          &gotwi.MockAPIParameter{},
+			response:        &gotwi.MockAPIResponse{},
 			wantErr:         true,
 		},
 	}
@@ -578,7 +578,7 @@ func Test_CallAPI(t *testing.T) {
 			tt.Setenv("GOTWI_API_KEY", c.envAPIKey)
 			tt.Setenv("GOTWI_API_KEY_SECRET", c.envAPIKeySecret)
 
-			mockClient := newMockHTTPClient(c.mockInput)
+			mockClient := gotwi.NewMockHTTPClient(c.mockInput)
 			in := c.clientInput
 			in.HTTPClient = mockClient
 			client, _ := gotwi.NewClient(in)
@@ -600,7 +600,7 @@ func Test_Exec(t *testing.T) {
 
 	cases := []struct {
 		name          string
-		mockInput     *mockInput
+		mockInput     *gotwi.MockInput
 		debugMode     bool
 		req           *http.Request
 		wantErr       bool
@@ -608,7 +608,7 @@ func Test_Exec(t *testing.T) {
 	}{
 		{
 			name: "ok",
-			mockInput: &mockInput{
+			mockInput: &gotwi.MockInput{
 				ResponseStatusCode: http.StatusOK,
 				ResponseBody:       io.NopCloser(strings.NewReader(`{}`)),
 			},
@@ -618,7 +618,7 @@ func Test_Exec(t *testing.T) {
 		},
 		{
 			name: "ok: debug mode",
-			mockInput: &mockInput{
+			mockInput: &gotwi.MockInput{
 				ResponseStatusCode: http.StatusOK,
 				ResponseBody:       io.NopCloser(strings.NewReader(`{}`)),
 			},
@@ -629,7 +629,7 @@ func Test_Exec(t *testing.T) {
 		},
 		{
 			name: "error: not 200 error",
-			mockInput: &mockInput{
+			mockInput: &gotwi.MockInput{
 				ResponseStatusCode: http.StatusInternalServerError,
 				ResponseBody:       io.NopCloser(strings.NewReader(`{}`)),
 			},
@@ -639,7 +639,7 @@ func Test_Exec(t *testing.T) {
 		},
 		{
 			name: "error: cannot resolve 200 error",
-			mockInput: &mockInput{
+			mockInput: &gotwi.MockInput{
 				ResponseStatusCode: http.StatusInternalServerError,
 				ResponseHeader: map[string][]string{
 					"Content-Type": {"application/json;charset=UTF-8"},
@@ -652,7 +652,7 @@ func Test_Exec(t *testing.T) {
 		},
 		{
 			name: "error: http.Client.Do error",
-			mockInput: &mockInput{
+			mockInput: &gotwi.MockInput{
 				ResponseStatusCode: http.StatusInternalServerError,
 				ResponseBody:       io.NopCloser(strings.NewReader(`{}`)),
 			},
@@ -664,13 +664,13 @@ func Test_Exec(t *testing.T) {
 
 	for _, c := range cases {
 		t.Run(c.name, func(tt *testing.T) {
-			mockClient := newMockHTTPClient(c.mockInput)
+			mockClient := gotwi.NewMockHTTPClient(c.mockInput)
 			client := gotwi.Client{
 				Client: mockClient,
 			}
 			client.SetDebugMode(c.debugMode)
 
-			not200err, err := client.Exec(c.req, &mockAPIResponse{})
+			not200err, err := client.Exec(c.req, &gotwi.MockAPIResponse{})
 
 			if c.wantErr {
 				assert.Nil(tt, not200err)

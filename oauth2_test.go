@@ -41,31 +41,31 @@ func Test_GenerateBearerToken(t *testing.T) {
 
 	cases := []struct {
 		name    string
-		client  *MockGotwiClient
+		client  *gotwi.MockGotwiClient
 		wantErr bool
 		expect  string
 	}{
 		{
 			name:    "normal",
-			client:  newMockGotwiClient(wantAccessToken, false, false),
+			client:  gotwi.NewMockGotwiClient(wantAccessToken, false, false),
 			wantErr: false,
 			expect:  wantAccessToken,
 		},
 		{
 			name:    "error: error",
-			client:  newMockGotwiClient(wantAccessToken, true, false),
+			client:  gotwi.NewMockGotwiClient(wantAccessToken, true, false),
 			wantErr: true,
 			expect:  "",
 		},
 		{
 			name:    "error: not 200 error",
-			client:  newMockGotwiClient(wantAccessToken, false, true),
+			client:  gotwi.NewMockGotwiClient(wantAccessToken, false, true),
 			wantErr: true,
 			expect:  "",
 		},
 		{
 			name:    "error: token is empty",
-			client:  newMockGotwiClient("", false, false),
+			client:  gotwi.NewMockGotwiClient("", false, false),
 			wantErr: true,
 			expect:  "",
 		},
