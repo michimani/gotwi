@@ -2,6 +2,7 @@ package upload
 
 import (
 	"context"
+	"errors"
 	"fmt"
 
 	"github.com/michimani/gotwi"
@@ -14,7 +15,10 @@ const (
 	finalizeEndpoint   = "https://api.x.com/2/media/upload/:mediaID/finalize"
 )
 
-func Initialize(ctx context.Context, c *gotwi.Client, p *types.InitializeInput) (*types.InitializeOutput, error) {
+func Initialize(ctx context.Context, c gotwi.IClient, p *types.InitializeInput) (*types.InitializeOutput, error) {
+	if p == nil {
+		return nil, errors.New("InitializeInput is nil")
+	}
 	res := &types.InitializeOutput{}
 	if err := c.CallAPI(ctx, initializeEndpoint, "POST", p, res); err != nil {
 		return nil, err
@@ -23,7 +27,10 @@ func Initialize(ctx context.Context, c *gotwi.Client, p *types.InitializeInput) 
 	return res, nil
 }
 
-func Append(ctx context.Context, c *gotwi.Client, p *types.AppendInput) (*types.AppendOutput, error) {
+func Append(ctx context.Context, c gotwi.IClient, p *types.AppendInput) (*types.AppendOutput, error) {
+	if p == nil {
+		return nil, errors.New("AppendInput is nil")
+	}
 	boundary := p.GenerateBoundary()
 	contentType := fmt.Sprintf("multipart/form-data;charset=UTF-8;boundary=%s", boundary)
 
@@ -36,7 +43,10 @@ func Append(ctx context.Context, c *gotwi.Client, p *types.AppendInput) (*types.
 	return res, nil
 }
 
-func Finalize(ctx context.Context, c *gotwi.Client, p *types.FinalizeInput) (*types.FinalizeOutput, error) {
+func Finalize(ctx context.Context, c gotwi.IClient, p *types.FinalizeInput) (*types.FinalizeOutput, error) {
+	if p == nil {
+		return nil, errors.New("FinalizeInput is nil")
+	}
 	res := &types.FinalizeOutput{}
 	if err := c.CallAPI(ctx, finalizeEndpoint, "POST", p, res); err != nil {
 		return nil, err

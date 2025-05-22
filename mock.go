@@ -144,7 +144,7 @@ func NewMockGotwiClient(returnedToken string, execHasError, hasNot200Error bool)
 	}
 }
 
-type mockFuncInput struct {
+type MockFuncInput struct {
 	MockExec                 func(req *http.Request, i util.Response) (*resources.Non2XXError, error)
 	MockIsReady              func() bool
 	MockAccessToken          func() string
@@ -155,7 +155,7 @@ type mockFuncInput struct {
 	MockCallAPI              func(ctx context.Context, endpoint, method string, p util.Parameters, i util.Response) error
 }
 
-func newMockGotwiClientWithFunc(in mockFuncInput) *MockGotwiClient {
+func NewMockGotwiClientWithFunc(in MockFuncInput) *MockGotwiClient {
 	m := MockGotwiClient{}
 
 	if in.MockExec != nil {
