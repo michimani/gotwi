@@ -104,6 +104,33 @@ func Test_InitializeInput_ParameterMap(t *testing.T) {
 	}
 }
 
+func Test_InitializeInput_ResolveEndpoint(t *testing.T) {
+	cases := []struct {
+		name         string
+		endpointBase string
+		expect       string
+	}{
+		{
+			name:         "normal",
+			endpointBase: "https://api.twitter.com/2/media/upload",
+			expect:       "https://api.twitter.com/2/media/upload",
+		},
+		{
+			name:         "empty",
+			endpointBase: "",
+			expect:       "",
+		},
+	}
+
+	for _, c := range cases {
+		t.Run(c.name, func(tt *testing.T) {
+			p := &types.InitializeInput{}
+			endpoint := p.ResolveEndpoint(c.endpointBase)
+			assert.Equal(tt, c.expect, endpoint)
+		})
+	}
+}
+
 func Test_AppendInput_SetAccessToken(t *testing.T) {
 	cases := []struct {
 		name   string
@@ -215,6 +242,44 @@ func Test_AppendInput_ParameterMap(t *testing.T) {
 	}
 }
 
+func Test_AppendInput_ResolveEndpoint(t *testing.T) {
+	cases := []struct {
+		name         string
+		endpointBase string
+		mediaID      string
+		expect       string
+	}{
+		{
+			name:         "normal",
+			endpointBase: "https://api.twitter.com/2/media/upload/:mediaID",
+			mediaID:      "test-media-id",
+			expect:       "https://api.twitter.com/2/media/upload/test-media-id",
+		},
+		{
+			name:         "empty mediaID",
+			endpointBase: "https://api.twitter.com/2/media/upload/:mediaID",
+			mediaID:      "",
+			expect:       "https://api.twitter.com/2/media/upload/",
+		},
+		{
+			name:         "empty endpoint",
+			endpointBase: "",
+			mediaID:      "test-media-id",
+			expect:       "",
+		},
+	}
+
+	for _, c := range cases {
+		t.Run(c.name, func(tt *testing.T) {
+			p := &types.AppendInput{
+				MediaID: c.mediaID,
+			}
+			endpoint := p.ResolveEndpoint(c.endpointBase)
+			assert.Equal(tt, c.expect, endpoint)
+		})
+	}
+}
+
 func Test_FinalizeInput_SetAccessToken(t *testing.T) {
 	cases := []struct {
 		name   string
@@ -291,6 +356,44 @@ func Test_FinalizeInput_ParameterMap(t *testing.T) {
 		t.Run(c.name, func(tt *testing.T) {
 			m := c.params.ParameterMap()
 			assert.Equal(tt, c.expect, m)
+		})
+	}
+}
+
+func Test_FinalizeInput_ResolveEndpoint(t *testing.T) {
+	cases := []struct {
+		name         string
+		endpointBase string
+		mediaID      string
+		expect       string
+	}{
+		{
+			name:         "normal",
+			endpointBase: "https://api.twitter.com/2/media/upload/:mediaID",
+			mediaID:      "test-media-id",
+			expect:       "https://api.twitter.com/2/media/upload/test-media-id",
+		},
+		{
+			name:         "empty mediaID",
+			endpointBase: "https://api.twitter.com/2/media/upload/:mediaID",
+			mediaID:      "",
+			expect:       "https://api.twitter.com/2/media/upload/",
+		},
+		{
+			name:         "empty endpoint",
+			endpointBase: "",
+			mediaID:      "test-media-id",
+			expect:       "",
+		},
+	}
+
+	for _, c := range cases {
+		t.Run(c.name, func(tt *testing.T) {
+			p := &types.FinalizeInput{
+				MediaID: c.mediaID,
+			}
+			endpoint := p.ResolveEndpoint(c.endpointBase)
+			assert.Equal(tt, c.expect, endpoint)
 		})
 	}
 }
