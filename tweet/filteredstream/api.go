@@ -2,6 +2,7 @@ package filteredstream
 
 import (
 	"context"
+	"errors"
 
 	"github.com/michimani/gotwi"
 	"github.com/michimani/gotwi/tweet/filteredstream/types"
@@ -16,6 +17,10 @@ const (
 // Return a list of rules currently active on the streaming endpoint, either as a list or individually.
 // https://developer.twitter.com/en/docs/twitter-api/tweets/filtered-stream/api-reference/get-tweets-search-stream-rules
 func ListRules(ctx context.Context, c gotwi.IClient, p *types.ListRulesInput) (*types.ListRulesOutput, error) {
+	if p == nil {
+		return nil, errors.New("params is required")
+	}
+
 	res := &types.ListRulesOutput{}
 	if err := c.CallAPI(ctx, listRulesEndpoint, "GET", p, res); err != nil {
 		return nil, err
@@ -27,6 +32,10 @@ func ListRules(ctx context.Context, c gotwi.IClient, p *types.ListRulesInput) (*
 // Add rules to your stream.
 // https://developer.twitter.com/en/docs/twitter-api/tweets/filtered-stream/api-reference/post-tweets-search-stream-rules
 func CreateRules(ctx context.Context, c gotwi.IClient, p *types.CreateRulesInput) (*types.CreateRulesOutput, error) {
+	if p == nil {
+		return nil, errors.New("params is required")
+	}
+
 	res := &types.CreateRulesOutput{}
 	if err := c.CallAPI(ctx, createOrDeleteRulesEndpoint, "POST", p, res); err != nil {
 		return nil, err
@@ -38,6 +47,10 @@ func CreateRules(ctx context.Context, c gotwi.IClient, p *types.CreateRulesInput
 // Delete rules to your stream.
 // https://developer.twitter.com/en/docs/twitter-api/tweets/filtered-stream/api-reference/post-tweets-search-stream-rules
 func DeleteRules(ctx context.Context, c gotwi.IClient, p *types.DeleteRulesInput) (*types.DeleteRulesOutput, error) {
+	if p == nil {
+		return nil, errors.New("params is required")
+	}
+
 	res := &types.DeleteRulesOutput{}
 	if err := c.CallAPI(ctx, createOrDeleteRulesEndpoint, "POST", p, res); err != nil {
 		return nil, err

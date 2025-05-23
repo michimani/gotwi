@@ -2,6 +2,7 @@ package timeline
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/michimani/gotwi"
 	"github.com/michimani/gotwi/tweet/timeline/types"
@@ -18,6 +19,10 @@ const (
 // The Tweets returned by this endpoint count towards the Project-level Tweet cap.
 // https://developer.twitter.com/en/docs/twitter-api/tweets/timelines/api-reference/get-users-id-tweets
 func ListTweets(ctx context.Context, c gotwi.IClient, p *types.ListTweetsInput) (*types.ListTweetsOutput, error) {
+	if p == nil {
+		return nil, fmt.Errorf("parameters is nil")
+	}
+
 	res := &types.ListTweetsOutput{}
 	if err := c.CallAPI(ctx, listTweetsEndpoint, "GET", p, res); err != nil {
 		return nil, err
@@ -31,6 +36,10 @@ func ListTweets(ctx context.Context, c gotwi.IClient, p *types.ListTweetsInput) 
 // The Tweets returned by this endpoint count towards the Project-level Tweet cap.
 // https://developer.twitter.com/en/docs/twitter-api/tweets/timelines/api-reference/get-users-id-mentions
 func ListMentions(ctx context.Context, c gotwi.IClient, p *types.ListMentionsInput) (*types.ListMentionsOutput, error) {
+	if p == nil {
+		return nil, fmt.Errorf("parameters is nil")
+	}
+
 	res := &types.ListMentionsOutput{}
 	if err := c.CallAPI(ctx, listMentionsEndpoint, "GET", p, res); err != nil {
 		return nil, err
@@ -44,6 +53,10 @@ func ListMentions(ctx context.Context, c gotwi.IClient, p *types.ListMentionsInp
 // created on a timeline over the last 7 days as well as the most recent 800 regardless of creation date.
 // https://developer.twitter.com/en/docs/twitter-api/tweets/timelines/api-reference/get-users-id-reverse-chronological
 func ListReverseChronological(ctx context.Context, c gotwi.IClient, p *types.ListReverseChronologicalInput) (*types.ListReverseChronologicalOutput, error) {
+	if p == nil {
+		return nil, fmt.Errorf("parameters is nil")
+	}
+
 	res := &types.ListReverseChronologicalOutput{}
 	if err := c.CallAPI(ctx, listReverseChronologicalEndpoint, "GET", p, res); err != nil {
 		return nil, err
