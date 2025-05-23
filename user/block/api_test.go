@@ -1,153 +1,49 @@
-package upload
+package block
 
 import (
-	"bytes"
 	"context"
 	"fmt"
 	"testing"
 
 	"github.com/michimani/gotwi"
 	"github.com/michimani/gotwi/internal/util"
-	"github.com/michimani/gotwi/media/upload/types"
+	"github.com/michimani/gotwi/user/block/types"
 	"github.com/stretchr/testify/assert"
 )
 
-func Test_Initialize(t *testing.T) {
+func Test_List(t *testing.T) {
 	cases := []struct {
 		name    string
 		client  gotwi.IClient
-		params  *types.InitializeInput
+		params  *types.ListInput
 		wantErr bool
 	}{
 		{
-			name: "normal: valid parameters",
+			name: "success",
 			client: gotwi.NewMockGotwiClientWithFunc(gotwi.MockFuncInput{
 				MockCallAPI: func(ctx context.Context, endpoint, method string, p util.Parameters, i util.Response) error {
 					return nil
 				},
 			}),
-			params: &types.InitializeInput{
-				TotalBytes: 1000,
-				MediaType:  types.MediaTypeJPEG,
+			params: &types.ListInput{
+				ID: "1234567890",
 			},
 			wantErr: false,
 		},
 		{
-			name: "error: parameters is nil",
-			client: gotwi.NewMockGotwiClientWithFunc(gotwi.MockFuncInput{
-				MockCallAPI: func(ctx context.Context, endpoint, method string, p util.Parameters, i util.Response) error {
-					return nil
-				},
-			}),
-			params:  nil,
-			wantErr: true,
-		},
-	}
-
-	for _, c := range cases {
-		t.Run(c.name, func(tt *testing.T) {
-			asst := assert.New(tt)
-			ctx := context.Background()
-			res, err := Initialize(ctx, c.client, c.params)
-
-			if c.wantErr {
-				asst.Error(err)
-				asst.Nil(res)
-				return
-			}
-
-			asst.NoError(err)
-			asst.NotNil(res)
-		})
-	}
-}
-
-func Test_Append(t *testing.T) {
-	cases := []struct {
-		name    string
-		client  gotwi.IClient
-		params  *types.AppendInput
-		wantErr bool
-	}{
-		{
-			name: "normal: valid parameters",
-			client: gotwi.NewMockGotwiClientWithFunc(gotwi.MockFuncInput{
-				MockCallAPI: func(ctx context.Context, endpoint, method string, p util.Parameters, i util.Response) error {
-					return nil
-				},
-			}),
-			params: &types.AppendInput{
-				MediaID:      "1234567890",
-				Media:        bytes.NewReader([]byte("test data")),
-				SegmentIndex: 0,
-			},
-			wantErr: false,
-		},
-		{
-			name: "error: parameters is nil",
-			client: gotwi.NewMockGotwiClientWithFunc(gotwi.MockFuncInput{
-				MockCallAPI: func(ctx context.Context, endpoint, method string, p util.Parameters, i util.Response) error {
-					return nil
-				},
-			}),
-			params:  nil,
-			wantErr: true,
-		},
-		{
-			name: "error: CallAPI returns error",
+			name: "error",
 			client: gotwi.NewMockGotwiClientWithFunc(gotwi.MockFuncInput{
 				MockCallAPI: func(ctx context.Context, endpoint, method string, p util.Parameters, i util.Response) error {
 					return fmt.Errorf("CallAPI error")
 				},
 			}),
-			params: &types.AppendInput{
-				MediaID:      "1234567890",
-				Media:        bytes.NewReader([]byte("test data")),
-				SegmentIndex: 0,
+			params: &types.ListInput{
+				ID: "1234567890",
 			},
 			wantErr: true,
 		},
-	}
-
-	for _, c := range cases {
-		t.Run(c.name, func(tt *testing.T) {
-			asst := assert.New(tt)
-			ctx := context.Background()
-			res, err := Append(ctx, c.client, c.params)
-
-			if c.wantErr {
-				asst.Error(err)
-				asst.Nil(res)
-				return
-			}
-
-			asst.NoError(err)
-			asst.NotNil(res)
-		})
-	}
-}
-
-func Test_Finalize(t *testing.T) {
-	cases := []struct {
-		name    string
-		client  gotwi.IClient
-		params  *types.FinalizeInput
-		wantErr bool
-	}{
 		{
-			name: "normal: valid parameters",
-			client: gotwi.NewMockGotwiClientWithFunc(gotwi.MockFuncInput{
-				MockCallAPI: func(ctx context.Context, endpoint, method string, p util.Parameters, i util.Response) error {
-					return nil
-				},
-			}),
-			params: &types.FinalizeInput{
-				MediaID: "1234567890",
-			},
-			wantErr: false,
-		},
-		{
-			name: "error: parameters is nil",
+			name: "error: params is nil",
 			client: gotwi.NewMockGotwiClientWithFunc(gotwi.MockFuncInput{
 				MockCallAPI: func(ctx context.Context, endpoint, method string, p util.Parameters, i util.Response) error {
 					return nil
@@ -162,7 +58,133 @@ func Test_Finalize(t *testing.T) {
 		t.Run(c.name, func(tt *testing.T) {
 			asst := assert.New(tt)
 			ctx := context.Background()
-			res, err := Finalize(ctx, c.client, c.params)
+			res, err := List(ctx, c.client, c.params)
+
+			if c.wantErr {
+				asst.Error(err)
+				asst.Nil(res)
+				return
+			}
+
+			asst.NoError(err)
+			asst.NotNil(res)
+		})
+	}
+}
+
+func Test_Create(t *testing.T) {
+	cases := []struct {
+		name    string
+		client  gotwi.IClient
+		params  *types.CreateInput
+		wantErr bool
+	}{
+		{
+			name: "success",
+			client: gotwi.NewMockGotwiClientWithFunc(gotwi.MockFuncInput{
+				MockCallAPI: func(ctx context.Context, endpoint, method string, p util.Parameters, i util.Response) error {
+					return nil
+				},
+			}),
+			params: &types.CreateInput{
+				ID:       "1234567890",
+				TargetID: "0987654321",
+			},
+			wantErr: false,
+		},
+		{
+			name: "error",
+			client: gotwi.NewMockGotwiClientWithFunc(gotwi.MockFuncInput{
+				MockCallAPI: func(ctx context.Context, endpoint, method string, p util.Parameters, i util.Response) error {
+					return fmt.Errorf("CallAPI error")
+				},
+			}),
+			params: &types.CreateInput{
+				ID:       "1234567890",
+				TargetID: "0987654321",
+			},
+			wantErr: true,
+		},
+		{
+			name: "error: params is nil",
+			client: gotwi.NewMockGotwiClientWithFunc(gotwi.MockFuncInput{
+				MockCallAPI: func(ctx context.Context, endpoint, method string, p util.Parameters, i util.Response) error {
+					return nil
+				},
+			}),
+			params:  nil,
+			wantErr: true,
+		},
+	}
+
+	for _, c := range cases {
+		t.Run(c.name, func(tt *testing.T) {
+			asst := assert.New(tt)
+			ctx := context.Background()
+			res, err := Create(ctx, c.client, c.params)
+
+			if c.wantErr {
+				asst.Error(err)
+				asst.Nil(res)
+				return
+			}
+
+			asst.NoError(err)
+			asst.NotNil(res)
+		})
+	}
+}
+
+func Test_Delete(t *testing.T) {
+	cases := []struct {
+		name    string
+		client  gotwi.IClient
+		params  *types.DeleteInput
+		wantErr bool
+	}{
+		{
+			name: "success",
+			client: gotwi.NewMockGotwiClientWithFunc(gotwi.MockFuncInput{
+				MockCallAPI: func(ctx context.Context, endpoint, method string, p util.Parameters, i util.Response) error {
+					return nil
+				},
+			}),
+			params: &types.DeleteInput{
+				SourceUserID: "1234567890",
+				TargetID:     "0987654321",
+			},
+			wantErr: false,
+		},
+		{
+			name: "error",
+			client: gotwi.NewMockGotwiClientWithFunc(gotwi.MockFuncInput{
+				MockCallAPI: func(ctx context.Context, endpoint, method string, p util.Parameters, i util.Response) error {
+					return fmt.Errorf("CallAPI error")
+				},
+			}),
+			params: &types.DeleteInput{
+				SourceUserID: "1234567890",
+				TargetID:     "0987654321",
+			},
+			wantErr: true,
+		},
+		{
+			name: "error: params is nil",
+			client: gotwi.NewMockGotwiClientWithFunc(gotwi.MockFuncInput{
+				MockCallAPI: func(ctx context.Context, endpoint, method string, p util.Parameters, i util.Response) error {
+					return nil
+				},
+			}),
+			params:  nil,
+			wantErr: true,
+		},
+	}
+
+	for _, c := range cases {
+		t.Run(c.name, func(tt *testing.T) {
+			asst := assert.New(tt)
+			ctx := context.Background()
+			res, err := Delete(ctx, c.client, c.params)
 
 			if c.wantErr {
 				asst.Error(err)

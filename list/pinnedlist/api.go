@@ -15,7 +15,7 @@ const (
 
 // Returns the Lists pinned by a specified user.
 // https://developer.twitter.com/en/docs/twitter-api/lists/pinned-lists/api-reference/get-users-id-pinned_lists
-func List(ctx context.Context, c *gotwi.Client, p *types.ListInput) (*types.ListOutput, error) {
+func List(ctx context.Context, c gotwi.IClient, p *types.ListInput) (*types.ListOutput, error) {
 	res := &types.ListOutput{}
 	if err := c.CallAPI(ctx, listEndpoint, "GET", p, res); err != nil {
 		return nil, err
@@ -26,7 +26,7 @@ func List(ctx context.Context, c *gotwi.Client, p *types.ListInput) (*types.List
 
 // Enables the authenticated user to pin a List.
 // https://developer.twitter.com/en/docs/twitter-api/lists/manage-lists/api-reference/post-users-id-pinned-lists
-func Create(ctx context.Context, c *gotwi.Client, p *types.CreateInput) (*types.CreateOutput, error) {
+func Create(ctx context.Context, c gotwi.IClient, p *types.CreateInput) (*types.CreateOutput, error) {
 	res := &types.CreateOutput{}
 	if err := c.CallAPI(ctx, createEndpoint, "POST", p, res); err != nil {
 		return nil, err
@@ -37,7 +37,7 @@ func Create(ctx context.Context, c *gotwi.Client, p *types.CreateInput) (*types.
 
 // Enables the authenticated user to unpin a List.
 // https://developer.twitter.com/en/docs/twitter-api/lists/manage-lists/api-reference/delete-users-id-pinned-lists-list_id
-func Delete(ctx context.Context, c *gotwi.Client, p *types.DeleteInput) (*types.DeleteOutput, error) {
+func Delete(ctx context.Context, c gotwi.IClient, p *types.DeleteInput) (*types.DeleteOutput, error) {
 	res := &types.DeleteOutput{}
 	if err := c.CallAPI(ctx, deleteEndpoint, "DELETE", p, res); err != nil {
 		return nil, err
