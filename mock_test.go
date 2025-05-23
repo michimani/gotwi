@@ -1,198 +1,340 @@
-package gotwi_test
+package gotwi
 
 import (
-	"encoding/json"
-	"fmt"
+	"context"
+	"errors"
 	"io"
 	"net/http"
 	"strings"
+	"testing"
 
-	"github.com/michimani/gotwi"
 	"github.com/michimani/gotwi/internal/util"
 	"github.com/michimani/gotwi/resources"
+	"github.com/stretchr/testify/assert"
 )
 
-type RoundTripFunc func(req *http.Request) *http.Response
+func Test_RoundTripFunc(t *testing.T) {
+	cases := []struct {
+		name           string
+		roundTripFunc  RoundTripFunc
+		expectedStatus int
+	}{
+		{
+			name: "success: returns status code 200",
+			roundTripFunc: func(req *http.Request) *http.Response {
+				return &http.Response{
+					StatusCode: http.StatusOK,
+					Body:       io.NopCloser(strings.NewReader("")),
+				}
+			},
+			expectedStatus: http.StatusOK,
+		},
+	}
 
-func (f RoundTripFunc) RoundTrip(req *http.Request) (*http.Response, error) {
-	return f(req), nil
-}
+	for _, c := range cases {
+		t.Run(c.name, func(tt *testing.T) {
+			asst := assert.New(tt)
+			client := newMockClient(c.roundTripFunc)
+			req, _ := http.NewRequest("GET", "http://example.com", nil)
+			resp, err := client.Do(req)
 
-func newMockClient(fn RoundTripFunc) *http.Client {
-	return &http.Client{
-		Transport: RoundTripFunc(fn),
+			asst.NoError(err)
+			asst.Equal(c.expectedStatus, resp.StatusCode)
+		})
 	}
 }
 
-type mockInput struct {
-	ResponseStatusCode int
-	ResponseHeader     map[string][]string
-	ResponseBody       io.ReadCloser
-}
-
-func newMockHTTPClient(in *mockInput) *http.Client {
-	if in == nil {
-		return nil
+func Test_NewMockHTTPClient(t *testing.T) {
+	cases := []struct {
+		name           string
+		input          *MockInput
+		expectedStatus int
+	}{
+		{
+			name: "success: returns status code 200",
+			input: &MockInput{
+				ResponseStatusCode: http.StatusOK,
+				ResponseBody:       io.NopCloser(strings.NewReader("")),
+			},
+			expectedStatus: http.StatusOK,
+		},
+		{
+			name:           "error: input is nil",
+			input:          nil,
+			expectedStatus: 0,
+		},
 	}
 
-	return newMockClient(func(req *http.Request) *http.Response {
-		return &http.Response{
-			Status:     "mock response status",
-			StatusCode: in.ResponseStatusCode,
-			Body:       in.ResponseBody,
-			Header:     in.ResponseHeader,
-		}
+	for _, c := range cases {
+		t.Run(c.name, func(tt *testing.T) {
+			asst := assert.New(tt)
+			client := NewMockHTTPClient(c.input)
+			if c.input == nil {
+				asst.Nil(client)
+				return
+			}
+
+			req, _ := http.NewRequest("GET", "http://example.com", nil)
+			resp, err := client.Do(req)
+
+			asst.NoError(err)
+			asst.Equal(c.expectedStatus, resp.StatusCode)
+		})
+	}
+}
+
+func Test_MockGotwiClient_Exec(t *testing.T) {
+	cases := []struct {
+		name           string
+		returnedToken  string
+		execHasError   bool
+		hasNot200Error bool
+		expectedError  bool
+	}{
+		{
+			name:           "success: returns token",
+			returnedToken:  "test-token",
+			execHasError:   false,
+			hasNot200Error: false,
+			expectedError:  false,
+		},
+		{
+			name:           "error: returns error",
+			returnedToken:  "",
+			execHasError:   true,
+			hasNot200Error: false,
+			expectedError:  true,
+		},
+		{
+			name:           "error: returns non-200 error",
+			returnedToken:  "",
+			execHasError:   false,
+			hasNot200Error: true,
+			expectedError:  false,
+		},
+	}
+
+	for _, c := range cases {
+		t.Run(c.name, func(tt *testing.T) {
+			asst := assert.New(tt)
+			client := NewMockGotwiClient(c.returnedToken, c.execHasError, c.hasNot200Error)
+			req, _ := http.NewRequest("GET", "http://example.com", nil)
+			var response util.Response = &MockAPIResponse{}
+
+			non2xxError, err := client.Exec(req, response)
+
+			if c.expectedError {
+				asst.Error(err)
+			} else {
+				asst.NoError(err)
+			}
+
+			if c.hasNot200Error {
+				asst.NotNil(non2xxError)
+			} else {
+				asst.Nil(non2xxError)
+			}
+		})
+	}
+}
+
+func Test_MockGotwiClient_IsReady(t *testing.T) {
+	cases := []struct {
+		name   string
+		client *MockGotwiClient
+		expect bool
+	}{
+		{
+			name: "success: returns true with AuthenMethodOAuth1UserContext",
+			client: NewMockGotwiClientWithFunc(MockFuncInput{
+				MockAuthenticationMethod: func() AuthenticationMethod {
+					return AuthenMethodOAuth1UserContext
+				},
+				MockAccessToken: func() string {
+					return "test-token"
+				},
+				MockSigningKey: func() string {
+					return "test-signing-key"
+				},
+			}),
+			expect: true,
+		},
+		{
+			name: "error: returns false with AuthenMethodOAuth1UserContext",
+			client: NewMockGotwiClientWithFunc(MockFuncInput{
+				MockAuthenticationMethod: func() AuthenticationMethod {
+					return AuthenMethodOAuth1UserContext
+				},
+				MockSigningKey: func() string {
+					return "test-signing-key"
+				},
+			}),
+			expect: false,
+		},
+		{
+			name: "success: returns true with AuthenMethodOAuth2BearerToken",
+			client: NewMockGotwiClientWithFunc(MockFuncInput{
+				MockAuthenticationMethod: func() AuthenticationMethod {
+					return AuthenMethodOAuth2BearerToken
+				},
+				MockAccessToken: func() string {
+					return "test-token"
+				},
+			}),
+			expect: true,
+		},
+		{
+			name: "error: returns false with AuthenMethodOAuth2BearerToken",
+			client: NewMockGotwiClientWithFunc(MockFuncInput{
+				MockAuthenticationMethod: func() AuthenticationMethod {
+					return AuthenMethodOAuth2BearerToken
+				},
+			}),
+			expect: false,
+		},
+		{
+			name: "error: return false with invalid AuthenticationMethod",
+			client: NewMockGotwiClientWithFunc(MockFuncInput{
+				MockAuthenticationMethod: func() AuthenticationMethod {
+					return AuthenticationMethod("invalid method")
+				},
+			}),
+			expect: false,
+		},
+		{
+			name:   "error: returns false with nil client",
+			client: nil,
+			expect: false,
+		},
+	}
+
+	for _, c := range cases {
+		t.Run(c.name, func(tt *testing.T) {
+			asst := assert.New(tt)
+			asst.Equal(c.expect, c.client.IsReady())
+		})
+	}
+}
+
+func Test_MockGotwiClientWithFunc(t *testing.T) {
+	cases := []struct {
+		name  string
+		input MockFuncInput
+	}{
+		{
+			name:  "success: uses default functions",
+			input: MockFuncInput{},
+		},
+		{
+			name: "success: uses custom functions",
+			input: MockFuncInput{
+				MockExec: func(req *http.Request, i util.Response) (*resources.Non2XXError, error) {
+					return nil, nil
+				},
+				MockIsReady:     func() bool { return true },
+				MockAccessToken: func() string { return "custom-token" },
+				MockAuthenticationMethod: func() AuthenticationMethod {
+					return AuthenMethodOAuth2BearerToken
+				},
+				MockOAuthToken: func() string {
+					return "custom-oauth-token"
+				},
+				MockOAuthConsumerKey: func() string {
+					return "custom-oauth-consumer-key"
+				},
+				MockSigningKey: func() string {
+					return "custom-signing-key"
+				},
+				MockCallAPI: func(ctx context.Context, endpoint, method string, p util.Parameters, i util.Response) error {
+					return nil
+				},
+			},
+		},
+	}
+
+	for _, c := range cases {
+		t.Run(c.name, func(tt *testing.T) {
+			asst := assert.New(tt)
+			client := NewMockGotwiClientWithFunc(c.input)
+
+			// can call all methods
+			asst.NotPanics(func() {
+				client.Exec(nil, nil)
+				client.IsReady()
+				client.AccessToken()
+				client.AuthenticationMethod()
+				client.OAuthToken()
+				client.OAuthConsumerKey()
+				client.SigningKey()
+				client.CallAPI(context.Background(), "endpoint", "method", nil, nil)
+			})
+		})
+	}
+}
+
+func Test_MockAPIParameter(t *testing.T) {
+	param := MockAPIParameter{}
+
+	t.Run("test MockAPIParameter methods", func(tt *testing.T) {
+		asst := assert.New(tt)
+		param.SetAccessToken("test-token")
+		asst.Equal("", param.AccessToken())
+		asst.Equal("", param.ResolveEndpoint("base"))
+
+		body, err := param.Body()
+		asst.Nil(body)
+		asst.NoError(err)
+
+		params := param.ParameterMap()
+		asst.Empty(params)
 	})
 }
 
-type mockAPIParameter struct{}
+func Test_MockAPIResponse(t *testing.T) {
+	response := MockAPIResponse{}
 
-func (mp mockAPIParameter) SetAccessToken(token string)                {}
-func (mp mockAPIParameter) AccessToken() string                        { return "" }
-func (mp mockAPIParameter) ResolveEndpoint(endpointBase string) string { return "" }
-func (mp mockAPIParameter) Body() (io.Reader, error)                   { return nil, nil }
-func (mp mockAPIParameter) ParameterMap() map[string]string            { return map[string]string{} }
-
-type mockAPIResponse struct{}
-
-func (mr mockAPIResponse) HasPartialError() bool { return false }
-
-type MockGotwiClient struct {
-	Client                   *http.Client
-	MockExec                 func(req *http.Request, i util.Response) (*resources.Non2XXError, error)
-	MockIsReady              func() bool
-	MockAccessToken          func() string
-	MockAuthenticationMethod func() gotwi.AuthenticationMethod
-	MockOAuthToken           func() string
-	MockOAuthConsumerKey     func() string
-	MockSigningKey           func() string
+	t.Run("test MockAPIResponse methods", func(tt *testing.T) {
+		asst := assert.New(tt)
+		asst.False(response.HasPartialError())
+	})
 }
 
-func (m *MockGotwiClient) Exec(req *http.Request, i util.Response) (*resources.Non2XXError, error) {
-	return m.MockExec(req, i)
-}
-
-func (m *MockGotwiClient) IsReady() bool {
-	if m == nil {
-		return false
+func Test_MockGotwiClient_CallAPI(t *testing.T) {
+	cases := []struct {
+		name        string
+		client      *MockGotwiClient
+		expectError bool
+	}{
+		{
+			name: "success: returns true",
+			client: &MockGotwiClient{
+				MockCallAPI: func(ctx context.Context, endpoint, method string, p util.Parameters, i util.Response) error {
+					return nil
+				},
+			},
+			expectError: false,
+		},
+		{
+			name: "error: returns error",
+			client: &MockGotwiClient{
+				MockCallAPI: func(ctx context.Context, endpoint, method string, p util.Parameters, i util.Response) error {
+					return errors.New("error")
+				},
+			},
+			expectError: true,
+		},
 	}
 
-	if !m.AuthenticationMethod().Valid() {
-		return false
+	for _, c := range cases {
+		t.Run(c.name, func(tt *testing.T) {
+			asst := assert.New(tt)
+
+			res := c.client.CallAPI(context.Background(), "endpoint", "method", nil, nil)
+			if c.expectError {
+				asst.Error(res)
+			} else {
+				asst.NoError(res)
+			}
+		})
 	}
-
-	switch m.AuthenticationMethod() {
-	case gotwi.AuthenMethodOAuth1UserContext:
-		if m.OAuthToken() == "" || m.SigningKey() == "" {
-			return false
-		}
-	case gotwi.AuthenMethodOAuth2BearerToken:
-		if m.AccessToken() == "" {
-			return false
-		}
-	}
-
-	return true
-}
-
-func (m *MockGotwiClient) AccessToken() string {
-	return m.MockAccessToken()
-}
-
-func (m *MockGotwiClient) AuthenticationMethod() gotwi.AuthenticationMethod {
-	return m.MockAuthenticationMethod()
-}
-
-func (m *MockGotwiClient) OAuthToken() string {
-	return m.MockAccessToken()
-}
-
-func (m *MockGotwiClient) OAuthConsumerKey() string {
-	return m.MockAccessToken()
-}
-
-func (m *MockGotwiClient) SigningKey() string {
-	return m.MockAccessToken()
-}
-
-func newMockGotwiClient(returnedToken string, execHasError, hasNot200Error bool) *MockGotwiClient {
-	fn := func(req *http.Request, i util.Response) (*resources.Non2XXError, error) {
-		if execHasError {
-			return nil, fmt.Errorf("has error")
-		}
-
-		if hasNot200Error {
-			return &resources.Non2XXError{}, nil
-		}
-
-		resBody := strings.NewReader(`{"token_type":"token_type","access_token":"` + returnedToken + `"}`)
-
-		if err := json.NewDecoder(resBody).Decode(i); err != nil {
-			return nil, err
-		}
-
-		return nil, nil
-	}
-
-	return &MockGotwiClient{
-		MockExec: fn,
-	}
-}
-
-type mockFuncInput struct {
-	MockExec                 func(req *http.Request, i util.Response) (*resources.Non2XXError, error)
-	MockIsReady              func() bool
-	MockAccessToken          func() string
-	MockAuthenticationMethod func() gotwi.AuthenticationMethod
-	MockOAuthToken           func() string
-	MockOAuthConsumerKey     func() string
-	MockSigningKey           func() string
-}
-
-func newMockGotwiClientWithFunc(in mockFuncInput) *MockGotwiClient {
-	m := MockGotwiClient{}
-
-	if in.MockExec != nil {
-		m.MockExec = in.MockExec
-	} else {
-		m.MockExec = func(req *http.Request, i util.Response) (*resources.Non2XXError, error) { return nil, nil }
-	}
-
-	if in.MockIsReady != nil {
-		m.MockIsReady = in.MockIsReady
-	} else {
-		m.MockIsReady = func() bool { return false }
-	}
-
-	if in.MockAccessToken != nil {
-		m.MockAccessToken = in.MockAccessToken
-	} else {
-		m.MockAccessToken = func() string { return "" }
-	}
-
-	if in.MockAuthenticationMethod != nil {
-		m.MockAuthenticationMethod = in.MockAuthenticationMethod
-	} else {
-		m.MockAuthenticationMethod = func() gotwi.AuthenticationMethod { return gotwi.AuthenticationMethod("") }
-	}
-
-	if in.MockOAuthToken != nil {
-		m.MockOAuthToken = in.MockOAuthToken
-	} else {
-		m.MockOAuthToken = func() string { return "" }
-	}
-
-	if in.MockOAuthConsumerKey != nil {
-		m.MockOAuthConsumerKey = in.MockOAuthConsumerKey
-	} else {
-		m.MockOAuthConsumerKey = func() string { return "" }
-	}
-
-	if in.MockSigningKey != nil {
-		m.MockSigningKey = in.MockSigningKey
-	} else {
-		m.MockSigningKey = func() string { return "" }
-	}
-
-	return &m
 }

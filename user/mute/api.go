@@ -2,6 +2,7 @@ package mute
 
 import (
 	"context"
+	"errors"
 
 	"github.com/michimani/gotwi"
 	"github.com/michimani/gotwi/user/mute/types"
@@ -15,7 +16,10 @@ const (
 
 // Returns a list of users who are muted by the specified user ID.
 // https://developer.twitter.com/en/docs/twitter-api/users/mutes/api-reference/get-users-muting
-func Lists(ctx context.Context, c *gotwi.Client, p *types.ListsInput) (*types.ListsOutput, error) {
+func Lists(ctx context.Context, c gotwi.IClient, p *types.ListsInput) (*types.ListsOutput, error) {
+	if p == nil {
+		return nil, errors.New("ListsInput is nil")
+	}
 	res := &types.ListsOutput{}
 	if err := c.CallAPI(ctx, listEndpoint, "GET", p, res); err != nil {
 		return nil, err
@@ -26,7 +30,10 @@ func Lists(ctx context.Context, c *gotwi.Client, p *types.ListsInput) (*types.Li
 
 // Allows an authenticated user ID to mute the target user.
 // https://developer.twitter.com/en/docs/twitter-api/users/mutes/api-reference/post-users-user_id-muting
-func Create(ctx context.Context, c *gotwi.Client, p *types.CreateInput) (*types.CreateOutput, error) {
+func Create(ctx context.Context, c gotwi.IClient, p *types.CreateInput) (*types.CreateOutput, error) {
+	if p == nil {
+		return nil, errors.New("CreateInput is nil")
+	}
 	res := &types.CreateOutput{}
 	if err := c.CallAPI(ctx, createEndpoint, "POST", p, res); err != nil {
 		return nil, err
@@ -38,7 +45,10 @@ func Create(ctx context.Context, c *gotwi.Client, p *types.CreateInput) (*types.
 // Allows an authenticated user ID to unmute the target user.
 // The request succeeds with no action when the user sends a request to a user they're not muting or have already unmuted.
 // https://developer.twitter.com/en/docs/twitter-api/users/mutes/api-reference/delete-users-user_id-muting
-func Delete(ctx context.Context, c *gotwi.Client, p *types.DeleteInput) (*types.DeleteOutput, error) {
+func Delete(ctx context.Context, c gotwi.IClient, p *types.DeleteInput) (*types.DeleteOutput, error) {
+	if p == nil {
+		return nil, errors.New("DeleteInput is nil")
+	}
 	res := &types.DeleteOutput{}
 	if err := c.CallAPI(ctx, deleteEndpoint, "DELETE", p, res); err != nil {
 		return nil, err

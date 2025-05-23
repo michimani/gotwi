@@ -2,6 +2,7 @@ package batchcompliance
 
 import (
 	"context"
+	"errors"
 
 	"github.com/michimani/gotwi"
 	"github.com/michimani/gotwi/compliance/batchcompliance/types"
@@ -15,7 +16,10 @@ const (
 
 // Returns a list of recent compliance jobs.
 // https://developer.twitter.com/en/docs/twitter-api/compliance/batch-compliance/api-reference/get-compliance-jobs
-func ListJobs(ctx context.Context, c *gotwi.Client, p *types.ListJobsInput) (*types.ListJobsOutput, error) {
+func ListJobs(ctx context.Context, c gotwi.IClient, p *types.ListJobsInput) (*types.ListJobsOutput, error) {
+	if p == nil {
+		return nil, errors.New("ListJobsInput is nil")
+	}
 	res := &types.ListJobsOutput{}
 	if err := c.CallAPI(ctx, listJobsEndpoint, "GET", p, res); err != nil {
 		return nil, err
@@ -26,7 +30,10 @@ func ListJobs(ctx context.Context, c *gotwi.Client, p *types.ListJobsInput) (*ty
 
 // Get a single compliance job with the specified ID.
 // https://developer.twitter.com/en/docs/twitter-api/compliance/batch-compliance/api-reference/get-compliance-jobs-id
-func GetJob(ctx context.Context, c *gotwi.Client, p *types.GetJobInput) (*types.GetJobOutput, error) {
+func GetJob(ctx context.Context, c gotwi.IClient, p *types.GetJobInput) (*types.GetJobOutput, error) {
+	if p == nil {
+		return nil, errors.New("GetJobInput is nil")
+	}
 	res := &types.GetJobOutput{}
 	if err := c.CallAPI(ctx, GetJobEndpoint, "GET", p, res); err != nil {
 		return nil, err
@@ -40,7 +47,10 @@ func GetJob(ctx context.Context, c *gotwi.Client, p *types.GetJobInput) (*types.
 // The destination URL represents the location that contains the list of IDs consumed by your App.
 // You can run one batch job at a time.
 // https://developer.twitter.com/en/docs/twitter-api/compliance/batch-compliance/api-reference/post-compliance-jobs
-func CreateJob(ctx context.Context, c *gotwi.Client, p *types.CreateJobInput) (*types.CreateJobOutput, error) {
+func CreateJob(ctx context.Context, c gotwi.IClient, p *types.CreateJobInput) (*types.CreateJobOutput, error) {
+	if p == nil {
+		return nil, errors.New("CreateJobInput is nil")
+	}
 	res := &types.CreateJobOutput{}
 	if err := c.CallAPI(ctx, createJobEndpoint, "POST", p, res); err != nil {
 		return nil, err

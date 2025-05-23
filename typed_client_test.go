@@ -140,7 +140,7 @@ func Test_TypedClient_Exec(t *testing.T) {
 			asst := assert.New(tt)
 
 			tc := gotwi.NewTypedClient[*gotwi.MockResponse](&gotwi.Client{})
-			not200err, err := tc.Exec(c.req, &mockAPIResponse{})
+			not200err, err := tc.Exec(c.req, &gotwi.MockAPIResponse{})
 
 			asst.Nil(err)
 			asst.Nil(not200err)
@@ -154,14 +154,14 @@ func Test_TypedClient_ExecStream(t *testing.T) {
 
 	cases := []struct {
 		name          string
-		mockInput     *mockInput
+		mockInput     *gotwi.MockInput
 		req           *http.Request
 		wantErr       bool
 		wantNot200Err bool
 	}{
 		{
 			name: "ok",
-			mockInput: &mockInput{
+			mockInput: &gotwi.MockInput{
 				ResponseStatusCode: http.StatusOK,
 				ResponseBody:       io.NopCloser(strings.NewReader(`{}`)),
 			},
@@ -171,7 +171,7 @@ func Test_TypedClient_ExecStream(t *testing.T) {
 		},
 		{
 			name: "error: not 200 error",
-			mockInput: &mockInput{
+			mockInput: &gotwi.MockInput{
 				ResponseStatusCode: http.StatusInternalServerError,
 				ResponseBody:       io.NopCloser(strings.NewReader(`{}`)),
 			},
@@ -181,7 +181,7 @@ func Test_TypedClient_ExecStream(t *testing.T) {
 		},
 		{
 			name: "error: cannot resolve 200 error",
-			mockInput: &mockInput{
+			mockInput: &gotwi.MockInput{
 				ResponseStatusCode: http.StatusInternalServerError,
 				ResponseHeader: map[string][]string{
 					"Content-Type": {"application/json;charset=UTF-8"},
@@ -194,7 +194,7 @@ func Test_TypedClient_ExecStream(t *testing.T) {
 		},
 		{
 			name: "error: http.Client.Do error",
-			mockInput: &mockInput{
+			mockInput: &gotwi.MockInput{
 				ResponseStatusCode: http.StatusInternalServerError,
 				ResponseBody:       io.NopCloser(strings.NewReader(`{}`)),
 			},
@@ -207,7 +207,7 @@ func Test_TypedClient_ExecStream(t *testing.T) {
 	for _, c := range cases {
 		t.Run(c.name, func(tt *testing.T) {
 			asst := assert.New(tt)
-			mockClient := newMockHTTPClient(c.mockInput)
+			mockClient := gotwi.NewMockHTTPClient(c.mockInput)
 			tc := gotwi.NewTypedClient[*gotwi.MockResponse](&gotwi.Client{
 				Client: mockClient,
 			})
@@ -238,7 +238,7 @@ func Test_TypedClient_ExecStream(t *testing.T) {
 func Test_CallStreamAPI(t *testing.T) {
 	cases := []struct {
 		name            string
-		mockInput       *mockInput
+		mockInput       *gotwi.MockInput
 		clientInput     *gotwi.NewClientInput
 		endpoint        string
 		method          string
@@ -250,7 +250,7 @@ func Test_CallStreamAPI(t *testing.T) {
 	}{
 		{
 			name: "ok: OAuth 1.0",
-			mockInput: &mockInput{
+			mockInput: &gotwi.MockInput{
 				ResponseStatusCode: http.StatusOK,
 				ResponseBody:       io.NopCloser(strings.NewReader(`{"message": "ok"}`)),
 			},
@@ -263,13 +263,13 @@ func Test_CallStreamAPI(t *testing.T) {
 			method:          http.MethodGet,
 			envAPIKey:       "api-key",
 			envAPIKeySecret: "api-key-secret",
-			params:          &mockAPIParameter{},
-			response:        &mockAPIResponse{},
+			params:          &gotwi.MockAPIParameter{},
+			response:        &gotwi.MockAPIResponse{},
 			wantErr:         false,
 		},
 		{
 			name: "error: response is nil",
-			mockInput: &mockInput{
+			mockInput: &gotwi.MockInput{
 				ResponseStatusCode: http.StatusOK,
 				ResponseBody:       io.NopCloser(strings.NewReader(`{"message": "ok"}`)),
 			},
@@ -282,13 +282,13 @@ func Test_CallStreamAPI(t *testing.T) {
 			method:          http.MethodGet,
 			envAPIKey:       "api-key",
 			envAPIKeySecret: "api-key-secret",
-			params:          &mockAPIParameter{},
+			params:          &gotwi.MockAPIParameter{},
 			response:        nil,
 			wantErr:         false,
 		},
 		{
 			name: "error: parameter is nil",
-			mockInput: &mockInput{
+			mockInput: &gotwi.MockInput{
 				ResponseStatusCode: http.StatusOK,
 				ResponseBody:       io.NopCloser(strings.NewReader(`{"message": "ok"}`)),
 			},
@@ -302,12 +302,12 @@ func Test_CallStreamAPI(t *testing.T) {
 			envAPIKey:       "api-key",
 			envAPIKeySecret: "api-key-secret",
 			params:          nil,
-			response:        &mockAPIResponse{},
+			response:        &gotwi.MockAPIResponse{},
 			wantErr:         true,
 		},
 		{
 			name: "error: client is not ready",
-			mockInput: &mockInput{
+			mockInput: &gotwi.MockInput{
 				ResponseStatusCode: http.StatusOK,
 				ResponseBody:       io.NopCloser(strings.NewReader(`{"message": "ok"}`)),
 			},
@@ -320,13 +320,13 @@ func Test_CallStreamAPI(t *testing.T) {
 			envAPIKey:       "api-key",
 			envAPIKeySecret: "api-key-secret",
 			method:          http.MethodGet,
-			params:          &mockAPIParameter{},
-			response:        &mockAPIResponse{},
+			params:          &gotwi.MockAPIParameter{},
+			response:        &gotwi.MockAPIResponse{},
 			wantErr:         true,
 		},
 		{
 			name: "error: not 200 response",
-			mockInput: &mockInput{
+			mockInput: &gotwi.MockInput{
 				ResponseStatusCode: http.StatusInternalServerError,
 				ResponseBody:       io.NopCloser(strings.NewReader(`{}`)),
 			},
@@ -339,13 +339,13 @@ func Test_CallStreamAPI(t *testing.T) {
 			method:          http.MethodGet,
 			envAPIKey:       "api-key",
 			envAPIKeySecret: "api-key-secret",
-			params:          &mockAPIParameter{},
-			response:        &mockAPIResponse{},
+			params:          &gotwi.MockAPIParameter{},
+			response:        &gotwi.MockAPIResponse{},
 			wantErr:         true,
 		},
 		{
 			name: "error: invalid json",
-			mockInput: &mockInput{
+			mockInput: &gotwi.MockInput{
 				ResponseStatusCode: http.StatusInternalServerError,
 				ResponseBody:       io.NopCloser(strings.NewReader(`///`)),
 			},
@@ -358,13 +358,13 @@ func Test_CallStreamAPI(t *testing.T) {
 			method:          http.MethodGet,
 			envAPIKey:       "api-key",
 			envAPIKeySecret: "api-key-secret",
-			params:          &mockAPIParameter{},
-			response:        &mockAPIResponse{},
+			params:          &gotwi.MockAPIParameter{},
+			response:        &gotwi.MockAPIResponse{},
 			wantErr:         true,
 		},
 		{
 			name: "error: invalid method",
-			mockInput: &mockInput{
+			mockInput: &gotwi.MockInput{
 				ResponseStatusCode: http.StatusOK,
 				ResponseBody:       io.NopCloser(strings.NewReader(`{}`)),
 			},
@@ -377,8 +377,8 @@ func Test_CallStreamAPI(t *testing.T) {
 			method:          "invalid method",
 			envAPIKey:       "api-key",
 			envAPIKeySecret: "api-key-secret",
-			params:          &mockAPIParameter{},
-			response:        &mockAPIResponse{},
+			params:          &gotwi.MockAPIParameter{},
+			response:        &gotwi.MockAPIResponse{},
 			wantErr:         true,
 		},
 	}
@@ -389,7 +389,7 @@ func Test_CallStreamAPI(t *testing.T) {
 			tt.Setenv("GOTWI_API_KEY", c.envAPIKey)
 			tt.Setenv("GOTWI_API_KEY_SECRET", c.envAPIKeySecret)
 
-			mockClient := newMockHTTPClient(c.mockInput)
+			mockClient := gotwi.NewMockHTTPClient(c.mockInput)
 			in := c.clientInput
 			in.HTTPClient = mockClient
 			client, _ := gotwi.NewClient(in)

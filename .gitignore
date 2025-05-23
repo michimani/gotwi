@@ -3,3 +3,7 @@ sample
 go.work
 go.work.sum
 .idea
+
+
+coverage.txt
+coverage.html
