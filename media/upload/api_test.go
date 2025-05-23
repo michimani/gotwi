@@ -42,6 +42,19 @@ func Test_Initialize(t *testing.T) {
 			params:  nil,
 			wantErr: true,
 		},
+		{
+			name: "error: CallAPI returns error",
+			client: gotwi.NewMockGotwiClientWithFunc(gotwi.MockFuncInput{
+				MockCallAPI: func(ctx context.Context, endpoint, method string, p util.Parameters, i util.Response) error {
+					return fmt.Errorf("CallAPI error")
+				},
+			}),
+			params: &types.InitializeInput{
+				TotalBytes: 1000,
+				MediaType:  types.MediaTypeJPEG,
+			},
+			wantErr: true,
+		},
 	}
 
 	for _, c := range cases {
@@ -154,6 +167,18 @@ func Test_Finalize(t *testing.T) {
 				},
 			}),
 			params:  nil,
+			wantErr: true,
+		},
+		{
+			name: "error: CallAPI returns error",
+			client: gotwi.NewMockGotwiClientWithFunc(gotwi.MockFuncInput{
+				MockCallAPI: func(ctx context.Context, endpoint, method string, p util.Parameters, i util.Response) error {
+					return fmt.Errorf("CallAPI error")
+				},
+			}),
+			params: &types.FinalizeInput{
+				MediaID: "1234567890",
+			},
 			wantErr: true,
 		},
 	}
