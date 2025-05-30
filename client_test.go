@@ -717,6 +717,22 @@ func Test_resolveNon2XXResponse(t *testing.T) {
 			},
 		},
 		{
+			name: "normal: has status field in body. that 'status' is not a string",
+			res: &http.Response{
+				Status:     "Internal Server Error",
+				StatusCode: http.StatusInternalServerError,
+				Header: map[string][]string{
+					"Content-Type": {"application/json;charset=UTF-8"},
+				},
+				Body: io.NopCloser(strings.NewReader(`{"status": 200}`)),
+			},
+			wantErr: false,
+			expect: resources.Non2XXError{
+				Status:     "Internal Server Error",
+				StatusCode: http.StatusInternalServerError,
+			},
+		},
+		{
 			name: "normal: content-type is text/plain",
 			res: &http.Response{
 				Status:     "Internal Server Error",
