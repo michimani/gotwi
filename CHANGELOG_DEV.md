@@ -6,6 +6,13 @@ This is a version of CHANGELOG less than v1.0.0
 
 * TBD
 
+v0.18.1 (2025-05-31)
+===
+
+### Fixes
+
+* Fix `Non2XXError.Status` field type. ([#333](https://github.com/michimani/gotwi/issues/333))
+
 v0.18.0 (2025-05-22)
 ===
 
