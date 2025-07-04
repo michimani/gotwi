@@ -371,6 +371,15 @@ if err != nil {
 
 See [_examples](https://github.com/michimani/gotwi/tree/main/_examples) directory.
 
+## Contributors
+
+<a href="https://github.com/michimani/gotwi/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=michimani/gotwi" />
+</a>
+
+Made with [contrib.rocks](https://contrib.rocks).
+
+
 # Licence
 
 [MIT](https://github.com/michimani/gotwi/blob/main/LICENCE)
