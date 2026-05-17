@@ -6,12 +6,14 @@ on:
     paths:
       - "**.go"
       - "go.mod"
+      - ".github/workflows/onlytest.yml"
   pull_request:
     branches:
       - "**"
     paths:
       - "**.go"
       - "go.mod"
+      - ".github/workflows/onlytest.yml"
 
 jobs:
   test:
