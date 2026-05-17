@@ -80,7 +80,6 @@ func non2XXErrorSummary(e *resources.Non2XXError) string {
 	}
 
 	ercnt := 1
-	fmt.Printf("api errors: %+v\n", e.APIErrors)
 	for _, er := range e.APIErrors {
 		if er.Message != "" {
 			detail := er.Code.Detail()
