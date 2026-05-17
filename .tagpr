@@ -1,3 +1,4 @@
+[tagpr]
 changelog = "CHANGELOG_DEV.md"
 versionFile = ""
 tagPrefix = "v"
