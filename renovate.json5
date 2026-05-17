@@ -1,0 +1,31 @@
+{
+  $schema: "https://docs.renovatebot.com/renovate-schema.json",
+  extends: [
+    "config:recommended",
+  ],
+  reviewers: ["michimani"],
+  packageRules: [
+    // Go toolchain (go directive in go.mod)
+    {
+      matchManagers: ["gomod"],
+      matchDepTypes: ["golang"],
+      matchUpdateTypes: ["patch"],
+      automerge: true,
+    },
+    // Go module dependencies
+    {
+      matchManagers: ["gomod"],
+      matchDepTypes: ["require"],
+      groupName: "Go dependencies",
+      matchUpdateTypes: ["patch"],
+      automerge: true,
+    },
+    // GitHub Actions
+    {
+      matchManagers: ["github-actions"],
+      groupName: "GitHub Actions",
+      matchUpdateTypes: ["patch"],
+      automerge: true,
+    },
+  ],
+}
