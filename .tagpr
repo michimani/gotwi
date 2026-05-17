@@ -3,3 +3,4 @@
 	vPrefix = true
 	changelog = true
 	changelogFile = "CHANGELOG_DEV.md"
+	versionFile = -

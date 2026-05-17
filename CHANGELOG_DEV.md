@@ -1,3 +1,11 @@
+## [v0.18.2](https://github.com/michimani/gotwi/compare/v0.18.1...v0.18.2) - 2026-05-17
+- chore: add Contributors section to README using cntrib.rocks by @michimani in https://github.com/michimani/gotwi/pull/336
+- chore: Migrate release flow to tagpr by @michimani in https://github.com/michimani/gotwi/pull/339
+- fix: tagpr config by @michimani in https://github.com/michimani/gotwi/pull/341
+- fix(errors): remove debug print statement from non2XXErrorSummary by @michimani in https://github.com/michimani/gotwi/pull/343
+- fix(client): close response body on non-2XX in ExecStream by @michimani in https://github.com/michimani/gotwi/pull/344
+- Adding tweet parameters by @V0lkanTas in https://github.com/michimani/gotwi/pull/338
+
 ## v0.18.1 - 2025-05-31
 
 ### Fixes
@@ -423,4 +431,3 @@
 ## v0.1.0 - 2021-10-08
 
 * dev release 🚀
-
