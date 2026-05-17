@@ -109,6 +109,7 @@ func (c *TypedClient[T]) ExecStream(req *http.Request) (*http.Response, *resourc
 	}
 
 	if _, ok := okCodes[res.StatusCode]; !ok {
+		defer res.Body.Close()
 		non200err, err := resolveNon2XXResponse(res)
 		if err != nil {
 			return nil, nil, err
