@@ -1,4 +1,5 @@
 [tagpr]
-changelog = "CHANGELOG_DEV.md"
-versionFile = ""
-tagPrefix = "v"
+	releaseBranch = "main"
+	vPrefix = true
+	changelog = true
+	changelogFile = "CHANGELOG_DEV.md"
