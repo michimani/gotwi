@@ -1,6 +1,6 @@
 module gotwi-example-1
 
-go 1.22
+go 1.26
 
 toolchain go1.23.0
 
