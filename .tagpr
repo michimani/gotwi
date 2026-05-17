@@ -2,3 +2,5 @@
 changelog = "CHANGELOG_DEV.md"
 versionFile = ""
 tagPrefix = "v"
+	vPrefix = true
+	releaseBranch = main
