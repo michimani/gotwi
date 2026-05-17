@@ -1,3 +1,12 @@
+## [v0.18.3](https://github.com/michimani/gotwi/compare/v0.18.2...v0.18.3) - 2026-05-17
+- chore/update go version by @michimani in https://github.com/michimani/gotwi/pull/345
+- chore(deps): update go toolchain directive to v1.26.3 by @renovate[bot] in https://github.com/michimani/gotwi/pull/347
+- fix(deps): update module github.com/michimani/gotwi to v0.18.2 by @renovate[bot] in https://github.com/michimani/gotwi/pull/348
+- chore(deps): update actions/checkout action to v6 by @renovate[bot] in https://github.com/michimani/gotwi/pull/351
+- chore(deps): update actions/setup-go action to v6 by @renovate[bot] in https://github.com/michimani/gotwi/pull/352
+- chore(deps): update codecov/codecov-action action to v6 by @renovate[bot] in https://github.com/michimani/gotwi/pull/353
+- fix(deps): update module github.com/stretchr/testify to v1.11.1 by @renovate[bot] in https://github.com/michimani/gotwi/pull/350
+
 ## [v0.18.2](https://github.com/michimani/gotwi/compare/v0.18.1...v0.18.2) - 2026-05-17
 - chore: add Contributors section to README using cntrib.rocks by @michimani in https://github.com/michimani/gotwi/pull/336
 - chore: Migrate release flow to tagpr by @michimani in https://github.com/michimani/gotwi/pull/339
