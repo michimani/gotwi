@@ -1,3 +1,10 @@
+## [v0.18.5](https://github.com/michimani/gotwi/compare/v0.18.4...v0.18.5) - 2026-08-21
+
+- fix(deps): update module github.com/michimani/gotwi to v0.18.4 by @renovate[bot] in https://github.com/michimani/gotwi/pull/361
+- chore(deps): update go toolchain directive to v1.26.6 by @renovate[bot] in https://github.com/michimani/gotwi/pull/363
+- fix(deps): update module github.com/stretchr/testify to v1.12.1 by @renovate[bot] in https://github.com/michimani/gotwi/pull/364
+- chore(deps): update go toolchain directive to v1.27.0 by @renovate[bot] in https://github.com/michimani/gotwi/pull/365
+
 ## [v0.18.4](https://github.com/michimani/gotwi/compare/v0.18.3...v0.18.4) - 2026-07-16
 
 - fix(deps): update module github.com/michimani/gotwi to v0.18.3 by @renovate[bot] in https://github.com/michimani/gotwi/pull/354
