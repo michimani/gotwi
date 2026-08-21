@@ -6,6 +6,8 @@ github.com/michimani/gotwi v0.18.3 h1:ii0ZHfjE2Cj43ralo9/9ZY6qQFWgVCIHD6EyaKwn5+
 github.com/michimani/gotwi v0.18.3/go.mod h1:JDj84GJikeqyPPjbIybiJIdXkUeevX8ZKYxv6Le2nhY=
 github.com/michimani/gotwi v0.18.4 h1:PDs0B87Ums/IKOlpiXC9vBGmMxnwY3GsJCp24J9JnpU=
 github.com/michimani/gotwi v0.18.4/go.mod h1:JDj84GJikeqyPPjbIybiJIdXkUeevX8ZKYxv6Le2nhY=
+github.com/michimani/gotwi v0.18.5 h1:DqvOTLHLZhRUOo2ZVzosmdZSAYKPJDbzl0RX6wd+iT8=
+github.com/michimani/gotwi v0.18.5/go.mod h1:tPOQVTBoLuXDUjL6WbbGTBGNMvANYxQxbgHPCzsJgf4=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
 github.com/stretchr/testify v1.7.0 h1:nwc3DEeHmmLAfoZucVR881uASk0Mfjw8xYJ99tb5CcY=
