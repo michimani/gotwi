@@ -1,3 +1,9 @@
+## [v0.18.6](https://github.com/michimani/gotwi/compare/v0.18.5...v0.18.6) - 2026-10-10
+
+- fix(deps): update module github.com/michimani/gotwi to v0.18.5 by @renovate[bot] in https://github.com/michimani/gotwi/pull/366
+- chore(deps): update go toolchain directive to v1.27.1 by @renovate[bot] in https://github.com/michimani/gotwi/pull/368
+- chore(deps): update go toolchain directive to v1.27.2 by @renovate[bot] in https://github.com/michimani/gotwi/pull/369
+
 ## [v0.18.5](https://github.com/michimani/gotwi/compare/v0.18.4...v0.18.5) - 2026-08-21
 
 - fix(deps): update module github.com/michimani/gotwi to v0.18.4 by @renovate[bot] in https://github.com/michimani/gotwi/pull/361
