@@ -2,7 +2,7 @@ module gotwi-example-1
 
 go 1.26
 
-toolchain go1.27.1
+toolchain go1.27.2
 
 require github.com/michimani/gotwi v0.18.5
 
